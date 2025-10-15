@@ -1,14 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Check } from "lucide-react";
+import { Check, Pencil, Trash2, Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 interface Emotion {
   id: string;
   name: string;
   subEmotions: string[];
+}
+
+interface SavedEmotionEntry {
+  id: string;
+  main_emotion: string;
+  sub_emotions: string[];
+  entry_date: string;
+  created_at: string;
 }
 
 const emotions: Emotion[] = [
@@ -128,7 +138,31 @@ export default function EmotionJournal() {
   const [selectedMainEmotions, setSelectedMainEmotions] = useState<string[]>([]);
   const [selectedSubEmotions, setSelectedSubEmotions] = useState<string[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+  const [savedEntries, setSavedEntries] = useState<SavedEmotionEntry[]>([]);
+  const [editingEntry, setEditingEntry] = useState<string | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    loadSavedEntries();
+  }, []);
+
+  const loadSavedEntries = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await (supabase as any)
+        .from('emotion_journal')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('entry_date', { ascending: false });
+
+      if (error) throw error;
+      setSavedEntries(data || []);
+    } catch (error) {
+      console.error('Error loading entries:', error);
+    }
+  };
 
   const toggleMainEmotion = (emotionId: string) => {
     setSelectedMainEmotions(prev => {
@@ -199,6 +233,7 @@ export default function EmotionJournal() {
       // Reset selections
       setSelectedMainEmotions([]);
       setSelectedSubEmotions([]);
+      await loadSavedEntries();
     } catch (error) {
       console.error('Error saving emotions:', error);
       toast({
@@ -209,6 +244,100 @@ export default function EmotionJournal() {
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleEdit = (entry: SavedEmotionEntry) => {
+    setEditingEntry(entry.id);
+    const mainEmotionNames = entry.main_emotion.split(', ');
+    const mainEmotionIds = mainEmotionNames
+      .map(name => emotions.find(e => e.name === name)?.id)
+      .filter(Boolean) as string[];
+    
+    setSelectedMainEmotions(mainEmotionIds);
+    setSelectedSubEmotions(entry.sub_emotions);
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleUpdate = async () => {
+    if (!editingEntry) return;
+
+    if (selectedMainEmotions.length === 0 || selectedSubEmotions.length === 0) {
+      toast({
+        title: "Error",
+        description: "Debes seleccionar al menos una emoción principal y una sub-emoción",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const mainEmotionNames = selectedMainEmotions
+        .map(id => emotions.find(e => e.id === id)?.name)
+        .filter(Boolean);
+      
+      const { error } = await (supabase as any)
+        .from('emotion_journal')
+        .update({
+          main_emotion: mainEmotionNames.join(', '),
+          sub_emotions: selectedSubEmotions
+        })
+        .eq('id', editingEntry);
+
+      if (error) throw error;
+
+      toast({
+        title: "¡Actualizado!",
+        description: "Tu entrada ha sido actualizada exitosamente"
+      });
+
+      setEditingEntry(null);
+      setSelectedMainEmotions([]);
+      setSelectedSubEmotions([]);
+      await loadSavedEntries();
+    } catch (error) {
+      console.error('Error updating entry:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar tu entrada",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDelete = async (entryId: string) => {
+    try {
+      const { error } = await (supabase as any)
+        .from('emotion_journal')
+        .delete()
+        .eq('id', entryId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Eliminado",
+        description: "La entrada ha sido eliminada"
+      });
+
+      await loadSavedEntries();
+    } catch (error) {
+      console.error('Error deleting entry:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar la entrada",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingEntry(null);
+    setSelectedMainEmotions([]);
+    setSelectedSubEmotions([]);
   };
 
   const selectedEmotionsData = emotions.filter(e => selectedMainEmotions.includes(e.id));
@@ -303,17 +432,96 @@ export default function EmotionJournal() {
         </div>
       </Card>
 
-      {/* Save Button - Outside the card */}
+      {/* Save/Update Button - Outside the card */}
       {selectedSubEmotions.length > 0 && (
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-4">
+          {editingEntry && (
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={handleCancelEdit}
+              className="rounded-full px-8 h-14 text-lg font-semibold"
+            >
+              Cancelar
+            </Button>
+          )}
           <Button
             size="lg"
-            onClick={handleSubmit}
+            onClick={editingEntry ? handleUpdate : handleSubmit}
             disabled={isSaving}
             className="rounded-full px-12 h-14 text-lg font-semibold bg-primary hover:bg-primary/90 shadow-lg"
           >
-            {isSaving ? "Guardando..." : "Guardar"}
+            {isSaving ? (editingEntry ? "Actualizando..." : "Guardando...") : (editingEntry ? "Actualizar" : "Guardar")}
           </Button>
+        </div>
+      )}
+
+      {/* Emotion Log Widget */}
+      {savedEntries.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold text-foreground mb-6">Registro de Emociones</h2>
+          <div className="space-y-4">
+            {savedEntries.map((entry) => (
+              <Card key={entry.id} className="p-6 bg-card border-border">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Calendar className="h-4 w-4" />
+                    <span className="text-sm font-medium">
+                      {format(new Date(entry.entry_date), "d 'de' MMMM, yyyy", { locale: es })}
+                    </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleEdit(entry)}
+                      className="h-8 w-8 p-0"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleDelete(entry.id)}
+                      className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <h3 className="text-sm font-semibold text-foreground/70 mb-2">Emociones Principales</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {entry.main_emotion.split(', ').map((emotion, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm font-medium"
+                        >
+                          {emotion}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-semibold text-foreground/70 mb-2">Emociones Específicas</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {entry.sub_emotions.map((emotion, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3 py-1 rounded-full bg-primary/20 text-primary text-sm"
+                        >
+                          {emotion}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
         </div>
       )}
     </div>
