@@ -75,18 +75,16 @@ export function Sidebar() {
             </Link>
           );
         })}
-      </nav>
-
-      {/* Logout Button */}
-      <div className="p-6 border-t border-sidebar-border">
+        
+        {/* Logout Button */}
         <button
           onClick={handleLogout}
-          className="flex items-center gap-4 w-full rounded-2xl px-4 py-3.5 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 font-medium"
+          className="flex items-center gap-4 w-full rounded-2xl px-4 py-3.5 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 font-medium mt-2"
         >
           <LogOut className="h-5 w-5" />
           <span className="text-[15px]">Cerrar sesión</span>
         </button>
-      </div>
+      </nav>
     </div>
   );
 
