@@ -105,7 +105,7 @@ export default function Plan() {
 
       <div className="space-y-4">
         {/* Today */}
-        <Card className="border-primary/20">
+        <Card className="border-border/50">
           <CardHeader>
             <SectionHeader title="Today" sectionKey="today" />
           </CardHeader>
@@ -119,7 +119,7 @@ export default function Plan() {
         </Card>
 
         {/* This Week */}
-        <Card className="border-primary/20">
+        <Card className="border-border/50">
           <CardHeader>
             <SectionHeader title="This Week (M-S)" sectionKey="week" />
           </CardHeader>
@@ -133,7 +133,7 @@ export default function Plan() {
         </Card>
 
         {/* This Month */}
-        <Card className="border-primary/20">
+        <Card className="border-border/50">
           <CardHeader>
             <SectionHeader title="This Month" sectionKey="month" />
           </CardHeader>
@@ -147,7 +147,7 @@ export default function Plan() {
         </Card>
 
         {/* One-Time Goals */}
-        <Card className="border-primary/20">
+        <Card className="border-border/50">
           <CardHeader>
             <SectionHeader title="One-Time Goals" sectionKey="onetime" />
           </CardHeader>
