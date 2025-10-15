@@ -23,14 +23,14 @@ import { useState } from "react";
 const menuItems = [
   { icon: Home, label: "Panel", path: "/dashboard" },
   { icon: Target, label: "Mi Plan", path: "/plan" },
-  { icon: Bell, label: "Recordatorios", path: "/reminders" },
   { icon: TrendingUp, label: "Progreso", path: "/progress" },
-  { icon: Wrench, label: "Herramientas", path: "/tools" },
   { icon: Heart, label: "Valores", path: "/values" },
-  { icon: ListChecks, label: "Lista de Gratitud", path: "/gratitude" },
-  { icon: MessageSquare, label: "Mensaje Diario", path: "/message" },
   { icon: Smile, label: "Diario de Emociones", path: "/emotion-journal" },
   { icon: BookOpen, label: "Diario", path: "/journal" },
+  { icon: ListChecks, label: "Lista de Gratitud", path: "/gratitude" },
+  { icon: MessageSquare, label: "Mensaje Diario", path: "/message" },
+  { icon: Wrench, label: "Herramientas", path: "/tools" },
+  { icon: Bell, label: "Recordatorios", path: "/reminders" },
   { icon: Settings, label: "Configuración", path: "/settings" },
 ];
 
