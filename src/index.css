@@ -8,55 +8,55 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 200 45% 96%;
-    --foreground: 210 40% 20%;
+    --background: 0 0% 7%;
+    --foreground: 0 0% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 210 40% 20%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 40% 20%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 195 75% 55%;
+    --primary: 12 100% 65%;
     --primary-foreground: 0 0% 100%;
     
-    --primary-glow: 195 85% 65%;
+    --primary-glow: 12 100% 70%;
 
-    --secondary: 200 30% 90%;
-    --secondary-foreground: 210 40% 20%;
+    --secondary: 30 15% 92%;
+    --secondary-foreground: 0 0% 15%;
 
-    --muted: 200 25% 92%;
-    --muted-foreground: 210 20% 50%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 270 60% 70%;
+    --accent: 12 100% 65%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 75% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 200 25% 88%;
-    --input: 200 25% 92%;
-    --ring: 195 75% 55%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 12 100% 65%;
 
-    --radius: 1rem;
+    --radius: 1.25rem;
     
-    --gradient-primary: linear-gradient(135deg, hsl(195 75% 55%), hsl(195 85% 65%));
-    --gradient-subtle: linear-gradient(180deg, hsl(200 45% 98%), hsl(200 40% 94%));
-    --gradient-card: linear-gradient(135deg, hsl(195 80% 92%), hsl(200 60% 95%));
+    --gradient-primary: linear-gradient(135deg, hsl(12 100% 65%), hsl(25 100% 60%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 12%), hsl(0 0% 8%));
+    --gradient-card: linear-gradient(135deg, hsl(12 95% 60%), hsl(25 95% 55%));
     
-    --shadow-soft: 0 2px 8px hsl(195 50% 50% / 0.08);
-    --shadow-medium: 0 4px 16px hsl(195 50% 50% / 0.12);
+    --shadow-soft: 0 4px 12px hsl(0 0% 0% / 0.3);
+    --shadow-medium: 0 8px 24px hsl(0 0% 0% / 0.4);
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 195 80% 95%;
-    --sidebar-foreground: 210 40% 25%;
-    --sidebar-primary: 195 75% 55%;
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 12 100% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 195 60% 88%;
-    --sidebar-accent-foreground: 210 40% 20%;
-    --sidebar-border: 195 30% 85%;
-    --sidebar-ring: 195 75% 55%;
+    --sidebar-accent: 0 0% 18%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 12 100% 65%;
   }
 }
 
@@ -66,6 +66,12 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+    letter-spacing: -0.02em;
   }
 }

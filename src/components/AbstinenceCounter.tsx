@@ -27,20 +27,20 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
   }, [startDate]);
 
   return (
-    <div className="rounded-2xl p-8 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20">
-      <p className="text-center text-foreground/80 text-lg mb-6">I've been abstinent for</p>
-      <div className="grid grid-cols-3 gap-4">
+    <div className="rounded-3xl p-8 md:p-12 bg-card border border-border/50 shadow-xl">
+      <p className="text-muted-foreground text-base mb-8">I've been abstinent for</p>
+      <div className="grid grid-cols-3 gap-6 md:gap-8">
         <div className="text-center">
-          <div className="text-6xl font-bold text-primary mb-2">{count.years}</div>
-          <div className="text-sm uppercase tracking-wider text-muted-foreground">Years</div>
+          <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight">{count.years}</div>
+          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium">Years</div>
         </div>
         <div className="text-center">
-          <div className="text-6xl font-bold text-primary mb-2">{count.months}</div>
-          <div className="text-sm uppercase tracking-wider text-muted-foreground">Months</div>
+          <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight">{count.months}</div>
+          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium">Months</div>
         </div>
         <div className="text-center">
-          <div className="text-6xl font-bold text-primary mb-2">{count.days}</div>
-          <div className="text-sm uppercase tracking-wider text-muted-foreground">Days</div>
+          <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight">{count.days}</div>
+          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium">Days</div>
         </div>
       </div>
     </div>

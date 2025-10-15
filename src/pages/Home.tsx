@@ -17,41 +17,38 @@ export default function Home() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Welcome Back</h1>
-        <p className="text-muted-foreground text-lg">Continue your recovery journey with strength and purpose</p>
+      <div className="mb-8">
+        <p className="text-muted-foreground text-sm mb-2">Hello there,</p>
+        <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight tracking-tight">Your recovery<br />journey continues</h1>
       </div>
 
       <AbstinenceCounter startDate={startDate} />
 
-      <Card className="border-primary/20 shadow-soft">
+      <Card className="bg-gradient-to-br from-primary via-primary to-accent border-0 shadow-xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            <span className="text-3xl">💪</span>
-            Daily Message
+          <p className="text-primary-foreground/70 text-sm font-medium">Daily Inspiration</p>
+          <CardTitle className="text-3xl md:text-4xl font-bold text-primary-foreground leading-tight">
+            It is always the simple that produces the marvelous
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <blockquote className="italic text-foreground/80 text-lg border-l-4 border-primary pl-4">
-            "It is always the simple that produces the marvelous."
-          </blockquote>
-          <p className="text-right text-muted-foreground">- Amelia Barr</p>
+        <CardContent>
+          <p className="text-primary-foreground/80 text-lg">- Amelia Barr</p>
         </CardContent>
       </Card>
 
       <div>
-        <h2 className="text-2xl font-semibold mb-4 text-foreground">Quick Actions</h2>
+        <h2 className="text-3xl font-bold mb-6 text-foreground">Quick Actions</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {quickActions.map((action) => {
             const Icon = action.icon;
             return (
               <Link key={action.path} to={action.path}>
-                <Card className="hover:shadow-medium transition-all duration-300 hover:-translate-y-1 cursor-pointer border-primary/10">
-                  <CardContent className="p-6 text-center space-y-3">
-                    <div className={`mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center ${action.color}`}>
-                      <Icon className="h-6 w-6" />
+                <Card className="hover:scale-105 transition-all duration-300 cursor-pointer border-border/50 bg-card/50 backdrop-blur h-full">
+                  <CardContent className="p-6 text-center space-y-4">
+                    <div className={`mx-auto w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center ${action.color}`}>
+                      <Icon className="h-7 w-7" />
                     </div>
-                    <p className="font-medium text-foreground">{action.label}</p>
+                    <p className="font-semibold text-foreground text-sm">{action.label}</p>
                   </CardContent>
                 </Card>
               </Link>
@@ -60,12 +57,12 @@ export default function Home() {
         </div>
       </div>
 
-      <Card className="bg-gradient-to-br from-accent/5 to-transparent border-accent/20">
-        <CardContent className="p-6">
-          <p className="text-center text-foreground/80 text-lg">
+      <Card className="bg-secondary border-0">
+        <CardContent className="p-8">
+          <p className="text-center text-secondary-foreground text-2xl font-medium leading-relaxed">
             "Trust is built with consistency."
           </p>
-          <p className="text-center text-muted-foreground mt-2">- Lincoln Chafee</p>
+          <p className="text-center text-secondary-foreground/60 mt-4 text-lg">- Lincoln Chafee</p>
         </CardContent>
       </Card>
     </div>

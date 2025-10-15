@@ -88,24 +88,24 @@ export default function Plan() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">My Plan</h1>
+      <div className="mb-8">
+        <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight tracking-tight mb-3">My Plan</h1>
         <p className="text-muted-foreground text-lg">Track your recovery goals and progress</p>
       </div>
 
       <AbstinenceCounter startDate={startDate} />
 
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-foreground">Goals</h2>
-        <Button className="gap-2">
-          <Plus className="h-4 w-4" />
+        <h2 className="text-3xl font-bold text-foreground">Goals</h2>
+        <Button variant="accent" className="gap-2">
+          <Plus className="h-5 w-5" />
           Add Goal
         </Button>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Today */}
-        <Card className="border-primary/20">
+        <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-lg">
           <CardHeader>
             <SectionHeader title="Today" sectionKey="today" />
           </CardHeader>
@@ -119,7 +119,7 @@ export default function Plan() {
         </Card>
 
         {/* This Week */}
-        <Card className="border-primary/20">
+        <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-lg">
           <CardHeader>
             <SectionHeader title="This Week (M-S)" sectionKey="week" />
           </CardHeader>
@@ -133,7 +133,7 @@ export default function Plan() {
         </Card>
 
         {/* This Month */}
-        <Card className="border-primary/20">
+        <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-lg">
           <CardHeader>
             <SectionHeader title="This Month" sectionKey="month" />
           </CardHeader>
@@ -147,7 +147,7 @@ export default function Plan() {
         </Card>
 
         {/* One-Time Goals */}
-        <Card className="border-primary/20">
+        <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-lg">
           <CardHeader>
             <SectionHeader title="One-Time Goals" sectionKey="onetime" />
           </CardHeader>

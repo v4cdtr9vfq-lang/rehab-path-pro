@@ -36,10 +36,10 @@ export function Sidebar() {
   const [open, setOpen] = useState(false);
 
   const SidebarContent = () => (
-    <nav className="flex flex-col gap-1 p-4">
-      <div className="mb-6 px-3">
-        <h1 className="text-2xl font-bold text-sidebar-foreground">RehabApp</h1>
-        <p className="text-sm text-sidebar-foreground/70">Your recovery journey</p>
+    <nav className="flex flex-col gap-2 p-6">
+      <div className="mb-8 px-2">
+        <h1 className="text-3xl font-bold text-sidebar-foreground tracking-tight">RehabApp</h1>
+        <p className="text-sm text-sidebar-foreground/60 mt-1">Your recovery journey</p>
       </div>
       {menuItems.map((item) => {
         const Icon = item.icon;
@@ -49,14 +49,14 @@ export function Sidebar() {
             key={item.path}
             to={item.path}
             onClick={() => setOpen(false)}
-            className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all ${
+            className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 transition-all ${
               isActive
-                ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-primary"
+                ? "bg-primary text-primary-foreground font-semibold shadow-lg"
+                : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"
             }`}
           >
             <Icon className="h-5 w-5" />
-            <span>{item.label}</span>
+            <span className="text-[15px]">{item.label}</span>
           </Link>
         );
       })}
