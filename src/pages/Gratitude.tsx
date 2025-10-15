@@ -77,7 +77,7 @@ export default function Gratitude() {
         <CardContent className="space-y-4">
           <div className="space-y-3">
             <Textarea
-              placeholder="¿Por qué estás agradecido hoy?"
+              placeholder="¿Por qué estás agradecido hoy y cómo te hace sentir?"
               value={newItem}
               onChange={(e) => setNewItem(e.target.value)}
               className="min-h-[100px] text-base"
