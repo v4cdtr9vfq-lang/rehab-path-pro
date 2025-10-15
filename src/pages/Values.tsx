@@ -309,31 +309,34 @@ export default function Values() {
     }
 
     return (
-      <ResponsiveContainer width="100%" height={350}>
-        <PieChart>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            innerRadius={50}
-            outerRadius={80}
-            paddingAngle={2}
-            dataKey="count"
-          >
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip 
-            formatter={(value: number, name: string) => [`${value} veces`, name]}
-          />
-          <Legend 
-            verticalAlign="bottom" 
-            height={36}
-            formatter={(value) => value}
-          />
-        </PieChart>
-      </ResponsiveContainer>
+      <div className="w-full px-4">
+        <ResponsiveContainer width="100%" height={320}>
+          <PieChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="45%"
+              innerRadius={40}
+              outerRadius={70}
+              paddingAngle={2}
+              dataKey="count"
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip 
+              formatter={(value: number, name: string) => [`${value} veces`, name]}
+            />
+            <Legend 
+              verticalAlign="bottom" 
+              height={40}
+              wrapperStyle={{ paddingTop: '20px' }}
+              formatter={(value) => value}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
     );
   };
 
