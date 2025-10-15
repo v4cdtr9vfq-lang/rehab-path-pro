@@ -51,12 +51,12 @@ export function Sidebar() {
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
-      <Link to="/dashboard" className="mb-8 px-8 pt-6 block hover:opacity-80 transition-opacity" onClick={() => setOpen(false)}>
-        <h1 className="text-3xl font-bold text-sidebar-foreground tracking-tight">Rehapp</h1>
-        <p className="text-sm text-sidebar-foreground/60 mt-1">Tu camino hacia la recuperación</p>
+      <Link to="/dashboard" className="mb-4 px-6 pt-4 block hover:opacity-80 transition-opacity" onClick={() => setOpen(false)}>
+        <h1 className="text-2xl font-bold text-sidebar-foreground tracking-tight">Rehapp</h1>
+        <p className="text-xs text-sidebar-foreground/60 mt-0.5">Tu camino hacia la recuperación</p>
       </Link>
       
-      <nav className="flex flex-col gap-2 px-6 flex-1 overflow-y-auto">
+      <nav className="flex flex-col gap-1 px-4 flex-1 overflow-y-auto">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
@@ -65,27 +65,27 @@ export function Sidebar() {
               key={item.path}
               to={item.path}
               onClick={() => setOpen(false)}
-              className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 transition-all ${
+              className={`flex items-center gap-3 rounded-xl px-3 py-2 transition-all ${
                 isActive
                   ? "bg-primary text-primary-foreground font-semibold shadow-lg"
                   : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"
               }`}
             >
-              <Icon className="h-5 w-5" />
-              <span className="text-[15px]">{item.label}</span>
+              <Icon className="h-4 w-4 flex-shrink-0" />
+              <span className="text-sm">{item.label}</span>
             </Link>
           );
         })}
       </nav>
 
       {/* Logout Button - Fixed at bottom */}
-      <div className="p-6 border-t border-sidebar-border">
+      <div className="p-4 border-t border-sidebar-border">
         <button
           onClick={handleLogout}
-          className="flex items-center gap-4 w-full rounded-2xl px-4 py-3.5 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 font-medium"
+          className="flex items-center gap-3 w-full rounded-xl px-3 py-2 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 font-medium"
         >
-          <LogOut className="h-5 w-5" />
-          <span className="text-[15px]">Cerrar sesión</span>
+          <LogOut className="h-4 w-4 flex-shrink-0" />
+          <span className="text-sm">Cerrar sesión</span>
         </button>
       </div>
     </div>
