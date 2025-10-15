@@ -348,11 +348,16 @@ export default function ProgressPage() {
                 </div>
               </div>
 
-              {groupGoalsByOriginal([...dailyGoals, ...weeklyGoals, ...monthlyGoals]
-                .filter((goal, index, self) => self.findIndex(g => g.originalId === goal.originalId) === index)
-              ).map((goal) => (
-                <GoalProgressBar key={goal.id} goal={goal} />
-              ))}
+              {/* Group all goals by original ID to show each unique goal once */}
+              {(() => {
+                const allGoals = [...dailyGoals, ...weeklyGoals, ...monthlyGoals];
+                const uniqueGoals = allGoals.filter((goal, index, self) => 
+                  self.findIndex(g => g.originalId === goal.originalId) === index
+                );
+                return groupGoalsByOriginal(uniqueGoals).map((goal) => (
+                  <GoalProgressBar key={goal.id} goal={goal} />
+                ));
+              })()}
             </CardContent>
           </Card>
         </TabsContent>
