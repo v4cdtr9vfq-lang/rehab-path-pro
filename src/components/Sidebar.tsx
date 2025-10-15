@@ -1,4 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import {
   Home,
   Target,
@@ -12,13 +14,14 @@ import {
   Wrench,
   Settings,
   Menu,
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 
 const menuItems = [
-  { icon: Home, label: "Home", path: "/" },
+  { icon: Home, label: "Dashboard", path: "/dashboard" },
   { icon: Target, label: "My Plan", path: "/plan" },
   { icon: Bell, label: "Reminders", path: "/reminders" },
   { icon: ClipboardCheck, label: "Daily Check-In", path: "/checkin" },
@@ -33,34 +36,58 @@ const menuItems = [
 
 export function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error("Error al cerrar sesión");
+    } else {
+      toast.success("Sesión cerrada");
+      navigate("/");
+    }
+  };
+
   const SidebarContent = () => (
-    <nav className="flex flex-col gap-2 p-6">
-      <div className="mb-8 px-2">
-        <h1 className="text-3xl font-bold text-sidebar-foreground tracking-tight">RehabApp</h1>
-        <p className="text-sm text-sidebar-foreground/60 mt-1">Your recovery journey</p>
+    <div className="flex flex-col h-full">
+      <nav className="flex flex-col gap-2 p-6 flex-1">
+        <div className="mb-8 px-2">
+          <h1 className="text-3xl font-bold text-sidebar-foreground tracking-tight">RehabApp</h1>
+          <p className="text-sm text-sidebar-foreground/60 mt-1">Your recovery journey</p>
+        </div>
+        {menuItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = location.pathname === item.path;
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() => setOpen(false)}
+              className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 transition-all ${
+                isActive
+                  ? "bg-primary text-primary-foreground font-semibold shadow-lg"
+                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"
+              }`}
+            >
+              <Icon className="h-5 w-5" />
+              <span className="text-[15px]">{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Logout Button */}
+      <div className="p-6 border-t border-sidebar-border">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-4 w-full rounded-2xl px-4 py-3.5 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 font-medium"
+        >
+          <LogOut className="h-5 w-5" />
+          <span className="text-[15px]">Cerrar sesión</span>
+        </button>
       </div>
-      {menuItems.map((item) => {
-        const Icon = item.icon;
-        const isActive = location.pathname === item.path;
-        return (
-          <Link
-            key={item.path}
-            to={item.path}
-            onClick={() => setOpen(false)}
-            className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 transition-all ${
-              isActive
-                ? "bg-primary text-primary-foreground font-semibold shadow-lg"
-                : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"
-            }`}
-          >
-            <Icon className="h-5 w-5" />
-            <span className="text-[15px]">{item.label}</span>
-          </Link>
-        );
-      })}
-    </nav>
+    </div>
   );
 
   return (
