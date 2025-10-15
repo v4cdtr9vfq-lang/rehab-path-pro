@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Heart, Plus, X } from "lucide-react";
+import { Heart, Plus, X, CheckCircle2, Circle } from "lucide-react";
 import { useState } from "react";
 
 export default function Values() {
@@ -67,11 +66,18 @@ export default function Values() {
                     : "bg-card/50 border-2 border-transparent hover:border-primary/10"
                 }`}
               >
-                <Checkbox
-                  checked={value.selected}
-                  onCheckedChange={() => toggleValue(value.id)}
-                  className="h-5 w-5"
-                />
+                <button
+                  onClick={() => toggleValue(value.id)}
+                  className="flex-shrink-0"
+                >
+                  {value.selected ? (
+                    <div className="w-6 h-6 rounded-full border-2 border-green-500 flex items-center justify-center bg-green-500/10">
+                      <CheckCircle2 className="h-4 w-4 text-green-500" fill="currentColor" />
+                    </div>
+                  ) : (
+                    <Circle className="h-6 w-6 text-muted-foreground" />
+                  )}
+                </button>
                 <span className="text-lg text-foreground flex-1">{value.name}</span>
                 {value.selected && (
                   <span className="text-xs bg-green-500 text-white px-3 py-1 rounded-full">
