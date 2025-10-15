@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChevronLeft, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -125,19 +125,25 @@ const emotions: Emotion[] = [
 ];
 
 export default function EmotionJournal() {
-  const [selectedMainEmotion, setSelectedMainEmotion] = useState<string | null>(null);
+  const [selectedMainEmotions, setSelectedMainEmotions] = useState<string[]>([]);
   const [selectedSubEmotions, setSelectedSubEmotions] = useState<string[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
 
-  const handleMainEmotionClick = (emotionId: string) => {
-    setSelectedMainEmotion(emotionId);
-    setSelectedSubEmotions([]);
-  };
-
-  const handleBackClick = () => {
-    setSelectedMainEmotion(null);
-    setSelectedSubEmotions([]);
+  const toggleMainEmotion = (emotionId: string) => {
+    setSelectedMainEmotions(prev => {
+      if (prev.includes(emotionId)) {
+        // Remove main emotion and its sub-emotions
+        const emotion = emotions.find(e => e.id === emotionId);
+        const subEmotionsToRemove = emotion?.subEmotions || [];
+        setSelectedSubEmotions(current => 
+          current.filter(sub => !subEmotionsToRemove.includes(sub))
+        );
+        return prev.filter(id => id !== emotionId);
+      } else {
+        return [...prev, emotionId];
+      }
+    });
   };
 
   const toggleSubEmotion = (subEmotion: string) => {
@@ -149,10 +155,10 @@ export default function EmotionJournal() {
   };
 
   const handleSubmit = async () => {
-    if (!selectedMainEmotion || selectedSubEmotions.length === 0) {
+    if (selectedMainEmotions.length === 0 || selectedSubEmotions.length === 0) {
       toast({
         title: "Error",
-        description: "Debes seleccionar al menos una sub-emoción",
+        description: "Debes seleccionar al menos una emoción principal y una sub-emoción",
         variant: "destructive"
       });
       return;
@@ -170,13 +176,15 @@ export default function EmotionJournal() {
         return;
       }
 
-      const currentEmotion = emotions.find(e => e.id === selectedMainEmotion);
+      const mainEmotionNames = selectedMainEmotions
+        .map(id => emotions.find(e => e.id === id)?.name)
+        .filter(Boolean);
       
       const { error } = await (supabase as any)
         .from('emotion_journal')
         .insert({
           user_id: user.id,
-          main_emotion: currentEmotion?.name,
+          main_emotion: mainEmotionNames.join(', '),
           sub_emotions: selectedSubEmotions,
           entry_date: new Date().toISOString().split('T')[0]
         });
@@ -189,7 +197,7 @@ export default function EmotionJournal() {
       });
 
       // Reset selections
-      setSelectedMainEmotion(null);
+      setSelectedMainEmotions([]);
       setSelectedSubEmotions([]);
     } catch (error) {
       console.error('Error saving emotions:', error);
@@ -203,7 +211,7 @@ export default function EmotionJournal() {
     }
   };
 
-  const currentEmotion = emotions.find(e => e.id === selectedMainEmotion);
+  const selectedEmotionsData = emotions.filter(e => selectedMainEmotions.includes(e.id));
 
   return (
     <div className="py-8 space-y-6 animate-fade-in">
@@ -213,88 +221,101 @@ export default function EmotionJournal() {
             Diario de Emociones
           </h1>
           <p className="text-muted-foreground">
-            {selectedMainEmotion 
-              ? "Selecciona las emociones específicas que sientes" 
-              : "¿Cómo te sientes hoy? Selecciona una emoción principal"}
+            ¿Cómo te sientes hoy? Selecciona las emociones que mejor describan tu estado
           </p>
         </div>
       </div>
 
       <Card className="p-8 bg-card border-border">
-        {!selectedMainEmotion ? (
-          <div className="flex flex-wrap gap-3">
-            {emotions.map((emotion) => (
-              <Button
-                key={emotion.id}
-                variant="outline"
-                size="lg"
-                onClick={() => handleMainEmotionClick(emotion.id)}
-                className="rounded-full px-6 h-12 text-base font-medium hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
-              >
-                + {emotion.name}
-              </Button>
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-6">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleBackClick}
-                className="h-10 w-10 rounded-full"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </Button>
-              <h2 className="text-2xl font-bold text-foreground">
-                {currentEmotion?.name}
-              </h2>
-            </div>
-
+        <div className="space-y-8">
+          {/* Main Emotions */}
+          <div>
+            <h2 className="text-xl font-semibold text-foreground mb-4">Emociones Principales</h2>
             <div className="flex flex-wrap gap-3">
-              {currentEmotion?.subEmotions.map((subEmotion) => {
-                const isSelected = selectedSubEmotions.includes(subEmotion);
+              {emotions.map((emotion) => {
+                const isSelected = selectedMainEmotions.includes(emotion.id);
                 return (
                   <Button
-                    key={subEmotion}
+                    key={emotion.id}
                     variant={isSelected ? "accent" : "outline"}
                     size="lg"
-                    onClick={() => toggleSubEmotion(subEmotion)}
+                    onClick={() => toggleMainEmotion(emotion.id)}
                     className={`rounded-full px-6 h-12 text-base font-medium transition-all ${
                       isSelected 
-                        ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
+                        ? "bg-primary text-primary-foreground border-primary hover:opacity-90" 
                         : "hover:bg-primary/10 hover:border-primary/50"
                     }`}
                   >
                     {isSelected ? (
                       <>
                         <Check className="h-4 w-4 mr-2" />
-                        {subEmotion}
+                        {emotion.name}
                       </>
                     ) : (
-                      <>+ {subEmotion}</>
+                      <>+ {emotion.name}</>
                     )}
                   </Button>
                 );
               })}
             </div>
-
-            {selectedSubEmotions.length > 0 && (
-              <div className="flex justify-center pt-6">
-                <Button
-                  size="lg"
-                  onClick={handleSubmit}
-                  disabled={isSaving}
-                  className="rounded-full px-8 h-14 text-lg font-semibold bg-primary hover:bg-primary/90"
-                >
-                  {isSaving ? "Guardando..." : "Enviar"}
-                </Button>
-              </div>
-            )}
-
           </div>
-        )}
+
+          {/* Sub Emotions */}
+          {selectedMainEmotions.length > 0 && (
+            <div>
+              <h2 className="text-xl font-semibold text-foreground mb-4">Emociones Específicas</h2>
+              <div className="space-y-6">
+                {selectedEmotionsData.map((emotion) => (
+                  <div key={emotion.id}>
+                    <h3 className="text-lg font-medium text-foreground/80 mb-3">{emotion.name}</h3>
+                    <div className="flex flex-wrap gap-3">
+                      {emotion.subEmotions.map((subEmotion) => {
+                        const isSelected = selectedSubEmotions.includes(subEmotion);
+                        return (
+                          <Button
+                            key={subEmotion}
+                            variant={isSelected ? "accent" : "outline"}
+                            size="lg"
+                            onClick={() => toggleSubEmotion(subEmotion)}
+                            className={`rounded-full px-6 h-12 text-base font-medium transition-all ${
+                              isSelected 
+                                ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
+                                : "hover:bg-primary/10 hover:border-primary/50"
+                            }`}
+                          >
+                            {isSelected ? (
+                              <>
+                                <Check className="h-4 w-4 mr-2" />
+                                {subEmotion}
+                              </>
+                            ) : (
+                              <>+ {subEmotion}</>
+                            )}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </Card>
+
+      {/* Save Button - Outside the card */}
+      {selectedSubEmotions.length > 0 && (
+        <div className="flex justify-center">
+          <Button
+            size="lg"
+            onClick={handleSubmit}
+            disabled={isSaving}
+            className="rounded-full px-12 h-14 text-lg font-semibold bg-primary hover:bg-primary/90 shadow-lg"
+          >
+            {isSaving ? "Guardando..." : "Guardar"}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
