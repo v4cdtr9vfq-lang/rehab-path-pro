@@ -1,8 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
-import { TrendingUp, CheckCircle } from "lucide-react";
+import { TrendingUp, CheckCircle2, Circle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -17,13 +16,23 @@ interface Goal {
   text: string;
   completed: boolean;
   goal_type: string;
+  remaining: number;
+}
+
+interface ExpandedGoal {
+  id: string;
+  originalId: string;
+  text: string;
+  completed: boolean;
+  goal_type: string;
+  instanceIndex: number;
 }
 
 export default function ProgressPage() {
   const [hasCheckedInToday, setHasCheckedInToday] = useState(false);
-  const [dailyGoals, setDailyGoals] = useState<Goal[]>([]);
-  const [weeklyGoals, setWeeklyGoals] = useState<Goal[]>([]);
-  const [monthlyGoals, setMonthlyGoals] = useState<Goal[]>([]);
+  const [dailyGoals, setDailyGoals] = useState<ExpandedGoal[]>([]);
+  const [weeklyGoals, setWeeklyGoals] = useState<ExpandedGoal[]>([]);
+  const [monthlyGoals, setMonthlyGoals] = useState<ExpandedGoal[]>([]);
   const [currentTab, setCurrentTab] = useState('daily');
   const [overallProgress, setOverallProgress] = useState(0);
 
@@ -34,6 +43,23 @@ export default function ProgressPage() {
   useEffect(() => {
     calculateProgress();
   }, [currentTab, dailyGoals, weeklyGoals, monthlyGoals, hasCheckedInToday]);
+
+  const expandGoals = (goals: Goal[]): ExpandedGoal[] => {
+    const expanded: ExpandedGoal[] = [];
+    goals.forEach(g => {
+      for (let i = 0; i < g.remaining; i++) {
+        expanded.push({
+          id: `${g.id}-${i}`,
+          originalId: g.id,
+          text: g.text,
+          completed: g.completed,
+          goal_type: g.goal_type,
+          instanceIndex: i
+        });
+      }
+    });
+    return expanded;
+  };
 
   const calculateProgress = () => {
     let completed = 0;
@@ -84,9 +110,9 @@ export default function ProgressPage() {
         const weekly = goals.filter(g => g.goal_type === 'week' || g.goal_type === 'always');
         const monthly = goals.filter(g => g.goal_type === 'month' || g.goal_type === 'always');
 
-        setDailyGoals(daily);
-        setWeeklyGoals(weekly);
-        setMonthlyGoals(monthly);
+        setDailyGoals(expandGoals(daily));
+        setWeeklyGoals(expandGoals(weekly));
+        setMonthlyGoals(expandGoals(monthly));
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -150,27 +176,33 @@ export default function ProgressPage() {
               <CardTitle>Progreso Diario</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex items-center justify-between p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
+              <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
                 <div className="flex items-center gap-3">
-                  <CheckCircle 
-                    className={`h-6 w-6 ${hasCheckedInToday ? 'text-green-500' : 'text-destructive'}`} 
-                  />
-                  <span className="text-foreground font-medium">Recuperación</span>
+                  {hasCheckedInToday ? (
+                    <CheckCircle2 className="h-6 w-6 text-green-500" />
+                  ) : (
+                    <Circle className="h-6 w-6 text-muted-foreground" />
+                  )}
+                  <span className="text-foreground font-semibold">Recuperación</span>
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  {hasCheckedInToday ? 'Completado hoy' : 'Pendiente'}
+                <span className={`text-sm ${hasCheckedInToday ? 'text-green-500' : 'text-muted-foreground'}`}>
+                  {hasCheckedInToday ? 'Completado' : 'Pendiente'}
                 </span>
               </div>
               
               {dailyGoals.map((goal) => (
-                <div key={goal.id} className="flex items-center justify-between p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
+                <div key={goal.id} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
                   <div className="flex items-center gap-3">
-                    <Checkbox checked={goal.completed} disabled />
-                    <span className={`text-foreground font-medium ${goal.completed ? 'line-through opacity-60' : ''}`}>
+                    {goal.completed ? (
+                      <CheckCircle2 className="h-6 w-6 text-green-500" />
+                    ) : (
+                      <Circle className="h-6 w-6 text-muted-foreground" />
+                    )}
+                    <span className="text-foreground font-semibold">
                       {goal.text}
                     </span>
                   </div>
-                  <span className="text-sm text-muted-foreground">
+                  <span className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
                     {goal.completed ? 'Completado' : 'Pendiente'}
                   </span>
                 </div>
@@ -190,14 +222,18 @@ export default function ProgressPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               {weeklyGoals.map((goal) => (
-                <div key={goal.id} className="flex items-center justify-between p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
+                <div key={goal.id} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
                   <div className="flex items-center gap-3">
-                    <Checkbox checked={goal.completed} disabled />
-                    <span className={`text-foreground font-medium ${goal.completed ? 'line-through opacity-60' : ''}`}>
+                    {goal.completed ? (
+                      <CheckCircle2 className="h-6 w-6 text-green-500" />
+                    ) : (
+                      <Circle className="h-6 w-6 text-muted-foreground" />
+                    )}
+                    <span className="text-foreground font-semibold">
                       {goal.text}
                     </span>
                   </div>
-                  <span className="text-sm text-muted-foreground">
+                  <span className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
                     {goal.completed ? 'Completado' : 'Pendiente'}
                   </span>
                 </div>
@@ -217,14 +253,18 @@ export default function ProgressPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               {monthlyGoals.map((goal) => (
-                <div key={goal.id} className="flex items-center justify-between p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
+                <div key={goal.id} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
                   <div className="flex items-center gap-3">
-                    <Checkbox checked={goal.completed} disabled />
-                    <span className={`text-foreground font-medium ${goal.completed ? 'line-through opacity-60' : ''}`}>
+                    {goal.completed ? (
+                      <CheckCircle2 className="h-6 w-6 text-green-500" />
+                    ) : (
+                      <Circle className="h-6 w-6 text-muted-foreground" />
+                    )}
+                    <span className="text-foreground font-semibold">
                       {goal.text}
                     </span>
                   </div>
-                  <span className="text-sm text-muted-foreground">
+                  <span className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
                     {goal.completed ? 'Completado' : 'Pendiente'}
                   </span>
                 </div>
@@ -243,29 +283,35 @@ export default function ProgressPage() {
               <CardTitle>Todas las Metas</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex items-center justify-between p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
+              <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
                 <div className="flex items-center gap-3">
-                  <CheckCircle 
-                    className={`h-6 w-6 ${hasCheckedInToday ? 'text-green-500' : 'text-destructive'}`} 
-                  />
-                  <span className="text-foreground font-medium">Recuperación</span>
+                  {hasCheckedInToday ? (
+                    <CheckCircle2 className="h-6 w-6 text-green-500" />
+                  ) : (
+                    <Circle className="h-6 w-6 text-muted-foreground" />
+                  )}
+                  <span className="text-foreground font-semibold">Recuperación</span>
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  {hasCheckedInToday ? 'Completado hoy' : 'Pendiente'}
+                <span className={`text-sm ${hasCheckedInToday ? 'text-green-500' : 'text-muted-foreground'}`}>
+                  {hasCheckedInToday ? 'Completado' : 'Pendiente'}
                 </span>
               </div>
 
               {[...dailyGoals, ...weeklyGoals, ...monthlyGoals]
                 .filter((goal, index, self) => self.findIndex(g => g.id === goal.id) === index)
                 .map((goal) => (
-                  <div key={goal.id} className="flex items-center justify-between p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
+                  <div key={goal.id} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
                     <div className="flex items-center gap-3">
-                      <Checkbox checked={goal.completed} disabled />
-                      <span className={`text-foreground font-medium ${goal.completed ? 'line-through opacity-60' : ''}`}>
+                      {goal.completed ? (
+                        <CheckCircle2 className="h-6 w-6 text-green-500" />
+                      ) : (
+                        <Circle className="h-6 w-6 text-muted-foreground" />
+                      )}
+                      <span className="text-foreground font-semibold">
                         {goal.text}
                       </span>
                     </div>
-                    <span className="text-sm text-muted-foreground">
+                    <span className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
                       {goal.completed ? 'Completado' : 'Pendiente'}
                     </span>
                   </div>
