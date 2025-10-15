@@ -402,9 +402,14 @@ export default function Plan() {
 
   // Calculate remaining count for display
   const getRemainingCount = (goal: ExpandedGoal, sectionKey: keyof typeof sections) => {
+    // Get all instances of this specific goal in THIS section only
     const allGoalsInSection = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
+    const totalInstances = allGoalsInSection.length;
+    
+    // Count how many are completed
     const completedCount = allGoalsInSection.filter(g => g.completed).length;
-    return allGoalsInSection.length - completedCount;
+    
+    return totalInstances - completedCount;
   };
 
   const GoalItem = ({ goal, sectionKey }: { goal: ExpandedGoal; sectionKey: keyof typeof sections }) => (
