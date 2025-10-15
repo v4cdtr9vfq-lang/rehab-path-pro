@@ -14,7 +14,6 @@ export default {
     },
     extend: {
       fontFamily: {
-        serif: ['Playfair Display', 'Georgia', 'serif'],
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
       },
       colors: {
@@ -62,16 +61,14 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
         widget: {
-          olive: "hsl(var(--widget-olive))",
-          "olive-foreground": "hsl(var(--widget-olive-foreground))",
-          rose: "hsl(var(--widget-rose))",
-          "rose-foreground": "hsl(var(--widget-rose-foreground))",
-          peach: "hsl(var(--widget-peach))",
-          "peach-foreground": "hsl(var(--widget-peach-foreground))",
-          slate: "hsl(var(--widget-slate))",
-          "slate-foreground": "hsl(var(--widget-slate-foreground))",
-          sky: "hsl(var(--widget-sky))",
-          "sky-foreground": "hsl(var(--widget-sky-foreground))",
+          mint: "hsl(var(--widget-mint))",
+          "mint-foreground": "hsl(var(--widget-mint-foreground))",
+          purple: "hsl(var(--widget-purple))",
+          "purple-foreground": "hsl(var(--widget-purple-foreground))",
+          yellow: "hsl(var(--widget-yellow))",
+          "yellow-foreground": "hsl(var(--widget-yellow-foreground))",
+          dark: "hsl(var(--widget-dark))",
+          "dark-foreground": "hsl(var(--widget-dark-foreground))",
         },
       },
       borderRadius: {

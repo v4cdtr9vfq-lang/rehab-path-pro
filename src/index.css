@@ -8,70 +8,68 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 30 25% 95%;
-    --foreground: 210 15% 25%;
+    --background: 0 0% 98%;
+    --foreground: 0 0% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 210 15% 25%;
+    --card-foreground: 0 0% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 210 15% 25%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 160 30% 45%;
+    --primary: 12 100% 65%;
     --primary-foreground: 0 0% 100%;
     
-    --primary-glow: 160 30% 55%;
+    --primary-glow: 12 100% 70%;
 
-    --secondary: 15 50% 75%;
-    --secondary-foreground: 15 40% 30%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 10%;
 
-    --muted: 30 15% 88%;
-    --muted-foreground: 210 10% 45%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 200 35% 70%;
-    --accent-foreground: 210 40% 20%;
+    --accent: 12 100% 65%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 70% 65%;
+    --destructive: 0 75% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 30 15% 85%;
-    --input: 30 15% 90%;
-    --ring: 160 30% 45%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 12 100% 65%;
 
-    --radius: 1.5rem;
+    --radius: 1.25rem;
     
-    --widget-olive: 160 30% 45%;
-    --widget-olive-foreground: 0 0% 100%;
+    /* Widget colors - vibrant cards */
+    --widget-mint: 160 65% 70%;
+    --widget-mint-foreground: 160 70% 15%;
     
-    --widget-rose: 15 50% 75%;
-    --widget-rose-foreground: 15 40% 30%;
+    --widget-purple: 270 65% 70%;
+    --widget-purple-foreground: 270 70% 15%;
     
-    --widget-peach: 25 60% 90%;
-    --widget-peach-foreground: 25 50% 35%;
+    --widget-yellow: 65 85% 75%;
+    --widget-yellow-foreground: 65 70% 15%;
     
-    --widget-slate: 200 20% 50%;
-    --widget-slate-foreground: 0 0% 100%;
+    --widget-dark: 0 0% 12%;
+    --widget-dark-foreground: 0 0% 98%;
     
-    --widget-sky: 200 50% 80%;
-    --widget-sky-foreground: 210 50% 30%;
+    --gradient-primary: linear-gradient(135deg, hsl(12 100% 65%), hsl(25 100% 60%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%));
+    --gradient-card: linear-gradient(135deg, hsl(12 95% 60%), hsl(25 95% 55%));
     
-    --gradient-primary: linear-gradient(135deg, hsl(160 30% 45%), hsl(160 30% 55%));
-    --gradient-subtle: linear-gradient(180deg, hsl(30 25% 98%), hsl(30 25% 95%));
-    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(30 20% 98%));
-    
-    --shadow-soft: 0 2px 8px hsl(210 15% 25% / 0.08);
-    --shadow-medium: 0 4px 16px hsl(210 15% 25% / 0.12);
+    --shadow-soft: 0 4px 12px hsl(0 0% 0% / 0.08);
+    --shadow-medium: 0 8px 24px hsl(0 0% 0% / 0.12);
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 30 20% 97%;
-    --sidebar-foreground: 210 15% 25%;
-    --sidebar-primary: 160 30% 45%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 12 100% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 30 15% 92%;
-    --sidebar-accent-foreground: 210 15% 25%;
-    --sidebar-border: 30 15% 88%;
-    --sidebar-ring: 160 30% 45%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 12 100% 65%;
   }
 }
 
@@ -81,8 +79,8 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground font-serif;
-    font-family: 'Playfair Display', Georgia, serif;
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
   
   h1, h2, h3, h4, h5, h6 {
