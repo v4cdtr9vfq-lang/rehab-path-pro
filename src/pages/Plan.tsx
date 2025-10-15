@@ -260,8 +260,22 @@ export default function Plan() {
       const goal = sections[sectionKey].goals.find(g => g.id === goalId);
       if (!goal) return;
 
-      // Load current completed instances
-      const completedInstances = loadCompletedInstances();
+      // Extract date from goalId (format: goalId-date-instance or goalId-instance for onetime)
+      const parts = goalId.split('-');
+      let dateKey: string;
+      
+      if (parts.length >= 3 && parts[parts.length - 2].match(/^\d{4}-\d{2}-\d{2}$/)) {
+        // Has date in format: uuid-yyyy-mm-dd-index
+        const dateStr = parts[parts.length - 2];
+        dateKey = `goals_completed_${dateStr}`;
+      } else {
+        // No date or onetime goal, use today
+        dateKey = getDateKey();
+      }
+
+      // Load completed instances from the specific date
+      const stored = localStorage.getItem(dateKey);
+      const completedInstances = stored ? new Set(JSON.parse(stored)) : new Set();
       
       // Toggle THIS instance
       if (completedInstances.has(goalId)) {
@@ -270,21 +284,29 @@ export default function Plan() {
         completedInstances.add(goalId);
       }
 
-      // Save to localStorage and notify other components
-      saveCompletedInstances(completedInstances);
-
-      // Update local state for this section
-      setSections(prev => ({
-        ...prev,
-        [sectionKey]: {
-          ...prev[sectionKey],
-          goals: prev[sectionKey].goals.map(g =>
-            g.id === goalId ? { ...g, completed: !g.completed } : g
-          )
-        }
+      // Save to localStorage for the specific date and notify other components
+      localStorage.setItem(dateKey, JSON.stringify([...completedInstances]));
+      window.dispatchEvent(new CustomEvent('goalsUpdated', { 
+        detail: { date: dateKey, completedIds: [...completedInstances] } 
       }));
 
-      // Check if ALL instances of this goal are completed
+      // Update local state for ALL sections that might contain this goal
+      const updatedSections = { ...sections };
+      
+      // Update all sections
+      Object.keys(updatedSections).forEach((key) => {
+        const sectionKey = key as keyof typeof sections;
+        updatedSections[sectionKey] = {
+          ...updatedSections[sectionKey],
+          goals: updatedSections[sectionKey].goals.map(g =>
+            g.id === goalId ? { ...g, completed: completedInstances.has(goalId) } : g
+          )
+        };
+      });
+      
+      setSections(updatedSections);
+
+      // Check if ALL instances of this goal are completed across all dates
       const allGoals = [
         ...sections.today.goals,
         ...sections.week.goals,
@@ -293,15 +315,33 @@ export default function Plan() {
       ];
       
       const instancesOfThisGoal = allGoals.filter(g => g.originalId === goal.originalId);
-      const completedInstancesOfGoal = instancesOfThisGoal.filter(g => 
-        completedInstances.has(g.id)
-      ).length;
-      const allInstancesCompleted = completedInstancesOfGoal === instancesOfThisGoal.length;
+      
+      // Check completion across all dates
+      let allCompleted = true;
+      for (const instance of instancesOfThisGoal) {
+        const instanceParts = instance.id.split('-');
+        let instanceDateKey: string;
+        
+        if (instanceParts.length >= 3 && instanceParts[instanceParts.length - 2].match(/^\d{4}-\d{2}-\d{2}$/)) {
+          const instanceDateStr = instanceParts[instanceParts.length - 2];
+          instanceDateKey = `goals_completed_${instanceDateStr}`;
+        } else {
+          instanceDateKey = getDateKey();
+        }
+        
+        const instanceStored = localStorage.getItem(instanceDateKey);
+        const instanceCompleted = instanceStored ? new Set(JSON.parse(instanceStored)) : new Set();
+        
+        if (!instanceCompleted.has(instance.id)) {
+          allCompleted = false;
+          break;
+        }
+      }
 
       // Update database: mark as completed only if ALL instances are done
       const { error } = await supabase
         .from('goals')
-        .update({ completed: allInstancesCompleted })
+        .update({ completed: allCompleted })
         .eq('id', goal.originalId);
 
       if (error) throw error;
@@ -483,14 +523,34 @@ export default function Plan() {
     );
   };
 
-  // Calculate remaining count for display
+  // Calculate remaining count for display - recalculate from localStorage
   const getRemainingCount = (goal: ExpandedGoal, sectionKey: keyof typeof sections) => {
     // Get all instances of this specific goal in THIS section only
     const allGoalsInSection = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
     const totalInstances = allGoalsInSection.length;
     
-    // Count how many are completed
-    const completedCount = allGoalsInSection.filter(g => g.completed).length;
+    // Count completed by checking localStorage for each instance's date
+    let completedCount = 0;
+    for (const instance of allGoalsInSection) {
+      const parts = instance.id.split('-');
+      let dateKey: string;
+      
+      if (parts.length >= 3 && parts[parts.length - 2].match(/^\d{4}-\d{2}-\d{2}$/)) {
+        // Has date in format: uuid-yyyy-mm-dd-index
+        const dateStr = parts[parts.length - 2];
+        dateKey = `goals_completed_${dateStr}`;
+      } else {
+        // No date or onetime goal, use today
+        dateKey = getDateKey();
+      }
+      
+      const stored = localStorage.getItem(dateKey);
+      const completedForDate = stored ? new Set(JSON.parse(stored)) : new Set();
+      
+      if (completedForDate.has(instance.id)) {
+        completedCount++;
+      }
+    }
     
     return totalInstances - completedCount;
   };
