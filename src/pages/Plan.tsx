@@ -191,14 +191,27 @@ export default function Plan() {
     fetchGoals();
   }, []);
 
-  // Listen for goal updates from other components
+  // Listen for goal updates from other components and storage changes
   useEffect(() => {
-    const handleGoalsUpdate = () => {
+    const handleGoalsUpdate = (e?: CustomEvent) => {
+      console.log('[Plan] goalsUpdated event received', e?.detail);
       fetchGoals();
     };
 
-    window.addEventListener('goalsUpdated', handleGoalsUpdate);
-    return () => window.removeEventListener('goalsUpdated', handleGoalsUpdate);
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key?.startsWith('goals_completed_')) {
+        console.log('[Plan] localStorage changed:', e.key);
+        fetchGoals();
+      }
+    };
+
+    window.addEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   const fetchGoals = async () => {
@@ -578,34 +591,8 @@ export default function Plan() {
   };
 
   const GoalItem = ({ goal, sectionKey }: { goal: ExpandedGoal; sectionKey: keyof typeof sections }) => {
-    // Force recalculation when localStorage changes
-    const [updateKey, setUpdateKey] = useState(0);
-    
-    useEffect(() => {
-      const handleUpdate = () => {
-        setUpdateKey(prev => prev + 1);
-      };
-      window.addEventListener('goalsUpdated', handleUpdate);
-      return () => window.removeEventListener('goalsUpdated', handleUpdate);
-    }, []);
-    
-    // Recalculate completion status from localStorage
-    const isCompleted = (() => {
-      const parts = goal.id.split('__');
-      let dateKey: string;
-      
-      if (parts.length === 3) {
-        const dateStr = parts[1];
-        dateKey = `goals_completed_${dateStr}`;
-      } else {
-        dateKey = getDateKey();
-      }
-      
-      const stored = localStorage.getItem(dateKey);
-      const completedIds = stored ? new Set(JSON.parse(stored)) : new Set();
-      return completedIds.has(goal.id);
-    })();
-    
+    // Read completion status directly from the goal prop (which comes from expanded goals)
+    // The goal.completed is already synced from localStorage in expandGoals
     return (
       <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
         <div className="flex items-center gap-3 flex-1">
@@ -613,7 +600,7 @@ export default function Plan() {
             onClick={() => toggleGoal(sectionKey, goal.id)}
             className="flex-shrink-0"
           >
-            {isCompleted ? (
+            {goal.completed ? (
               <CheckCircle2 className="h-6 w-6 text-green-500" />
             ) : (
               <Circle className="h-6 w-6 text-muted-foreground" />
@@ -623,8 +610,8 @@ export default function Plan() {
             <p className="text-foreground font-semibold">
               {goal.text}
             </p>
-            <p className={`text-sm ${isCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
-              {isCompleted ? 'Completado' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+            <p className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
+              {goal.completed ? 'Completado' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
             </p>
           </div>
         </div>

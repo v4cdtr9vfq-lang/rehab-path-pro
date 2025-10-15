@@ -46,12 +46,13 @@ export default function ProgressPage() {
 
   // Listen for goal updates from other components
   useEffect(() => {
-    const handleGoalsUpdate = () => {
+    const handleGoalsUpdate = (e?: CustomEvent) => {
+      console.log('[Progress] goalsUpdated event received', e?.detail);
       fetchData();
     };
 
-    window.addEventListener('goalsUpdated', handleGoalsUpdate);
-    return () => window.removeEventListener('goalsUpdated', handleGoalsUpdate);
+    window.addEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
+    return () => window.removeEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
   }, []);
 
   // Get date key for localStorage

@@ -209,26 +209,24 @@ export default function Home() {
     fetchData();
   }, []);
 
-  // Listen for goal updates from other components
+  // Listen for goal updates from other components and force refresh
   useEffect(() => {
-    const handleGoalsUpdate = () => {
+    const handleGoalsUpdate = (e?: CustomEvent) => {
+      console.log('[Dashboard] goalsUpdated event received', e?.detail);
+      // Force reload of activeGoals
       const completedInstances = loadCompletedInstances();
-      
-      // Update activeGoals with new completion status
       const updatedGoals = activeGoals.map(g => ({
         ...g,
         status: completedInstances.has(g.id) ? 'completed' : 'pending'
       }));
-      
       setActiveGoals(updatedGoals);
       
-      // Recalculate counts
       const completedCount = updatedGoals.filter(g => g.status === 'completed').length;
       setGoalsCompleted(completedCount + (checkInCompleted ? 1 : 0));
     };
 
-    window.addEventListener('goalsUpdated', handleGoalsUpdate);
-    return () => window.removeEventListener('goalsUpdated', handleGoalsUpdate);
+    window.addEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
+    return () => window.removeEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
   }, [activeGoals, checkInCompleted]);
 
   // Quick tools - configurable
