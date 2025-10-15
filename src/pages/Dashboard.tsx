@@ -77,7 +77,7 @@ export default function Home() {
                 <Clock className="h-6 w-6 text-muted-foreground" />
               )}
               <div>
-                <p className="font-semibold text-foreground">Daily Check-In</p>
+                <p className="font-semibold text-foreground">Check-In Diario</p>
                 {checkInCompleted ? (
                   <p className="text-sm text-muted-foreground">Completado ✅</p>
                 ) : (

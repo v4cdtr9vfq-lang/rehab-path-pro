@@ -11,12 +11,12 @@ interface ProgressArea {
 
 export default function ProgressPage() {
   const areas: ProgressArea[] = [
-    { name: "Recovery Engagement", percentage: 85, color: "bg-primary" },
-    { name: "Physical", percentage: 70, color: "bg-primary" },
-    { name: "Emotional", percentage: 60, color: "bg-primary" },
-    { name: "Relationships", percentage: 75, color: "bg-primary" },
-    { name: "Practical", percentage: 80, color: "bg-primary" },
-    { name: "Spiritual", percentage: 65, color: "bg-accent" },
+    { name: "Participación en Recuperación", percentage: 85, color: "bg-primary" },
+    { name: "Físico", percentage: 70, color: "bg-primary" },
+    { name: "Emocional", percentage: 60, color: "bg-primary" },
+    { name: "Relaciones", percentage: 75, color: "bg-primary" },
+    { name: "Práctico", percentage: 80, color: "bg-primary" },
+    { name: "Espiritual", percentage: 65, color: "bg-accent" },
   ];
 
   const ProgressBar = ({ area }: { area: ProgressArea }) => (
@@ -32,15 +32,15 @@ export default function ProgressPage() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Progress</h1>
-        <p className="text-muted-foreground text-lg">Track your recovery journey across different areas</p>
+        <h1 className="text-4xl font-bold text-foreground mb-2">Progreso</h1>
+        <p className="text-muted-foreground text-lg">Rastrea tu camino de recuperación en diferentes áreas</p>
       </div>
 
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             <TrendingUp className="h-6 w-6 text-primary" />
-            Overall Progress
+            Progreso General
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -48,16 +48,16 @@ export default function ProgressPage() {
             <div className="inline-flex items-center justify-center w-32 h-32 rounded-full border-8 border-primary/20 bg-card">
               <span className="text-4xl font-bold text-primary">75%</span>
             </div>
-            <p className="text-sm text-muted-foreground mt-4">Total Goal Completion</p>
+            <p className="text-sm text-muted-foreground mt-4">Completitud Total de Metas</p>
           </div>
         </CardContent>
       </Card>
 
       <Tabs defaultValue="week" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="week">Current Week</TabsTrigger>
-          <TabsTrigger value="month">Current Month</TabsTrigger>
-          <TabsTrigger value="overall">Overall</TabsTrigger>
+          <TabsTrigger value="week">Semana Actual</TabsTrigger>
+          <TabsTrigger value="month">Mes Actual</TabsTrigger>
+          <TabsTrigger value="overall">General</TabsTrigger>
         </TabsList>
         
         <TabsContent value="week" className="space-y-6 mt-6">

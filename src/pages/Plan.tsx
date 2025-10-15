@@ -66,7 +66,7 @@ export default function Plan() {
           {goal.text}
         </p>
         <p className="text-sm text-muted-foreground mt-1">
-          {goal.remaining} remaining {sectionKey === "today" ? "today" : sectionKey === "week" ? "this week" : sectionKey === "month" ? "this month" : ""}
+          {goal.remaining} restante{goal.remaining !== 1 ? 's' : ''} {sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}
         </p>
       </div>
       <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-primary/30 text-primary font-medium">
@@ -78,17 +78,17 @@ export default function Plan() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight tracking-tight mb-3">My Plan</h1>
-        <p className="text-muted-foreground text-lg">Track your recovery goals and progress</p>
+        <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight tracking-tight mb-3">Mi Plan</h1>
+        <p className="text-muted-foreground text-lg">Rastrea tus metas y progreso de recuperación</p>
       </div>
 
       <AbstinenceCounter startDate={startDate} />
 
       <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold text-foreground">Goals</h2>
+        <h2 className="text-3xl font-bold text-foreground">Metas</h2>
         <Button variant="accent" className="gap-2">
           <Plus className="h-5 w-5" />
-          Add Goal
+          Añadir Meta
         </Button>
       </div>
 
@@ -96,7 +96,7 @@ export default function Plan() {
         {/* Today */}
         <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-lg">
           <CardHeader>
-            <SectionHeader title="Today" sectionKey="today" />
+            <SectionHeader title="Hoy" sectionKey="today" />
           </CardHeader>
           {sections.today.open && (
             <CardContent className="space-y-3">
@@ -110,7 +110,7 @@ export default function Plan() {
         {/* This Week */}
         <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-lg">
           <CardHeader>
-            <SectionHeader title="This Week (M-S)" sectionKey="week" />
+            <SectionHeader title="Esta Semana (L-D)" sectionKey="week" />
           </CardHeader>
           {sections.week.open && (
             <CardContent className="space-y-3">
@@ -124,7 +124,7 @@ export default function Plan() {
         {/* This Month */}
         <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-lg">
           <CardHeader>
-            <SectionHeader title="This Month" sectionKey="month" />
+            <SectionHeader title="Este Mes" sectionKey="month" />
           </CardHeader>
           {sections.month.open && (
             <CardContent className="space-y-3">
@@ -138,7 +138,7 @@ export default function Plan() {
         {/* One-Time Goals */}
         <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-lg">
           <CardHeader>
-            <SectionHeader title="One-Time Goals" sectionKey="onetime" />
+            <SectionHeader title="Metas Únicas" sectionKey="onetime" />
           </CardHeader>
           {sections.onetime.open && (
             <CardContent className="space-y-3">

@@ -21,17 +21,17 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 
 const menuItems = [
-  { icon: Home, label: "Dashboard", path: "/dashboard" },
-  { icon: Target, label: "My Plan", path: "/plan" },
-  { icon: Bell, label: "Reminders", path: "/reminders" },
-  { icon: ClipboardCheck, label: "Daily Check-In", path: "/checkin" },
-  { icon: TrendingUp, label: "Progress", path: "/progress" },
-  { icon: Wrench, label: "Tools", path: "/tools" },
-  { icon: Heart, label: "Values", path: "/values" },
-  { icon: ListChecks, label: "Gratitude List", path: "/gratitude" },
-  { icon: MessageSquare, label: "Daily Message", path: "/message" },
-  { icon: BookOpen, label: "Journal", path: "/journal" },
-  { icon: Settings, label: "Settings", path: "/settings" },
+  { icon: Home, label: "Panel", path: "/dashboard" },
+  { icon: Target, label: "Mi Plan", path: "/plan" },
+  { icon: Bell, label: "Recordatorios", path: "/reminders" },
+  { icon: ClipboardCheck, label: "Check-In Diario", path: "/checkin" },
+  { icon: TrendingUp, label: "Progreso", path: "/progress" },
+  { icon: Wrench, label: "Herramientas", path: "/tools" },
+  { icon: Heart, label: "Valores", path: "/values" },
+  { icon: ListChecks, label: "Lista de Gratitud", path: "/gratitude" },
+  { icon: MessageSquare, label: "Mensaje Diario", path: "/message" },
+  { icon: BookOpen, label: "Diario", path: "/journal" },
+  { icon: Settings, label: "Configuración", path: "/settings" },
 ];
 
 export function Sidebar() {
@@ -53,7 +53,7 @@ export function Sidebar() {
     <div className="flex flex-col h-full">
       <Link to="/dashboard" className="mb-8 px-8 pt-6 block hover:opacity-80 transition-opacity" onClick={() => setOpen(false)}>
         <h1 className="text-3xl font-bold text-sidebar-foreground tracking-tight">Rehapp</h1>
-        <p className="text-sm text-sidebar-foreground/60 mt-1">Your recovery journey</p>
+        <p className="text-sm text-sidebar-foreground/60 mt-1">Tu camino hacia la recuperación</p>
       </Link>
       
       <nav className="flex flex-col gap-2 px-6 flex-1 overflow-y-auto">
