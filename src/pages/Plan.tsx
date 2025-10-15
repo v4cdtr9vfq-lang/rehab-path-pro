@@ -140,7 +140,7 @@ export default function Plan() {
         setSections(prev => ({
           ...prev,
           [newGoal.type]: {
-            ...prev[newGoal.type],
+            open: true, // Abrir la sección automáticamente
             goals: [...prev[newGoal.type].goals, goal]
           }
         }));
