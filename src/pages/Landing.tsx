@@ -48,7 +48,7 @@ export default function Landing() {
               <span className="text-primary">está en  tus manos</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">Rehapp te acompaña en cada paso de tu proceso de crecimiento con herramientas diseñadas para mantenerte motivado y enfocado</p>
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">Rehapp te acompaña en cada paso de tu proceso de crecimiento con herramientas diseñadas para mantenerte motivado y enfocado.</p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
               <Link to="/auth?mode=signup">
@@ -71,9 +71,7 @@ export default function Landing() {
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               ¿Por qué Rehapp?
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Herramientas diseñadas específicamente para tu proceso de recuperación
-            </p>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Herramientas diseñadas específicamente para tu proceso de recuperación de las dependecias.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
