@@ -305,10 +305,11 @@ export default function ProgressPage() {
       </Card>
 
       <Tabs defaultValue="daily" className="w-full" onValueChange={setCurrentTab}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="daily">Diario</TabsTrigger>
           <TabsTrigger value="week">Semana Actual</TabsTrigger>
           <TabsTrigger value="month">Mes Actual</TabsTrigger>
+          <TabsTrigger value="overall">General</TabsTrigger>
         </TabsList>
 
         <TabsContent value="daily" className="space-y-6 mt-6">
@@ -376,6 +377,39 @@ export default function ProgressPage() {
           </Card>
         </TabsContent>
 
+        <TabsContent value="overall" className="space-y-6 mt-6">
+          <Card className="border-primary/20">
+            <CardHeader>
+              <CardTitle>Todas las Metas</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-semibold text-foreground">Check-in Diario</span>
+                  <span className="text-sm font-bold text-primary">{hasCheckedInToday ? '100' : '0'}%</span>
+                </div>
+                <Progress value={hasCheckedInToday ? 100 : 0} className="h-2.5 [&>div]:bg-green-500" />
+                <div className="flex justify-between items-center mt-1">
+                  <span className="text-xs text-muted-foreground">Check-in de recuperación</span>
+                  <span className={`text-xs font-medium ${hasCheckedInToday ? 'text-green-500' : 'text-muted-foreground'}`}>
+                    {hasCheckedInToday ? '✓ Completado' : 'Pendiente'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Group all goals by original ID to show each unique goal once */}
+              {(() => {
+                const allGoals = [...dailyGoals, ...weeklyGoals, ...monthlyGoals];
+                const uniqueGoals = allGoals.filter((goal, index, self) => 
+                  self.findIndex(g => g.originalId === goal.originalId) === index
+                );
+                return groupGoalsByOriginal(uniqueGoals).map((goal) => (
+                  <GoalProgressBar key={goal.id} goal={goal} />
+                ));
+              })()}
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
     </div>
   );
