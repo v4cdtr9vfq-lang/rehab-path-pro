@@ -227,21 +227,23 @@ export default function Home() {
                   className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-card hover:bg-muted/30 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <Checkbox
-                      checked={goal.status === "completed"}
-                      onCheckedChange={() => toggleGoal(goal.id)}
-                      className="flex-shrink-0 data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500"
-                    />
+                    <button
+                      onClick={() => toggleGoal(goal.id)}
+                      className="flex-shrink-0"
+                    >
+                      <CheckCircle2 
+                        className={`h-6 w-6 ${goal.status === "completed" ? "text-green-500" : "text-muted-foreground"}`} 
+                      />
+                    </button>
                     <div>
-                      <p className={`font-medium ${goal.status === "completed" ? "line-through text-muted-foreground" : "text-foreground"}`}>
+                      <p className="font-medium text-foreground">
                         {goal.title}
                       </p>
-                      <p className="text-xs text-muted-foreground">{goal.period}</p>
+                      <p className={`text-sm ${goal.status === "completed" ? "text-green-500" : "text-muted-foreground"}`}>
+                        {goal.status === "completed" ? "Completado" : goal.period}
+                      </p>
                     </div>
                   </div>
-                  <span className={`text-xs font-medium ${goal.status === "completed" ? "text-green-500" : "text-muted-foreground"}`}>
-                    {goal.status === "completed" ? "Completada" : "Pendiente"}
-                  </span>
                 </div>
               ))}
             </div>
