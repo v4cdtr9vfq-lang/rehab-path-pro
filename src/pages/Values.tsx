@@ -63,7 +63,7 @@ export default function Values() {
                 key={value.id}
                 className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
                   value.selected
-                    ? "bg-primary/10 border-2 border-primary/30"
+                    ? "bg-green-500/10 border-2 border-green-500/30"
                     : "bg-card/50 border-2 border-transparent hover:border-primary/10"
                 }`}
               >
@@ -74,7 +74,7 @@ export default function Values() {
                 />
                 <span className="text-lg text-foreground flex-1">{value.name}</span>
                 {value.selected && (
-                  <span className="text-xs bg-primary text-primary-foreground px-3 py-1 rounded-full">
+                  <span className="text-xs bg-green-500 text-white px-3 py-1 rounded-full">
                     Activo Hoy
                   </span>
                 )}
@@ -95,7 +95,7 @@ export default function Values() {
           <CardContent className="p-6">
             <h3 className="font-semibold text-foreground mb-3">💡 Recordatorio Diario de Valores</h3>
             <p className="text-foreground/80 text-sm">
-              Has seleccionado <span className="font-bold text-accent">{values.filter(v => v.selected).length} valores</span> para hoy. 
+              Has seleccionado <span className="font-bold text-green-500">{values.filter(v => v.selected).length} valores</span> para hoy. 
               Te haremos un seguimiento durante tu check-in diario para ver si has honrado estos valores.
             </p>
           </CardContent>
