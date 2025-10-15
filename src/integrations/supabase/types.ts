@@ -101,6 +101,62 @@ export type Database = {
         }
         Relationships: []
       }
+      value_selections: {
+        Row: {
+          created_at: string
+          id: string
+          selected_date: string
+          user_id: string
+          value_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          selected_date?: string
+          user_id: string
+          value_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          selected_date?: string
+          user_id?: string
+          value_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "value_selections_value_id_fkey"
+            columns: ["value_id"]
+            isOneToOne: false
+            referencedRelation: "values"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      values: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
