@@ -2,39 +2,38 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, Target, TrendingUp, Users, Heart, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
-
 export default function Landing() {
-  const benefits = [
-    {
-      icon: Target,
-      title: "Seguimiento de Progreso",
-      description: "Monitorea tu abstinencia día a día y celebra cada logro alcanzado"
-    },
-    {
-      icon: Calendar,
-      title: "Check-In Diario",
-      description: "Registra tu estado emocional y mantén el control de tu recuperación"
-    },
-    {
-      icon: TrendingUp,
-      title: "Metas Personalizadas",
-      description: "Establece y alcanza objetivos adaptados a tu proceso de recuperación"
-    },
-    {
-      icon: Users,
-      title: "Red de Apoyo",
-      description: "Conecta con tu red de soporte cuando más lo necesites"
-    }
-  ];
-
-  const steps = [
-    { number: "1", title: "Regístrate", description: "Crea tu cuenta en segundos" },
-    { number: "2", title: "Configura", description: "Personaliza tu perfil y fecha de inicio" },
-    { number: "3", title: "Progresa", description: "Sigue tu recuperación día a día" }
-  ];
-
-  return (
-    <div className="min-h-screen bg-background">
+  const benefits = [{
+    icon: Target,
+    title: "Seguimiento de Progreso",
+    description: "Monitorea tu abstinencia día a día y celebra cada logro alcanzado"
+  }, {
+    icon: Calendar,
+    title: "Check-In Diario",
+    description: "Registra tu estado emocional y mantén el control de tu recuperación"
+  }, {
+    icon: TrendingUp,
+    title: "Metas Personalizadas",
+    description: "Establece y alcanza objetivos adaptados a tu proceso de recuperación"
+  }, {
+    icon: Users,
+    title: "Red de Apoyo",
+    description: "Conecta con tu red de soporte cuando más lo necesites"
+  }];
+  const steps = [{
+    number: "1",
+    title: "Regístrate",
+    description: "Crea tu cuenta en segundos"
+  }, {
+    number: "2",
+    title: "Configura",
+    description: "Personaliza tu perfil y fecha de inicio"
+  }, {
+    number: "3",
+    title: "Progresa",
+    description: "Sigue tu recuperación día a día"
+  }];
+  return <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 md:py-32">
         <div className="container mx-auto px-4 max-w-6xl">
@@ -46,7 +45,7 @@ export default function Landing() {
             
             <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight">
               Tu recuperación,<br />
-              <span className="text-primary">a un toque de distancia</span>
+              <span className="text-primary">está en en tus manos</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -83,9 +82,8 @@ export default function Landing() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {benefits.map((benefit, index) => {
-              const Icon = benefit.icon;
-              return (
-                <Card key={index} className="border-border/50 hover:border-primary/20 transition-all duration-300">
+            const Icon = benefit.icon;
+            return <Card key={index} className="border-border/50 hover:border-primary/20 transition-all duration-300">
                   <CardContent className="p-8">
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -97,9 +95,8 @@ export default function Landing() {
                       </div>
                     </div>
                   </CardContent>
-                </Card>
-              );
-            })}
+                </Card>;
+          })}
           </div>
         </div>
       </section>
@@ -117,15 +114,13 @@ export default function Landing() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {steps.map((step, index) => (
-              <div key={index} className="text-center space-y-4">
+            {steps.map((step, index) => <div key={index} className="text-center space-y-4">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground text-2xl font-bold">
                   {step.number}
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">{step.title}</h3>
                 <p className="text-muted-foreground text-lg">{step.description}</p>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
       </section>
@@ -136,9 +131,7 @@ export default function Landing() {
           <Card className="border-primary/20">
             <CardContent className="p-12 text-center space-y-6">
               <div className="flex justify-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <CheckCircle2 key={i} className="h-6 w-6 text-primary" />
-                ))}
+                {[...Array(5)].map((_, i) => <CheckCircle2 key={i} className="h-6 w-6 text-primary" />)}
               </div>
               <blockquote className="text-2xl md:text-3xl font-medium text-foreground leading-relaxed">
                 "La confianza se construye con consistencia. Rehapp me ha ayudado a mantener el enfoque día a día"
@@ -174,6 +167,5 @@ export default function Landing() {
           </p>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 }
