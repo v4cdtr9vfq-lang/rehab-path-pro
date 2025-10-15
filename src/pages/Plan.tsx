@@ -129,6 +129,8 @@ export default function Plan() {
     const dates = context === 'onetime' ? [new Date()] : getDateRange(context);
     const expanded: ExpandedGoal[] = [];
     
+    console.log(`[expandGoals] Context: ${context}, Dates:`, dates.map(d => d.toISOString().split('T')[0]));
+    
     goals.forEach(g => {
       if (context === 'onetime') {
         // One-time goals: simple expansion
@@ -151,6 +153,8 @@ export default function Plan() {
           const stored = localStorage.getItem(dateKey);
           const completedForDay = stored ? new Set(JSON.parse(stored)) : new Set();
           
+          console.log(`  Goal: ${g.text}, Date: ${dateStr}, Completed for day:`, [...completedForDay]);
+          
           // How many instances per day based on goal type
           let instancesPerDay = g.remaining;
           if (g.goal_type === 'week' && context === 'month') {
@@ -171,6 +175,7 @@ export default function Plan() {
             // Daily goals: create instances for each day
             for (let i = 0; i < instancesPerDay; i++) {
               const instanceId = `${g.id}__${dateStr}__${i}`;
+              console.log(`    Creating instance: ${instanceId}, completed: ${completedForDay.has(instanceId)}`);
               expanded.push({
                 ...g,
                 id: instanceId,
