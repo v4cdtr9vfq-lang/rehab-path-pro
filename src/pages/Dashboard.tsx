@@ -241,18 +241,18 @@ export default function Home() {
           {/* Daily Check-In Status */}
           <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
             <div className="flex items-center gap-3">
-              {checkInCompleted ? (
-                <CheckCircle2 className="h-6 w-6 text-green-500" />
-              ) : (
-                <Clock className="h-6 w-6 text-muted-foreground" />
-              )}
+              <button className="flex-shrink-0 cursor-default">
+                {checkInCompleted ? (
+                  <CheckCircle2 className="h-6 w-6 text-green-500" />
+                ) : (
+                  <Circle className="h-6 w-6 text-muted-foreground" />
+                )}
+              </button>
               <div>
                 <p className="font-semibold text-foreground">Check-In Diario</p>
-                {checkInCompleted ? (
-                  <p className="text-sm text-green-500">Completado</p>
-                ) : (
-                  <p className="text-sm text-muted-foreground">Pendiente ⏱️</p>
-                )}
+                <p className={`text-sm ${checkInCompleted ? "text-green-500" : "text-muted-foreground"}`}>
+                  {checkInCompleted ? "Completado" : "Pendiente"}
+                </p>
               </div>
             </div>
             {checkInCompleted ? (
