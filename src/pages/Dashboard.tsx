@@ -49,27 +49,41 @@ export default function Home() {
         }
 
         // Fetch today's goals (including 'always' type)
-        const { data: goals } = await supabase
+        const { data: goals, error: goalsError } = await supabase
           .from('goals')
           .select('*')
-          .eq('user_id', user.id)
-          .in('goal_type', ['today', 'week', 'always']);
+          .eq('user_id', user.id);
 
-        if (goals) {
-          const completed = goals.filter(g => g.completed).length;
+        console.log('Goals data:', goals);
+        console.log('Goals error:', goalsError);
+
+        if (goals && goals.length > 0) {
+          // Filter goals that should appear today
+          const todayGoals = goals.filter(g => 
+            g.goal_type === 'today' || 
+            g.goal_type === 'week' || 
+            g.goal_type === 'always'
+          );
+          
+          const completed = todayGoals.filter(g => g.completed).length;
           // Add check-in to completed count if done
           const totalCompleted = completed + (checkIn ? 1 : 0);
           // Add 1 to total goals for the check-in
-          const totalGoalsCount = goals.length + 1;
+          const totalGoalsCount = todayGoals.length + 1;
           
           setGoalsCompleted(totalCompleted);
           setTotalGoals(totalGoalsCount);
-          setActiveGoals(goals.slice(0, 3).map(g => ({
+          setActiveGoals(todayGoals.slice(0, 3).map(g => ({
             id: g.id,
             title: g.text,
             period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Siempre' : 'Esta semana',
             status: g.completed ? 'completed' : 'pending'
           })));
+        } else {
+          // No goals yet, only count check-in
+          setGoalsCompleted(checkIn ? 1 : 0);
+          setTotalGoals(1);
+          setActiveGoals([]);
         }
       }
       setLoading(false);
