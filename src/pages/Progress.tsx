@@ -75,6 +75,28 @@ export default function ProgressPage() {
     return expanded;
   };
 
+  // Group expanded goals by original ID and calculate percentage
+  const groupGoalsByOriginal = (expandedGoals: ExpandedGoal[]) => {
+    const grouped = new Map<string, { text: string; total: number; completed: number }>();
+    
+    expandedGoals.forEach(goal => {
+      if (!grouped.has(goal.originalId)) {
+        grouped.set(goal.originalId, { text: goal.text, total: 0, completed: 0 });
+      }
+      const group = grouped.get(goal.originalId)!;
+      group.total++;
+      if (goal.completed) group.completed++;
+    });
+    
+    return Array.from(grouped.entries()).map(([id, data]) => ({
+      id,
+      text: data.text,
+      total: data.total,
+      completed: data.completed,
+      percentage: data.total > 0 ? Math.round((data.completed / data.total) * 100) : 0
+    }));
+  };
+
   const calculateProgress = () => {
     let completed = 0;
     let total = 0;
@@ -142,13 +164,21 @@ export default function ProgressPage() {
     { name: "Espiritual", percentage: 0, color: "bg-accent" },
   ];
 
-  const ProgressBar = ({ area }: { area: ProgressArea }) => (
-    <div className="space-y-2">
-      <div className="flex justify-between items-center">
-        <span className="text-sm font-medium text-foreground">{area.name}</span>
-        <span className="text-sm font-bold text-primary">{area.percentage}%</span>
+  const GoalProgressBar = ({ goal }: { goal: { id: string; text: string; total: number; completed: number; percentage: number } }) => (
+    <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-sm font-semibold text-foreground">{goal.text}</span>
+        <span className="text-sm font-bold text-primary">{goal.percentage}%</span>
       </div>
-      <Progress value={area.percentage} className="h-2" />
+      <Progress value={goal.percentage} className="h-2.5 [&>div]:bg-green-500" />
+      <div className="flex justify-between items-center mt-1">
+        <span className="text-xs text-muted-foreground">
+          {goal.completed} de {goal.total} completadas
+        </span>
+        <span className={`text-xs font-medium ${goal.percentage === 100 ? 'text-green-500' : 'text-muted-foreground'}`}>
+          {goal.percentage === 100 ? '✓ Completada' : `${goal.total - goal.completed} restantes`}
+        </span>
+      </div>
     </div>
   );
 
@@ -190,36 +220,22 @@ export default function ProgressPage() {
               <CardTitle>Progreso Diario</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
-                <div className="flex items-center gap-3">
-                  {hasCheckedInToday ? (
-                    <CheckCircle2 className="h-6 w-6 text-green-500" />
-                  ) : (
-                    <Circle className="h-6 w-6 text-muted-foreground" />
-                  )}
-                  <span className="text-foreground font-semibold">Recuperación</span>
+              <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-semibold text-foreground">Check-in Diario</span>
+                  <span className="text-sm font-bold text-primary">{hasCheckedInToday ? '100' : '0'}%</span>
                 </div>
-                <span className={`text-sm ${hasCheckedInToday ? 'text-green-500' : 'text-muted-foreground'}`}>
-                  {hasCheckedInToday ? 'Completado' : 'Pendiente'}
-                </span>
-              </div>
-              
-              {dailyGoals.map((goal) => (
-                <div key={goal.id} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
-                  <div className="flex items-center gap-3">
-                    {goal.completed ? (
-                      <CheckCircle2 className="h-6 w-6 text-green-500" />
-                    ) : (
-                      <Circle className="h-6 w-6 text-muted-foreground" />
-                    )}
-                    <span className="text-foreground font-semibold">
-                      {goal.text}
-                    </span>
-                  </div>
-                  <span className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
-                    {goal.completed ? 'Completado' : 'Pendiente'}
+                <Progress value={hasCheckedInToday ? 100 : 0} className="h-2.5 [&>div]:bg-green-500" />
+                <div className="flex justify-between items-center mt-1">
+                  <span className="text-xs text-muted-foreground">Check-in de recuperación</span>
+                  <span className={`text-xs font-medium ${hasCheckedInToday ? 'text-green-500' : 'text-muted-foreground'}`}>
+                    {hasCheckedInToday ? '✓ Completado' : 'Pendiente'}
                   </span>
                 </div>
+              </div>
+              
+              {groupGoalsByOriginal(dailyGoals).map((goal) => (
+                <GoalProgressBar key={goal.id} goal={goal} />
               ))}
 
               {dailyGoals.length === 0 && (
@@ -235,22 +251,8 @@ export default function ProgressPage() {
               <CardTitle>Progreso Semanal</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {weeklyGoals.map((goal) => (
-                <div key={goal.id} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
-                  <div className="flex items-center gap-3">
-                    {goal.completed ? (
-                      <CheckCircle2 className="h-6 w-6 text-green-500" />
-                    ) : (
-                      <Circle className="h-6 w-6 text-muted-foreground" />
-                    )}
-                    <span className="text-foreground font-semibold">
-                      {goal.text}
-                    </span>
-                  </div>
-                  <span className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
-                    {goal.completed ? 'Completado' : 'Pendiente'}
-                  </span>
-                </div>
+              {groupGoalsByOriginal(weeklyGoals).map((goal) => (
+                <GoalProgressBar key={goal.id} goal={goal} />
               ))}
 
               {weeklyGoals.length === 0 && (
@@ -266,22 +268,8 @@ export default function ProgressPage() {
               <CardTitle>Progreso Mensual</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {monthlyGoals.map((goal) => (
-                <div key={goal.id} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
-                  <div className="flex items-center gap-3">
-                    {goal.completed ? (
-                      <CheckCircle2 className="h-6 w-6 text-green-500" />
-                    ) : (
-                      <Circle className="h-6 w-6 text-muted-foreground" />
-                    )}
-                    <span className="text-foreground font-semibold">
-                      {goal.text}
-                    </span>
-                  </div>
-                  <span className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
-                    {goal.completed ? 'Completado' : 'Pendiente'}
-                  </span>
-                </div>
+              {groupGoalsByOriginal(monthlyGoals).map((goal) => (
+                <GoalProgressBar key={goal.id} goal={goal} />
               ))}
 
               {monthlyGoals.length === 0 && (
@@ -297,39 +285,25 @@ export default function ProgressPage() {
               <CardTitle>Todas las Metas</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
-                <div className="flex items-center gap-3">
-                  {hasCheckedInToday ? (
-                    <CheckCircle2 className="h-6 w-6 text-green-500" />
-                  ) : (
-                    <Circle className="h-6 w-6 text-muted-foreground" />
-                  )}
-                  <span className="text-foreground font-semibold">Recuperación</span>
+              <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-semibold text-foreground">Check-in Diario</span>
+                  <span className="text-sm font-bold text-primary">{hasCheckedInToday ? '100' : '0'}%</span>
                 </div>
-                <span className={`text-sm ${hasCheckedInToday ? 'text-green-500' : 'text-muted-foreground'}`}>
-                  {hasCheckedInToday ? 'Completado' : 'Pendiente'}
-                </span>
+                <Progress value={hasCheckedInToday ? 100 : 0} className="h-2.5 [&>div]:bg-green-500" />
+                <div className="flex justify-between items-center mt-1">
+                  <span className="text-xs text-muted-foreground">Check-in de recuperación</span>
+                  <span className={`text-xs font-medium ${hasCheckedInToday ? 'text-green-500' : 'text-muted-foreground'}`}>
+                    {hasCheckedInToday ? '✓ Completado' : 'Pendiente'}
+                  </span>
+                </div>
               </div>
 
-              {[...dailyGoals, ...weeklyGoals, ...monthlyGoals]
-                .filter((goal, index, self) => self.findIndex(g => g.id === goal.id) === index)
-                .map((goal) => (
-                  <div key={goal.id} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
-                    <div className="flex items-center gap-3">
-                      {goal.completed ? (
-                        <CheckCircle2 className="h-6 w-6 text-green-500" />
-                      ) : (
-                        <Circle className="h-6 w-6 text-muted-foreground" />
-                      )}
-                      <span className="text-foreground font-semibold">
-                        {goal.text}
-                      </span>
-                    </div>
-                    <span className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
-                      {goal.completed ? 'Completado' : 'Pendiente'}
-                    </span>
-                  </div>
-                ))}
+              {groupGoalsByOriginal([...dailyGoals, ...weeklyGoals, ...monthlyGoals]
+                .filter((goal, index, self) => self.findIndex(g => g.originalId === goal.originalId) === index)
+              ).map((goal) => (
+                <GoalProgressBar key={goal.id} goal={goal} />
+              ))}
             </CardContent>
           </Card>
         </TabsContent>
