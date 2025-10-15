@@ -266,9 +266,9 @@ export default function ProgressPage() {
     <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
       <div className="flex justify-between items-center mb-2">
         <span className="text-sm font-semibold text-foreground">{goal.text}</span>
-        <span className="text-sm font-bold text-primary">{goal.percentage}%</span>
+        <span className={`text-sm font-bold ${goal.percentage === 100 ? 'text-green-500' : 'text-primary'}`}>{goal.percentage}%</span>
       </div>
-      <Progress value={goal.percentage} className="h-2.5 [&>div]:bg-green-500" />
+      <Progress value={goal.percentage} className={`h-2.5 ${goal.percentage === 100 ? '[&>div]:bg-green-500' : '[&>div]:bg-primary'}`} />
       <div className="flex justify-between items-center mt-1">
         <span className="text-xs text-muted-foreground">
           {goal.completed} de {goal.total} completadas
@@ -296,8 +296,11 @@ export default function ProgressPage() {
         </CardHeader>
         <CardContent>
           <div className="text-center mb-6">
-            <div className={`inline-flex items-center justify-center w-32 h-32 rounded-full border-8 ${overallProgress === 100 ? 'border-green-500/30 bg-green-500/5' : 'border-primary/20 bg-card'} transition-colors duration-500`}>
-              <span className={`text-4xl font-bold ${overallProgress === 100 ? 'text-green-500' : 'text-primary'} transition-colors duration-500`}>{overallProgress}%</span>
+            <div className={`inline-flex items-center justify-center w-40 h-40 rounded-full border-8 ${overallProgress === 100 ? 'border-green-500/30 bg-green-500/5' : 'border-primary/20 bg-card'} transition-colors duration-500`}>
+              <div className="flex flex-col items-center justify-center">
+                <span className={`text-5xl font-bold ${overallProgress === 100 ? 'text-green-500' : 'text-primary'} transition-colors duration-500`}>{overallProgress}</span>
+                <span className={`text-lg font-medium ${overallProgress === 100 ? 'text-green-500' : 'text-primary'} transition-colors duration-500`}>%</span>
+              </div>
             </div>
             <p className="text-sm text-muted-foreground mt-4">Completitud Total de Metas</p>
           </div>
@@ -320,9 +323,9 @@ export default function ProgressPage() {
               <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-semibold text-foreground">Check-in Diario</span>
-                  <span className="text-sm font-bold text-primary">{hasCheckedInToday ? '100' : '0'}%</span>
+                  <span className={`text-sm font-bold ${hasCheckedInToday ? 'text-green-500' : 'text-primary'}`}>{hasCheckedInToday ? '100' : '0'}%</span>
                 </div>
-                <Progress value={hasCheckedInToday ? 100 : 0} className="h-2.5 [&>div]:bg-green-500" />
+                <Progress value={hasCheckedInToday ? 100 : 0} className={`h-2.5 ${hasCheckedInToday ? '[&>div]:bg-green-500' : '[&>div]:bg-primary'}`} />
                 <div className="flex justify-between items-center mt-1">
                   <span className="text-xs text-muted-foreground">Check-in de recuperación</span>
                   <span className={`text-xs font-medium ${hasCheckedInToday ? 'text-green-500' : 'text-muted-foreground'}`}>
