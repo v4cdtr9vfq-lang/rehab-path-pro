@@ -3,12 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Target, ClipboardCheck, Phone, Wind, BookOpen, AlertCircle, CheckCircle2, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
+  const { toast } = useToast();
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [loading, setLoading] = useState(true);
   const [checkInCompleted, setCheckInCompleted] = useState(false);
@@ -17,6 +20,47 @@ export default function Home() {
   const [totalGoals, setTotalGoals] = useState(0);
   const goalsProgress = totalGoals > 0 ? (goalsCompleted / totalGoals) * 100 : 0;
   const [activeGoals, setActiveGoals] = useState<any[]>([]);
+
+  const toggleGoal = async (goalId: string) => {
+    try {
+      const goal = activeGoals.find(g => g.id === goalId);
+      if (!goal) return;
+
+      const newCompletedStatus = goal.status !== 'completed';
+
+      const { error } = await supabase
+        .from('goals')
+        .update({ completed: newCompletedStatus })
+        .eq('id', goalId);
+
+      if (error) throw error;
+
+      // Update local state
+      setActiveGoals(prev => prev.map(g => 
+        g.id === goalId 
+          ? { ...g, status: newCompletedStatus ? 'completed' : 'pending' }
+          : g
+      ));
+
+      // Recalculate completed count
+      const newCompleted = activeGoals.filter(g => 
+        g.id === goalId ? newCompletedStatus : g.status === 'completed'
+      ).length + (checkInCompleted ? 1 : 0);
+      
+      setGoalsCompleted(newCompleted);
+
+      toast({
+        title: "Meta actualizada",
+        description: "El estado de la meta ha sido actualizado",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar la meta",
+        variant: "destructive",
+      });
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -183,11 +227,11 @@ export default function Home() {
                   className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-card hover:bg-muted/30 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    {goal.status === "completed" ? (
-                      <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                    ) : (
-                      <div className="h-5 w-5 rounded-full border-2 border-muted-foreground flex-shrink-0" />
-                    )}
+                    <Checkbox
+                      checked={goal.status === "completed"}
+                      onCheckedChange={() => toggleGoal(goal.id)}
+                      className="flex-shrink-0"
+                    />
                     <div>
                       <p className={`font-medium ${goal.status === "completed" ? "line-through text-muted-foreground" : "text-foreground"}`}>
                         {goal.title}
