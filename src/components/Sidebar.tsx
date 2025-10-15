@@ -29,8 +29,8 @@ const menuItems = [
   { icon: Heart, label: "Valores", path: "/values" },
   { icon: ListChecks, label: "Lista de Gratitud", path: "/gratitude" },
   { icon: MessageSquare, label: "Mensaje Diario", path: "/message" },
-  { icon: BookOpen, label: "Diario", path: "/journal" },
   { icon: Smile, label: "Diario de Emociones", path: "/emotion-journal" },
+  { icon: BookOpen, label: "Diario", path: "/journal" },
   { icon: Settings, label: "Configuración", path: "/settings" },
 ];
 
