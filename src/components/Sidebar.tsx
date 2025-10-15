@@ -51,11 +51,12 @@ export function Sidebar() {
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
-      <nav className="flex flex-col gap-2 p-6 flex-1">
-        <div className="mb-8 px-2">
-          <h1 className="text-3xl font-bold text-sidebar-foreground tracking-tight">RehabApp</h1>
-          <p className="text-sm text-sidebar-foreground/60 mt-1">Your recovery journey</p>
-        </div>
+      <div className="mb-8 px-8 pt-6">
+        <h1 className="text-3xl font-bold text-sidebar-foreground tracking-tight">RehabApp</h1>
+        <p className="text-sm text-sidebar-foreground/60 mt-1">Your recovery journey</p>
+      </div>
+      
+      <nav className="flex flex-col gap-2 px-6 flex-1 overflow-y-auto">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
@@ -75,16 +76,18 @@ export function Sidebar() {
             </Link>
           );
         })}
-        
-        {/* Logout Button */}
+      </nav>
+
+      {/* Logout Button - Fixed at bottom */}
+      <div className="p-6 border-t border-sidebar-border">
         <button
           onClick={handleLogout}
-          className="flex items-center gap-4 w-full rounded-2xl px-4 py-3.5 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 font-medium mt-2"
+          className="flex items-center gap-4 w-full rounded-2xl px-4 py-3.5 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 font-medium"
         >
           <LogOut className="h-5 w-5" />
           <span className="text-[15px]">Cerrar sesión</span>
         </button>
-      </nav>
+      </div>
     </div>
   );
 
