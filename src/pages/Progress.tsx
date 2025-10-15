@@ -44,23 +44,72 @@ export default function ProgressPage() {
     calculateProgress();
   }, [currentTab, dailyGoals, weeklyGoals, monthlyGoals, hasCheckedInToday]);
 
-  // Get today's date key for localStorage
-  const getTodayKey = () => {
-    return `goals_completed_${new Date().toISOString().split('T')[0]}`;
+  // Get date key for localStorage
+  const getDateKey = (date: Date) => {
+    return `goals_completed_${date.toISOString().split('T')[0]}`;
   };
 
-  // Load completed instances from localStorage
-  const loadCompletedInstances = (): Set<string> => {
-    const stored = localStorage.getItem(getTodayKey());
-    return stored ? new Set(JSON.parse(stored)) : new Set();
+  // Get date range for context
+  const getDateRange = (context: 'daily' | 'weekly' | 'monthly'): Date[] => {
+    const dates: Date[] = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    if (context === 'daily') {
+      dates.push(today);
+    } else if (context === 'weekly') {
+      // Get current week (last 7 days including today)
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        dates.push(date);
+      }
+    } else if (context === 'monthly') {
+      // Get current month days
+      const year = today.getFullYear();
+      const month = today.getMonth();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      for (let day = 1; day <= daysInMonth; day++) {
+        dates.push(new Date(year, month, day));
+      }
+    }
+    return dates;
   };
 
-  const expandGoals = (goals: Goal[]): ExpandedGoal[] => {
-    const completedInstances = loadCompletedInstances();
+  // Load completed instances from localStorage for a date range
+  const loadCompletedInstancesForRange = (dates: Date[]): Set<string> => {
+    const allCompleted = new Set<string>();
+    dates.forEach(date => {
+      const stored = localStorage.getItem(getDateKey(date));
+      if (stored) {
+        const completedIds = JSON.parse(stored);
+        completedIds.forEach((id: string) => allCompleted.add(id));
+      }
+    });
+    return allCompleted;
+  };
+
+  const expandGoals = (goals: Goal[], context: 'daily' | 'weekly' | 'monthly'): ExpandedGoal[] => {
+    const dates = getDateRange(context);
+    const completedInstances = loadCompletedInstancesForRange(dates);
     const expanded: ExpandedGoal[] = [];
     
     goals.forEach(g => {
-      for (let i = 0; i < g.remaining; i++) {
+      let instanceCount = g.remaining;
+      
+      // Multiply instances based on context for recurring goals
+      if (g.goal_type === 'always' || g.goal_type === 'today') {
+        if (context === 'weekly') {
+          instanceCount = g.remaining * 7;
+        } else if (context === 'monthly') {
+          instanceCount = g.remaining * dates.length;
+        }
+      } else if (g.goal_type === 'week' && context === 'monthly') {
+        // Weekly goals in monthly view: ~4 weeks
+        instanceCount = g.remaining * 4;
+      }
+      
+      for (let i = 0; i < instanceCount; i++) {
         const instanceId = `${g.id}-${i}`;
         expanded.push({
           id: instanceId,
@@ -143,12 +192,12 @@ export default function ProgressPage() {
 
       if (goals) {
         const daily = goals.filter(g => g.goal_type === 'today' || g.goal_type === 'always');
-        const weekly = goals.filter(g => g.goal_type === 'week' || g.goal_type === 'always');
-        const monthly = goals.filter(g => g.goal_type === 'month' || g.goal_type === 'always');
+        const weekly = goals.filter(g => g.goal_type === 'week' || g.goal_type === 'always' || g.goal_type === 'today');
+        const monthly = goals.filter(g => g.goal_type === 'month' || g.goal_type === 'always' || g.goal_type === 'today' || g.goal_type === 'week');
 
-        setDailyGoals(expandGoals(daily));
-        setWeeklyGoals(expandGoals(weekly));
-        setMonthlyGoals(expandGoals(monthly));
+        setDailyGoals(expandGoals(daily, 'daily'));
+        setWeeklyGoals(expandGoals(weekly, 'weekly'));
+        setMonthlyGoals(expandGoals(monthly, 'monthly'));
       }
     } catch (error) {
       console.error('Error fetching data:', error);

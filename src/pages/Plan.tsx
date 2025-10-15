@@ -63,29 +63,85 @@ export default function Plan() {
   });
   const [editingGoal, setEditingGoal] = useState<any>(null);
 
-  // Get today's date key for localStorage
-  const getTodayKey = () => {
+  // Get date key for localStorage
+  const getDateKey = () => {
     return `goals_completed_${new Date().toISOString().split('T')[0]}`;
   };
 
-  // Load completed instances from localStorage
+  // Load completed instances from localStorage for today
   const loadCompletedInstances = (): Set<string> => {
-    const stored = localStorage.getItem(getTodayKey());
+    const stored = localStorage.getItem(getDateKey());
     return stored ? new Set(JSON.parse(stored)) : new Set();
   };
 
   // Save completed instances to localStorage
   const saveCompletedInstances = (completedIds: Set<string>) => {
-    localStorage.setItem(getTodayKey(), JSON.stringify([...completedIds]));
+    localStorage.setItem(getDateKey(), JSON.stringify([...completedIds]));
   };
 
-  // Expand goals into instances
-  const expandGoals = (goals: Goal[]): ExpandedGoal[] => {
-    const completedInstances = loadCompletedInstances();
+  // Get date range for context
+  const getDateRange = (context: 'today' | 'week' | 'month'): Date[] => {
+    const dates: Date[] = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    if (context === 'today') {
+      dates.push(today);
+    } else if (context === 'week') {
+      // Get current week (last 7 days including today)
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        dates.push(date);
+      }
+    } else if (context === 'month') {
+      // Get current month days
+      const year = today.getFullYear();
+      const month = today.getMonth();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      for (let day = 1; day <= daysInMonth; day++) {
+        dates.push(new Date(year, month, day));
+      }
+    }
+    return dates;
+  };
+
+  // Load completed instances from localStorage for a date range
+  const loadCompletedInstancesForRange = (dates: Date[]): Set<string> => {
+    const allCompleted = new Set<string>();
+    dates.forEach(date => {
+      const key = `goals_completed_${date.toISOString().split('T')[0]}`;
+      const stored = localStorage.getItem(key);
+      if (stored) {
+        const completedIds = JSON.parse(stored);
+        completedIds.forEach((id: string) => allCompleted.add(id));
+      }
+    });
+    return allCompleted;
+  };
+
+  // Expand goals into instances based on context
+  const expandGoals = (goals: Goal[], context: 'today' | 'week' | 'month' | 'onetime'): ExpandedGoal[] => {
+    const dates = context === 'onetime' ? [new Date()] : getDateRange(context);
+    const completedInstances = loadCompletedInstancesForRange(dates);
     const expanded: ExpandedGoal[] = [];
     
     goals.forEach(g => {
-      for (let i = 0; i < g.remaining; i++) {
+      let instanceCount = g.remaining;
+      
+      // Multiply instances based on context for recurring goals
+      if (g.goal_type === 'always' || g.goal_type === 'today') {
+        if (context === 'week') {
+          instanceCount = g.remaining * 7;
+        } else if (context === 'month') {
+          instanceCount = g.remaining * dates.length;
+        }
+      } else if (g.goal_type === 'week' && context === 'month') {
+        // Weekly goals in monthly view: ~4 weeks
+        instanceCount = g.remaining * 4;
+      }
+      
+      for (let i = 0; i < instanceCount; i++) {
         const instanceId = `${g.id}-${i}`;
         expanded.push({
           ...g,
@@ -119,22 +175,26 @@ export default function Plan() {
 
       if (goals) {
         const alwaysGoals = goals.filter(g => g.goal_type === 'always');
+        const todayGoals = goals.filter(g => g.goal_type === 'today');
+        const weekGoals = goals.filter(g => g.goal_type === 'week');
+        const monthGoals = goals.filter(g => g.goal_type === 'month');
+        
         const groupedGoals = {
           today: { 
             open: true, 
-            goals: expandGoals([...goals.filter(g => g.goal_type === 'today'), ...alwaysGoals])
+            goals: expandGoals([...todayGoals, ...alwaysGoals], 'today')
           },
           week: { 
             open: false, 
-            goals: expandGoals([...goals.filter(g => g.goal_type === 'week'), ...alwaysGoals])
+            goals: expandGoals([...weekGoals, ...todayGoals, ...alwaysGoals], 'week')
           },
           month: { 
             open: false, 
-            goals: expandGoals([...goals.filter(g => g.goal_type === 'month'), ...alwaysGoals])
+            goals: expandGoals([...monthGoals, ...weekGoals, ...todayGoals, ...alwaysGoals], 'month')
           },
           onetime: { 
             open: false, 
-            goals: expandGoals(goals.filter(g => g.goal_type === 'onetime'))
+            goals: expandGoals(goals.filter(g => g.goal_type === 'onetime'), 'onetime')
           }
         };
         setSections(groupedGoals);
@@ -248,25 +308,8 @@ export default function Plan() {
       if (error) throw error;
 
       if (goal) {
-        const expandedGoal = expandGoals([goal]);
-        
-        // Si es tipo "always", añadir a todas las secciones
-        if (newGoal.type === 'always') {
-          setSections(prev => ({
-            today: { open: true, goals: [...prev.today.goals, ...expandedGoal] },
-            week: { open: prev.week.open, goals: [...prev.week.goals, ...expandedGoal] },
-            month: { open: prev.month.open, goals: [...prev.month.goals, ...expandedGoal] },
-            onetime: prev.onetime
-          }));
-        } else {
-          setSections(prev => ({
-            ...prev,
-            [newGoal.type]: {
-              open: true,
-              goals: [...prev[newGoal.type].goals, ...expandedGoal]
-            }
-          }));
-        }
+        // Refresh all goals to get correct expansion
+        await fetchGoals();
 
         toast({
           title: "¡Meta añadida!",
