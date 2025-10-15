@@ -63,9 +63,17 @@ export default function Plan() {
   });
   const [editingGoal, setEditingGoal] = useState<any>(null);
 
+  // Get local date string without UTC conversion
+  const getLocalDateString = (date: Date = new Date()): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   // Get date key for localStorage
   const getDateKey = () => {
-    return `goals_completed_${new Date().toISOString().split('T')[0]}`;
+    return `goals_completed_${getLocalDateString()}`;
   };
 
   // Load completed instances from localStorage for today
@@ -114,7 +122,7 @@ export default function Plan() {
   const loadCompletedInstancesForRange = (dates: Date[]): Set<string> => {
     const allCompleted = new Set<string>();
     dates.forEach(date => {
-      const key = `goals_completed_${date.toISOString().split('T')[0]}`;
+      const key = `goals_completed_${getLocalDateString(date)}`;
       const stored = localStorage.getItem(key);
       if (stored) {
         const completedIds = JSON.parse(stored);
@@ -128,8 +136,6 @@ export default function Plan() {
   const expandGoals = (goals: Goal[], context: 'today' | 'week' | 'month' | 'onetime'): ExpandedGoal[] => {
     const dates = context === 'onetime' ? [new Date()] : getDateRange(context);
     const expanded: ExpandedGoal[] = [];
-    
-    console.log(`[expandGoals] Context: ${context}, Dates:`, dates.map(d => d.toISOString().split('T')[0]));
     
     goals.forEach(g => {
       if (context === 'onetime') {
@@ -148,12 +154,10 @@ export default function Plan() {
       } else {
         // Recurring goals: create instances per day
         dates.forEach((date, dayIndex) => {
-          const dateStr = date.toISOString().split('T')[0];
+          const dateStr = getLocalDateString(date);
           const dateKey = `goals_completed_${dateStr}`;
           const stored = localStorage.getItem(dateKey);
           const completedForDay = stored ? new Set(JSON.parse(stored)) : new Set();
-          
-          console.log(`  Goal: ${g.text}, Date: ${dateStr}, Completed for day:`, [...completedForDay]);
           
           // How many instances per day based on goal type
           let instancesPerDay = g.remaining;
@@ -175,7 +179,6 @@ export default function Plan() {
             // Daily goals: create instances for each day
             for (let i = 0; i < instancesPerDay; i++) {
               const instanceId = `${g.id}__${dateStr}__${i}`;
-              console.log(`    Creating instance: ${instanceId}, completed: ${completedForDay.has(instanceId)}`);
               expanded.push({
                 ...g,
                 id: instanceId,
@@ -198,24 +201,14 @@ export default function Plan() {
 
   // Listen for goal updates from other components and storage changes
   useEffect(() => {
-    const handleGoalsUpdate = (e?: CustomEvent) => {
-      console.log('[Plan] goalsUpdated event received', e?.detail);
+    const handleGoalsUpdate = () => {
       fetchGoals();
     };
 
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key?.startsWith('goals_completed_')) {
-        console.log('[Plan] localStorage changed:', e.key);
-        fetchGoals();
-      }
-    };
-
     window.addEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
-    window.addEventListener('storage', handleStorageChange);
     
     return () => {
       window.removeEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
-      window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
 
@@ -553,13 +546,6 @@ export default function Plan() {
     // Get all instances of this specific goal in THIS section only
     const allGoalsInSection = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
     
-    console.log(`\n========== getRemainingCount ==========`);
-    console.log(`Goal: "${goal.text}"`);
-    console.log(`Section: ${sectionKey}`);
-    console.log(`Original ID: ${goal.originalId}`);
-    console.log(`Total instances in section: ${allGoalsInSection.length}`);
-    console.log(`All localStorage keys:`, Object.keys(localStorage).filter(k => k.startsWith('goals_completed')));
-    
     // Count completed by checking localStorage for each instance's date
     let completedCount = 0;
     for (const instance of allGoalsInSection) {
@@ -578,21 +564,13 @@ export default function Plan() {
       const stored = localStorage.getItem(dateKey);
       const completedForDate = stored ? new Set(JSON.parse(stored)) : new Set();
       
-      console.log(`  Instance: ${instance.id.substring(0, 50)}...`);
-      console.log(`    Date key: ${dateKey}`);
-      console.log(`    Completed IDs in that date:`, stored ? JSON.parse(stored) : []);
-      console.log(`    Is this instance completed? ${completedForDate.has(instance.id)}`);
-      
       if (completedForDate.has(instance.id)) {
         completedCount++;
       }
     }
     
     const totalInstances = allGoalsInSection.length;
-    const remaining = totalInstances - completedCount;
-    console.log(`RESULT: ${completedCount}/${totalInstances} completed, ${remaining} remaining`);
-    console.log(`======================================\n`);
-    return remaining;
+    return totalInstances - completedCount;
   };
 
   const GoalItem = ({ goal, sectionKey }: { goal: ExpandedGoal; sectionKey: keyof typeof sections }) => {

@@ -21,9 +21,17 @@ export default function Home() {
   const goalsProgress = totalGoals > 0 ? (goalsCompleted / totalGoals) * 100 : 0;
   const [activeGoals, setActiveGoals] = useState<any[]>([]);
 
+  // Get local date string without UTC conversion
+  const getLocalDateString = (date: Date = new Date()): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   // Get today's date key for localStorage
   const getTodayKey = () => {
-    return `goals_completed_${new Date().toISOString().split('T')[0]}`;
+    return `goals_completed_${getLocalDateString()}`;
   };
 
   // Load completed instances from localStorage
@@ -169,7 +177,7 @@ export default function Home() {
         
         // Load completed instances from localStorage
         const completedInstances = loadCompletedInstances();
-        const todayStr = new Date().toISOString().split('T')[0];
+        const todayStr = getLocalDateString();
         
         // Expand goals based on remaining count for TODAY's display
         const expandedGoals: any[] = [];
@@ -211,8 +219,7 @@ export default function Home() {
 
   // Listen for goal updates from other components and force refresh
   useEffect(() => {
-    const handleGoalsUpdate = (e?: CustomEvent) => {
-      console.log('[Dashboard] goalsUpdated event received', e?.detail);
+    const handleGoalsUpdate = () => {
       // Force reload of activeGoals
       const completedInstances = loadCompletedInstances();
       const updatedGoals = activeGoals.map(g => ({
