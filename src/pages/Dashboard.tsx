@@ -26,28 +26,31 @@ export default function Home() {
       const goal = activeGoals.find(g => g.id === goalId);
       if (!goal) return;
 
-      const newCompletedStatus = goal.status !== 'completed';
+      // Toggle only THIS instance
+      const updatedGoals = activeGoals.map(g => 
+        g.id === goalId 
+          ? { ...g, status: g.status === 'completed' ? 'pending' : 'completed' }
+          : g
+      );
 
+      setActiveGoals(updatedGoals);
+
+      // Count how many instances of this specific goal are completed
+      const instancesOfThisGoal = updatedGoals.filter(g => g.originalId === goal.originalId);
+      const completedInstances = instancesOfThisGoal.filter(g => g.status === 'completed').length;
+      const allInstancesCompleted = completedInstances === instancesOfThisGoal.length;
+
+      // Update database: mark as completed only if ALL instances are done
       const { error } = await supabase
         .from('goals')
-        .update({ completed: newCompletedStatus })
+        .update({ completed: allInstancesCompleted })
         .eq('id', goal.originalId);
 
       if (error) throw error;
 
-      // Update local state for all instances of this goal
-      setActiveGoals(prev => prev.map(g => 
-        g.originalId === goal.originalId 
-          ? { ...g, status: newCompletedStatus ? 'completed' : 'pending' }
-          : g
-      ));
-
-      // Recalculate completed count
-      const newCompleted = activeGoals.filter(g => 
-        g.originalId === goal.originalId ? newCompletedStatus : g.status === 'completed'
-      ).length + (checkInCompleted ? 1 : 0);
-      
-      setGoalsCompleted(newCompleted);
+      // Recalculate total completed count
+      const totalCompletedGoals = updatedGoals.filter(g => g.status === 'completed').length;
+      setGoalsCompleted(totalCompletedGoals + (checkInCompleted ? 1 : 0));
 
       toast({
         title: "Meta actualizada",
@@ -129,15 +132,6 @@ export default function Home() {
           g.goal_type === 'always'
         );
         
-        const completed = todayGoals.filter(g => g.completed).length;
-        // Add check-in to completed count if done
-        const totalCompleted = completed + (checkIn ? 1 : 0);
-        // Add 1 to total goals for the check-in
-        const totalGoalsCount = todayGoals.length + 1;
-        
-        setGoalsCompleted(totalCompleted);
-        setTotalGoals(totalGoalsCount);
-        
         // Expand goals based on remaining count
         const expandedGoals: any[] = [];
         todayGoals.forEach(g => {
@@ -147,12 +141,17 @@ export default function Home() {
               originalId: g.id,
               title: g.text,
               period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Siempre' : 'Esta semana',
-              status: g.completed ? 'completed' : 'pending',
+              status: 'pending',
               instanceIndex: i
             });
           }
         });
         
+        // Total goals is now the sum of all instances + check-in
+        const totalGoalsCount = expandedGoals.length + 1;
+        
+        setGoalsCompleted(checkIn ? 1 : 0);
+        setTotalGoals(totalGoalsCount);
         setActiveGoals(expandedGoals.slice(0, 6));
       } else {
         // No goals yet, only count check-in
