@@ -32,9 +32,13 @@ export default function Home() {
     return stored ? new Set(JSON.parse(stored)) : new Set();
   };
 
-  // Save completed instances to localStorage
+  // Save completed instances to localStorage and notify other components
   const saveCompletedInstances = (completedIds: Set<string>) => {
     localStorage.setItem(getTodayKey(), JSON.stringify([...completedIds]));
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new CustomEvent('goalsUpdated', { 
+      detail: { date: getTodayKey(), completedIds: [...completedIds] } 
+    }));
   };
 
   const toggleGoal = async (goalId: string) => {
@@ -203,6 +207,28 @@ export default function Home() {
 
     fetchData();
   }, []);
+
+  // Listen for goal updates from other components
+  useEffect(() => {
+    const handleGoalsUpdate = () => {
+      const completedInstances = loadCompletedInstances();
+      
+      // Update activeGoals with new completion status
+      const updatedGoals = activeGoals.map(g => ({
+        ...g,
+        status: completedInstances.has(g.id) ? 'completed' : 'pending'
+      }));
+      
+      setActiveGoals(updatedGoals);
+      
+      // Recalculate counts
+      const completedCount = updatedGoals.filter(g => g.status === 'completed').length;
+      setGoalsCompleted(completedCount + (checkInCompleted ? 1 : 0));
+    };
+
+    window.addEventListener('goalsUpdated', handleGoalsUpdate);
+    return () => window.removeEventListener('goalsUpdated', handleGoalsUpdate);
+  }, [activeGoals, checkInCompleted]);
 
   // Quick tools - configurable
   const quickTools = [

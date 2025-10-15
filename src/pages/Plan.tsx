@@ -74,9 +74,13 @@ export default function Plan() {
     return stored ? new Set(JSON.parse(stored)) : new Set();
   };
 
-  // Save completed instances to localStorage
+  // Save completed instances to localStorage and notify other components
   const saveCompletedInstances = (completedIds: Set<string>) => {
     localStorage.setItem(getDateKey(), JSON.stringify([...completedIds]));
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new CustomEvent('goalsUpdated', { 
+      detail: { date: getDateKey(), completedIds: [...completedIds] } 
+    }));
   };
 
   // Get date range for context
@@ -160,6 +164,16 @@ export default function Plan() {
     fetchGoals();
   }, []);
 
+  // Listen for goal updates from other components
+  useEffect(() => {
+    const handleGoalsUpdate = () => {
+      fetchGoals();
+    };
+
+    window.addEventListener('goalsUpdated', handleGoalsUpdate);
+    return () => window.removeEventListener('goalsUpdated', handleGoalsUpdate);
+  }, []);
+
   const fetchGoals = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -230,7 +244,7 @@ export default function Plan() {
         completedInstances.add(goalId);
       }
 
-      // Save to localStorage
+      // Save to localStorage and notify other components
       saveCompletedInstances(completedInstances);
 
       // Update local state for this section

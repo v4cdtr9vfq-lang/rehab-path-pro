@@ -44,6 +44,16 @@ export default function ProgressPage() {
     calculateProgress();
   }, [currentTab, dailyGoals, weeklyGoals, monthlyGoals, hasCheckedInToday]);
 
+  // Listen for goal updates from other components
+  useEffect(() => {
+    const handleGoalsUpdate = () => {
+      fetchData();
+    };
+
+    window.addEventListener('goalsUpdated', handleGoalsUpdate);
+    return () => window.removeEventListener('goalsUpdated', handleGoalsUpdate);
+  }, []);
+
   // Get date key for localStorage
   const getDateKey = (date: Date) => {
     return `goals_completed_${date.toISOString().split('T')[0]}`;
