@@ -1,10 +1,47 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Bell, Plus } from "lucide-react";
+import { useState } from "react";
+
+interface Reminder {
+  id: string;
+  title: string;
+  time: string;
+  enabled: boolean;
+}
 
 export default function Reminders() {
-  const reminders: any[] = [];
+  const [reminders, setReminders] = useState<Reminder[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newReminder, setNewReminder] = useState({
+    title: "",
+    time: ""
+  });
+
+  const addReminder = () => {
+    if (!newReminder.title.trim() || !newReminder.time) return;
+
+    const reminder: Reminder = {
+      id: Date.now().toString(),
+      title: newReminder.title,
+      time: newReminder.time,
+      enabled: true
+    };
+
+    setReminders(prev => [...prev, reminder]);
+    setNewReminder({ title: "", time: "" });
+    setIsDialogOpen(false);
+  };
+
+  const toggleReminder = (id: string) => {
+    setReminders(prev => prev.map(reminder =>
+      reminder.id === id ? { ...reminder, enabled: !reminder.enabled } : reminder
+    ));
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -30,10 +67,42 @@ export default function Reminders() {
 
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-semibold text-foreground">Tus Recordatorios</h2>
-        <Button className="gap-2">
-          <Plus className="h-4 w-4" />
-          Añadir Recordatorio
-        </Button>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="gap-2">
+              <Plus className="h-4 w-4" />
+              Añadir Recordatorio
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Añadir Nuevo Recordatorio</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="reminder-title">Título</Label>
+                <Input
+                  id="reminder-title"
+                  placeholder="Ej: Meditación matutina"
+                  value={newReminder.title}
+                  onChange={(e) => setNewReminder(prev => ({ ...prev, title: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="reminder-time">Hora</Label>
+                <Input
+                  id="reminder-time"
+                  type="time"
+                  value={newReminder.time}
+                  onChange={(e) => setNewReminder(prev => ({ ...prev, time: e.target.value }))}
+                />
+              </div>
+              <Button onClick={addReminder} className="w-full">
+                Añadir
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="space-y-3">
@@ -42,10 +111,42 @@ export default function Reminders() {
             <CardContent className="p-12 text-center">
               <Bell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground mb-4">No tienes recordatorios configurados</p>
-              <Button className="gap-2">
-                <Plus className="h-4 w-4" />
-                Añadir Primer Recordatorio
-              </Button>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="gap-2">
+                    <Plus className="h-4 w-4" />
+                    Añadir Primer Recordatorio
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Añadir Nuevo Recordatorio</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="reminder-title-empty">Título</Label>
+                      <Input
+                        id="reminder-title-empty"
+                        placeholder="Ej: Meditación matutina"
+                        value={newReminder.title}
+                        onChange={(e) => setNewReminder(prev => ({ ...prev, title: e.target.value }))}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="reminder-time-empty">Hora</Label>
+                      <Input
+                        id="reminder-time-empty"
+                        type="time"
+                        value={newReminder.time}
+                        onChange={(e) => setNewReminder(prev => ({ ...prev, time: e.target.value }))}
+                      />
+                    </div>
+                    <Button onClick={addReminder} className="w-full">
+                      Añadir
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </CardContent>
           </Card>
         ) : (
@@ -57,7 +158,10 @@ export default function Reminders() {
                     <h3 className="font-semibold text-foreground">{reminder.title}</h3>
                     <p className="text-sm text-muted-foreground">{reminder.time}</p>
                   </div>
-                  <Switch checked={reminder.enabled} />
+                  <Switch 
+                    checked={reminder.enabled} 
+                    onCheckedChange={() => toggleReminder(reminder.id)}
+                  />
                 </div>
               </CardContent>
             </Card>
