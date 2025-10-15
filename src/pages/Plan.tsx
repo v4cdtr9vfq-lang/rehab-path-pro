@@ -535,9 +535,12 @@ export default function Plan() {
     // Get all instances of this specific goal in THIS section only
     const allGoalsInSection = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
     
-    console.log(`[getRemainingCount] Goal: "${goal.text}", Section: ${sectionKey}`);
-    console.log(`  Total instances in section:`, allGoalsInSection.length);
-    console.log(`  All instance IDs:`, allGoalsInSection.map(g => g.id));
+    console.log(`\n========== getRemainingCount ==========`);
+    console.log(`Goal: "${goal.text}"`);
+    console.log(`Section: ${sectionKey}`);
+    console.log(`Original ID: ${goal.originalId}`);
+    console.log(`Total instances in section: ${allGoalsInSection.length}`);
+    console.log(`All localStorage keys:`, Object.keys(localStorage).filter(k => k.startsWith('goals_completed')));
     
     // Count completed by checking localStorage for each instance's date
     let completedCount = 0;
@@ -557,7 +560,10 @@ export default function Plan() {
       const stored = localStorage.getItem(dateKey);
       const completedForDate = stored ? new Set(JSON.parse(stored)) : new Set();
       
-      console.log(`    Instance ${instance.id}: dateKey=${dateKey}, completed=${completedForDate.has(instance.id)}`);
+      console.log(`  Instance: ${instance.id.substring(0, 50)}...`);
+      console.log(`    Date key: ${dateKey}`);
+      console.log(`    Completed IDs in that date:`, stored ? JSON.parse(stored) : []);
+      console.log(`    Is this instance completed? ${completedForDate.has(instance.id)}`);
       
       if (completedForDate.has(instance.id)) {
         completedCount++;
@@ -565,8 +571,10 @@ export default function Plan() {
     }
     
     const totalInstances = allGoalsInSection.length;
-    console.log(`  Completed: ${completedCount}, Remaining: ${totalInstances - completedCount}`);
-    return totalInstances - completedCount;
+    const remaining = totalInstances - completedCount;
+    console.log(`RESULT: ${completedCount}/${totalInstances} completed, ${remaining} remaining`);
+    console.log(`======================================\n`);
+    return remaining;
   };
 
   const GoalItem = ({ goal, sectionKey }: { goal: ExpandedGoal; sectionKey: keyof typeof sections }) => {
