@@ -48,21 +48,26 @@ export default function Home() {
           if (emotion) setTodayEmotion(emotion);
         }
 
-        // Fetch today's goals
+        // Fetch today's goals (including 'always' type)
         const { data: goals } = await supabase
           .from('goals')
           .select('*')
           .eq('user_id', user.id)
-          .in('goal_type', ['today', 'week']);
+          .in('goal_type', ['today', 'week', 'always']);
 
         if (goals) {
           const completed = goals.filter(g => g.completed).length;
-          setGoalsCompleted(completed);
-          setTotalGoals(goals.length);
+          // Add check-in to completed count if done
+          const totalCompleted = completed + (checkIn ? 1 : 0);
+          // Add 1 to total goals for the check-in
+          const totalGoalsCount = goals.length + 1;
+          
+          setGoalsCompleted(totalCompleted);
+          setTotalGoals(totalGoalsCount);
           setActiveGoals(goals.slice(0, 3).map(g => ({
             id: g.id,
             title: g.text,
-            period: g.goal_type === 'today' ? 'Hoy' : 'Esta semana',
+            period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Siempre' : 'Esta semana',
             status: g.completed ? 'completed' : 'pending'
           })));
         }
