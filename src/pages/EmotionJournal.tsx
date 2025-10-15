@@ -214,6 +214,12 @@ export default function EmotionJournal() {
         .map(id => emotions.find(e => e.id === id)?.name)
         .filter(Boolean);
       
+      console.log('Guardando:', {
+        mainEmotions: selectedMainEmotions,
+        mainEmotionNames,
+        subEmotions: selectedSubEmotions
+      });
+
       const { error } = await (supabase as any)
         .from('emotion_journal')
         .insert({
