@@ -26,13 +26,24 @@ interface Goal {
   text: string;
   completed: boolean;
   remaining: number;
+  goal_type?: string;
+}
+
+interface ExpandedGoal extends Goal {
+  originalId: string;
+  instanceIndex: number;
 }
 
 export default function Plan() {
   const { toast } = useToast();
   const startDate = new Date();
   
-  const [sections, setSections] = useState({
+  const [sections, setSections] = useState<{
+    today: { open: boolean; goals: ExpandedGoal[] };
+    week: { open: boolean; goals: ExpandedGoal[] };
+    month: { open: boolean; goals: ExpandedGoal[] };
+    onetime: { open: boolean; goals: ExpandedGoal[] };
+  }>({
     today: { open: true, goals: [] },
     week: { open: false, goals: [] },
     month: { open: false, goals: [] },
@@ -51,6 +62,43 @@ export default function Plan() {
     remaining: 1
   });
   const [editingGoal, setEditingGoal] = useState<any>(null);
+
+  // Get today's date key for localStorage
+  const getTodayKey = () => {
+    return `goals_completed_${new Date().toISOString().split('T')[0]}`;
+  };
+
+  // Load completed instances from localStorage
+  const loadCompletedInstances = (): Set<string> => {
+    const stored = localStorage.getItem(getTodayKey());
+    return stored ? new Set(JSON.parse(stored)) : new Set();
+  };
+
+  // Save completed instances to localStorage
+  const saveCompletedInstances = (completedIds: Set<string>) => {
+    localStorage.setItem(getTodayKey(), JSON.stringify([...completedIds]));
+  };
+
+  // Expand goals into instances
+  const expandGoals = (goals: Goal[]): ExpandedGoal[] => {
+    const completedInstances = loadCompletedInstances();
+    const expanded: ExpandedGoal[] = [];
+    
+    goals.forEach(g => {
+      for (let i = 0; i < g.remaining; i++) {
+        const instanceId = `${g.id}-${i}`;
+        expanded.push({
+          ...g,
+          id: instanceId,
+          originalId: g.id,
+          instanceIndex: i,
+          completed: completedInstances.has(instanceId)
+        });
+      }
+    });
+    
+    return expanded;
+  };
 
   useEffect(() => {
     fetchGoals();
@@ -72,10 +120,22 @@ export default function Plan() {
       if (goals) {
         const alwaysGoals = goals.filter(g => g.goal_type === 'always');
         const groupedGoals = {
-          today: { open: true, goals: [...goals.filter(g => g.goal_type === 'today'), ...alwaysGoals] },
-          week: { open: false, goals: [...goals.filter(g => g.goal_type === 'week'), ...alwaysGoals] },
-          month: { open: false, goals: [...goals.filter(g => g.goal_type === 'month'), ...alwaysGoals] },
-          onetime: { open: false, goals: goals.filter(g => g.goal_type === 'onetime') }
+          today: { 
+            open: true, 
+            goals: expandGoals([...goals.filter(g => g.goal_type === 'today'), ...alwaysGoals])
+          },
+          week: { 
+            open: false, 
+            goals: expandGoals([...goals.filter(g => g.goal_type === 'week'), ...alwaysGoals])
+          },
+          month: { 
+            open: false, 
+            goals: expandGoals([...goals.filter(g => g.goal_type === 'month'), ...alwaysGoals])
+          },
+          onetime: { 
+            open: false, 
+            goals: expandGoals(goals.filter(g => g.goal_type === 'onetime'))
+          }
         };
         setSections(groupedGoals);
       }
@@ -100,13 +160,20 @@ export default function Plan() {
       const goal = sections[sectionKey].goals.find(g => g.id === goalId);
       if (!goal) return;
 
-      const { error } = await supabase
-        .from('goals')
-        .update({ completed: !goal.completed })
-        .eq('id', goalId);
+      // Load current completed instances
+      const completedInstances = loadCompletedInstances();
+      
+      // Toggle THIS instance
+      if (completedInstances.has(goalId)) {
+        completedInstances.delete(goalId);
+      } else {
+        completedInstances.add(goalId);
+      }
 
-      if (error) throw error;
+      // Save to localStorage
+      saveCompletedInstances(completedInstances);
 
+      // Update local state for this section
       setSections(prev => ({
         ...prev,
         [sectionKey]: {
@@ -116,6 +183,33 @@ export default function Plan() {
           )
         }
       }));
+
+      // Check if ALL instances of this goal are completed
+      const allGoals = [
+        ...sections.today.goals,
+        ...sections.week.goals,
+        ...sections.month.goals,
+        ...sections.onetime.goals
+      ];
+      
+      const instancesOfThisGoal = allGoals.filter(g => g.originalId === goal.originalId);
+      const completedInstancesOfGoal = instancesOfThisGoal.filter(g => 
+        completedInstances.has(g.id)
+      ).length;
+      const allInstancesCompleted = completedInstancesOfGoal === instancesOfThisGoal.length;
+
+      // Update database: mark as completed only if ALL instances are done
+      const { error } = await supabase
+        .from('goals')
+        .update({ completed: allInstancesCompleted })
+        .eq('id', goal.originalId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Meta actualizada",
+        description: "El estado de la meta ha sido actualizado",
+      });
     } catch (error: any) {
       toast({
         title: "Error",
@@ -154,12 +248,14 @@ export default function Plan() {
       if (error) throw error;
 
       if (goal) {
+        const expandedGoal = expandGoals([goal]);
+        
         // Si es tipo "always", añadir a todas las secciones
         if (newGoal.type === 'always') {
           setSections(prev => ({
-            today: { open: true, goals: [...prev.today.goals, goal] },
-            week: { open: prev.week.open, goals: [...prev.week.goals, goal] },
-            month: { open: prev.month.open, goals: [...prev.month.goals, goal] },
+            today: { open: true, goals: [...prev.today.goals, ...expandedGoal] },
+            week: { open: prev.week.open, goals: [...prev.week.goals, ...expandedGoal] },
+            month: { open: prev.month.open, goals: [...prev.month.goals, ...expandedGoal] },
             onetime: prev.onetime
           }));
         } else {
@@ -167,7 +263,7 @@ export default function Plan() {
             ...prev,
             [newGoal.type]: {
               open: true,
-              goals: [...prev[newGoal.type].goals, goal]
+              goals: [...prev[newGoal.type].goals, ...expandedGoal]
             }
           }));
         }
@@ -198,13 +294,32 @@ export default function Plan() {
 
       if (error) throw error;
 
+      // Remove all instances of this goal from all sections
       setSections(prev => ({
-        ...prev,
-        [sectionKey]: {
-          ...prev[sectionKey],
-          goals: prev[sectionKey].goals.filter(g => g.id !== goalId)
+        today: {
+          ...prev.today,
+          goals: prev.today.goals.filter(g => g.originalId !== goalId)
+        },
+        week: {
+          ...prev.week,
+          goals: prev.week.goals.filter(g => g.originalId !== goalId)
+        },
+        month: {
+          ...prev.month,
+          goals: prev.month.goals.filter(g => g.originalId !== goalId)
+        },
+        onetime: {
+          ...prev.onetime,
+          goals: prev.onetime.goals.filter(g => g.originalId !== goalId)
         }
       }));
+
+      // Clean up localStorage for this goal's instances
+      const completedInstances = loadCompletedInstances();
+      const updatedInstances = new Set(
+        [...completedInstances].filter(id => !id.startsWith(goalId))
+      );
+      saveCompletedInstances(updatedInstances);
 
       toast({
         title: "Meta eliminada",
@@ -219,9 +334,19 @@ export default function Plan() {
     }
   };
 
-  const openEditDialog = (goal: any, sectionKey: string) => {
-    setEditingGoal({ ...goal, sectionKey });
-    setIsEditDialogOpen(true);
+  const openEditDialog = (goal: ExpandedGoal, sectionKey: string) => {
+    // Find the original goal data
+    const originalGoalData = sections[sectionKey as keyof typeof sections].goals.find(
+      g => g.originalId === goal.originalId && g.instanceIndex === 0
+    );
+    if (originalGoalData) {
+      setEditingGoal({ 
+        ...originalGoalData, 
+        id: goal.originalId,
+        sectionKey 
+      });
+      setIsEditDialogOpen(true);
+    }
   };
 
   const updateGoal = async () => {
@@ -238,17 +363,8 @@ export default function Plan() {
 
       if (error) throw error;
 
-      setSections(prev => ({
-        ...prev,
-        [editingGoal.sectionKey]: {
-          ...prev[editingGoal.sectionKey],
-          goals: prev[editingGoal.sectionKey].goals.map(g =>
-            g.id === editingGoal.id 
-              ? { ...g, text: editingGoal.text, remaining: editingGoal.remaining }
-              : g
-          )
-        }
-      }));
+      // Refetch to get updated expanded goals
+      await fetchGoals();
 
       toast({
         title: "Meta actualizada",
@@ -284,7 +400,14 @@ export default function Plan() {
     );
   };
 
-  const GoalItem = ({ goal, sectionKey }: { goal: Goal; sectionKey: keyof typeof sections }) => (
+  // Calculate remaining count for display
+  const getRemainingCount = (goal: ExpandedGoal, sectionKey: keyof typeof sections) => {
+    const allGoalsInSection = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
+    const completedCount = allGoalsInSection.filter(g => g.completed).length;
+    return allGoalsInSection.length - completedCount;
+  };
+
+  const GoalItem = ({ goal, sectionKey }: { goal: ExpandedGoal; sectionKey: keyof typeof sections }) => (
     <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
       <div className="flex items-center gap-3 flex-1">
         <button
@@ -302,50 +425,54 @@ export default function Plan() {
             {goal.text}
           </p>
           <p className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
-            {goal.completed ? 'Completado' : `${goal.remaining} restante${goal.remaining !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+            {goal.completed ? 'Completado' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
           </p>
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-primary/30 text-primary font-medium">
-          {goal.remaining}
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={() => openEditDialog(goal, sectionKey)}
-        >
-          <Pencil className="h-4 w-4" />
-        </Button>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
+        {goal.instanceIndex === 0 && (
+          <>
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-primary/30 text-primary font-medium">
+              {sections[sectionKey].goals.filter(g => g.originalId === goal.originalId).length}
+            </div>
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-destructive hover:text-destructive"
+              className="h-8 w-8"
+              onClick={() => openEditDialog(goal, sectionKey)}
             >
-              <Trash2 className="h-4 w-4" />
+              <Pencil className="h-4 w-4" />
             </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>¿Eliminar meta?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Esta acción no se puede deshacer. La meta será eliminada permanentemente.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancelar</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => deleteGoal(sectionKey, goal.id)}
-                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              >
-                Eliminar
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-destructive hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>¿Eliminar meta?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Esta acción no se puede deshacer. La meta será eliminada permanentemente.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => deleteGoal(sectionKey, goal.originalId)}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Eliminar
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </>
+        )}
       </div>
     </div>
   );
