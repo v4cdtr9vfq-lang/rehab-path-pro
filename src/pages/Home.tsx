@@ -1,54 +1,141 @@
 import { AbstinenceCounter } from "@/components/AbstinenceCounter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Target, ClipboardCheck, TrendingUp, Heart } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Target, ClipboardCheck, Phone, Wind, BookOpen, AlertCircle, CheckCircle2, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Home() {
-  // Demo start date - in real app this would come from user settings
+  // Demo data - in real app this would come from user settings/state
   const startDate = new Date("2021-01-22");
+  const checkInCompleted = false;
+  const todayEmotion = "Esperanzado";
+  const goalsCompleted = 2;
+  const totalGoals = 4;
+  const goalsProgress = (goalsCompleted / totalGoals) * 100;
 
-  const quickActions = [
-    { icon: Target, label: "My Plan", path: "/plan", color: "text-primary" },
-    { icon: ClipboardCheck, label: "Daily Check-In", path: "/checkin", color: "text-accent" },
-    { icon: TrendingUp, label: "Progress", path: "/progress", color: "text-primary" },
-    { icon: Heart, label: "Values", path: "/values", color: "text-accent" },
+  // Active goals for today/week
+  const activeGoals = [
+    { id: 1, title: "Asistir a reunión de grupo", status: "completed", period: "Hoy" },
+    { id: 2, title: "Meditar 10 minutos", status: "completed", period: "Hoy" },
+    { id: 3, title: "Ejercicio físico 30 min", status: "pending", period: "Hoy" },
+    { id: 4, title: "Llamar a mi sponsor", status: "pending", period: "Esta semana" },
+  ];
+
+  // Quick tools - configurable
+  const quickTools = [
+    { icon: Wind, label: "Respiración guiada", path: "/tools", color: "text-primary" },
+    { icon: Phone, label: "Contacto de apoyo", path: "/message", color: "text-accent" },
+    { icon: BookOpen, label: "Diario", path: "/journal", color: "text-primary" },
+    { icon: AlertCircle, label: "Plan de emergencia", path: "/tools", color: "text-destructive" },
   ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
-      <div className="mb-8">
-        <p className="text-muted-foreground text-sm mb-2">Hello there,</p>
-        <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight tracking-tight">Your recovery<br />journey continues</h1>
-      </div>
-
+    <div className="space-y-6 animate-in fade-in duration-500">
+      {/* Header - Abstinence Counter */}
       <AbstinenceCounter startDate={startDate} />
 
-      <Card className="bg-gradient-to-br from-primary via-primary to-accent border-0 shadow-xl">
+      {/* Daily Progress Panel */}
+      <Card className="border-border/50">
         <CardHeader>
-          <p className="text-primary-foreground/70 text-sm font-medium">Daily Inspiration</p>
-          <CardTitle className="text-3xl md:text-4xl font-bold text-primary-foreground leading-tight">
-            It is always the simple that produces the marvelous
-          </CardTitle>
+          <CardTitle className="text-2xl font-bold">Progreso Diario</CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-primary-foreground/80 text-lg">- Amelia Barr</p>
+        <CardContent className="space-y-6">
+          {/* Goals Progress Bar */}
+          <div className="space-y-2">
+            <div className="flex justify-between items-center mb-2">
+              <p className="text-sm font-medium text-muted-foreground">Metas completadas hoy</p>
+              <p className="text-sm font-bold text-primary">{goalsCompleted} de {totalGoals}</p>
+            </div>
+            <Progress value={goalsProgress} className="h-3" />
+          </div>
+
+          {/* Daily Check-In Status */}
+          <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
+            <div className="flex items-center gap-3">
+              {checkInCompleted ? (
+                <CheckCircle2 className="h-6 w-6 text-primary" />
+              ) : (
+                <Clock className="h-6 w-6 text-muted-foreground" />
+              )}
+              <div>
+                <p className="font-semibold text-foreground">Daily Check-In</p>
+                {checkInCompleted ? (
+                  <p className="text-sm text-muted-foreground">Completado ✅</p>
+                ) : (
+                  <p className="text-sm text-muted-foreground">Pendiente ⏱️</p>
+                )}
+              </div>
+            </div>
+            {!checkInCompleted && (
+              <Link to="/checkin">
+                <Button size="sm" className="rounded-xl">Registrar</Button>
+              </Link>
+            )}
+          </div>
+
+          {/* Today's Emotion */}
+          {checkInCompleted && (
+            <div className="flex items-center justify-between p-4 rounded-xl bg-primary/5 border border-primary/20">
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">Emoción principal del día</p>
+                <p className="text-lg font-semibold text-primary">{todayEmotion}</p>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
+      {/* Active Goals Summary */}
+      <Card className="border-border/50">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="text-2xl font-bold">Metas Activas</CardTitle>
+          <Link to="/plan">
+            <Button variant="ghost" size="sm" className="text-primary">Ver todas</Button>
+          </Link>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {activeGoals.slice(0, 3).map((goal) => (
+            <div
+              key={goal.id}
+              className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-card hover:bg-muted/30 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                {goal.status === "completed" ? (
+                  <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                ) : (
+                  <div className="h-5 w-5 rounded-full border-2 border-muted-foreground flex-shrink-0" />
+                )}
+                <div>
+                  <p className={`font-medium ${goal.status === "completed" ? "line-through text-muted-foreground" : "text-foreground"}`}>
+                    {goal.title}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{goal.period}</p>
+                </div>
+              </div>
+              <Badge variant={goal.status === "completed" ? "default" : "outline"} className="text-xs">
+                {goal.status === "completed" ? "Completada" : "Pendiente"}
+              </Badge>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+
+      {/* Quick Tools */}
       <div>
-        <h2 className="text-3xl font-bold mb-6 text-foreground">Quick Actions</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {quickActions.map((action) => {
-            const Icon = action.icon;
+        <h2 className="text-2xl font-bold mb-4 text-foreground">Herramientas Rápidas</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {quickTools.map((tool) => {
+            const Icon = tool.icon;
             return (
-              <Link key={action.path} to={action.path}>
-                <Card className="hover:scale-105 transition-all duration-300 cursor-pointer border-border/50 bg-card/50 backdrop-blur h-full">
-                  <CardContent className="p-6 text-center space-y-4">
-                    <div className={`mx-auto w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center ${action.color}`}>
-                      <Icon className="h-7 w-7" />
+              <Link key={tool.label} to={tool.path}>
+                <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-border/50 h-full">
+                  <CardContent className="p-5 text-center space-y-3">
+                    <div className={`mx-auto w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center ${tool.color}`}>
+                      <Icon className="h-6 w-6" />
                     </div>
-                    <p className="font-semibold text-foreground text-sm">{action.label}</p>
+                    <p className="font-semibold text-foreground text-xs leading-tight">{tool.label}</p>
                   </CardContent>
                 </Card>
               </Link>
@@ -57,12 +144,18 @@ export default function Home() {
         </div>
       </div>
 
-      <Card className="bg-secondary border-0">
-        <CardContent className="p-8">
-          <p className="text-center text-secondary-foreground text-2xl font-medium leading-relaxed">
-            "Trust is built with consistency."
+      {/* Daily Motivational Message */}
+      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+        <CardContent className="p-6">
+          <p className="text-center text-foreground text-xl font-medium leading-relaxed mb-2">
+            "La confianza se construye con consistencia."
           </p>
-          <p className="text-center text-secondary-foreground/60 mt-4 text-lg">- Lincoln Chafee</p>
+          <p className="text-center text-muted-foreground text-sm">- Lincoln Chafee</p>
+          <div className="flex justify-center mt-4">
+            <Link to="/message">
+              <Button variant="ghost" size="sm" className="text-primary text-xs">Ver más mensajes</Button>
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>
