@@ -109,7 +109,7 @@ export default function ProgressPage() {
         if (context === 'daily') {
           const completedInstances = loadCompletedInstancesForRange([new Date()]);
           for (let i = 0; i < g.remaining; i++) {
-            const instanceId = `${g.id}-${i}`;
+            const instanceId = `${g.id}__${i}`;
             expanded.push({
               id: instanceId,
               originalId: g.id,
@@ -123,7 +123,8 @@ export default function ProgressPage() {
       } else {
         // Recurring goals: create instances per day
         dates.forEach((date, dayIndex) => {
-          const dateKey = `goals_completed_${date.toISOString().split('T')[0]}`;
+          const dateStr = date.toISOString().split('T')[0];
+          const dateKey = `goals_completed_${dateStr}`;
           const stored = localStorage.getItem(dateKey);
           const completedForDay = stored ? new Set(JSON.parse(stored)) : new Set();
           
@@ -133,7 +134,7 @@ export default function ProgressPage() {
             // Weekly goals in monthly view: only on week boundaries
             if (dayIndex % 7 === 0) {
               for (let i = 0; i < g.remaining; i++) {
-                const instanceId = `${g.id}-${date.toISOString().split('T')[0]}-${i}`;
+                const instanceId = `${g.id}__${dateStr}__${i}`;
                 expanded.push({
                   id: instanceId,
                   originalId: g.id,
@@ -147,7 +148,7 @@ export default function ProgressPage() {
           } else {
             // Daily/weekly goals: create instances for each applicable day
             for (let i = 0; i < instancesPerDay; i++) {
-              const instanceId = `${g.id}-${date.toISOString().split('T')[0]}-${i}`;
+              const instanceId = `${g.id}__${dateStr}__${i}`;
               expanded.push({
                 id: instanceId,
                 originalId: g.id,

@@ -175,7 +175,7 @@ export default function Home() {
         const expandedGoals: any[] = [];
         todayGoals.forEach(g => {
           for (let i = 0; i < g.remaining; i++) {
-            const instanceId = `${g.id}-${todayStr}-${i}`;
+            const instanceId = `${g.id}__${todayStr}__${i}`;
             expandedGoals.push({
               id: instanceId,
               originalId: g.id,

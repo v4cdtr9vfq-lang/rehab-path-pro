@@ -134,7 +134,7 @@ export default function Plan() {
         // One-time goals: simple expansion
         const completedInstances = loadCompletedInstances();
         for (let i = 0; i < g.remaining; i++) {
-          const instanceId = `${g.id}-${i}`;
+          const instanceId = `${g.id}__${i}`;
           expanded.push({
             ...g,
             id: instanceId,
@@ -146,7 +146,8 @@ export default function Plan() {
       } else {
         // Recurring goals: create instances per day
         dates.forEach((date, dayIndex) => {
-          const dateKey = `goals_completed_${date.toISOString().split('T')[0]}`;
+          const dateStr = date.toISOString().split('T')[0];
+          const dateKey = `goals_completed_${dateStr}`;
           const stored = localStorage.getItem(dateKey);
           const completedForDay = stored ? new Set(JSON.parse(stored)) : new Set();
           
@@ -156,7 +157,7 @@ export default function Plan() {
             // Weekly goals in monthly view: only on week boundaries
             if (dayIndex % 7 === 0) {
               for (let i = 0; i < g.remaining; i++) {
-                const instanceId = `${g.id}-${date.toISOString().split('T')[0]}-${i}`;
+                const instanceId = `${g.id}__${dateStr}__${i}`;
                 expanded.push({
                   ...g,
                   id: instanceId,
@@ -169,7 +170,7 @@ export default function Plan() {
           } else {
             // Daily goals: create instances for each day
             for (let i = 0; i < instancesPerDay; i++) {
-              const instanceId = `${g.id}-${date.toISOString().split('T')[0]}-${i}`;
+              const instanceId = `${g.id}__${dateStr}__${i}`;
               expanded.push({
                 ...g,
                 id: instanceId,
@@ -260,22 +261,26 @@ export default function Plan() {
       const goal = sections[sectionKey].goals.find(g => g.id === goalId);
       if (!goal) return;
 
-      // Extract date from goalId (format: goalId-date-instance or goalId-instance for onetime)
-      const parts = goalId.split('-');
+      // Parse goalId format: uuid__date__index or uuid__index
+      const parts = goalId.split('__');
       let dateKey: string;
       
-      if (parts.length >= 3 && parts[parts.length - 2].match(/^\d{4}-\d{2}-\d{2}$/)) {
-        // Has date in format: uuid-yyyy-mm-dd-index
-        const dateStr = parts[parts.length - 2];
+      if (parts.length === 3) {
+        // Format: uuid__yyyy-mm-dd__index
+        const dateStr = parts[1];
         dateKey = `goals_completed_${dateStr}`;
       } else {
-        // No date or onetime goal, use today
+        // Format: uuid__index (onetime goal, use today)
         dateKey = getDateKey();
       }
+
+      console.log('[toggleGoal] Goal ID:', goalId, 'Date key:', dateKey);
 
       // Load completed instances from the specific date
       const stored = localStorage.getItem(dateKey);
       const completedInstances = stored ? new Set(JSON.parse(stored)) : new Set();
+      
+      console.log('[toggleGoal] Before toggle:', [...completedInstances]);
       
       // Toggle THIS instance
       if (completedInstances.has(goalId)) {
@@ -283,6 +288,8 @@ export default function Plan() {
       } else {
         completedInstances.add(goalId);
       }
+
+      console.log('[toggleGoal] After toggle:', [...completedInstances]);
 
       // Save to localStorage for the specific date and notify other components
       localStorage.setItem(dateKey, JSON.stringify([...completedInstances]));
@@ -319,11 +326,11 @@ export default function Plan() {
       // Check completion across all dates
       let allCompleted = true;
       for (const instance of instancesOfThisGoal) {
-        const instanceParts = instance.id.split('-');
+        const instanceParts = instance.id.split('__');
         let instanceDateKey: string;
         
-        if (instanceParts.length >= 3 && instanceParts[instanceParts.length - 2].match(/^\d{4}-\d{2}-\d{2}$/)) {
-          const instanceDateStr = instanceParts[instanceParts.length - 2];
+        if (instanceParts.length === 3) {
+          const instanceDateStr = instanceParts[1];
           instanceDateKey = `goals_completed_${instanceDateStr}`;
         } else {
           instanceDateKey = getDateKey();
@@ -529,101 +536,118 @@ export default function Plan() {
     const allGoalsInSection = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
     const totalInstances = allGoalsInSection.length;
     
+    console.log(`[getRemainingCount] Goal: ${goal.text}, Section: ${sectionKey}, Total instances: ${totalInstances}`);
+    
     // Count completed by checking localStorage for each instance's date
     let completedCount = 0;
     for (const instance of allGoalsInSection) {
-      const parts = instance.id.split('-');
+      const parts = instance.id.split('__');
       let dateKey: string;
       
-      if (parts.length >= 3 && parts[parts.length - 2].match(/^\d{4}-\d{2}-\d{2}$/)) {
-        // Has date in format: uuid-yyyy-mm-dd-index
-        const dateStr = parts[parts.length - 2];
+      if (parts.length === 3) {
+        // Format: uuid__yyyy-mm-dd__index
+        const dateStr = parts[1];
         dateKey = `goals_completed_${dateStr}`;
       } else {
-        // No date or onetime goal, use today
+        // Format: uuid__index (onetime goal, use today)
         dateKey = getDateKey();
       }
       
       const stored = localStorage.getItem(dateKey);
       const completedForDate = stored ? new Set(JSON.parse(stored)) : new Set();
       
+      console.log(`  Instance: ${instance.id}, Date key: ${dateKey}, Completed:`, completedForDate.has(instance.id));
+      
       if (completedForDate.has(instance.id)) {
         completedCount++;
       }
     }
     
+    console.log(`  Total completed: ${completedCount}, Remaining: ${totalInstances - completedCount}`);
+    
     return totalInstances - completedCount;
   };
 
-  const GoalItem = ({ goal, sectionKey }: { goal: ExpandedGoal; sectionKey: keyof typeof sections }) => (
-    <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
-      <div className="flex items-center gap-3 flex-1">
-        <button
-          onClick={() => toggleGoal(sectionKey, goal.id)}
-          className="flex-shrink-0"
-        >
-          {goal.completed ? (
-            <CheckCircle2 className="h-6 w-6 text-green-500" />
-          ) : (
-            <Circle className="h-6 w-6 text-muted-foreground" />
+  const GoalItem = ({ goal, sectionKey }: { goal: ExpandedGoal; sectionKey: keyof typeof sections }) => {
+    // Force recalculation of remaining count
+    const [, forceUpdate] = useState({});
+    
+    useEffect(() => {
+      const handleUpdate = () => forceUpdate({});
+      window.addEventListener('goalsUpdated', handleUpdate);
+      return () => window.removeEventListener('goalsUpdated', handleUpdate);
+    }, []);
+    
+    return (
+      <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
+        <div className="flex items-center gap-3 flex-1">
+          <button
+            onClick={() => toggleGoal(sectionKey, goal.id)}
+            className="flex-shrink-0"
+          >
+            {goal.completed ? (
+              <CheckCircle2 className="h-6 w-6 text-green-500" />
+            ) : (
+              <Circle className="h-6 w-6 text-muted-foreground" />
+            )}
+          </button>
+          <div className="flex-1">
+            <p className="text-foreground font-semibold">
+              {goal.text}
+            </p>
+            <p className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
+              {goal.completed ? 'Completado' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          {goal.instanceIndex === 0 && (
+            <>
+              <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-primary/30 text-primary font-medium">
+                {sections[sectionKey].goals.filter(g => g.originalId === goal.originalId).length}
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => openEditDialog(goal, sectionKey)}
+              >
+                <Pencil className="h-4 w-4" />
+              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-destructive hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>¿Eliminar meta?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Esta acción no se puede deshacer. La meta será eliminada permanentemente.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => deleteGoal(sectionKey, goal.originalId)}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      Eliminar
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </>
           )}
-        </button>
-        <div className="flex-1">
-          <p className="text-foreground font-semibold">
-            {goal.text}
-          </p>
-          <p className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
-            {goal.completed ? 'Completado' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
-          </p>
         </div>
       </div>
-      <div className="flex items-center gap-2">
-        {goal.instanceIndex === 0 && (
-          <>
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-primary/30 text-primary font-medium">
-              {sections[sectionKey].goals.filter(g => g.originalId === goal.originalId).length}
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => openEditDialog(goal, sectionKey)}
-            >
-              <Pencil className="h-4 w-4" />
-            </Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 text-destructive hover:text-destructive"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>¿Eliminar meta?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Esta acción no se puede deshacer. La meta será eliminada permanentemente.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => deleteGoal(sectionKey, goal.originalId)}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  >
-                    Eliminar
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </>
-        )}
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
