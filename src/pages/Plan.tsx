@@ -222,19 +222,19 @@ export default function Plan() {
         
         const groupedGoals = {
           today: { 
-            open: true, 
+            open: sections.today.open, 
             goals: expandGoals([...todayGoals, ...alwaysGoals], 'today')
           },
           week: { 
-            open: false, 
+            open: sections.week.open, 
             goals: expandGoals([...weekGoals, ...todayGoals, ...alwaysGoals], 'week')
           },
           month: { 
-            open: false, 
+            open: sections.month.open, 
             goals: expandGoals([...monthGoals, ...weekGoals, ...todayGoals, ...alwaysGoals], 'month')
           },
           onetime: { 
-            open: false, 
+            open: sections.onetime.open, 
             goals: expandGoals(goals.filter(g => g.goal_type === 'onetime'), 'onetime')
           }
         };
@@ -578,14 +578,33 @@ export default function Plan() {
   };
 
   const GoalItem = ({ goal, sectionKey }: { goal: ExpandedGoal; sectionKey: keyof typeof sections }) => {
-    // Force recalculation of remaining count
-    const [, forceUpdate] = useState({});
+    // Force recalculation when localStorage changes
+    const [updateKey, setUpdateKey] = useState(0);
     
     useEffect(() => {
-      const handleUpdate = () => forceUpdate({});
+      const handleUpdate = () => {
+        setUpdateKey(prev => prev + 1);
+      };
       window.addEventListener('goalsUpdated', handleUpdate);
       return () => window.removeEventListener('goalsUpdated', handleUpdate);
     }, []);
+    
+    // Recalculate completion status from localStorage
+    const isCompleted = (() => {
+      const parts = goal.id.split('__');
+      let dateKey: string;
+      
+      if (parts.length === 3) {
+        const dateStr = parts[1];
+        dateKey = `goals_completed_${dateStr}`;
+      } else {
+        dateKey = getDateKey();
+      }
+      
+      const stored = localStorage.getItem(dateKey);
+      const completedIds = stored ? new Set(JSON.parse(stored)) : new Set();
+      return completedIds.has(goal.id);
+    })();
     
     return (
       <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
@@ -594,7 +613,7 @@ export default function Plan() {
             onClick={() => toggleGoal(sectionKey, goal.id)}
             className="flex-shrink-0"
           >
-            {goal.completed ? (
+            {isCompleted ? (
               <CheckCircle2 className="h-6 w-6 text-green-500" />
             ) : (
               <Circle className="h-6 w-6 text-muted-foreground" />
@@ -604,8 +623,8 @@ export default function Plan() {
             <p className="text-foreground font-semibold">
               {goal.text}
             </p>
-            <p className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
-              {goal.completed ? 'Completado' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+            <p className={`text-sm ${isCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
+              {isCompleted ? 'Completado' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
             </p>
           </div>
         </div>
