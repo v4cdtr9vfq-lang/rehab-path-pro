@@ -42,9 +42,13 @@ export default function Plan() {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [newGoal, setNewGoal] = useState({
+  const [newGoal, setNewGoal] = useState<{
+    text: string;
+    type: keyof typeof sections | 'always';
+    remaining: number;
+  }>({
     text: "",
-    type: "today" as keyof typeof sections,
+    type: "today",
     remaining: 1
   });
   const [editingGoal, setEditingGoal] = useState<any>(null);
@@ -67,10 +71,11 @@ export default function Plan() {
       if (error) throw error;
 
       if (goals) {
+        const alwaysGoals = goals.filter(g => g.goal_type === 'always');
         const groupedGoals = {
-          today: { open: true, goals: goals.filter(g => g.goal_type === 'today') },
-          week: { open: false, goals: goals.filter(g => g.goal_type === 'week') },
-          month: { open: false, goals: goals.filter(g => g.goal_type === 'month') },
+          today: { open: true, goals: [...goals.filter(g => g.goal_type === 'today'), ...alwaysGoals] },
+          week: { open: false, goals: [...goals.filter(g => g.goal_type === 'week'), ...alwaysGoals] },
+          month: { open: false, goals: [...goals.filter(g => g.goal_type === 'month'), ...alwaysGoals] },
           onetime: { open: false, goals: goals.filter(g => g.goal_type === 'onetime') }
         };
         setSections(groupedGoals);
@@ -150,13 +155,23 @@ export default function Plan() {
       if (error) throw error;
 
       if (goal) {
-        setSections(prev => ({
-          ...prev,
-          [newGoal.type]: {
-            open: true, // Abrir la sección automáticamente
-            goals: [...prev[newGoal.type].goals, goal]
-          }
-        }));
+        // Si es tipo "always", añadir a todas las secciones
+        if (newGoal.type === 'always') {
+          setSections(prev => ({
+            today: { open: true, goals: [...prev.today.goals, goal] },
+            week: { open: prev.week.open, goals: [...prev.week.goals, goal] },
+            month: { open: prev.month.open, goals: [...prev.month.goals, goal] },
+            onetime: prev.onetime
+          }));
+        } else {
+          setSections(prev => ({
+            ...prev,
+            [newGoal.type]: {
+              open: true,
+              goals: [...prev[newGoal.type].goals, goal]
+            }
+          }));
+        }
 
         toast({
           title: "¡Meta añadida!",
@@ -252,18 +267,23 @@ export default function Plan() {
     }
   };
 
-  const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey: keyof typeof sections }) => (
-    <button
-      onClick={() => toggleSection(sectionKey)}
-      className="flex items-center justify-between w-full text-left"
-    >
-      <div className="flex items-center gap-2">
-        <span className="text-primary">✓</span>
-        <h3 className="text-xl font-semibold text-foreground">{title}</h3>
-      </div>
-      {sections[sectionKey].open ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
-    </button>
-  );
+  const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey: keyof typeof sections }) => {
+    const count = sections[sectionKey].goals.length;
+    return (
+      <button
+        onClick={() => toggleSection(sectionKey)}
+        className="flex items-center justify-between w-full text-left"
+      >
+        <div className="flex items-center gap-2">
+          <span className="text-primary">✓</span>
+          <h3 className="text-xl font-semibold text-foreground">
+            {title} {count > 0 && <span className="text-muted-foreground">({count})</span>}
+          </h3>
+        </div>
+        {sections[sectionKey].open ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+      </button>
+    );
+  };
 
   const GoalItem = ({ goal, sectionKey }: { goal: Goal; sectionKey: keyof typeof sections }) => (
     <div className="flex items-start gap-3 p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
@@ -358,7 +378,7 @@ export default function Plan() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="goal-type">Tipo</Label>
-                <Select value={newGoal.type} onValueChange={(value) => setNewGoal(prev => ({ ...prev, type: value as keyof typeof sections }))}>
+                <Select value={newGoal.type} onValueChange={(value) => setNewGoal(prev => ({ ...prev, type: value as (keyof typeof sections | 'always') }))}>
                   <SelectTrigger id="goal-type">
                     <SelectValue />
                   </SelectTrigger>
@@ -367,6 +387,7 @@ export default function Plan() {
                     <SelectItem value="week">Esta Semana</SelectItem>
                     <SelectItem value="month">Este Mes</SelectItem>
                     <SelectItem value="onetime">Meta Única</SelectItem>
+                    <SelectItem value="always">Siempre</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
