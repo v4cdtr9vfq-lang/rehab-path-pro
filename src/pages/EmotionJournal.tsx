@@ -473,7 +473,7 @@ export default function EmotionJournal() {
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Calendar className="h-4 w-4" />
                     <span className="text-sm font-medium">
-                      {format(new Date(entry.entry_date), "d 'de' MMMM, yyyy", { locale: es })}
+                      {format(new Date(entry.created_at), "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
                     </span>
                   </div>
                   <div className="flex gap-2">
