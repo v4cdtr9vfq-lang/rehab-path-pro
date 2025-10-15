@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
 import { TrendingUp, CheckCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,29 +12,84 @@ interface ProgressArea {
   color: string;
 }
 
+interface Goal {
+  id: string;
+  text: string;
+  completed: boolean;
+  goal_type: string;
+}
+
 export default function ProgressPage() {
   const [hasCheckedInToday, setHasCheckedInToday] = useState(false);
+  const [dailyGoals, setDailyGoals] = useState<Goal[]>([]);
+  const [weeklyGoals, setWeeklyGoals] = useState<Goal[]>([]);
+  const [monthlyGoals, setMonthlyGoals] = useState<Goal[]>([]);
+  const [currentTab, setCurrentTab] = useState('daily');
+  const [overallProgress, setOverallProgress] = useState(0);
 
   useEffect(() => {
-    checkTodayCheckIn();
+    fetchData();
   }, []);
 
-  const checkTodayCheckIn = async () => {
+  useEffect(() => {
+    calculateProgress();
+  }, [currentTab, dailyGoals, weeklyGoals, monthlyGoals, hasCheckedInToday]);
+
+  const calculateProgress = () => {
+    let completed = 0;
+    let total = 0;
+
+    if (currentTab === 'daily') {
+      completed = (hasCheckedInToday ? 1 : 0) + dailyGoals.filter(g => g.completed).length;
+      total = 1 + dailyGoals.length;
+    } else if (currentTab === 'week') {
+      completed = weeklyGoals.filter(g => g.completed).length;
+      total = weeklyGoals.length;
+    } else if (currentTab === 'month') {
+      completed = monthlyGoals.filter(g => g.completed).length;
+      total = monthlyGoals.length;
+    } else if (currentTab === 'overall') {
+      const allGoals = [...dailyGoals, ...weeklyGoals, ...monthlyGoals];
+      completed = (hasCheckedInToday ? 1 : 0) + allGoals.filter(g => g.completed).length;
+      total = 1 + allGoals.length;
+    }
+
+    setOverallProgress(total > 0 ? Math.round((completed / total) * 100) : 0);
+  };
+
+  const fetchData = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
+      // Check today's check-in
       const today = new Date().toISOString().split('T')[0];
-      const { data } = await supabase
+      const { data: checkIn } = await supabase
         .from('check_ins')
         .select('id')
         .eq('user_id', user.id)
         .eq('check_in_date', today)
         .maybeSingle();
 
-      setHasCheckedInToday(!!data);
+      setHasCheckedInToday(!!checkIn);
+
+      // Fetch all goals
+      const { data: goals } = await supabase
+        .from('goals')
+        .select('*')
+        .eq('user_id', user.id);
+
+      if (goals) {
+        const daily = goals.filter(g => g.goal_type === 'today' || g.goal_type === 'always');
+        const weekly = goals.filter(g => g.goal_type === 'week' || g.goal_type === 'always');
+        const monthly = goals.filter(g => g.goal_type === 'month' || g.goal_type === 'always');
+
+        setDailyGoals(daily);
+        setWeeklyGoals(weekly);
+        setMonthlyGoals(monthly);
+      }
     } catch (error) {
-      console.error('Error checking check-in:', error);
+      console.error('Error fetching data:', error);
     }
   };
 
@@ -73,14 +129,14 @@ export default function ProgressPage() {
         <CardContent>
           <div className="text-center mb-6">
             <div className="inline-flex items-center justify-center w-32 h-32 rounded-full border-8 border-primary/20 bg-card">
-              <span className="text-4xl font-bold text-primary">0%</span>
+              <span className="text-4xl font-bold text-primary">{overallProgress}%</span>
             </div>
             <p className="text-sm text-muted-foreground mt-4">Completitud Total de Metas</p>
           </div>
         </CardContent>
       </Card>
 
-      <Tabs defaultValue="daily" className="w-full">
+      <Tabs defaultValue="daily" className="w-full" onValueChange={setCurrentTab}>
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="daily">Diario</TabsTrigger>
           <TabsTrigger value="week">Semana Actual</TabsTrigger>
@@ -93,7 +149,7 @@ export default function ProgressPage() {
             <CardHeader>
               <CardTitle>Progreso Diario</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-3">
               <div className="flex items-center justify-between p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
                 <div className="flex items-center gap-3">
                   <CheckCircle 
@@ -105,6 +161,24 @@ export default function ProgressPage() {
                   {hasCheckedInToday ? 'Completado hoy' : 'Pendiente'}
                 </span>
               </div>
+              
+              {dailyGoals.map((goal) => (
+                <div key={goal.id} className="flex items-center justify-between p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
+                  <div className="flex items-center gap-3">
+                    <Checkbox checked={goal.completed} disabled />
+                    <span className={`text-foreground font-medium ${goal.completed ? 'line-through opacity-60' : ''}`}>
+                      {goal.text}
+                    </span>
+                  </div>
+                  <span className="text-sm text-muted-foreground">
+                    {goal.completed ? 'Completado' : 'Pendiente'}
+                  </span>
+                </div>
+              ))}
+
+              {dailyGoals.length === 0 && (
+                <p className="text-center py-4 text-muted-foreground">No hay metas para hoy</p>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -112,26 +186,26 @@ export default function ProgressPage() {
         <TabsContent value="week" className="space-y-6 mt-6">
           <Card className="border-primary/20">
             <CardHeader>
-              <CardTitle>Progreso Semanal por Área</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Sin datos aún
-              </p>
+              <CardTitle>Progreso Semanal</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {areas.map((area) => (
-                <ProgressBar key={area.name} area={area} />
+            <CardContent className="space-y-3">
+              {weeklyGoals.map((goal) => (
+                <div key={goal.id} className="flex items-center justify-between p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
+                  <div className="flex items-center gap-3">
+                    <Checkbox checked={goal.completed} disabled />
+                    <span className={`text-foreground font-medium ${goal.completed ? 'line-through opacity-60' : ''}`}>
+                      {goal.text}
+                    </span>
+                  </div>
+                  <span className="text-sm text-muted-foreground">
+                    {goal.completed ? 'Completado' : 'Pendiente'}
+                  </span>
+                </div>
               ))}
-            </CardContent>
-          </Card>
 
-          <Card className="border-primary/20">
-            <CardHeader>
-              <CardTitle>Historial de Check-In Diario</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8 text-muted-foreground">
-                <p>No hay check-ins registrados aún</p>
-              </div>
+              {weeklyGoals.length === 0 && (
+                <p className="text-center py-4 text-muted-foreground">No hay metas para esta semana</p>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -139,15 +213,26 @@ export default function ProgressPage() {
         <TabsContent value="month" className="space-y-6 mt-6">
           <Card className="border-primary/20">
             <CardHeader>
-              <CardTitle>Progreso Mensual por Área</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Sin datos aún
-              </p>
+              <CardTitle>Progreso Mensual</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {areas.map((area) => (
-                <ProgressBar key={area.name} area={area} />
+            <CardContent className="space-y-3">
+              {monthlyGoals.map((goal) => (
+                <div key={goal.id} className="flex items-center justify-between p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
+                  <div className="flex items-center gap-3">
+                    <Checkbox checked={goal.completed} disabled />
+                    <span className={`text-foreground font-medium ${goal.completed ? 'line-through opacity-60' : ''}`}>
+                      {goal.text}
+                    </span>
+                  </div>
+                  <span className="text-sm text-muted-foreground">
+                    {goal.completed ? 'Completado' : 'Pendiente'}
+                  </span>
+                </div>
               ))}
+
+              {monthlyGoals.length === 0 && (
+                <p className="text-center py-4 text-muted-foreground">No hay metas para este mes</p>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -155,15 +240,36 @@ export default function ProgressPage() {
         <TabsContent value="overall" className="space-y-6 mt-6">
           <Card className="border-primary/20">
             <CardHeader>
-              <CardTitle>Progreso General</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Sin datos aún
-              </p>
+              <CardTitle>Todas las Metas</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {areas.map((area) => (
-                <ProgressBar key={area.name} area={area} />
-              ))}
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
+                <div className="flex items-center gap-3">
+                  <CheckCircle 
+                    className={`h-6 w-6 ${hasCheckedInToday ? 'text-green-500' : 'text-destructive'}`} 
+                  />
+                  <span className="text-foreground font-medium">Recuperación</span>
+                </div>
+                <span className="text-sm text-muted-foreground">
+                  {hasCheckedInToday ? 'Completado hoy' : 'Pendiente'}
+                </span>
+              </div>
+
+              {[...dailyGoals, ...weeklyGoals, ...monthlyGoals]
+                .filter((goal, index, self) => self.findIndex(g => g.id === goal.id) === index)
+                .map((goal) => (
+                  <div key={goal.id} className="flex items-center justify-between p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
+                    <div className="flex items-center gap-3">
+                      <Checkbox checked={goal.completed} disabled />
+                      <span className={`text-foreground font-medium ${goal.completed ? 'line-through opacity-60' : ''}`}>
+                        {goal.text}
+                      </span>
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      {goal.completed ? 'Completado' : 'Pendiente'}
+                    </span>
+                  </div>
+                ))}
             </CardContent>
           </Card>
         </TabsContent>
