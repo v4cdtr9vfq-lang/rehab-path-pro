@@ -27,20 +27,20 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
   }, [startDate]);
 
   return (
-    <div className="rounded-3xl p-8 md:p-12 bg-card border border-border/50 shadow-xl">
-      <p className="text-muted-foreground text-base mb-8">He estado en abstinencia por</p>
+    <div className="rounded-3xl p-8 md:p-12 bg-primary/80 border border-primary shadow-xl">
+      <p className="text-primary-foreground/80 text-base mb-8">He estado en abstinencia por</p>
       <div className="grid grid-cols-3 gap-6 md:gap-8">
         <div className="text-center">
-          <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight">{count.years}</div>
-          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium">Años</div>
+          <div className="text-7xl md:text-8xl font-bold text-primary-foreground mb-3 tracking-tight">{count.years}</div>
+          <div className="text-sm uppercase tracking-widest text-primary-foreground/70 font-medium">Años</div>
         </div>
         <div className="text-center">
-          <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight">{count.months}</div>
-          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium">Meses</div>
+          <div className="text-7xl md:text-8xl font-bold text-primary-foreground mb-3 tracking-tight">{count.months}</div>
+          <div className="text-sm uppercase tracking-widest text-primary-foreground/70 font-medium">Meses</div>
         </div>
         <div className="text-center">
-          <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight">{count.days}</div>
-          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium">Días</div>
+          <div className="text-7xl md:text-8xl font-bold text-primary-foreground mb-3 tracking-tight">{count.days}</div>
+          <div className="text-sm uppercase tracking-widest text-primary-foreground/70 font-medium">Días</div>
         </div>
       </div>
     </div>
