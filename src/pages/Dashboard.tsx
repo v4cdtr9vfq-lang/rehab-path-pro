@@ -105,19 +105,19 @@ export default function Home() {
       </Card>
 
       {/* Active Goals Summary */}
-      <Card className="bg-secondary/80 border-secondary">
+      <Card className="border-border/50">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-2xl font-bold text-secondary-foreground">Metas Activas</CardTitle>
+          <CardTitle className="text-2xl font-bold">Metas Activas</CardTitle>
           <Link to="/plan">
-            <Button variant="ghost" size="sm" className="text-secondary-foreground hover:bg-secondary-foreground/10">Ver todas</Button>
+            <Button variant="ghost" size="sm" className="text-primary">Ver todas</Button>
           </Link>
         </CardHeader>
         <CardContent>
           {activeGoals.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-secondary-foreground/70 mb-4">No tienes metas activas aún</p>
+              <p className="text-muted-foreground mb-4">No tienes metas activas aún</p>
               <Link to="/plan">
-                <Button className="rounded-xl bg-secondary-foreground text-secondary hover:bg-secondary-foreground/90">
+                <Button className="rounded-xl">
                   <Target className="h-4 w-4 mr-2" />
                   Añadir meta
                 </Button>
@@ -128,19 +128,19 @@ export default function Home() {
               {activeGoals.slice(0, 3).map((goal) => (
                 <div
                   key={goal.id}
-                  className="flex items-center justify-between p-4 rounded-xl border border-secondary-foreground/20 bg-card hover:bg-secondary-foreground/5 transition-colors"
+                  className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-card hover:bg-muted/30 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     {goal.status === "completed" ? (
-                      <CheckCircle2 className="h-5 w-5 text-secondary-foreground flex-shrink-0" />
+                      <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
                     ) : (
-                      <div className="h-5 w-5 rounded-full border-2 border-secondary-foreground/50 flex-shrink-0" />
+                      <div className="h-5 w-5 rounded-full border-2 border-muted-foreground flex-shrink-0" />
                     )}
                     <div>
-                      <p className={`font-medium ${goal.status === "completed" ? "line-through text-secondary-foreground/60" : "text-secondary-foreground"}`}>
+                      <p className={`font-medium ${goal.status === "completed" ? "line-through text-muted-foreground" : "text-foreground"}`}>
                         {goal.title}
                       </p>
-                      <p className="text-xs text-secondary-foreground/60">{goal.period}</p>
+                      <p className="text-xs text-muted-foreground">{goal.period}</p>
                     </div>
                   </div>
                   <Badge variant={goal.status === "completed" ? "default" : "outline"} className="text-xs">
@@ -161,12 +161,12 @@ export default function Home() {
             const Icon = tool.icon;
             return (
               <Link key={tool.label} to={tool.path}>
-                <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer bg-accent/80 border-accent h-full">
+                <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-border/50 h-full">
                   <CardContent className="p-5 text-center space-y-3">
-                    <div className="mx-auto w-12 h-12 rounded-2xl bg-accent-foreground/10 flex items-center justify-center">
-                      <Icon className="h-6 w-6 text-accent-foreground" />
+                    <div className={`mx-auto w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center ${tool.color}`}>
+                      <Icon className="h-6 w-6" />
                     </div>
-                    <p className="font-semibold text-accent-foreground text-xs leading-tight">{tool.label}</p>
+                    <p className="font-semibold text-foreground text-xs leading-tight">{tool.label}</p>
                   </CardContent>
                 </Card>
               </Link>
@@ -176,15 +176,15 @@ export default function Home() {
       </div>
 
       {/* Daily Motivational Message */}
-      <Card className="bg-[hsl(var(--warning))] border-[hsl(var(--warning))]">
+      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
         <CardContent className="p-6">
-          <p className="text-center text-warning-foreground text-xl font-medium leading-relaxed mb-2">
+          <p className="text-center text-foreground text-xl font-medium leading-relaxed mb-2">
             "La confianza se construye con consistencia."
           </p>
-          <p className="text-center text-warning-foreground/70 text-sm">- Lincoln Chafee</p>
+          <p className="text-center text-muted-foreground text-sm">- Lincoln Chafee</p>
           <div className="flex justify-center mt-4">
             <Link to="/message">
-              <Button variant="ghost" size="sm" className="text-warning-foreground hover:bg-warning-foreground/10 text-xs">Ver más mensajes</Button>
+              <Button variant="ghost" size="sm" className="text-primary text-xs">Ver más mensajes</Button>
             </Link>
           </div>
         </CardContent>
