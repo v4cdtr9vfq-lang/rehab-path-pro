@@ -3,7 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Calendar, Plus, Sparkles, Pencil, Check, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface GratitudeItem {
   text: string;
@@ -21,32 +23,93 @@ export default function Gratitude() {
   const [newItem, setNewItem] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
+  const { toast } = useToast();
 
-  const addGratitudeItem = () => {
+  useEffect(() => {
+    loadEntries();
+  }, []);
+
+  const loadEntries = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await (supabase as any)
+        .from('gratitude_entries')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('entry_date', { ascending: false });
+
+      if (error) throw error;
+
+      // Group entries by date
+      const groupedEntries: GratitudeEntry[] = [];
+      data?.forEach((entry: any) => {
+        const entryDate = new Date(entry.entry_date);
+        const existingEntry = groupedEntries.find(e => 
+          e.date.toDateString() === entryDate.toDateString()
+        );
+
+        const item: GratitudeItem = {
+          text: entry.text,
+          timestamp: new Date(entry.created_at)
+        };
+
+        if (existingEntry) {
+          existingEntry.items.push(item);
+        } else {
+          groupedEntries.push({
+            id: entry.entry_date,
+            date: entryDate,
+            items: [item]
+          });
+        }
+      });
+
+      setEntries(groupedEntries);
+    } catch (error) {
+      console.error('Error loading entries:', error);
+    }
+  };
+
+  const addGratitudeItem = async () => {
     if (newItem.trim()) {
-      const today = entries.find(e => 
-        e.date.toDateString() === new Date().toDateString()
-      );
-      
-      const newGratitudeItem: GratitudeItem = {
-        text: newItem,
-        timestamp: new Date()
-      };
-      
-      if (today) {
-        setEntries(entries.map(e => 
-          e.id === today.id 
-            ? { ...e, items: [...e.items, newGratitudeItem] }
-            : e
-        ));
-      } else {
-        setEntries([{
-          id: Date.now().toString(),
-          date: new Date(),
-          items: [newGratitudeItem]
-        }, ...entries]);
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          toast({
+            title: "Error",
+            description: "Debes iniciar sesión para guardar entradas",
+            variant: "destructive"
+          });
+          return;
+        }
+
+        const { error } = await (supabase as any)
+          .from('gratitude_entries')
+          .insert({
+            user_id: user.id,
+            text: newItem,
+            entry_date: new Date().toISOString().split('T')[0]
+          });
+
+        if (error) throw error;
+
+        toast({
+          title: "¡Guardado!",
+          description: "Tu entrada de gratitud ha sido guardada"
+        });
+
+        setNewItem("");
+        await loadEntries();
+      } catch (error) {
+        console.error('Error adding entry:', error);
+        toast({
+          title: "Error",
+          description: "No se pudo guardar tu entrada",
+          variant: "destructive"
+        });
       }
-      setNewItem("");
     }
   };
 
