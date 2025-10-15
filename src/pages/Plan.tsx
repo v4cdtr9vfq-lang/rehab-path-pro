@@ -523,12 +523,19 @@ export default function Plan() {
     if (!editingGoal || !editingGoal.text.trim()) return;
 
     try {
+      const updateData: any = {
+        text: editingGoal.text,
+        remaining: editingGoal.remaining
+      };
+
+      // Only update periodic_type if it's a periodic goal
+      if (editingGoal.goal_type === 'periodic') {
+        updateData.periodic_type = editingGoal.periodic_type;
+      }
+
       const { error } = await supabase
         .from('goals')
-        .update({
-          text: editingGoal.text,
-          remaining: editingGoal.remaining
-        })
+        .update(updateData)
         .eq('id', editingGoal.id);
 
       if (error) throw error;
@@ -804,6 +811,26 @@ export default function Plan() {
                 onChange={(e) => setEditingGoal(prev => ({ ...prev, text: e.target.value }))}
               />
             </div>
+            
+            {editingGoal?.goal_type === 'periodic' && (
+              <div className="space-y-2">
+                <Label htmlFor="edit-periodic-type">Periodicidad</Label>
+                <Select 
+                  value={editingGoal?.periodic_type || ""} 
+                  onValueChange={(value) => setEditingGoal(prev => ({ ...prev, periodic_type: value }))}
+                >
+                  <SelectTrigger id="edit-periodic-type">
+                    <SelectValue placeholder="Seleccionar periodicidad" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="inicio_mes">Primero de Mes</SelectItem>
+                    <SelectItem value="mitad_mes">Mitad de Mes</SelectItem>
+                    <SelectItem value="final_mes">Final de Mes</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
             <div className="space-y-2">
               <Label htmlFor="edit-goal-remaining">Número de veces</Label>
               <Input
