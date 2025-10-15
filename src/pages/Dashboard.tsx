@@ -21,24 +21,52 @@ export default function Home() {
   const goalsProgress = totalGoals > 0 ? (goalsCompleted / totalGoals) * 100 : 0;
   const [activeGoals, setActiveGoals] = useState<any[]>([]);
 
+  // Get today's date key for localStorage
+  const getTodayKey = () => {
+    return `goals_completed_${new Date().toISOString().split('T')[0]}`;
+  };
+
+  // Load completed instances from localStorage
+  const loadCompletedInstances = (): Set<string> => {
+    const stored = localStorage.getItem(getTodayKey());
+    return stored ? new Set(JSON.parse(stored)) : new Set();
+  };
+
+  // Save completed instances to localStorage
+  const saveCompletedInstances = (completedIds: Set<string>) => {
+    localStorage.setItem(getTodayKey(), JSON.stringify([...completedIds]));
+  };
+
   const toggleGoal = async (goalId: string) => {
     try {
       const goal = activeGoals.find(g => g.id === goalId);
       if (!goal) return;
 
-      // Toggle only THIS instance
-      const updatedGoals = activeGoals.map(g => 
-        g.id === goalId 
-          ? { ...g, status: g.status === 'completed' ? 'pending' : 'completed' }
-          : g
-      );
+      // Load current completed instances
+      const completedInstances = loadCompletedInstances();
+      
+      // Toggle THIS instance
+      if (completedInstances.has(goalId)) {
+        completedInstances.delete(goalId);
+      } else {
+        completedInstances.add(goalId);
+      }
+
+      // Save to localStorage
+      saveCompletedInstances(completedInstances);
+
+      // Update local state
+      const updatedGoals = activeGoals.map(g => ({
+        ...g,
+        status: completedInstances.has(g.id) ? 'completed' : 'pending'
+      }));
 
       setActiveGoals(updatedGoals);
 
       // Count how many instances of this specific goal are completed
       const instancesOfThisGoal = updatedGoals.filter(g => g.originalId === goal.originalId);
-      const completedInstances = instancesOfThisGoal.filter(g => g.status === 'completed').length;
-      const allInstancesCompleted = completedInstances === instancesOfThisGoal.length;
+      const completedInstancesOfGoal = instancesOfThisGoal.filter(g => g.status === 'completed').length;
+      const allInstancesCompleted = completedInstancesOfGoal === instancesOfThisGoal.length;
 
       // Update database: mark as completed only if ALL instances are done
       const { error } = await supabase
@@ -48,7 +76,7 @@ export default function Home() {
 
       if (error) throw error;
 
-      // Recalculate TODAY's completed count (not weekly)
+      // Recalculate TODAY's completed count
       const totalCompletedToday = updatedGoals.filter(g => g.status === 'completed').length;
       const totalTodayGoals = updatedGoals.length + 1; // All instances + check-in
       
@@ -135,28 +163,32 @@ export default function Home() {
           g.goal_type === 'always'
         );
         
+        // Load completed instances from localStorage
+        const completedInstances = loadCompletedInstances();
+        
         // Expand goals based on remaining count for TODAY's display
         const expandedGoals: any[] = [];
         todayGoals.forEach(g => {
           for (let i = 0; i < g.remaining; i++) {
+            const instanceId = `${g.id}-${i}`;
             expandedGoals.push({
-              id: `${g.id}-${i}`,
+              id: instanceId,
               originalId: g.id,
               title: g.text,
               period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Siempre' : 'Esta semana',
-              status: g.completed ? 'completed' : 'pending',
+              status: completedInstances.has(instanceId) ? 'completed' : 'pending',
               instanceIndex: i
             });
           }
         });
         
         // Count completed instances
-        const completedInstances = expandedGoals.filter(g => g.status === 'completed').length;
+        const completedCount = expandedGoals.filter(g => g.status === 'completed').length;
         
         // TODAY's total: all instances + check-in
         const totalTodayGoals = expandedGoals.length + 1;
         
-        setGoalsCompleted(completedInstances + (checkIn ? 1 : 0));
+        setGoalsCompleted(completedCount + (checkIn ? 1 : 0));
         setTotalGoals(totalTodayGoals);
         setActiveGoals(expandedGoals);
       } else {
