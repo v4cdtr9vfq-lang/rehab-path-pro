@@ -44,7 +44,7 @@ export default function Landing() {
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight">
-              Tu recuperación,<br />
+              La recuperación,<br />
               <span className="text-primary">está en  tus manos</span>
             </h1>
             
