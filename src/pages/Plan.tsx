@@ -612,12 +612,15 @@ export default function Plan() {
   const GoalItem = ({ goal, sectionKey }: { goal: ExpandedGoal; sectionKey: keyof typeof sections }) => {
     // Read completion status directly from the goal prop (which comes from expanded goals)
     // The goal.completed is already synced from localStorage in expandGoals
+    const isClickable = sectionKey !== 'week' && sectionKey !== 'month';
+    
     return (
       <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
         <div className="flex items-center gap-3 flex-1">
           <button
-            onClick={() => toggleGoal(sectionKey, goal.id)}
-            className="flex-shrink-0"
+            onClick={isClickable ? () => toggleGoal(sectionKey, goal.id) : undefined}
+            className={`flex-shrink-0 ${!isClickable ? 'cursor-default' : ''}`}
+            disabled={!isClickable}
           >
             {goal.completed ? (
               <CheckCircle2 className="h-6 w-6 text-green-500" />
