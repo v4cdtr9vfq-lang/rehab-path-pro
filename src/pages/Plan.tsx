@@ -5,10 +5,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, ChevronDown, ChevronUp, Pencil, Trash2, CheckCircle2, Circle } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Plus, ChevronDown, ChevronUp, Pencil, Trash2, CheckCircle2, Circle, CalendarIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,6 +32,8 @@ interface Goal {
   completed: boolean;
   remaining: number;
   goal_type?: string;
+  target_date?: string;
+  periodic_type?: string;
 }
 
 interface ExpandedGoal extends Goal {
@@ -54,8 +61,10 @@ export default function Plan() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [newGoal, setNewGoal] = useState<{
     text: string;
-    type: keyof typeof sections | 'always';
+    type: keyof typeof sections | 'always' | 'periodic';
     remaining: number;
+    target_date?: Date;
+    periodic_type?: string;
   }>({
     text: "",
     type: "today",
@@ -398,7 +407,9 @@ export default function Plan() {
           text: newGoal.text,
           goal_type: newGoal.type,
           remaining: newGoal.remaining,
-          completed: false
+          completed: false,
+          target_date: newGoal.target_date ? format(newGoal.target_date, 'yyyy-MM-dd') : null,
+          periodic_type: newGoal.periodic_type || null
         })
         .select()
         .single();
@@ -415,7 +426,7 @@ export default function Plan() {
         });
       }
 
-      setNewGoal({ text: "", type: "today", remaining: 1 });
+      setNewGoal({ text: "", type: "today", remaining: 1, target_date: undefined, periodic_type: undefined });
       setIsDialogOpen(false);
     } catch (error: any) {
       toast({
@@ -681,7 +692,7 @@ export default function Plan() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="goal-type">Tipo</Label>
-                <Select value={newGoal.type} onValueChange={(value) => setNewGoal(prev => ({ ...prev, type: value as (keyof typeof sections | 'always') }))}>
+                <Select value={newGoal.type} onValueChange={(value) => setNewGoal(prev => ({ ...prev, type: value as (keyof typeof sections | 'always' | 'periodic'), target_date: undefined, periodic_type: undefined }))}>
                   <SelectTrigger id="goal-type">
                     <SelectValue />
                   </SelectTrigger>
@@ -690,10 +701,57 @@ export default function Plan() {
                     <SelectItem value="week">Esta Semana</SelectItem>
                     <SelectItem value="month">Este Mes</SelectItem>
                     <SelectItem value="onetime">Meta Única</SelectItem>
+                    <SelectItem value="periodic">Meta Periódica</SelectItem>
                     <SelectItem value="always">Siempre</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
+
+              {newGoal.type === 'onetime' && (
+                <div className="space-y-2">
+                  <Label>Fecha objetivo</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !newGoal.target_date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {newGoal.target_date ? format(newGoal.target_date, "PPP", { locale: es }) : <span>Seleccionar fecha</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={newGoal.target_date}
+                        onSelect={(date) => setNewGoal(prev => ({ ...prev, target_date: date }))}
+                        initialFocus
+                        className={cn("p-3 pointer-events-auto")}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              )}
+
+              {newGoal.type === 'periodic' && (
+                <div className="space-y-2">
+                  <Label htmlFor="periodic-type">Periodicidad</Label>
+                  <Select value={newGoal.periodic_type} onValueChange={(value) => setNewGoal(prev => ({ ...prev, periodic_type: value }))}>
+                    <SelectTrigger id="periodic-type">
+                      <SelectValue placeholder="Seleccionar periodicidad" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="inicio_mes">Primero de Mes</SelectItem>
+                      <SelectItem value="mitad_mes">Mitad de Mes</SelectItem>
+                      <SelectItem value="final_mes">Final de Mes</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
               <div className="space-y-2">
                 <Label htmlFor="goal-remaining">Número de veces</Label>
                 <Input

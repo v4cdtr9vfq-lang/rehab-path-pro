@@ -77,7 +77,9 @@ export type Database = {
           created_at: string
           goal_type: string
           id: string
+          periodic_type: string | null
           remaining: number
+          target_date: string | null
           text: string
           updated_at: string
           user_id: string
@@ -87,7 +89,9 @@ export type Database = {
           created_at?: string
           goal_type: string
           id?: string
+          periodic_type?: string | null
           remaining?: number
+          target_date?: string | null
           text: string
           updated_at?: string
           user_id: string
@@ -97,7 +101,9 @@ export type Database = {
           created_at?: string
           goal_type?: string
           id?: string
+          periodic_type?: string | null
           remaining?: number
+          target_date?: string | null
           text?: string
           updated_at?: string
           user_id?: string
