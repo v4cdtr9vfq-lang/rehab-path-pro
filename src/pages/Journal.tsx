@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { BookOpen, Plus, Search } from "lucide-react";
 import { useState } from "react";
+import { AudioRecorder } from "@/components/AudioRecorder";
 
 interface JournalEntry {
   id: string;
@@ -16,6 +17,11 @@ interface JournalEntry {
 export default function Journal() {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [showNewEntry, setShowNewEntry] = useState(false);
+  const [entryContent, setEntryContent] = useState("");
+
+  const handleTranscriptionComplete = (text: string) => {
+    setEntryContent(prev => prev ? `${prev}\n\n${text}` : text);
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -47,10 +53,15 @@ export default function Journal() {
           </CardHeader>
           <CardContent className="space-y-4">
             <Input placeholder="Título de la entrada..." />
-            <Textarea
-              placeholder="Escribe tus pensamientos..."
-              className="min-h-[200px]"
-            />
+            <div className="space-y-2">
+              <Textarea
+                placeholder="Escribe tus pensamientos..."
+                className="min-h-[200px]"
+                value={entryContent}
+                onChange={(e) => setEntryContent(e.target.value)}
+              />
+              <AudioRecorder onTranscriptionComplete={handleTranscriptionComplete} />
+            </div>
             <Input placeholder="Etiquetas (separadas por comas)" />
             <div className="flex gap-2">
               <Button className="flex-1">Guardar Entrada</Button>
