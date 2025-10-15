@@ -4,7 +4,8 @@ import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Bell, Plus } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Bell, Plus, Mail, BellRing } from "lucide-react";
 import { useState } from "react";
 
 interface Reminder {
@@ -12,6 +13,7 @@ interface Reminder {
   title: string;
   time: string;
   enabled: boolean;
+  notificationType: "email" | "popup";
 }
 
 export default function Reminders() {
@@ -19,7 +21,8 @@ export default function Reminders() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newReminder, setNewReminder] = useState({
     title: "",
-    time: ""
+    time: "",
+    notificationType: "popup" as "email" | "popup"
   });
 
   const addReminder = () => {
@@ -29,11 +32,12 @@ export default function Reminders() {
       id: Date.now().toString(),
       title: newReminder.title,
       time: newReminder.time,
-      enabled: true
+      enabled: true,
+      notificationType: newReminder.notificationType
     };
 
     setReminders(prev => [...prev, reminder]);
-    setNewReminder({ title: "", time: "" });
+    setNewReminder({ title: "", time: "", notificationType: "popup" });
     setIsDialogOpen(false);
   };
 
@@ -97,6 +101,28 @@ export default function Reminders() {
                   onChange={(e) => setNewReminder(prev => ({ ...prev, time: e.target.value }))}
                 />
               </div>
+              <div className="space-y-2">
+                <Label>Tipo de Notificación</Label>
+                <RadioGroup 
+                  value={newReminder.notificationType} 
+                  onValueChange={(value: "email" | "popup") => setNewReminder(prev => ({ ...prev, notificationType: value }))}
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="popup" id="popup" />
+                    <Label htmlFor="popup" className="flex items-center gap-2 cursor-pointer font-normal">
+                      <BellRing className="h-4 w-4" />
+                      Pop-up en la aplicación
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="email" id="email" />
+                    <Label htmlFor="email" className="flex items-center gap-2 cursor-pointer font-normal">
+                      <Mail className="h-4 w-4" />
+                      Enviar por email
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
               <Button onClick={addReminder} className="w-full">
                 Añadir
               </Button>
@@ -141,6 +167,28 @@ export default function Reminders() {
                         onChange={(e) => setNewReminder(prev => ({ ...prev, time: e.target.value }))}
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label>Tipo de Notificación</Label>
+                      <RadioGroup 
+                        value={newReminder.notificationType} 
+                        onValueChange={(value: "email" | "popup") => setNewReminder(prev => ({ ...prev, notificationType: value }))}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="popup" id="popup-empty" />
+                          <Label htmlFor="popup-empty" className="flex items-center gap-2 cursor-pointer font-normal">
+                            <BellRing className="h-4 w-4" />
+                            Pop-up en la aplicación
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="email" id="email-empty" />
+                          <Label htmlFor="email-empty" className="flex items-center gap-2 cursor-pointer font-normal">
+                            <Mail className="h-4 w-4" />
+                            Enviar por email
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
                     <Button onClick={addReminder} className="w-full">
                       Añadir
                     </Button>
@@ -157,6 +205,19 @@ export default function Reminders() {
                   <div className="flex-1">
                     <h3 className="font-semibold text-foreground">{reminder.title}</h3>
                     <p className="text-sm text-muted-foreground">{reminder.time}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      {reminder.notificationType === "email" ? (
+                        <>
+                          <Mail className="h-3 w-3 text-muted-foreground" />
+                          <span className="text-xs text-muted-foreground">Email</span>
+                        </>
+                      ) : (
+                        <>
+                          <BellRing className="h-3 w-3 text-muted-foreground" />
+                          <span className="text-xs text-muted-foreground">Pop-up</span>
+                        </>
+                      )}
+                    </div>
                   </div>
                   <Switch 
                     checked={reminder.enabled} 
