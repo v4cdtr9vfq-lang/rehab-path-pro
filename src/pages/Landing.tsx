@@ -17,7 +17,7 @@ export default function Landing() {
     description: "Establece y alcanza objetivos adaptados a tu proceso de recuperación"
   }, {
     icon: Users,
-    title: "Red de Apoyo",
+    title: "Red de apoyo",
     description: "Conecta con tu red de soporte cuando más lo necesites"
   }];
   const steps = [{
