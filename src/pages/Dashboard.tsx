@@ -255,7 +255,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="space-y-3">
-              {activeGoals.slice(0, 3).map((goal) => (
+              {activeGoals.map((goal) => (
                 <div
                   key={goal.id}
                   className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-card hover:bg-muted/30 transition-colors"
