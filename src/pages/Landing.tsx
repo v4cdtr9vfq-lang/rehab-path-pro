@@ -138,11 +138,11 @@ export default function Landing() {
 
       {/* CTA Final */}
       <section className="py-20">
-        <div className="container mx-auto px-4 max-w-4xl text-center space-y-8">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+        <div className="container mx-auto px-4 max-w-4xl text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Comienza tu viaje hoy
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
             Únete a miles de personas que ya están transformando sus vidas
           </p>
           <Link to="/auth?mode=signup">
