@@ -6,36 +6,36 @@ export default function Tools() {
   const tools = [
     {
       icon: Wind,
-      title: "Breathing Exercise",
-      description: "Calm your mind with guided breathing techniques",
+      title: "Ejercicio de Respiración",
+      description: "Calma tu mente con técnicas de respiración guiada",
       color: "text-primary",
       bgColor: "bg-primary/10"
     },
     {
       icon: Anchor,
-      title: "Grounding Exercise",
-      description: "Connect with the present moment using the 5-4-3-2-1 technique",
+      title: "Ejercicio de Anclaje",
+      description: "Conéctate con el momento presente usando la técnica 5-4-3-2-1",
       color: "text-accent",
       bgColor: "bg-accent/10"
     },
     {
       icon: Phone,
-      title: "Emergency Contacts",
-      description: "Quick access to your support network",
+      title: "Contactos de Emergencia",
+      description: "Acceso rápido a tu red de apoyo",
       color: "text-primary",
       bgColor: "bg-primary/10"
     },
     {
       icon: AlertCircle,
-      title: "Crisis Plan",
-      description: "Your personalized plan for difficult moments",
+      title: "Plan de Crisis",
+      description: "Tu plan personalizado para momentos difíciles",
       color: "text-destructive",
       bgColor: "bg-destructive/10"
     },
     {
       icon: HeartPulse,
-      title: "Self-Care Menu",
-      description: "Quick activities to support your wellbeing",
+      title: "Menú de Autocuidado",
+      description: "Actividades rápidas para apoyar tu bienestar",
       color: "text-accent",
       bgColor: "bg-accent/10"
     }
@@ -44,8 +44,8 @@ export default function Tools() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Tools</h1>
-        <p className="text-muted-foreground text-lg">Resources to support you in challenging moments</p>
+        <h1 className="text-4xl font-bold text-foreground mb-2">Herramientas</h1>
+        <p className="text-muted-foreground text-lg">Recursos para apoyarte en momentos desafiantes</p>
       </div>
 
       <Card className="border-destructive/30 bg-gradient-to-br from-destructive/5 to-transparent">
@@ -55,17 +55,17 @@ export default function Tools() {
               <AlertCircle className="h-6 w-6 text-destructive" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-foreground mb-2">In Crisis?</h3>
+              <h3 className="font-semibold text-foreground mb-2">¿En Crisis?</h3>
               <p className="text-sm text-foreground/80 mb-4">
-                If you're in immediate danger or experiencing a crisis, please reach out for help immediately.
+                Si estás en peligro inmediato o experimentando una crisis, por favor busca ayuda inmediatamente.
               </p>
               <div className="flex flex-col sm:flex-row gap-2">
                 <Button variant="destructive" className="gap-2">
                   <Phone className="h-4 w-4" />
-                  Call Crisis Hotline
+                  Llamar Línea de Crisis
                 </Button>
                 <Button variant="outline">
-                  Contact My Sponsor
+                  Contactar Mi Padrino
                 </Button>
               </div>
             </div>
@@ -101,27 +101,17 @@ export default function Tools() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Phone className="h-5 w-5 text-primary" />
-            My Support Network
+            Mi Red de Apoyo
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          {[
-            { name: "Sponsor - John", phone: "(555) 123-4567" },
-            { name: "Recovery Friend - Sarah", phone: "(555) 987-6543" },
-            { name: "Therapist - Dr. Smith", phone: "(555) 456-7890" }
-          ].map((contact, i) => (
-            <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-card/50">
-              <span className="font-medium text-foreground">{contact.name}</span>
-              <Button variant="outline" size="sm" className="gap-2">
-                <Phone className="h-4 w-4" />
-                Call
-              </Button>
-            </div>
-          ))}
-          <Button variant="outline" className="w-full gap-2">
-            <Phone className="h-4 w-4" />
-            Add Contact
-          </Button>
+          <div className="text-center py-8">
+            <p className="text-muted-foreground mb-4">No tienes contactos guardados aún</p>
+            <Button className="gap-2">
+              <Phone className="h-4 w-4" />
+              Añadir Contacto
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

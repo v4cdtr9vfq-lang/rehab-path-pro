@@ -11,12 +11,12 @@ interface ProgressArea {
 
 export default function ProgressPage() {
   const areas: ProgressArea[] = [
-    { name: "Participación en Recuperación", percentage: 85, color: "bg-primary" },
-    { name: "Físico", percentage: 70, color: "bg-primary" },
-    { name: "Emocional", percentage: 60, color: "bg-primary" },
-    { name: "Relaciones", percentage: 75, color: "bg-primary" },
-    { name: "Práctico", percentage: 80, color: "bg-primary" },
-    { name: "Espiritual", percentage: 65, color: "bg-accent" },
+    { name: "Participación en Recuperación", percentage: 0, color: "bg-primary" },
+    { name: "Físico", percentage: 0, color: "bg-primary" },
+    { name: "Emocional", percentage: 0, color: "bg-primary" },
+    { name: "Relaciones", percentage: 0, color: "bg-primary" },
+    { name: "Práctico", percentage: 0, color: "bg-primary" },
+    { name: "Espiritual", percentage: 0, color: "bg-accent" },
   ];
 
   const ProgressBar = ({ area }: { area: ProgressArea }) => (
@@ -46,7 +46,7 @@ export default function ProgressPage() {
         <CardContent>
           <div className="text-center mb-6">
             <div className="inline-flex items-center justify-center w-32 h-32 rounded-full border-8 border-primary/20 bg-card">
-              <span className="text-4xl font-bold text-primary">75%</span>
+              <span className="text-4xl font-bold text-primary">0%</span>
             </div>
             <p className="text-sm text-muted-foreground mt-4">Completitud Total de Metas</p>
           </div>
@@ -63,9 +63,9 @@ export default function ProgressPage() {
         <TabsContent value="week" className="space-y-6 mt-6">
           <Card className="border-primary/20">
             <CardHeader>
-              <CardTitle>Weekly Progress by Area</CardTitle>
+              <CardTitle>Progreso Semanal por Área</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Feb 19, 2024 - Feb 25, 2024
+                Sin datos aún
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -77,22 +77,12 @@ export default function ProgressPage() {
 
           <Card className="border-primary/20">
             <CardHeader>
-              <CardTitle>Daily Check-In History</CardTitle>
+              <CardTitle>Historial de Check-In Diario</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-7 gap-2">
-                {[...Array(7)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="aspect-square rounded-lg bg-primary/80 flex items-center justify-center text-xs text-white font-medium"
-                  >
-                    {i + 1}
-                  </div>
-                ))}
+              <div className="text-center py-8 text-muted-foreground">
+                <p>No hay check-ins registrados aún</p>
               </div>
-              <p className="text-sm text-muted-foreground mt-4 text-center">
-                7 day check-in streak! 🔥
-              </p>
             </CardContent>
           </Card>
         </TabsContent>
@@ -100,14 +90,14 @@ export default function ProgressPage() {
         <TabsContent value="month" className="space-y-6 mt-6">
           <Card className="border-primary/20">
             <CardHeader>
-              <CardTitle>Monthly Progress by Area</CardTitle>
+              <CardTitle>Progreso Mensual por Área</CardTitle>
               <p className="text-sm text-muted-foreground">
-                February 2024
+                Sin datos aún
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
               {areas.map((area) => (
-                <ProgressBar key={area.name} area={{ ...area, percentage: Math.floor(area.percentage * 0.9) }} />
+                <ProgressBar key={area.name} area={area} />
               ))}
             </CardContent>
           </Card>
@@ -116,9 +106,9 @@ export default function ProgressPage() {
         <TabsContent value="overall" className="space-y-6 mt-6">
           <Card className="border-primary/20">
             <CardHeader>
-              <CardTitle>Overall Progress</CardTitle>
+              <CardTitle>Progreso General</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Since Jan 22, 2021
+                Sin datos aún
               </p>
             </CardHeader>
             <CardContent className="space-y-4">

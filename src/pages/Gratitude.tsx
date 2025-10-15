@@ -11,18 +11,7 @@ interface GratitudeEntry {
 }
 
 export default function Gratitude() {
-  const [entries, setEntries] = useState<GratitudeEntry[]>([
-    {
-      id: "1",
-      date: new Date(),
-      items: [
-        "My supportive family",
-        "Another day of sobriety",
-        "A beautiful morning walk"
-      ]
-    }
-  ]);
-
+  const [entries, setEntries] = useState<GratitudeEntry[]>([]);
   const [newItem, setNewItem] = useState("");
 
   const addGratitudeItem = () => {
@@ -37,30 +26,40 @@ export default function Gratitude() {
             ? { ...e, items: [...e.items, newItem] }
             : e
         ));
+      } else {
+        setEntries([{
+          id: Date.now().toString(),
+          date: new Date(),
+          items: [newItem]
+        }, ...entries]);
       }
       setNewItem("");
     }
   };
 
+  const todayEntry = entries.find(e => 
+    e.date.toDateString() === new Date().toDateString()
+  );
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Gratitude List</h1>
-        <p className="text-muted-foreground text-lg">Cultivate gratitude and recognize life's blessings</p>
+        <h1 className="text-4xl font-bold text-foreground mb-2">Lista de Gratitud</h1>
+        <p className="text-muted-foreground text-lg">Cultiva la gratitud y reconoce las bendiciones de la vida</p>
       </div>
 
       <Card className="border-accent/20 bg-gradient-to-br from-accent/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             <Sparkles className="h-6 w-6 text-accent" />
-            Why Gratitude Matters
+            Por Qué Importa la Gratitud
           </CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-foreground/80">
-            Practicing gratitude shifts your focus from what's missing to what's present. 
-            Regular gratitude practice has been shown to improve mental health, strengthen relationships, 
-            and support long-term recovery.
+            Practicar la gratitud cambia tu enfoque de lo que falta a lo que está presente. 
+            La práctica regular de gratitud ha demostrado mejorar la salud mental, fortalecer relaciones 
+            y apoyar la recuperación a largo plazo.
           </p>
         </CardContent>
       </Card>
@@ -69,31 +68,31 @@ export default function Gratitude() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5 text-primary" />
-            Today's Gratitude
+            Gratitud de Hoy
             <span className="text-sm font-normal text-muted-foreground ml-auto">
-              {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+              {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
             </span>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-3">
             <Textarea
-              placeholder="What are you grateful for today?"
+              placeholder="¿Por qué estás agradecido hoy?"
               value={newItem}
               onChange={(e) => setNewItem(e.target.value)}
               className="min-h-[100px] text-base"
             />
             <Button onClick={addGratitudeItem} className="w-full gap-2">
               <Plus className="h-4 w-4" />
-              Add to Today's List
+              Añadir a la Lista de Hoy
             </Button>
           </div>
 
-          {entries[0]?.items.length > 0 && (
+          {todayEntry && todayEntry.items.length > 0 && (
             <div className="space-y-3 pt-4 border-t">
-              <h3 className="font-semibold text-foreground">Today I'm grateful for:</h3>
+              <h3 className="font-semibold text-foreground">Hoy estoy agradecido por:</h3>
               <ul className="space-y-2">
-                {entries[0].items.map((item, index) => (
+                {todayEntry.items.map((item, index) => (
                   <li
                     key={index}
                     className="flex items-start gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10"
@@ -105,34 +104,42 @@ export default function Gratitude() {
               </ul>
             </div>
           )}
+
+          {(!todayEntry || todayEntry.items.length === 0) && (
+            <div className="text-center py-8 text-muted-foreground">
+              <p>Aún no has añadido nada a tu lista de hoy</p>
+            </div>
+          )}
         </CardContent>
       </Card>
 
-      <Card className="border-primary/20">
-        <CardHeader>
-          <CardTitle>Recent Entries</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {entries.map((entry) => (
-            <div key={entry.id} className="p-4 rounded-lg bg-card/50 border border-primary/10">
-              <div className="flex items-center gap-2 mb-3">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium text-muted-foreground">
-                  {entry.date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
-                </span>
+      {entries.length > 0 && entries.filter(e => e.date.toDateString() !== new Date().toDateString()).length > 0 && (
+        <Card className="border-primary/20">
+          <CardHeader>
+            <CardTitle>Entradas Recientes</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {entries.filter(e => e.date.toDateString() !== new Date().toDateString()).map((entry) => (
+              <div key={entry.id} className="p-4 rounded-lg bg-card/50 border border-primary/10">
+                <div className="flex items-center gap-2 mb-3">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium text-muted-foreground">
+                    {entry.date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                  </span>
+                </div>
+                <ul className="space-y-2">
+                  {entry.items.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-foreground/80">
+                      <span className="text-accent">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-2">
-                {entry.items.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-foreground/80">
-                    <span className="text-accent">•</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

@@ -12,18 +12,18 @@ interface Question {
 }
 
 const questions: Question[] = [
-  { id: 1, text: "Was I abstinent today?", type: "yesno" },
-  { id: 2, text: "Did I encounter a situation that was triggering for me?", type: "yesno" },
-  { id: 3, text: "What is the one best word to describe how I felt today?", type: "text" },
-  { id: 4, text: "Was I resentful today?", type: "yesno" },
-  { id: 5, text: "Was I honest with my feelings today?", type: "yesno" },
-  { id: 6, text: "Did I isolate today?", type: "yesno" },
-  { id: 7, text: "Did I adhere to my daily values?", type: "yesno" },
+  { id: 1, text: "¿Estuve abstinente hoy?", type: "yesno" },
+  { id: 2, text: "¿Encontré alguna situación que me provocara hoy?", type: "yesno" },
+  { id: 3, text: "¿Cuál es la mejor palabra para describir cómo me sentí hoy?", type: "text" },
+  { id: 4, text: "¿Sentí resentimiento hoy?", type: "yesno" },
+  { id: 5, text: "¿Fui honesto con mis sentimientos hoy?", type: "yesno" },
+  { id: 6, text: "¿Me aislé hoy?", type: "yesno" },
+  { id: 7, text: "¿Seguí mis valores diarios?", type: "yesno" },
 ];
 
 export default function CheckIn() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [feelingWords, setFeelingWords] = useState(["Comfortable", "Confident"]);
+  const [feelingWords, setFeelingWords] = useState(["Cómodo", "Confiado"]);
 
   const handleAnswer = (questionId: number, answer: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: answer }));
@@ -37,18 +37,18 @@ export default function CheckIn() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Daily Check-In</h1>
-        <p className="text-muted-foreground text-lg">Reflect on your day and track your progress</p>
+        <h1 className="text-4xl font-bold text-foreground mb-2">Check-In Diario</h1>
+        <p className="text-muted-foreground text-lg">Reflexiona sobre tu día y rastrea tu progreso</p>
       </div>
 
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5 text-primary" />
-            Daily Check-In Summary
+            Resumen del Check-In Diario
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            {new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -65,7 +65,7 @@ export default function CheckIn() {
                     className="flex-1"
                     onClick={() => handleAnswer(question.id, "yes")}
                   >
-                    YES
+                    SÍ
                   </Button>
                   <Button
                     variant={answers[question.id] === "no" ? "default" : "outline"}
@@ -78,7 +78,7 @@ export default function CheckIn() {
               ) : (
                 <div className="space-y-2">
                   <Input
-                    placeholder="Type a word..."
+                    placeholder="Escribe una palabra..."
                     value={answers[question.id] || ""}
                     onChange={(e) => handleAnswer(question.id, e.target.value)}
                     className="text-base"
@@ -105,7 +105,7 @@ export default function CheckIn() {
             size="lg"
             onClick={handleSubmit}
           >
-            Submit
+            Enviar
             <ArrowRight className="h-5 w-5" />
           </Button>
         </CardContent>
@@ -114,7 +114,7 @@ export default function CheckIn() {
       <Card className="bg-gradient-to-br from-accent/5 to-transparent border-accent/20">
         <CardContent className="p-6">
           <p className="text-center text-foreground/80">
-            Daily check-ins help you stay aware of your emotional state and identify patterns in your recovery journey.
+            Los check-ins diarios te ayudan a mantener conciencia de tu estado emocional e identificar patrones en tu camino de recuperación.
           </p>
         </CardContent>
       </Card>

@@ -5,11 +5,11 @@ import { MessageSquare, RefreshCw } from "lucide-react";
 export default function Message() {
   const quotes = [
     {
-      text: "It is always the simple that produces the marvelous.",
+      text: "Siempre es lo simple lo que produce lo maravilloso.",
       author: "Amelia Barr"
     },
     {
-      text: "Trust is built with consistency.",
+      text: "La confianza se construye con consistencia.",
       author: "Lincoln Chafee"
     }
   ];
@@ -17,18 +17,18 @@ export default function Message() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Daily Message</h1>
-        <p className="text-muted-foreground text-lg">Inspiration and wisdom for your journey</p>
+        <h1 className="text-4xl font-bold text-foreground mb-2">Mensaje Diario</h1>
+        <p className="text-muted-foreground text-lg">Inspiración y sabiduría para tu camino</p>
       </div>
 
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             <MessageSquare className="h-6 w-6 text-primary" />
-            Today's Message
+            Mensaje de Hoy
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+            {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -47,10 +47,10 @@ export default function Message() {
 
       <Card className="border-accent/20 bg-gradient-to-br from-accent/5 to-transparent">
         <CardContent className="p-6">
-          <h3 className="font-semibold text-foreground mb-3">💡 Reflection Prompt</h3>
+          <h3 className="font-semibold text-foreground mb-3">💡 Reflexión del Día</h3>
           <p className="text-foreground/80">
-            How can you practice simplicity in your recovery today? What small, consistent action can you take 
-            to build trust with yourself and others?
+            ¿Cómo puedes practicar la simplicidad en tu recuperación hoy? ¿Qué pequeña acción consistente puedes tomar 
+            para construir confianza contigo mismo y con los demás?
           </p>
         </CardContent>
       </Card>
@@ -58,7 +58,7 @@ export default function Message() {
       <div className="flex justify-center">
         <Button variant="outline" className="gap-2">
           <RefreshCw className="h-4 w-4" />
-          Get Another Message
+          Obtener Otro Mensaje
         </Button>
       </div>
     </div>
