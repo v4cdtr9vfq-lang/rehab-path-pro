@@ -291,7 +291,7 @@ export default function ProgressPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             <TrendingUp className="h-6 w-6 text-primary" />
-            Progreso General
+            Progreso
           </CardTitle>
         </CardHeader>
         <CardContent>
