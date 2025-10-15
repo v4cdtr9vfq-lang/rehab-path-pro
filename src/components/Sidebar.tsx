@@ -21,7 +21,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 
 const menuItems = [
-  { icon: Home, label: "Panel", path: "/dashboard" },
+  { icon: Home, label: "Home", path: "/dashboard" },
   { icon: Target, label: "Mi Plan", path: "/plan" },
   { icon: TrendingUp, label: "Progreso", path: "/progress" },
   { icon: Heart, label: "Valores", path: "/values" },
