@@ -11,7 +11,7 @@ export function Layout({ children }: LayoutProps) {
       <Sidebar />
       <div className="lg:pl-72">
         <div className="pt-16 lg:pt-0">
-          <main className="container mx-auto p-4 lg:p-8 max-w-6xl">
+          <main className="container mx-auto px-4 lg:px-8 pt-6 pb-8 max-w-6xl">
             {children}
           </main>
         </div>
