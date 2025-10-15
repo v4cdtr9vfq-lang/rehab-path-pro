@@ -13,7 +13,7 @@ export default function Landing() {
     description: "Registra tu estado emocional y mantén el control de tu recuperación"
   }, {
     icon: TrendingUp,
-    title: "Metas Personalizadas",
+    title: "Metas personalizadas",
     description: "Establece y alcanza objetivos adaptados a tu proceso de recuperación"
   }, {
     icon: Users,
