@@ -294,10 +294,10 @@ export default function Home() {
 
           {/* Today's Emotion */}
           {checkInCompleted && (
-            <div className="flex items-center justify-between p-4 rounded-xl bg-primary/5 border border-primary/20">
+            <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Emoción principal del día</p>
-                <p className="text-lg font-semibold text-primary">{todayEmotion}</p>
+                <p className="text-lg font-semibold text-green-500">{todayEmotion}</p>
               </div>
             </div>
           )}
