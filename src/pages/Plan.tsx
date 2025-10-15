@@ -2,6 +2,10 @@ import { AbstinenceCounter } from "@/components/AbstinenceCounter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 
@@ -22,6 +26,13 @@ export default function Plan() {
     onetime: { open: false, goals: [] }
   });
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newGoal, setNewGoal] = useState({
+    text: "",
+    type: "today" as keyof typeof sections,
+    remaining: 1
+  });
+
   const toggleSection = (section: keyof typeof sections) => {
     setSections(prev => ({
       ...prev,
@@ -39,6 +50,28 @@ export default function Plan() {
         )
       }
     }));
+  };
+
+  const addGoal = () => {
+    if (!newGoal.text.trim()) return;
+
+    const goal: Goal = {
+      id: Date.now().toString(),
+      text: newGoal.text,
+      completed: false,
+      remaining: newGoal.remaining
+    };
+
+    setSections(prev => ({
+      ...prev,
+      [newGoal.type]: {
+        ...prev[newGoal.type],
+        goals: [...prev[newGoal.type].goals, goal]
+      }
+    }));
+
+    setNewGoal({ text: "", type: "today", remaining: 1 });
+    setIsDialogOpen(false);
   };
 
   const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey: keyof typeof sections }) => (
@@ -86,10 +119,57 @@ export default function Plan() {
 
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold text-foreground">Metas</h2>
-        <Button variant="accent" className="gap-2">
-          <Plus className="h-5 w-5" />
-          Añadir Meta
-        </Button>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button variant="accent" className="gap-2">
+              <Plus className="h-5 w-5" />
+              Añadir Meta
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Añadir Nueva Meta</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="goal-text">Meta</Label>
+                <Input
+                  id="goal-text"
+                  placeholder="Escribe tu meta..."
+                  value={newGoal.text}
+                  onChange={(e) => setNewGoal(prev => ({ ...prev, text: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="goal-type">Tipo</Label>
+                <Select value={newGoal.type} onValueChange={(value) => setNewGoal(prev => ({ ...prev, type: value as keyof typeof sections }))}>
+                  <SelectTrigger id="goal-type">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="today">Hoy</SelectItem>
+                    <SelectItem value="week">Esta Semana</SelectItem>
+                    <SelectItem value="month">Este Mes</SelectItem>
+                    <SelectItem value="onetime">Meta Única</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="goal-remaining">Número de veces</Label>
+                <Input
+                  id="goal-remaining"
+                  type="number"
+                  min="1"
+                  value={newGoal.remaining}
+                  onChange={(e) => setNewGoal(prev => ({ ...prev, remaining: parseInt(e.target.value) || 1 }))}
+                />
+              </div>
+              <Button onClick={addGoal} className="w-full">
+                Añadir
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="space-y-4">
