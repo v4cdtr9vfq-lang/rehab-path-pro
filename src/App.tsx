@@ -14,6 +14,7 @@ import Progress from "./pages/Progress";
 import Values from "./pages/Values";
 import Gratitude from "./pages/Gratitude";
 import Journal from "./pages/Journal";
+import EmotionJournal from "./pages/EmotionJournal";
 import Tools from "./pages/Tools";
 import Reminders from "./pages/Reminders";
 import Message from "./pages/Message";
@@ -80,6 +81,13 @@ const App = () => (
             <ProtectedRoute>
               <Layout>
                 <Journal />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/emotion-journal" element={
+            <ProtectedRoute>
+              <Layout>
+                <EmotionJournal />
               </Layout>
             </ProtectedRoute>
           } />

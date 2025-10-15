@@ -10,6 +10,7 @@ import {
   ListChecks,
   MessageSquare,
   BookOpen,
+  Smile,
   Wrench,
   Settings,
   Menu,
@@ -29,6 +30,7 @@ const menuItems = [
   { icon: ListChecks, label: "Lista de Gratitud", path: "/gratitude" },
   { icon: MessageSquare, label: "Mensaje Diario", path: "/message" },
   { icon: BookOpen, label: "Diario", path: "/journal" },
+  { icon: Smile, label: "Diario de Emociones", path: "/emotion-journal" },
   { icon: Settings, label: "Configuración", path: "/settings" },
 ];
 
