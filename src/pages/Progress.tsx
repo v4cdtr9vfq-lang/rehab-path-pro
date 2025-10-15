@@ -1,7 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, CheckCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ProgressArea {
   name: string;
@@ -10,6 +12,31 @@ interface ProgressArea {
 }
 
 export default function ProgressPage() {
+  const [hasCheckedInToday, setHasCheckedInToday] = useState(false);
+
+  useEffect(() => {
+    checkTodayCheckIn();
+  }, []);
+
+  const checkTodayCheckIn = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const today = new Date().toISOString().split('T')[0];
+      const { data } = await supabase
+        .from('check_ins')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('check_in_date', today)
+        .maybeSingle();
+
+      setHasCheckedInToday(!!data);
+    } catch (error) {
+      console.error('Error checking check-in:', error);
+    }
+  };
+
   const areas: ProgressArea[] = [
     { name: "Participación en Recuperación", percentage: 0, color: "bg-primary" },
     { name: "Físico", percentage: 0, color: "bg-primary" },
@@ -53,12 +80,34 @@ export default function ProgressPage() {
         </CardContent>
       </Card>
 
-      <Tabs defaultValue="week" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+      <Tabs defaultValue="daily" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="daily">Diario</TabsTrigger>
           <TabsTrigger value="week">Semana Actual</TabsTrigger>
           <TabsTrigger value="month">Mes Actual</TabsTrigger>
           <TabsTrigger value="overall">General</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="daily" className="space-y-6 mt-6">
+          <Card className="border-primary/20">
+            <CardHeader>
+              <CardTitle>Progreso Diario</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
+                <div className="flex items-center gap-3">
+                  <CheckCircle 
+                    className={`h-6 w-6 ${hasCheckedInToday ? 'text-green-500' : 'text-destructive'}`} 
+                  />
+                  <span className="text-foreground font-medium">Recuperación</span>
+                </div>
+                <span className="text-sm text-muted-foreground">
+                  {hasCheckedInToday ? 'Completado hoy' : 'Pendiente'}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
         
         <TabsContent value="week" className="space-y-6 mt-6">
           <Card className="border-primary/20">
