@@ -28,7 +28,6 @@ export default function Settings() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isUpdatingEmail, setIsUpdatingEmail] = useState(false);
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
-  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
   const handleUpdateEmail = async () => {
     if (!newEmail.trim()) {
@@ -104,30 +103,6 @@ export default function Settings() {
     }
   };
 
-  const handleDeleteAccount = async () => {
-    setIsDeletingAccount(true);
-    try {
-      const { error } = await supabase.rpc('delete_user');
-      
-      if (error) throw error;
-
-      toast({
-        title: "Cuenta eliminada",
-        description: "Tu cuenta ha sido eliminada permanentemente",
-      });
-      
-      await supabase.auth.signOut();
-      navigate("/auth");
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "No se pudo eliminar la cuenta",
-        variant: "destructive",
-      });
-    } finally {
-      setIsDeletingAccount(false);
-    }
-  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -251,36 +226,6 @@ export default function Settings() {
           <Button variant="outline" className="w-full">
             Exportar Mis Datos
           </Button>
-
-          <div className="border-t pt-6">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" className="w-full">
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Eliminar Cuenta
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Esta acción no se puede deshacer. Esto eliminará permanentemente tu cuenta
-                    y removerá todos tus datos de nuestros servidores.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={handleDeleteAccount}
-                    disabled={isDeletingAccount}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  >
-                    {isDeletingAccount ? "Eliminando..." : "Eliminar Cuenta"}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
         </CardContent>
       </Card>
 
