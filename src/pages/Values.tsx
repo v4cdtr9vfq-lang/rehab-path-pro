@@ -309,23 +309,29 @@ export default function Values() {
     }
 
     return (
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={350}>
         <PieChart>
           <Pie
             data={data}
             cx="50%"
             cy="50%"
-            innerRadius={60}
-            outerRadius={100}
-            paddingAngle={5}
+            innerRadius={50}
+            outerRadius={80}
+            paddingAngle={2}
             dataKey="count"
-            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
           >
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip 
+            formatter={(value: number, name: string) => [`${value} veces`, name]}
+          />
+          <Legend 
+            verticalAlign="bottom" 
+            height={36}
+            formatter={(value) => value}
+          />
         </PieChart>
       </ResponsiveContainer>
     );
