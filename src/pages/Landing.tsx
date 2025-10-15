@@ -40,17 +40,15 @@ export default function Landing() {
           <div className="text-center space-y-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
               <Heart className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Tu aliado en la recuperación</span>
+              <span className="text-sm font-medium text-primary">Tu aliado en tu rehabilitación</span>
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight">
               Tu recuperación,<br />
-              <span className="text-primary">está en en tus manos</span>
+              <span className="text-primary">está en  tus manos</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Rehapp te acompaña en cada paso de tu proceso de recuperación con herramientas diseñadas para mantenerte motivado y enfocado
-            </p>
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">Rehapp te acompaña en cada paso de tu proceso de crecimiento con herramientas diseñadas para mantenerte motivado y enfocado</p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
               <Link to="/auth?mode=signup">
