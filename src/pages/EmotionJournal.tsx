@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ChevronLeft, Check } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface Emotion {
   id: string;
@@ -125,6 +127,8 @@ const emotions: Emotion[] = [
 export default function EmotionJournal() {
   const [selectedMainEmotion, setSelectedMainEmotion] = useState<string | null>(null);
   const [selectedSubEmotions, setSelectedSubEmotions] = useState<string[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
+  const { toast } = useToast();
 
   const handleMainEmotionClick = (emotionId: string) => {
     setSelectedMainEmotion(emotionId);
@@ -142,6 +146,61 @@ export default function EmotionJournal() {
         ? prev.filter(e => e !== subEmotion)
         : [...prev, subEmotion]
     );
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedMainEmotion || selectedSubEmotions.length === 0) {
+      toast({
+        title: "Error",
+        description: "Debes seleccionar al menos una sub-emoción",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "Debes iniciar sesión para guardar tus emociones",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const currentEmotion = emotions.find(e => e.id === selectedMainEmotion);
+      
+      const { error } = await (supabase as any)
+        .from('emotion_journal')
+        .insert({
+          user_id: user.id,
+          main_emotion: currentEmotion?.name,
+          sub_emotions: selectedSubEmotions,
+          entry_date: new Date().toISOString().split('T')[0]
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "¡Guardado!",
+        description: "Tus emociones han sido registradas exitosamente"
+      });
+
+      // Reset selections
+      setSelectedMainEmotion(null);
+      setSelectedSubEmotions([]);
+    } catch (error) {
+      console.error('Error saving emotions:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo guardar tu entrada",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const currentEmotion = emotions.find(e => e.id === selectedMainEmotion);
@@ -203,7 +262,7 @@ export default function EmotionJournal() {
                     onClick={() => toggleSubEmotion(subEmotion)}
                     className={`rounded-full px-6 h-12 text-base font-medium transition-all ${
                       isSelected 
-                        ? "bg-primary text-primary-foreground border-primary" 
+                        ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
                         : "hover:bg-primary/10 hover:border-primary/50"
                     }`}
                   >
@@ -221,22 +280,18 @@ export default function EmotionJournal() {
             </div>
 
             {selectedSubEmotions.length > 0 && (
-              <div className="pt-6 border-t border-border">
-                <p className="text-sm text-muted-foreground mb-3">
-                  Has seleccionado {selectedSubEmotions.length} emoción(es):
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {selectedSubEmotions.map((emotion) => (
-                    <span
-                      key={emotion}
-                      className="px-4 py-2 rounded-full bg-primary/20 text-primary text-sm font-medium"
-                    >
-                      {emotion}
-                    </span>
-                  ))}
-                </div>
+              <div className="flex justify-center pt-6">
+                <Button
+                  size="lg"
+                  onClick={handleSubmit}
+                  disabled={isSaving}
+                  className="rounded-full px-8 h-14 text-lg font-semibold bg-primary hover:bg-primary/90"
+                >
+                  {isSaving ? "Guardando..." : "Enviar"}
+                </Button>
               </div>
             )}
+
           </div>
         )}
       </Card>

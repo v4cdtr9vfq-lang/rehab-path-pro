@@ -41,6 +41,36 @@ export type Database = {
         }
         Relationships: []
       }
+      emotion_journal: {
+        Row: {
+          created_at: string
+          entry_date: string
+          id: string
+          main_emotion: string
+          sub_emotions: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          entry_date?: string
+          id?: string
+          main_emotion: string
+          sub_emotions: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          entry_date?: string
+          id?: string
+          main_emotion?: string
+          sub_emotions?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           completed: boolean
@@ -70,6 +100,30 @@ export type Database = {
           remaining?: number
           text?: string
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      gratitude_entries: {
+        Row: {
+          created_at: string
+          entry_date: string
+          id: string
+          text: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          entry_date?: string
+          id?: string
+          text: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          entry_date?: string
+          id?: string
+          text?: string
           user_id?: string
         }
         Relationships: []
