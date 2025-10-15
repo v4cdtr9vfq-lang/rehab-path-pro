@@ -17,7 +17,7 @@ interface Question {
 const questions: Question[] = [
   { id: 1, text: "¿Estuve abstinente hoy?", type: "yesno" },
   { id: 2, text: "¿Encontré alguna situación que me provocara hoy?", type: "yesno" },
-  { id: 3, text: "Hoy lo más importante recordarme es", type: "text" },
+  { id: 3, text: "Hoy lo más importante recordarme es:", type: "text" },
   { id: 4, text: "¿Sentí resentimiento hoy?", type: "yesno" },
   { id: 5, text: "¿Fui honesto con mis sentimientos hoy?", type: "yesno" },
   { id: 6, text: "¿Me aislé hoy?", type: "yesno" },
@@ -28,7 +28,6 @@ export default function CheckIn() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [feelingWords, setFeelingWords] = useState(["Cómodo", "Confiado"]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAnswer = (questionId: number, answer: string) => {
@@ -120,26 +119,12 @@ export default function CheckIn() {
                   </Button>
                 </div>
               ) : (
-                <div className="space-y-2">
-                  <Input
-                    placeholder="Escribe una palabra..."
-                    value={answers[question.id] || ""}
-                    onChange={(e) => handleAnswer(question.id, e.target.value)}
-                    className="text-base"
-                  />
-                  <div className="flex flex-wrap gap-2">
-                    {feelingWords.map((word, i) => (
-                      <Button
-                        key={i}
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => handleAnswer(question.id, word)}
-                      >
-                        {word}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
+                <Input
+                  placeholder="Escribe..."
+                  value={answers[question.id] || ""}
+                  onChange={(e) => handleAnswer(question.id, e.target.value)}
+                  className="text-base"
+                />
               )}
             </div>
           ))}

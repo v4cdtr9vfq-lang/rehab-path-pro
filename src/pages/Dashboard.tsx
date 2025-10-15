@@ -15,7 +15,7 @@ export default function Home() {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [loading, setLoading] = useState(true);
   const [checkInCompleted, setCheckInCompleted] = useState(false);
-  const [todayEmotion, setTodayEmotion] = useState("");
+  const [todayReminder, setTodayReminder] = useState("");
   const [goalsCompleted, setGoalsCompleted] = useState(0);
   const [totalGoals, setTotalGoals] = useState(0);
   const goalsProgress = totalGoals > 0 ? (goalsCompleted / totalGoals) * 100 : 0;
@@ -154,8 +154,8 @@ export default function Home() {
 
       if (checkIn) {
         setCheckInCompleted(true);
-        const emotion = checkIn.answers['3'];
-        if (emotion) setTodayEmotion(emotion);
+        const reminder = checkIn.answers['3'];
+        if (reminder) setTodayReminder(reminder);
       }
 
       // Fetch today's goals (including 'always' type)
@@ -292,12 +292,12 @@ export default function Home() {
             )}
           </div>
 
-          {/* Today's Emotion */}
-          {checkInCompleted && (
+          {/* Today's Reminder */}
+          {checkInCompleted && todayReminder && (
             <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Emoción principal del día</p>
-                <p className="text-lg font-semibold text-green-500">{todayEmotion}</p>
+                <p className="text-sm text-muted-foreground mb-1">Hoy elijo recordarme que:</p>
+                <p className="text-lg font-semibold text-green-500">{todayReminder}</p>
               </div>
             </div>
           )}
