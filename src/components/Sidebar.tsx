@@ -51,8 +51,8 @@ export function Sidebar() {
             onClick={() => setOpen(false)}
             className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all ${
               isActive
-                ? "bg-sidebar-accent text-sidebar-primary-foreground font-medium"
-                : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                : "text-sidebar-foreground/70 hover:bg-sidebar-accent/30 hover:text-sidebar-foreground"
             }`}
           >
             <Icon className="h-5 w-5" />
