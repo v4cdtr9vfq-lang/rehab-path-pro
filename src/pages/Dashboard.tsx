@@ -5,15 +5,37 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Target, ClipboardCheck, Phone, Wind, BookOpen, AlertCircle, CheckCircle2, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Home() {
-  // Demo data - in real app this would come from user settings/state
-  const startDate = new Date("2021-01-22");
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [loading, setLoading] = useState(true);
   const checkInCompleted = false;
   const todayEmotion = "Esperanzado";
-  const goalsCompleted = 2;
-  const totalGoals = 4;
-  const goalsProgress = (goalsCompleted / totalGoals) * 100;
+  const goalsCompleted = 0;
+  const totalGoals = 0;
+  const goalsProgress = totalGoals > 0 ? (goalsCompleted / totalGoals) * 100 : 0;
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('abstinence_start_date')
+          .eq('user_id', user.id)
+          .single();
+        
+        if (profile?.abstinence_start_date) {
+          setStartDate(new Date(profile.abstinence_start_date));
+        }
+      }
+      setLoading(false);
+    };
+
+    fetchProfile();
+  }, []);
 
   // Active goals for today/week
   const activeGoals = [
