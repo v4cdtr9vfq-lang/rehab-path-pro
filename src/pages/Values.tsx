@@ -33,9 +33,49 @@ export default function Values() {
   const [monthStats, setMonthStats] = useState<ValueStats[]>([]);
 
   useEffect(() => {
-    fetchValues();
+    initializeValues();
     fetchStats();
   }, []);
+
+  const initializeValues = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Check if user has any values
+      const { data: existingValues } = await supabase
+        .from('values')
+        .select('*')
+        .eq('user_id', user.id);
+
+      // If no values exist, create default ones
+      if (!existingValues || existingValues.length === 0) {
+        const defaultValues = [
+          "Autocuidado",
+          "Gratitud",
+          "Humor",
+          "Respeto",
+          "Salud",
+          "Consideración",
+          "Compromiso"
+        ];
+
+        const valuesToInsert = defaultValues.map(name => ({
+          user_id: user.id,
+          name: name
+        }));
+
+        await supabase
+          .from('values')
+          .insert(valuesToInsert);
+      }
+
+      // Fetch all values
+      await fetchValues();
+    } catch (error: any) {
+      console.error('Error initializing values:', error);
+    }
+  };
 
   const fetchValues = async () => {
     try {
@@ -313,34 +353,7 @@ export default function Values() {
         </CardContent>
       </Card>
 
-      {/* Statistics Widget */}
-      <Card className="border-primary/20">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            <TrendingUp className="h-6 w-6 text-primary" />
-            Estadísticas
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="today" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="today">Hoy</TabsTrigger>
-              <TabsTrigger value="week">Esta Semana</TabsTrigger>
-              <TabsTrigger value="month">Este Mes</TabsTrigger>
-            </TabsList>
-            <TabsContent value="today" className="mt-6">
-              {renderDonutChart(todayStats)}
-            </TabsContent>
-            <TabsContent value="week" className="mt-6">
-              {renderDonutChart(weekStats)}
-            </TabsContent>
-            <TabsContent value="month" className="mt-6">
-              {renderDonutChart(monthStats)}
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
-
+      {/* Tus Valores - Moved before Statistics */}
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-semibold text-foreground">Tus Valores</h2>
@@ -434,6 +447,34 @@ export default function Values() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Statistics Widget */}
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <TrendingUp className="h-6 w-6 text-primary" />
+            Estadísticas
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="today" className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="today">Hoy</TabsTrigger>
+              <TabsTrigger value="week">Esta Semana</TabsTrigger>
+              <TabsTrigger value="month">Este Mes</TabsTrigger>
+            </TabsList>
+            <TabsContent value="today" className="mt-6">
+              {renderDonutChart(todayStats)}
+            </TabsContent>
+            <TabsContent value="week" className="mt-6">
+              {renderDonutChart(weekStats)}
+            </TabsContent>
+            <TabsContent value="month" className="mt-6">
+              {renderDonutChart(monthStats)}
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
     </div>
   );
 }
