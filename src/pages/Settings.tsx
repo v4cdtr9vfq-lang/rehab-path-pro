@@ -103,6 +103,31 @@ export default function Settings() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      const { error } = await supabase.auth.admin.deleteUser(
+        (await supabase.auth.getUser()).data.user?.id || ""
+      );
+      
+      if (error) throw error;
+
+      toast({
+        title: "Cuenta eliminada",
+        description: "Tu cuenta ha sido eliminada permanentemente",
+      });
+      
+      // Sign out and redirect to landing page
+      await supabase.auth.signOut();
+      navigate("/");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo eliminar la cuenta",
+        variant: "destructive",
+      });
+    }
+  };
+
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -244,6 +269,48 @@ export default function Settings() {
           <Button variant="link" className="p-0 h-auto">
             Términos de Servicio
           </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="border-destructive/50 bg-destructive/5">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-destructive">
+            <Trash2 className="h-5 w-5" />
+            Zona de Peligro
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <Label className="text-destructive font-semibold">Eliminar Cuenta</Label>
+            <p className="text-sm text-muted-foreground mb-4">
+              Esta acción es permanente y no se puede deshacer. Todos tus datos serán eliminados permanentemente.
+            </p>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" className="w-full">
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Eliminar mi cuenta
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Esta acción no se puede deshacer. Esto eliminará permanentemente tu cuenta y todos tus datos de nuestros servidores.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleDeleteAccount}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Sí, eliminar mi cuenta
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </CardContent>
       </Card>
     </div>
