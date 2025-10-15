@@ -3,15 +3,167 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Settings as SettingsIcon } from "lucide-react";
+import { Settings as SettingsIcon, User, Lock } from "lucide-react";
+import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Settings() {
+  const { toast } = useToast();
+  const [newEmail, setNewEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isUpdatingEmail, setIsUpdatingEmail] = useState(false);
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+
+  const handleUpdateEmail = async () => {
+    if (!newEmail.trim()) {
+      toast({
+        title: "Error",
+        description: "Por favor ingresa un email válido",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsUpdatingEmail(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ email: newEmail });
+      
+      if (error) throw error;
+
+      toast({
+        title: "Email actualizado",
+        description: "Se ha enviado un correo de confirmación a tu nueva dirección",
+      });
+      setNewEmail("");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdatingEmail(false);
+    }
+  };
+
+  const handleUpdatePassword = async () => {
+    if (!newPassword || newPassword.length < 6) {
+      toast({
+        title: "Error",
+        description: "La contraseña debe tener al menos 6 caracteres",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast({
+        title: "Error",
+        description: "Las contraseñas no coinciden",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsUpdatingPassword(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      
+      if (error) throw error;
+
+      toast({
+        title: "Contraseña actualizada",
+        description: "Tu contraseña ha sido actualizada exitosamente",
+      });
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdatingPassword(false);
+    }
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div>
         <h1 className="text-4xl font-bold text-foreground mb-2">Configuración</h1>
         <p className="text-muted-foreground text-lg">Personaliza tu experiencia en Rehapp</p>
       </div>
+
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <User className="h-5 w-5 text-primary" />
+            Cuenta
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="new-email">Cambiar Email</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="new-email"
+                  type="email"
+                  placeholder="nuevo@email.com"
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
+                />
+                <Button 
+                  onClick={handleUpdateEmail} 
+                  disabled={isUpdatingEmail}
+                >
+                  {isUpdatingEmail ? "Actualizando..." : "Actualizar"}
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Se enviará un correo de confirmación a tu nueva dirección
+              </p>
+            </div>
+
+            <div className="border-t pt-4 space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Lock className="h-5 w-5 text-primary" />
+                <Label>Cambiar Contraseña</Label>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-password">Nueva Contraseña</Label>
+                <Input
+                  id="new-password"
+                  type="password"
+                  placeholder="Mínimo 6 caracteres"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="confirm-password">Confirmar Contraseña</Label>
+                <Input
+                  id="confirm-password"
+                  type="password"
+                  placeholder="Repite tu nueva contraseña"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </div>
+              <Button 
+                onClick={handleUpdatePassword} 
+                disabled={isUpdatingPassword}
+                className="w-full"
+              >
+                {isUpdatingPassword ? "Actualizando..." : "Actualizar Contraseña"}
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <Card className="border-primary/20">
         <CardHeader>
