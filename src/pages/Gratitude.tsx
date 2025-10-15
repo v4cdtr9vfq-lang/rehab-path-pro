@@ -1,18 +1,26 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar, Plus, Sparkles } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Calendar, Plus, Sparkles, Pencil, Check, X } from "lucide-react";
 import { useState } from "react";
+
+interface GratitudeItem {
+  text: string;
+  timestamp: Date;
+}
 
 interface GratitudeEntry {
   id: string;
   date: Date;
-  items: string[];
+  items: GratitudeItem[];
 }
 
 export default function Gratitude() {
   const [entries, setEntries] = useState<GratitudeEntry[]>([]);
   const [newItem, setNewItem] = useState("");
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editText, setEditText] = useState("");
 
   const addGratitudeItem = () => {
     if (newItem.trim()) {
@@ -20,21 +28,59 @@ export default function Gratitude() {
         e.date.toDateString() === new Date().toDateString()
       );
       
+      const newGratitudeItem: GratitudeItem = {
+        text: newItem,
+        timestamp: new Date()
+      };
+      
       if (today) {
         setEntries(entries.map(e => 
           e.id === today.id 
-            ? { ...e, items: [...e.items, newItem] }
+            ? { ...e, items: [...e.items, newGratitudeItem] }
             : e
         ));
       } else {
         setEntries([{
           id: Date.now().toString(),
           date: new Date(),
-          items: [newItem]
+          items: [newGratitudeItem]
         }, ...entries]);
       }
       setNewItem("");
     }
+  };
+
+  const startEditing = (index: number, text: string) => {
+    setEditingIndex(index);
+    setEditText(text);
+  };
+
+  const saveEdit = () => {
+    if (editText.trim() && editingIndex !== null) {
+      const today = entries.find(e => 
+        e.date.toDateString() === new Date().toDateString()
+      );
+      
+      if (today) {
+        setEntries(entries.map(e => 
+          e.id === today.id 
+            ? { 
+                ...e, 
+                items: e.items.map((item, i) => 
+                  i === editingIndex ? { ...item, text: editText } : item
+                )
+              }
+            : e
+        ));
+      }
+    }
+    setEditingIndex(null);
+    setEditText("");
+  };
+
+  const cancelEdit = () => {
+    setEditingIndex(null);
+    setEditText("");
   };
 
   const todayEntry = entries.find(e => 
@@ -98,7 +144,41 @@ export default function Gratitude() {
                     className="flex items-start gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10"
                   >
                     <span className="text-primary mt-1">•</span>
-                    <span className="text-foreground flex-1">{item}</span>
+                    <div className="flex-1 space-y-1">
+                      {editingIndex === index ? (
+                        <div className="flex gap-2">
+                          <Input
+                            value={editText}
+                            onChange={(e) => setEditText(e.target.value)}
+                            className="flex-1"
+                            autoFocus
+                          />
+                          <Button size="sm" onClick={saveEdit}>
+                            <Check className="h-4 w-4" />
+                          </Button>
+                          <Button size="sm" variant="outline" onClick={cancelEdit}>
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex items-start justify-between gap-2">
+                            <span className="text-foreground flex-1">{item.text}</span>
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              onClick={() => startEditing(index, item.text)}
+                              className="h-6 w-6 p-0"
+                            >
+                              <Pencil className="h-3 w-3" />
+                            </Button>
+                          </div>
+                          <span className="text-xs text-muted-foreground">
+                            {item.timestamp.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </>
+                      )}
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -131,7 +211,12 @@ export default function Gratitude() {
                   {entry.items.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-foreground/80">
                       <span className="text-accent">•</span>
-                      <span>{item}</span>
+                      <div className="flex-1 space-y-1">
+                        <span>{item.text}</span>
+                        <div className="text-xs text-muted-foreground">
+                          {item.timestamp.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                      </div>
                     </li>
                   ))}
                 </ul>
