@@ -239,6 +239,7 @@ export default function Plan() {
         const todayGoals = goals.filter(g => g.goal_type === 'today');
         const weekGoals = goals.filter(g => g.goal_type === 'week');
         const monthGoals = goals.filter(g => g.goal_type === 'month');
+        const periodicGoals = goals.filter(g => g.goal_type === 'periodic');
         
         const groupedGoals = {
           today: { 
@@ -251,7 +252,7 @@ export default function Plan() {
           },
           month: { 
             open: sections.month.open, 
-            goals: expandGoals([...monthGoals, ...weekGoals, ...todayGoals, ...alwaysGoals], 'month')
+            goals: expandGoals([...monthGoals, ...periodicGoals, ...weekGoals, ...todayGoals, ...alwaysGoals], 'month')
           },
           onetime: { 
             open: sections.onetime.open, 
