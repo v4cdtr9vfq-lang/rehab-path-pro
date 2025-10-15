@@ -296,8 +296,8 @@ export default function ProgressPage() {
         </CardHeader>
         <CardContent>
           <div className="text-center mb-6">
-            <div className="inline-flex items-center justify-center w-32 h-32 rounded-full border-8 border-primary/20 bg-card">
-              <span className="text-4xl font-bold text-primary">{overallProgress}%</span>
+            <div className={`inline-flex items-center justify-center w-32 h-32 rounded-full border-8 ${overallProgress === 100 ? 'border-green-500/30 bg-green-500/5' : 'border-primary/20 bg-card'} transition-colors duration-500`}>
+              <span className={`text-4xl font-bold ${overallProgress === 100 ? 'text-green-500' : 'text-primary'} transition-colors duration-500`}>{overallProgress}%</span>
             </div>
             <p className="text-sm text-muted-foreground mt-4">Completitud Total de Metas</p>
           </div>
