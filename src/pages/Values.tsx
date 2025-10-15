@@ -71,13 +71,9 @@ export default function Values() {
                   className="flex-shrink-0"
                 >
                   {value.selected ? (
-                    <div className="w-8 h-8 rounded-full border-2 border-green-500 flex items-center justify-center">
-                      <CheckCircle2 className="h-5 w-5 text-green-500" strokeWidth={2.5} />
-                    </div>
+                    <CheckCircle2 className="h-6 w-6 text-green-500" />
                   ) : (
-                    <div className="w-8 h-8 rounded-full border-2 border-muted-foreground flex items-center justify-center">
-                      <Circle className="h-5 w-5 text-muted-foreground" />
-                    </div>
+                    <Circle className="h-6 w-6 text-muted-foreground" />
                   )}
                 </button>
                 <span className="text-lg text-foreground flex-1">{value.name}</span>
