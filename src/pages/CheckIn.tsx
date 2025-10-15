@@ -4,6 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowRight, Calendar } from "lucide-react";
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface Question {
   id: number;
@@ -22,16 +25,57 @@ const questions: Question[] = [
 ];
 
 export default function CheckIn() {
+  const { toast } = useToast();
+  const navigate = useNavigate();
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [feelingWords, setFeelingWords] = useState(["Cómodo", "Confiado"]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAnswer = (questionId: number, answer: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: answer }));
   };
 
-  const handleSubmit = () => {
-    console.log("Submitted answers:", answers);
-    // Here you would save to database
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "Debes iniciar sesión para guardar el check-in",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const { error } = await supabase
+        .from('check_ins')
+        .upsert({
+          user_id: user.id,
+          check_in_date: new Date().toISOString().split('T')[0],
+          answers: answers,
+        }, {
+          onConflict: 'user_id,check_in_date'
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "¡Check-in guardado!",
+        description: "Tu progreso diario ha sido registrado exitosamente",
+      });
+
+      navigate('/');
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo guardar el check-in",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -104,8 +148,9 @@ export default function CheckIn() {
             className="w-full gap-2 text-lg py-6 mt-8"
             size="lg"
             onClick={handleSubmit}
+            disabled={isSubmitting}
           >
-            Enviar
+            {isSubmitting ? "Guardando..." : "Enviar"}
             <ArrowRight className="h-5 w-5" />
           </Button>
         </CardContent>

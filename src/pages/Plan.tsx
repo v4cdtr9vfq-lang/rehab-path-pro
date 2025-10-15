@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, ChevronDown, ChevronUp } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface Goal {
   id: string;
@@ -17,6 +19,7 @@ interface Goal {
 }
 
 export default function Plan() {
+  const { toast } = useToast();
   const startDate = new Date();
   
   const [sections, setSections] = useState({
@@ -33,6 +36,41 @@ export default function Plan() {
     remaining: 1
   });
 
+  useEffect(() => {
+    fetchGoals();
+  }, []);
+
+  const fetchGoals = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: goals, error } = await supabase
+        .from('goals')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (goals) {
+        const groupedGoals = {
+          today: { open: true, goals: goals.filter(g => g.goal_type === 'today') },
+          week: { open: false, goals: goals.filter(g => g.goal_type === 'week') },
+          month: { open: false, goals: goals.filter(g => g.goal_type === 'month') },
+          onetime: { open: false, goals: goals.filter(g => g.goal_type === 'onetime') }
+        };
+        setSections(groupedGoals);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "No se pudieron cargar las metas",
+        variant: "destructive",
+      });
+    }
+  };
+
   const toggleSection = (section: keyof typeof sections) => {
     setSections(prev => ({
       ...prev,
@@ -40,38 +78,88 @@ export default function Plan() {
     }));
   };
 
-  const toggleGoal = (sectionKey: keyof typeof sections, goalId: string) => {
-    setSections(prev => ({
-      ...prev,
-      [sectionKey]: {
-        ...prev[sectionKey],
-        goals: prev[sectionKey].goals.map(goal =>
-          goal.id === goalId ? { ...goal, completed: !goal.completed } : goal
-        )
-      }
-    }));
+  const toggleGoal = async (sectionKey: keyof typeof sections, goalId: string) => {
+    try {
+      const goal = sections[sectionKey].goals.find(g => g.id === goalId);
+      if (!goal) return;
+
+      const { error } = await supabase
+        .from('goals')
+        .update({ completed: !goal.completed })
+        .eq('id', goalId);
+
+      if (error) throw error;
+
+      setSections(prev => ({
+        ...prev,
+        [sectionKey]: {
+          ...prev[sectionKey],
+          goals: prev[sectionKey].goals.map(g =>
+            g.id === goalId ? { ...g, completed: !g.completed } : g
+          )
+        }
+      }));
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar la meta",
+        variant: "destructive",
+      });
+    }
   };
 
-  const addGoal = () => {
+  const addGoal = async () => {
     if (!newGoal.text.trim()) return;
 
-    const goal: Goal = {
-      id: Date.now().toString(),
-      text: newGoal.text,
-      completed: false,
-      remaining: newGoal.remaining
-    };
-
-    setSections(prev => ({
-      ...prev,
-      [newGoal.type]: {
-        ...prev[newGoal.type],
-        goals: [...prev[newGoal.type].goals, goal]
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "Debes iniciar sesión para añadir metas",
+          variant: "destructive",
+        });
+        return;
       }
-    }));
 
-    setNewGoal({ text: "", type: "today", remaining: 1 });
-    setIsDialogOpen(false);
+      const { data: goal, error } = await supabase
+        .from('goals')
+        .insert({
+          user_id: user.id,
+          text: newGoal.text,
+          goal_type: newGoal.type,
+          remaining: newGoal.remaining,
+          completed: false
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (goal) {
+        setSections(prev => ({
+          ...prev,
+          [newGoal.type]: {
+            ...prev[newGoal.type],
+            goals: [...prev[newGoal.type].goals, goal]
+          }
+        }));
+
+        toast({
+          title: "¡Meta añadida!",
+          description: "Tu meta ha sido guardada exitosamente",
+        });
+      }
+
+      setNewGoal({ text: "", type: "today", remaining: 1 });
+      setIsDialogOpen(false);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo guardar la meta",
+        variant: "destructive",
+      });
+    }
   };
 
   const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey: keyof typeof sections }) => (

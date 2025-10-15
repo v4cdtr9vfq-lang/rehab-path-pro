@@ -11,16 +11,18 @@ import { supabase } from "@/integrations/supabase/client";
 export default function Home() {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [loading, setLoading] = useState(true);
-  const checkInCompleted = false;
-  const todayEmotion = "Esperanzado";
-  const goalsCompleted = 0;
-  const totalGoals = 0;
+  const [checkInCompleted, setCheckInCompleted] = useState(false);
+  const [todayEmotion, setTodayEmotion] = useState("");
+  const [goalsCompleted, setGoalsCompleted] = useState(0);
+  const [totalGoals, setTotalGoals] = useState(0);
   const goalsProgress = totalGoals > 0 ? (goalsCompleted / totalGoals) * 100 : 0;
+  const [activeGoals, setActiveGoals] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchData = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
+        // Fetch profile
         const { data: profile } = await supabase
           .from('profiles')
           .select('abstinence_start_date')
@@ -30,15 +32,46 @@ export default function Home() {
         if (profile?.abstinence_start_date) {
           setStartDate(new Date(profile.abstinence_start_date));
         }
+
+        // Fetch today's check-in
+        const today = new Date().toISOString().split('T')[0];
+        const { data: checkIn } = await supabase
+          .from('check_ins')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('check_in_date', today)
+          .maybeSingle();
+
+        if (checkIn) {
+          setCheckInCompleted(true);
+          const emotion = checkIn.answers['3'];
+          if (emotion) setTodayEmotion(emotion);
+        }
+
+        // Fetch today's goals
+        const { data: goals } = await supabase
+          .from('goals')
+          .select('*')
+          .eq('user_id', user.id)
+          .in('goal_type', ['today', 'week']);
+
+        if (goals) {
+          const completed = goals.filter(g => g.completed).length;
+          setGoalsCompleted(completed);
+          setTotalGoals(goals.length);
+          setActiveGoals(goals.slice(0, 3).map(g => ({
+            id: g.id,
+            title: g.text,
+            period: g.goal_type === 'today' ? 'Hoy' : 'Esta semana',
+            status: g.completed ? 'completed' : 'pending'
+          })));
+        }
       }
       setLoading(false);
     };
 
-    fetchProfile();
+    fetchData();
   }, []);
-
-  // Active goals for today/week
-  const activeGoals: any[] = [];
 
   // Quick tools - configurable
   const quickTools = [
