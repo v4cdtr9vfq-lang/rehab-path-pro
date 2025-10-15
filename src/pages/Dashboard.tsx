@@ -48,9 +48,12 @@ export default function Home() {
 
       if (error) throw error;
 
-      // Recalculate total completed count
-      const totalCompletedGoals = updatedGoals.filter(g => g.status === 'completed').length;
-      setGoalsCompleted(totalCompletedGoals + (checkInCompleted ? 1 : 0));
+      // Recalculate TODAY's completed count (not weekly)
+      const totalCompletedToday = updatedGoals.filter(g => g.status === 'completed').length;
+      const totalTodayGoals = updatedGoals.length + 1; // All instances + check-in
+      
+      setGoalsCompleted(totalCompletedToday + (checkInCompleted ? 1 : 0));
+      setTotalGoals(totalTodayGoals);
 
       toast({
         title: "Meta actualizada",
@@ -132,43 +135,6 @@ export default function Home() {
           g.goal_type === 'always'
         );
         
-        // Calculate weekly totals (7 days)
-        const daysInWeek = 7;
-        let totalWeeklyGoals = daysInWeek; // 7 check-ins for the week
-        
-        todayGoals.forEach(g => {
-          totalWeeklyGoals += g.remaining * daysInWeek;
-        });
-        
-        // Calculate completed goals for the week
-        // Get all check-ins from this week
-        const startOfWeek = new Date();
-        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // Sunday
-        const startOfWeekStr = startOfWeek.toISOString().split('T')[0];
-        
-        const { data: weekCheckIns } = await supabase
-          .from('check_ins')
-          .select('id')
-          .eq('user_id', user.id)
-          .gte('check_in_date', startOfWeekStr);
-        
-        const completedCheckIns = weekCheckIns?.length || 0;
-        
-        // For goals, we count based on today's completion status multiplied by days passed
-        const daysPassed = Math.min(daysInWeek, (new Date().getDay() || 7)); // 1-7
-        let completedGoalsThisWeek = 0;
-        
-        todayGoals.forEach(g => {
-          if (g.completed) {
-            completedGoalsThisWeek += g.remaining * daysPassed;
-          }
-        });
-        
-        const totalCompleted = completedCheckIns + completedGoalsThisWeek;
-        
-        setGoalsCompleted(totalCompleted);
-        setTotalGoals(totalWeeklyGoals);
-        
         // Expand goals based on remaining count for TODAY's display
         const expandedGoals: any[] = [];
         todayGoals.forEach(g => {
@@ -184,23 +150,16 @@ export default function Home() {
           }
         });
         
+        // TODAY's total: all instances + check-in
+        const totalTodayGoals = expandedGoals.length + 1;
+        
+        setGoalsCompleted(checkIn ? 1 : 0);
+        setTotalGoals(totalTodayGoals);
         setActiveGoals(expandedGoals);
       } else {
-        // No goals yet, only count check-ins for the week
-        const startOfWeek = new Date();
-        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-        const startOfWeekStr = startOfWeek.toISOString().split('T')[0];
-        
-        const { data: weekCheckIns } = await supabase
-          .from('check_ins')
-          .select('id')
-          .eq('user_id', user.id)
-          .gte('check_in_date', startOfWeekStr);
-        
-        const completedCheckIns = weekCheckIns?.length || 0;
-        
-        setGoalsCompleted(completedCheckIns);
-        setTotalGoals(7); // 7 days in a week
+        // No goals yet, only count check-in
+        setGoalsCompleted(checkIn ? 1 : 0);
+        setTotalGoals(1);
         setActiveGoals([]);
       }
     }
