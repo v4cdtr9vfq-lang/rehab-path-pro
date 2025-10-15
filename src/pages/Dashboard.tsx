@@ -63,86 +63,106 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        // Fetch profile
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('abstinence_start_date')
-          .eq('user_id', user.id)
-          .single();
-        
-        if (profile?.abstinence_start_date) {
-          setStartDate(new Date(profile.abstinence_start_date));
-        }
-
-        // Fetch today's check-in
-        const today = new Date().toISOString().split('T')[0];
-        const { data: checkIn } = await supabase
-          .from('check_ins')
-          .select('*')
-          .eq('user_id', user.id)
-          .eq('check_in_date', today)
-          .maybeSingle();
-
-        if (checkIn) {
-          setCheckInCompleted(true);
-          const emotion = checkIn.answers['3'];
-          if (emotion) setTodayEmotion(emotion);
-        }
-
-        // Fetch today's goals (including 'always' type)
-        const { data: goals, error: goalsError } = await supabase
-          .from('goals')
-          .select('*')
-          .eq('user_id', user.id);
-
-        console.log('Goals data:', goals);
-        console.log('Goals error:', goalsError);
-
-        if (goals && goals.length > 0) {
-          // Filter goals that should appear today
-          const todayGoals = goals.filter(g => 
-            g.goal_type === 'today' || 
-            g.goal_type === 'week' || 
-            g.goal_type === 'always'
-          );
-          
-          const completed = todayGoals.filter(g => g.completed).length;
-          // Add check-in to completed count if done
-          const totalCompleted = completed + (checkIn ? 1 : 0);
-          // Add 1 to total goals for the check-in
-          const totalGoalsCount = todayGoals.length + 1;
-          
-          setGoalsCompleted(totalCompleted);
-          setTotalGoals(totalGoalsCount);
-          
-          // Expand goals based on remaining count
-          const expandedGoals: any[] = [];
-          todayGoals.forEach(g => {
-            for (let i = 0; i < g.remaining; i++) {
-              expandedGoals.push({
-                id: `${g.id}-${i}`,
-                originalId: g.id,
-                title: g.text,
-                period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Siempre' : 'Esta semana',
-                status: g.completed ? 'completed' : 'pending',
-                instanceIndex: i
-              });
-            }
-          });
-          
-          setActiveGoals(expandedGoals.slice(0, 6));
-        } else {
-          // No goals yet, only count check-in
-          setGoalsCompleted(checkIn ? 1 : 0);
-          setTotalGoals(1);
-          setActiveGoals([]);
-        }
+  const fetchData = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      // Fetch profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('abstinence_start_date')
+        .eq('user_id', user.id)
+        .single();
+      
+      if (profile?.abstinence_start_date) {
+        setStartDate(new Date(profile.abstinence_start_date));
       }
-      setLoading(false);
-    };
+
+      // Check yesterday's check-in to determine if we need to reset
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = yesterday.toISOString().split('T')[0];
+      
+      const { data: yesterdayCheckIn } = await supabase
+        .from('check_ins')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('check_in_date', yesterdayStr)
+        .maybeSingle();
+
+      // If no check-in yesterday, reset all goals
+      if (!yesterdayCheckIn) {
+        await supabase
+          .from('goals')
+          .update({ completed: false })
+          .eq('user_id', user.id);
+      }
+
+      // Fetch today's check-in
+      const today = new Date().toISOString().split('T')[0];
+      const { data: checkIn } = await supabase
+        .from('check_ins')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('check_in_date', today)
+        .maybeSingle();
+
+      if (checkIn) {
+        setCheckInCompleted(true);
+        const emotion = checkIn.answers['3'];
+        if (emotion) setTodayEmotion(emotion);
+      }
+
+      // Fetch today's goals (including 'always' type)
+      const { data: goals, error: goalsError } = await supabase
+        .from('goals')
+        .select('*')
+        .eq('user_id', user.id);
+
+      console.log('Goals data:', goals);
+      console.log('Goals error:', goalsError);
+
+      if (goals && goals.length > 0) {
+        // Filter goals that should appear today
+        const todayGoals = goals.filter(g => 
+          g.goal_type === 'today' || 
+          g.goal_type === 'week' || 
+          g.goal_type === 'always'
+        );
+        
+        const completed = todayGoals.filter(g => g.completed).length;
+        // Add check-in to completed count if done
+        const totalCompleted = completed + (checkIn ? 1 : 0);
+        // Add 1 to total goals for the check-in
+        const totalGoalsCount = todayGoals.length + 1;
+        
+        setGoalsCompleted(totalCompleted);
+        setTotalGoals(totalGoalsCount);
+        
+        // Expand goals based on remaining count
+        const expandedGoals: any[] = [];
+        todayGoals.forEach(g => {
+          for (let i = 0; i < g.remaining; i++) {
+            expandedGoals.push({
+              id: `${g.id}-${i}`,
+              originalId: g.id,
+              title: g.text,
+              period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Siempre' : 'Esta semana',
+              status: g.completed ? 'completed' : 'pending',
+              instanceIndex: i
+            });
+          }
+        });
+        
+        setActiveGoals(expandedGoals.slice(0, 6));
+      } else {
+        // No goals yet, only count check-in
+        setGoalsCompleted(checkIn ? 1 : 0);
+        setTotalGoals(1);
+        setActiveGoals([]);
+      }
+    }
+    setLoading(false);
+  };
 
     fetchData();
   }, []);
@@ -192,7 +212,11 @@ export default function Home() {
                 )}
               </div>
             </div>
-            {!checkInCompleted && (
+            {checkInCompleted ? (
+              <Link to="/checkin">
+                <Button size="sm" variant="outline" className="rounded-xl">Editar</Button>
+              </Link>
+            ) : (
               <Link to="/checkin">
                 <Button size="sm" className="rounded-xl">Registrar</Button>
               </Link>
