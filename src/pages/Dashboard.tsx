@@ -152,7 +152,7 @@ export default function Home() {
         
         setGoalsCompleted(checkIn ? 1 : 0);
         setTotalGoals(totalGoalsCount);
-        setActiveGoals(expandedGoals.slice(0, 6));
+        setActiveGoals(expandedGoals);
       } else {
         // No goals yet, only count check-in
         setGoalsCompleted(checkIn ? 1 : 0);
@@ -258,7 +258,7 @@ export default function Home() {
               {activeGoals.map((goal) => (
                 <div
                   key={goal.id}
-                  className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-card hover:bg-muted/30 transition-colors"
+                  className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50"
                 >
                   <div className="flex items-center gap-3">
                     <button
@@ -272,7 +272,7 @@ export default function Home() {
                       )}
                     </button>
                     <div>
-                      <p className="font-medium text-foreground">
+                      <p className="font-semibold text-foreground">
                         {goal.title}
                       </p>
                       <p className={`text-sm ${goal.status === "completed" ? "text-green-500" : "text-muted-foreground"}`}>
