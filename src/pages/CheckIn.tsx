@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowRight, Calendar } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +29,27 @@ export default function CheckIn() {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const loadExistingCheckIn = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const today = new Date().toISOString().split('T')[0];
+      const { data: checkIn } = await supabase
+        .from('check_ins')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('check_in_date', today)
+        .maybeSingle();
+
+      if (checkIn?.answers) {
+        setAnswers(checkIn.answers as Record<number, string>);
+      }
+    };
+
+    loadExistingCheckIn();
+  }, []);
 
   const handleAnswer = (questionId: number, answer: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: answer }));
