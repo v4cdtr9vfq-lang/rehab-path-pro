@@ -162,7 +162,8 @@ export default function Home() {
       const { data: goals, error: goalsError } = await supabase
         .from('goals')
         .select('*')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
 
       console.log('Goals data:', goals);
       console.log('Goals error:', goalsError);
