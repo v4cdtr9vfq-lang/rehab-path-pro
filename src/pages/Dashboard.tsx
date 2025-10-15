@@ -144,16 +144,19 @@ export default function Home() {
               originalId: g.id,
               title: g.text,
               period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Siempre' : 'Esta semana',
-              status: 'pending',
+              status: g.completed ? 'completed' : 'pending',
               instanceIndex: i
             });
           }
         });
         
+        // Count completed instances
+        const completedInstances = expandedGoals.filter(g => g.status === 'completed').length;
+        
         // TODAY's total: all instances + check-in
         const totalTodayGoals = expandedGoals.length + 1;
         
-        setGoalsCompleted(checkIn ? 1 : 0);
+        setGoalsCompleted(completedInstances + (checkIn ? 1 : 0));
         setTotalGoals(totalTodayGoals);
         setActiveGoals(expandedGoals);
       } else {
