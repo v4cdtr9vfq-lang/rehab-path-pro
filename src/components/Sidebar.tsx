@@ -52,7 +52,7 @@ export function Sidebar() {
             className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all ${
               isActive
                 ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                : "text-sidebar-foreground/70 hover:bg-sidebar-accent/30 hover:text-sidebar-foreground"
+                : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-primary"
             }`}
           >
             <Icon className="h-5 w-5" />
