@@ -12,7 +12,7 @@ export default function Reminders() {
   ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500">
       <div>
         <h1 className="text-4xl font-bold text-foreground mb-2">Reminders</h1>
         <p className="text-muted-foreground text-lg">Stay on track with personalized notifications</p>

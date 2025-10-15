@@ -23,7 +23,7 @@ export default function Values() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500">
       <div>
         <h1 className="text-4xl font-bold text-foreground mb-2">My Values</h1>
         <p className="text-muted-foreground text-lg">Define and live by your core values every day</p>

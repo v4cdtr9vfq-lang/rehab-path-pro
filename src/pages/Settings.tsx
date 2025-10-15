@@ -7,7 +7,7 @@ import { Settings as SettingsIcon } from "lucide-react";
 
 export default function Settings() {
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500">
       <div>
         <h1 className="text-4xl font-bold text-foreground mb-2">Settings</h1>
         <p className="text-muted-foreground text-lg">Customize your Rehapp experience</p>
