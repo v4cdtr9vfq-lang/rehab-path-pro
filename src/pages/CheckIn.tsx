@@ -36,12 +36,12 @@ export default function CheckIn() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <div className="mb-8">
-        <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight tracking-tight mb-3">Daily Check-In</h1>
+      <div>
+        <h1 className="text-4xl font-bold text-foreground mb-2">Daily Check-In</h1>
         <p className="text-muted-foreground text-lg">Reflect on your day and track your progress</p>
       </div>
 
-      <Card className="border-border/50">
+      <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5 text-primary" />
@@ -111,7 +111,7 @@ export default function CheckIn() {
         </CardContent>
       </Card>
 
-      <Card className="bg-muted/50 border-border/30">
+      <Card className="bg-gradient-to-br from-accent/5 to-transparent border-accent/20">
         <CardContent className="p-6">
           <p className="text-center text-foreground/80">
             Daily check-ins help you stay aware of your emotional state and identify patterns in your recovery journey.

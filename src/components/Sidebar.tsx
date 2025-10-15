@@ -51,7 +51,7 @@ export function Sidebar() {
             onClick={() => setOpen(false)}
             className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 transition-all ${
               isActive
-                ? "bg-foreground text-background font-semibold"
+                ? "bg-primary text-primary-foreground font-semibold shadow-lg"
                 : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"
             }`}
           >

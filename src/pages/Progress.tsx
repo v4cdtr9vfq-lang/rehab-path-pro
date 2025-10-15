@@ -31,12 +31,12 @@ export default function ProgressPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <div className="mb-8">
-        <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight tracking-tight mb-3">Progress</h1>
+      <div>
+        <h1 className="text-4xl font-bold text-foreground mb-2">Progress</h1>
         <p className="text-muted-foreground text-lg">Track your recovery journey across different areas</p>
       </div>
 
-      <Card className="border-border/50 bg-gradient-to-br from-primary/5 to-transparent">
+      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             <TrendingUp className="h-6 w-6 text-primary" />
@@ -61,7 +61,7 @@ export default function ProgressPage() {
         </TabsList>
         
         <TabsContent value="week" className="space-y-6 mt-6">
-          <Card className="border-border/50">
+          <Card className="border-primary/20">
             <CardHeader>
               <CardTitle>Weekly Progress by Area</CardTitle>
               <p className="text-sm text-muted-foreground">
@@ -75,7 +75,7 @@ export default function ProgressPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-border/50">
+          <Card className="border-primary/20">
             <CardHeader>
               <CardTitle>Daily Check-In History</CardTitle>
             </CardHeader>
@@ -98,7 +98,7 @@ export default function ProgressPage() {
         </TabsContent>
 
         <TabsContent value="month" className="space-y-6 mt-6">
-          <Card className="border-border/50">
+          <Card className="border-primary/20">
             <CardHeader>
               <CardTitle>Monthly Progress by Area</CardTitle>
               <p className="text-sm text-muted-foreground">
@@ -114,7 +114,7 @@ export default function ProgressPage() {
         </TabsContent>
 
         <TabsContent value="overall" className="space-y-6 mt-6">
-          <Card className="border-border/50">
+          <Card className="border-primary/20">
             <CardHeader>
               <CardTitle>Overall Progress</CardTitle>
               <p className="text-sm text-muted-foreground">
