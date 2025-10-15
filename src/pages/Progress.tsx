@@ -44,15 +44,29 @@ export default function ProgressPage() {
     calculateProgress();
   }, [currentTab, dailyGoals, weeklyGoals, monthlyGoals, hasCheckedInToday]);
 
+  // Get today's date key for localStorage
+  const getTodayKey = () => {
+    return `goals_completed_${new Date().toISOString().split('T')[0]}`;
+  };
+
+  // Load completed instances from localStorage
+  const loadCompletedInstances = (): Set<string> => {
+    const stored = localStorage.getItem(getTodayKey());
+    return stored ? new Set(JSON.parse(stored)) : new Set();
+  };
+
   const expandGoals = (goals: Goal[]): ExpandedGoal[] => {
+    const completedInstances = loadCompletedInstances();
     const expanded: ExpandedGoal[] = [];
+    
     goals.forEach(g => {
       for (let i = 0; i < g.remaining; i++) {
+        const instanceId = `${g.id}-${i}`;
         expanded.push({
-          id: `${g.id}-${i}`,
+          id: instanceId,
           originalId: g.id,
           text: g.text,
-          completed: g.completed,
+          completed: completedInstances.has(instanceId),
           goal_type: g.goal_type,
           instanceIndex: i
         });
