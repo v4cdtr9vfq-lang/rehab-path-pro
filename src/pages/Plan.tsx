@@ -6,10 +6,21 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, ChevronDown, ChevronUp, Pencil, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface Goal {
   id: string;
@@ -30,11 +41,13 @@ export default function Plan() {
   });
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [newGoal, setNewGoal] = useState({
     text: "",
     type: "today" as keyof typeof sections,
     remaining: 1
   });
+  const [editingGoal, setEditingGoal] = useState<any>(null);
 
   useEffect(() => {
     fetchGoals();
@@ -162,6 +175,83 @@ export default function Plan() {
     }
   };
 
+  const deleteGoal = async (sectionKey: keyof typeof sections, goalId: string) => {
+    try {
+      const { error } = await supabase
+        .from('goals')
+        .delete()
+        .eq('id', goalId);
+
+      if (error) throw error;
+
+      setSections(prev => ({
+        ...prev,
+        [sectionKey]: {
+          ...prev[sectionKey],
+          goals: prev[sectionKey].goals.filter(g => g.id !== goalId)
+        }
+      }));
+
+      toast({
+        title: "Meta eliminada",
+        description: "La meta ha sido eliminada exitosamente",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar la meta",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const openEditDialog = (goal: any, sectionKey: string) => {
+    setEditingGoal({ ...goal, sectionKey });
+    setIsEditDialogOpen(true);
+  };
+
+  const updateGoal = async () => {
+    if (!editingGoal || !editingGoal.text.trim()) return;
+
+    try {
+      const { error } = await supabase
+        .from('goals')
+        .update({
+          text: editingGoal.text,
+          remaining: editingGoal.remaining
+        })
+        .eq('id', editingGoal.id);
+
+      if (error) throw error;
+
+      setSections(prev => ({
+        ...prev,
+        [editingGoal.sectionKey]: {
+          ...prev[editingGoal.sectionKey],
+          goals: prev[editingGoal.sectionKey].goals.map(g =>
+            g.id === editingGoal.id 
+              ? { ...g, text: editingGoal.text, remaining: editingGoal.remaining }
+              : g
+          )
+        }
+      }));
+
+      toast({
+        title: "Meta actualizada",
+        description: "La meta ha sido actualizada exitosamente",
+      });
+
+      setIsEditDialogOpen(false);
+      setEditingGoal(null);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar la meta",
+        variant: "destructive",
+      });
+    }
+  };
+
   const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey: keyof typeof sections }) => (
     <button
       onClick={() => toggleSection(sectionKey)}
@@ -190,8 +280,46 @@ export default function Plan() {
           {goal.remaining} restante{goal.remaining !== 1 ? 's' : ''} {sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}
         </p>
       </div>
-      <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-primary/30 text-primary font-medium">
-        {goal.remaining}
+      <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-primary/30 text-primary font-medium">
+          {goal.remaining}
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          onClick={() => openEditDialog(goal, sectionKey)}
+        >
+          <Pencil className="h-4 w-4" />
+        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-destructive hover:text-destructive"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>¿Eliminar meta?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Esta acción no se puede deshacer. La meta será eliminada permanentemente.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => deleteGoal(sectionKey, goal.id)}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Eliminar
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );
@@ -259,6 +387,39 @@ export default function Plan() {
           </DialogContent>
         </Dialog>
       </div>
+
+      {/* Edit Goal Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Meta</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-goal-text">Meta</Label>
+              <Input
+                id="edit-goal-text"
+                placeholder="Escribe tu meta..."
+                value={editingGoal?.text || ""}
+                onChange={(e) => setEditingGoal(prev => ({ ...prev, text: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-goal-remaining">Número de veces</Label>
+              <Input
+                id="edit-goal-remaining"
+                type="number"
+                min="1"
+                value={editingGoal?.remaining || 1}
+                onChange={(e) => setEditingGoal(prev => ({ ...prev, remaining: parseInt(e.target.value) || 1 }))}
+              />
+            </div>
+            <Button onClick={updateGoal} className="w-full">
+              Guardar Cambios
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <div className="space-y-4">
         {/* Today */}
