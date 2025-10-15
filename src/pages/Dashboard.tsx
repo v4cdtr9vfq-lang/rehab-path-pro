@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Target, ClipboardCheck, Phone, Wind, BookOpen, AlertCircle, CheckCircle2, Clock } from "lucide-react";
+import { Target, ClipboardCheck, Phone, Wind, BookOpen, AlertCircle, CheckCircle2, Clock, Circle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,20 +31,20 @@ export default function Home() {
       const { error } = await supabase
         .from('goals')
         .update({ completed: newCompletedStatus })
-        .eq('id', goalId);
+        .eq('id', goal.originalId);
 
       if (error) throw error;
 
-      // Update local state
+      // Update local state for all instances of this goal
       setActiveGoals(prev => prev.map(g => 
-        g.id === goalId 
+        g.originalId === goal.originalId 
           ? { ...g, status: newCompletedStatus ? 'completed' : 'pending' }
           : g
       ));
 
       // Recalculate completed count
       const newCompleted = activeGoals.filter(g => 
-        g.id === goalId ? newCompletedStatus : g.status === 'completed'
+        g.originalId === goal.originalId ? newCompletedStatus : g.status === 'completed'
       ).length + (checkInCompleted ? 1 : 0);
       
       setGoalsCompleted(newCompleted);
@@ -117,12 +117,23 @@ export default function Home() {
           
           setGoalsCompleted(totalCompleted);
           setTotalGoals(totalGoalsCount);
-          setActiveGoals(todayGoals.slice(0, 3).map(g => ({
-            id: g.id,
-            title: g.text,
-            period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Siempre' : 'Esta semana',
-            status: g.completed ? 'completed' : 'pending'
-          })));
+          
+          // Expand goals based on remaining count
+          const expandedGoals: any[] = [];
+          todayGoals.forEach(g => {
+            for (let i = 0; i < g.remaining; i++) {
+              expandedGoals.push({
+                id: `${g.id}-${i}`,
+                originalId: g.id,
+                title: g.text,
+                period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Siempre' : 'Esta semana',
+                status: g.completed ? 'completed' : 'pending',
+                instanceIndex: i
+              });
+            }
+          });
+          
+          setActiveGoals(expandedGoals.slice(0, 6));
         } else {
           // No goals yet, only count check-in
           setGoalsCompleted(checkIn ? 1 : 0);
@@ -231,9 +242,11 @@ export default function Home() {
                       onClick={() => toggleGoal(goal.id)}
                       className="flex-shrink-0"
                     >
-                      <CheckCircle2 
-                        className={`h-6 w-6 ${goal.status === "completed" ? "text-green-500" : "text-muted-foreground"}`} 
-                      />
+                      {goal.status === "completed" ? (
+                        <CheckCircle2 className="h-6 w-6 text-green-500" />
+                      ) : (
+                        <Circle className="h-6 w-6 text-muted-foreground" />
+                      )}
                     </button>
                     <div>
                       <p className="font-medium text-foreground">
