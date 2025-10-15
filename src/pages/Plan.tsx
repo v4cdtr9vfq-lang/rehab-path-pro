@@ -13,7 +13,7 @@ interface Goal {
 }
 
 export default function Plan() {
-  const startDate = new Date("2021-01-22");
+  const startDate = new Date();
   
   const [sections, setSections] = useState({
     today: { open: true, goals: [] },
