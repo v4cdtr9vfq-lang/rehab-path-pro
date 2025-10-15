@@ -49,13 +49,13 @@ All colors MUST be HSL.
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 210 50% 25%;
-    --sidebar-foreground: 200 40% 95%;
+    --sidebar-background: 195 80% 95%;
+    --sidebar-foreground: 210 40% 25%;
     --sidebar-primary: 195 75% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 45% 30%;
-    --sidebar-accent-foreground: 200 40% 95%;
-    --sidebar-border: 210 40% 30%;
+    --sidebar-accent: 195 60% 88%;
+    --sidebar-accent-foreground: 210 40% 20%;
+    --sidebar-border: 195 30% 85%;
     --sidebar-ring: 195 75% 55%;
   }
 }
