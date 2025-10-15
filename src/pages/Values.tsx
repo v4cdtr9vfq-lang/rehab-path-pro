@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Heart, Plus } from "lucide-react";
+import { Heart, Plus, X } from "lucide-react";
 import { useState } from "react";
 
 export default function Values() {
@@ -19,6 +19,10 @@ export default function Values() {
     setValues(prev =>
       prev.map(v => v.id === id ? { ...v, selected: !v.selected } : v)
     );
+  };
+
+  const deleteValue = (id: string) => {
+    setValues(prev => prev.filter(v => v.id !== id));
   };
 
   return (
@@ -74,6 +78,14 @@ export default function Values() {
                     Activo Hoy
                   </span>
                 )}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => deleteValue(value.id)}
+                  className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
               </div>
             ))}
           </CardContent>
