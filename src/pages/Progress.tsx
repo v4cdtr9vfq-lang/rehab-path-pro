@@ -101,33 +101,63 @@ export default function ProgressPage() {
 
   const expandGoals = (goals: Goal[], context: 'daily' | 'weekly' | 'monthly'): ExpandedGoal[] => {
     const dates = getDateRange(context);
-    const completedInstances = loadCompletedInstancesForRange(dates);
     const expanded: ExpandedGoal[] = [];
     
     goals.forEach(g => {
-      let instanceCount = g.remaining;
-      
-      // Multiply instances based on context for recurring goals
-      if (g.goal_type === 'always' || g.goal_type === 'today') {
-        if (context === 'weekly') {
-          instanceCount = g.remaining * 7;
-        } else if (context === 'monthly') {
-          instanceCount = g.remaining * dates.length;
+      if (g.goal_type === 'onetime') {
+        // One-time goals: simple expansion for daily view only
+        if (context === 'daily') {
+          const completedInstances = loadCompletedInstancesForRange([new Date()]);
+          for (let i = 0; i < g.remaining; i++) {
+            const instanceId = `${g.id}-${i}`;
+            expanded.push({
+              id: instanceId,
+              originalId: g.id,
+              text: g.text,
+              completed: completedInstances.has(instanceId),
+              goal_type: g.goal_type,
+              instanceIndex: i
+            });
+          }
         }
-      } else if (g.goal_type === 'week' && context === 'monthly') {
-        // Weekly goals in monthly view: ~4 weeks
-        instanceCount = g.remaining * 4;
-      }
-      
-      for (let i = 0; i < instanceCount; i++) {
-        const instanceId = `${g.id}-${i}`;
-        expanded.push({
-          id: instanceId,
-          originalId: g.id,
-          text: g.text,
-          completed: completedInstances.has(instanceId),
-          goal_type: g.goal_type,
-          instanceIndex: i
+      } else {
+        // Recurring goals: create instances per day
+        dates.forEach((date, dayIndex) => {
+          const dateKey = `goals_completed_${date.toISOString().split('T')[0]}`;
+          const stored = localStorage.getItem(dateKey);
+          const completedForDay = stored ? new Set(JSON.parse(stored)) : new Set();
+          
+          // How many instances per day based on goal type
+          let instancesPerDay = g.remaining;
+          if (g.goal_type === 'week' && context === 'monthly') {
+            // Weekly goals in monthly view: only on week boundaries
+            if (dayIndex % 7 === 0) {
+              for (let i = 0; i < g.remaining; i++) {
+                const instanceId = `${g.id}-${date.toISOString().split('T')[0]}-${i}`;
+                expanded.push({
+                  id: instanceId,
+                  originalId: g.id,
+                  text: g.text,
+                  completed: completedForDay.has(instanceId),
+                  goal_type: g.goal_type,
+                  instanceIndex: dayIndex * g.remaining + i
+                });
+              }
+            }
+          } else {
+            // Daily/weekly goals: create instances for each applicable day
+            for (let i = 0; i < instancesPerDay; i++) {
+              const instanceId = `${g.id}-${date.toISOString().split('T')[0]}-${i}`;
+              expanded.push({
+                id: instanceId,
+                originalId: g.id,
+                text: g.text,
+                completed: completedForDay.has(instanceId),
+                goal_type: g.goal_type,
+                instanceIndex: dayIndex * g.remaining + i
+              });
+            }
+          }
         });
       }
     });

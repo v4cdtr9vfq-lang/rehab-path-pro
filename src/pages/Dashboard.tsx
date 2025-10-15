@@ -169,12 +169,13 @@ export default function Home() {
         
         // Load completed instances from localStorage
         const completedInstances = loadCompletedInstances();
+        const todayStr = new Date().toISOString().split('T')[0];
         
         // Expand goals based on remaining count for TODAY's display
         const expandedGoals: any[] = [];
         todayGoals.forEach(g => {
           for (let i = 0; i < g.remaining; i++) {
-            const instanceId = `${g.id}-${i}`;
+            const instanceId = `${g.id}-${todayStr}-${i}`;
             expandedGoals.push({
               id: instanceId,
               originalId: g.id,

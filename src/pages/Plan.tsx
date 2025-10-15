@@ -127,32 +127,58 @@ export default function Plan() {
   // Expand goals into instances based on context
   const expandGoals = (goals: Goal[], context: 'today' | 'week' | 'month' | 'onetime'): ExpandedGoal[] => {
     const dates = context === 'onetime' ? [new Date()] : getDateRange(context);
-    const completedInstances = loadCompletedInstancesForRange(dates);
     const expanded: ExpandedGoal[] = [];
     
     goals.forEach(g => {
-      let instanceCount = g.remaining;
-      
-      // Multiply instances based on context for recurring goals
-      if (g.goal_type === 'always' || g.goal_type === 'today') {
-        if (context === 'week') {
-          instanceCount = g.remaining * 7;
-        } else if (context === 'month') {
-          instanceCount = g.remaining * dates.length;
+      if (context === 'onetime') {
+        // One-time goals: simple expansion
+        const completedInstances = loadCompletedInstances();
+        for (let i = 0; i < g.remaining; i++) {
+          const instanceId = `${g.id}-${i}`;
+          expanded.push({
+            ...g,
+            id: instanceId,
+            originalId: g.id,
+            instanceIndex: i,
+            completed: completedInstances.has(instanceId)
+          });
         }
-      } else if (g.goal_type === 'week' && context === 'month') {
-        // Weekly goals in monthly view: ~4 weeks
-        instanceCount = g.remaining * 4;
-      }
-      
-      for (let i = 0; i < instanceCount; i++) {
-        const instanceId = `${g.id}-${i}`;
-        expanded.push({
-          ...g,
-          id: instanceId,
-          originalId: g.id,
-          instanceIndex: i,
-          completed: completedInstances.has(instanceId)
+      } else {
+        // Recurring goals: create instances per day
+        dates.forEach((date, dayIndex) => {
+          const dateKey = `goals_completed_${date.toISOString().split('T')[0]}`;
+          const stored = localStorage.getItem(dateKey);
+          const completedForDay = stored ? new Set(JSON.parse(stored)) : new Set();
+          
+          // How many instances per day based on goal type
+          let instancesPerDay = g.remaining;
+          if (g.goal_type === 'week' && context === 'month') {
+            // Weekly goals in monthly view: only on week boundaries
+            if (dayIndex % 7 === 0) {
+              for (let i = 0; i < g.remaining; i++) {
+                const instanceId = `${g.id}-${date.toISOString().split('T')[0]}-${i}`;
+                expanded.push({
+                  ...g,
+                  id: instanceId,
+                  originalId: g.id,
+                  instanceIndex: dayIndex * g.remaining + i,
+                  completed: completedForDay.has(instanceId)
+                });
+              }
+            }
+          } else {
+            // Daily goals: create instances for each day
+            for (let i = 0; i < instancesPerDay; i++) {
+              const instanceId = `${g.id}-${date.toISOString().split('T')[0]}-${i}`;
+              expanded.push({
+                ...g,
+                id: instanceId,
+                originalId: g.id,
+                instanceIndex: dayIndex * g.remaining + i,
+                completed: completedForDay.has(instanceId)
+              });
+            }
+          }
         });
       }
     });
