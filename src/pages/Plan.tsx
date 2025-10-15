@@ -534,9 +534,10 @@ export default function Plan() {
   const getRemainingCount = (goal: ExpandedGoal, sectionKey: keyof typeof sections) => {
     // Get all instances of this specific goal in THIS section only
     const allGoalsInSection = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
-    const totalInstances = allGoalsInSection.length;
     
-    console.log(`[getRemainingCount] Goal: ${goal.text}, Section: ${sectionKey}, Total instances: ${totalInstances}`);
+    console.log(`[getRemainingCount] Goal: "${goal.text}", Section: ${sectionKey}`);
+    console.log(`  Total instances in section:`, allGoalsInSection.length);
+    console.log(`  All instance IDs:`, allGoalsInSection.map(g => g.id));
     
     // Count completed by checking localStorage for each instance's date
     let completedCount = 0;
@@ -556,15 +557,15 @@ export default function Plan() {
       const stored = localStorage.getItem(dateKey);
       const completedForDate = stored ? new Set(JSON.parse(stored)) : new Set();
       
-      console.log(`  Instance: ${instance.id}, Date key: ${dateKey}, Completed:`, completedForDate.has(instance.id));
+      console.log(`    Instance ${instance.id}: dateKey=${dateKey}, completed=${completedForDate.has(instance.id)}`);
       
       if (completedForDate.has(instance.id)) {
         completedCount++;
       }
     }
     
-    console.log(`  Total completed: ${completedCount}, Remaining: ${totalInstances - completedCount}`);
-    
+    const totalInstances = allGoalsInSection.length;
+    console.log(`  Completed: ${completedCount}, Remaining: ${totalInstances - completedCount}`);
     return totalInstances - completedCount;
   };
 
