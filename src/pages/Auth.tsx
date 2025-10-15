@@ -105,7 +105,7 @@ export default function Auth() {
         <div className="text-center space-y-4">
           <Link to="/" className="inline-flex items-center gap-2 text-primary hover:opacity-80 transition-opacity">
             <Heart className="h-6 w-6" />
-            <span className="text-2xl font-bold">RehabApp</span>
+            <span className="text-2xl font-bold">Rehapp</span>
           </Link>
           <h1 className="text-4xl font-bold text-foreground">
             {isLogin ? "Bienvenido de vuelta" : "Comienza tu recuperación"}

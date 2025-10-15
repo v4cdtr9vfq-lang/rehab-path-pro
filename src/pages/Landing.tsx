@@ -50,7 +50,7 @@ export default function Landing() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              RehabApp te acompaña en cada paso de tu proceso de recuperación con herramientas diseñadas para mantenerte motivado y enfocado
+              Rehapp te acompaña en cada paso de tu proceso de recuperación con herramientas diseñadas para mantenerte motivado y enfocado
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
@@ -74,7 +74,7 @@ export default function Landing() {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              ¿Por qué RehabApp?
+              ¿Por qué Rehapp?
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Herramientas diseñadas específicamente para tu proceso de recuperación
@@ -141,9 +141,9 @@ export default function Landing() {
                 ))}
               </div>
               <blockquote className="text-2xl md:text-3xl font-medium text-foreground leading-relaxed">
-                "La confianza se construye con consistencia. RehabApp me ha ayudado a mantener el enfoque día a día"
+                "La confianza se construye con consistencia. Rehapp me ha ayudado a mantener el enfoque día a día"
               </blockquote>
-              <p className="text-muted-foreground text-lg">- Usuario de RehabApp</p>
+              <p className="text-muted-foreground text-lg">- Usuario de Rehapp</p>
             </CardContent>
           </Card>
         </div>
@@ -170,7 +170,7 @@ export default function Landing() {
       <footer className="py-8 border-t border-border/50">
         <div className="container mx-auto px-4 text-center">
           <p className="text-muted-foreground">
-            © 2024 RehabApp. Tu privacidad y recuperación son nuestra prioridad.
+            © 2024 Rehapp. Tu privacidad y recuperación son nuestra prioridad.
           </p>
         </div>
       </footer>

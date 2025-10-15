@@ -51,10 +51,10 @@ export function Sidebar() {
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
-      <div className="mb-8 px-8 pt-6">
-        <h1 className="text-3xl font-bold text-sidebar-foreground tracking-tight">RehabApp</h1>
+      <Link to="/dashboard" className="mb-8 px-8 pt-6 block hover:opacity-80 transition-opacity" onClick={() => setOpen(false)}>
+        <h1 className="text-3xl font-bold text-sidebar-foreground tracking-tight">Rehapp</h1>
         <p className="text-sm text-sidebar-foreground/60 mt-1">Your recovery journey</p>
-      </div>
+      </Link>
       
       <nav className="flex flex-col gap-2 px-6 flex-1 overflow-y-auto">
         {menuItems.map((item) => {
@@ -94,9 +94,11 @@ export function Sidebar() {
   return (
     <>
       {/* Mobile Menu Button */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-sm border-b border-border">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-card backdrop-blur-sm border-b border-border">
         <div className="flex items-center justify-between p-4">
-          <h1 className="text-xl font-bold text-primary">RehabApp</h1>
+          <Link to="/dashboard" onClick={() => setOpen(false)}>
+            <h1 className="text-xl font-bold text-primary">Rehapp</h1>
+          </Link>
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">

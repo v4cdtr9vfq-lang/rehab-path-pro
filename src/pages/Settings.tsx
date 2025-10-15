@@ -10,7 +10,7 @@ export default function Settings() {
     <div className="space-y-8 animate-in fade-in duration-500">
       <div>
         <h1 className="text-4xl font-bold text-foreground mb-2">Settings</h1>
-        <p className="text-muted-foreground text-lg">Customize your RehabApp experience</p>
+        <p className="text-muted-foreground text-lg">Customize your Rehapp experience</p>
       </div>
 
       <Card className="border-primary/20">

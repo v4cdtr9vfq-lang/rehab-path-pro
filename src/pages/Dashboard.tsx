@@ -38,12 +38,7 @@ export default function Home() {
   }, []);
 
   // Active goals for today/week
-  const activeGoals = [
-    { id: 1, title: "Asistir a reunión de grupo", status: "completed", period: "Hoy" },
-    { id: 2, title: "Meditar 10 minutos", status: "completed", period: "Hoy" },
-    { id: 3, title: "Ejercicio físico 30 min", status: "pending", period: "Hoy" },
-    { id: 4, title: "Llamar a mi sponsor", status: "pending", period: "Esta semana" },
-  ];
+  const activeGoals: any[] = [];
 
   // Quick tools - configurable
   const quickTools = [
@@ -117,30 +112,44 @@ export default function Home() {
             <Button variant="ghost" size="sm" className="text-primary">Ver todas</Button>
           </Link>
         </CardHeader>
-        <CardContent className="space-y-3">
-          {activeGoals.slice(0, 3).map((goal) => (
-            <div
-              key={goal.id}
-              className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-card hover:bg-muted/30 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                {goal.status === "completed" ? (
-                  <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                ) : (
-                  <div className="h-5 w-5 rounded-full border-2 border-muted-foreground flex-shrink-0" />
-                )}
-                <div>
-                  <p className={`font-medium ${goal.status === "completed" ? "line-through text-muted-foreground" : "text-foreground"}`}>
-                    {goal.title}
-                  </p>
-                  <p className="text-xs text-muted-foreground">{goal.period}</p>
-                </div>
-              </div>
-              <Badge variant={goal.status === "completed" ? "default" : "outline"} className="text-xs">
-                {goal.status === "completed" ? "Completada" : "Pendiente"}
-              </Badge>
+        <CardContent>
+          {activeGoals.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground mb-4">No tienes metas activas aún</p>
+              <Link to="/plan">
+                <Button className="rounded-xl">
+                  <Target className="h-4 w-4 mr-2" />
+                  Añadir meta
+                </Button>
+              </Link>
             </div>
-          ))}
+          ) : (
+            <div className="space-y-3">
+              {activeGoals.slice(0, 3).map((goal) => (
+                <div
+                  key={goal.id}
+                  className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-card hover:bg-muted/30 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    {goal.status === "completed" ? (
+                      <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                    ) : (
+                      <div className="h-5 w-5 rounded-full border-2 border-muted-foreground flex-shrink-0" />
+                    )}
+                    <div>
+                      <p className={`font-medium ${goal.status === "completed" ? "line-through text-muted-foreground" : "text-foreground"}`}>
+                        {goal.title}
+                      </p>
+                      <p className="text-xs text-muted-foreground">{goal.period}</p>
+                    </div>
+                  </div>
+                  <Badge variant={goal.status === "completed" ? "default" : "outline"} className="text-xs">
+                    {goal.status === "completed" ? "Completada" : "Pendiente"}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
 

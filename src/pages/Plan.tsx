@@ -16,21 +16,10 @@ export default function Plan() {
   const startDate = new Date("2021-01-22");
   
   const [sections, setSections] = useState({
-    today: { open: true, goals: [
-      { id: "1", text: "Attend a recovery meeting", completed: false, remaining: 1 }
-    ]},
-    week: { open: true, goals: [
-      { id: "2", text: "Do a service position at my home group", completed: false, remaining: 1 },
-      { id: "3", text: "Lead fitness class", completed: false, remaining: 2 },
-      { id: "4", text: "Connect with someone in recovery on an emotional level", completed: false, remaining: 2 },
-      { id: "5", text: "1 Hour for Step work", completed: false, remaining: 2 }
-    ]},
-    month: { open: true, goals: [
-      { id: "6", text: "Complete Step 4 inventory", completed: false, remaining: 15 }
-    ]},
-    onetime: { open: true, goals: [
-      { id: "7", text: "Find a new sponsor", completed: false, remaining: 1 }
-    ]}
+    today: { open: true, goals: [] },
+    week: { open: false, goals: [] },
+    month: { open: false, goals: [] },
+    onetime: { open: false, goals: [] }
   });
 
   const toggleSection = (section: keyof typeof sections) => {
