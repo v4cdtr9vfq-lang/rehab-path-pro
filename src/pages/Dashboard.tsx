@@ -269,9 +269,7 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <button className="flex-shrink-0 cursor-default">
                 {checkInCompleted ? (
-                  <div className="w-6 h-6 rounded-full border-2 border-green-500 flex items-center justify-center bg-green-500/10">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" fill="currentColor" />
-                  </div>
+                  <CheckCircle2 className="h-6 w-6 text-green-500" />
                 ) : (
                   <Circle className="h-6 w-6 text-muted-foreground" />
                 )}
@@ -338,9 +336,7 @@ export default function Home() {
                       className="flex-shrink-0"
                     >
                       {goal.status === "completed" ? (
-                        <div className="w-6 h-6 rounded-full border-2 border-green-500 flex items-center justify-center bg-green-500/10">
-                          <CheckCircle2 className="h-4 w-4 text-green-500" fill="currentColor" />
-                        </div>
+                        <CheckCircle2 className="h-6 w-6 text-green-500" />
                       ) : (
                         <Circle className="h-6 w-6 text-muted-foreground" />
                       )}

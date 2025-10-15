@@ -584,9 +584,7 @@ export default function Plan() {
             className="flex-shrink-0"
           >
             {goal.completed ? (
-              <div className="w-6 h-6 rounded-full border-2 border-green-500 flex items-center justify-center bg-green-500/10">
-                <CheckCircle2 className="h-4 w-4 text-green-500" fill="currentColor" />
-              </div>
+              <CheckCircle2 className="h-6 w-6 text-green-500" />
             ) : (
               <Circle className="h-6 w-6 text-muted-foreground" />
             )}
