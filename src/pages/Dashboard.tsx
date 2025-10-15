@@ -159,9 +159,9 @@ export default function Home() {
           <div className="space-y-2">
             <div className="flex justify-between items-center mb-2">
               <p className="text-sm font-medium text-muted-foreground">Metas completadas hoy</p>
-              <p className="text-sm font-bold text-primary">{goalsCompleted} de {totalGoals}</p>
+              <p className="text-sm font-bold text-green-500">{goalsCompleted} de {totalGoals}</p>
             </div>
-            <Progress value={goalsProgress} className="h-3" />
+            <Progress value={goalsProgress} className="h-3 [&>div]:bg-green-500" />
           </div>
 
           {/* Daily Check-In Status */}
@@ -230,7 +230,7 @@ export default function Home() {
                     <Checkbox
                       checked={goal.status === "completed"}
                       onCheckedChange={() => toggleGoal(goal.id)}
-                      className="flex-shrink-0"
+                      className="flex-shrink-0 data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500"
                     />
                     <div>
                       <p className={`font-medium ${goal.status === "completed" ? "line-through text-muted-foreground" : "text-foreground"}`}>
@@ -239,9 +239,9 @@ export default function Home() {
                       <p className="text-xs text-muted-foreground">{goal.period}</p>
                     </div>
                   </div>
-                  <Badge variant={goal.status === "completed" ? "default" : "outline"} className="text-xs">
+                  <span className={`text-xs font-medium ${goal.status === "completed" ? "text-green-500" : "text-muted-foreground"}`}>
                     {goal.status === "completed" ? "Completada" : "Pendiente"}
-                  </Badge>
+                  </span>
                 </div>
               ))}
             </div>
