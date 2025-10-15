@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function Landing() {
   const benefits = [{
     icon: Target,
-    title: "Seguimiento de Progreso",
+    title: "Seguimiento de progreso",
     description: "Monitorea tu abstinencia día a día y celebra cada logro alcanzado"
   }, {
     icon: Calendar,
