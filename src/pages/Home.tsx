@@ -24,15 +24,15 @@ export default function Home() {
 
       <AbstinenceCounter startDate={startDate} />
 
-      <Card className="bg-gradient-to-br from-primary via-primary to-accent border-0 shadow-xl">
+      <Card className="bg-gradient-to-br from-primary via-primary to-accent border-0">
         <CardHeader>
-          <p className="text-primary-foreground/70 text-sm font-medium">Daily Inspiration</p>
-          <CardTitle className="text-3xl md:text-4xl font-bold text-primary-foreground leading-tight">
+          <p className="text-primary-foreground/80 text-sm font-medium uppercase tracking-wide">Daily Inspiration</p>
+          <CardTitle className="text-2xl md:text-3xl font-bold text-primary-foreground leading-tight">
             It is always the simple that produces the marvelous
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-primary-foreground/80 text-lg">- Amelia Barr</p>
+          <p className="text-primary-foreground/90 text-base">- Amelia Barr</p>
         </CardContent>
       </Card>
 
@@ -43,9 +43,9 @@ export default function Home() {
             const Icon = action.icon;
             return (
               <Link key={action.path} to={action.path}>
-                <Card className="hover:scale-105 transition-all duration-300 cursor-pointer border-border/50 bg-card/50 backdrop-blur h-full">
+                <Card className="hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full">
                   <CardContent className="p-6 text-center space-y-4">
-                    <div className={`mx-auto w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center ${action.color}`}>
+                    <div className={`mx-auto w-14 h-14 rounded-2xl bg-foreground/5 flex items-center justify-center ${action.color}`}>
                       <Icon className="h-7 w-7" />
                     </div>
                     <p className="font-semibold text-foreground text-sm">{action.label}</p>
@@ -57,12 +57,12 @@ export default function Home() {
         </div>
       </div>
 
-      <Card className="bg-secondary border-0">
+      <Card className="bg-muted/50 border-border/30">
         <CardContent className="p-8">
-          <p className="text-center text-secondary-foreground text-2xl font-medium leading-relaxed">
+          <p className="text-center text-foreground text-xl font-medium leading-relaxed">
             "Trust is built with consistency."
           </p>
-          <p className="text-center text-secondary-foreground/60 mt-4 text-lg">- Lincoln Chafee</p>
+          <p className="text-center text-muted-foreground mt-4 text-base">- Lincoln Chafee</p>
         </CardContent>
       </Card>
     </div>
