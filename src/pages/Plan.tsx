@@ -168,6 +168,23 @@ export default function Plan() {
           const stored = localStorage.getItem(dateKey);
           const completedForDay = stored ? new Set(JSON.parse(stored)) : new Set();
           
+          // Check if periodic goal should appear on this date
+          if (g.goal_type === 'periodic' && g.periodic_type) {
+            const dayOfMonth = date.getDate();
+            const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+            
+            let shouldShow = false;
+            if (g.periodic_type === 'inicio_mes' && dayOfMonth === 1) {
+              shouldShow = true;
+            } else if (g.periodic_type === 'mitad_mes' && dayOfMonth === 15) {
+              shouldShow = true;
+            } else if (g.periodic_type === 'final_mes' && dayOfMonth === lastDayOfMonth) {
+              shouldShow = true;
+            }
+            
+            if (!shouldShow) return; // Skip this date for this periodic goal
+          }
+          
           // How many instances per day based on goal type
           let instancesPerDay = g.remaining;
           if (g.goal_type === 'week' && context === 'month') {
@@ -244,11 +261,11 @@ export default function Plan() {
         const groupedGoals = {
           today: { 
             open: sections.today.open, 
-            goals: expandGoals([...todayGoals, ...alwaysGoals], 'today')
+            goals: expandGoals([...todayGoals, ...periodicGoals, ...alwaysGoals], 'today')
           },
           week: { 
             open: sections.week.open, 
-            goals: expandGoals([...weekGoals, ...todayGoals, ...alwaysGoals], 'week')
+            goals: expandGoals([...weekGoals, ...periodicGoals, ...todayGoals, ...alwaysGoals], 'week')
           },
           month: { 
             open: sections.month.open, 
