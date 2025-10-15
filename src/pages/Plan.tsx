@@ -1,12 +1,11 @@
 import { AbstinenceCounter } from "@/components/AbstinenceCounter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, ChevronDown, ChevronUp, Pencil, Trash2 } from "lucide-react";
+import { Plus, ChevronDown, ChevronUp, Pencil, Trash2, CheckCircle2, Circle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -286,19 +285,26 @@ export default function Plan() {
   };
 
   const GoalItem = ({ goal, sectionKey }: { goal: Goal; sectionKey: keyof typeof sections }) => (
-    <div className="flex items-start gap-3 p-4 rounded-lg bg-card/50 hover:bg-card transition-colors">
-      <Checkbox
-        checked={goal.completed}
-        onCheckedChange={() => toggleGoal(sectionKey, goal.id)}
-        className="mt-1"
-      />
-      <div className="flex-1">
-        <p className={`text-foreground ${goal.completed ? "line-through opacity-60" : ""}`}>
-          {goal.text}
-        </p>
-        <p className="text-sm text-muted-foreground mt-1">
-          {goal.remaining} restante{goal.remaining !== 1 ? 's' : ''} {sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}
-        </p>
+    <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
+      <div className="flex items-center gap-3 flex-1">
+        <button
+          onClick={() => toggleGoal(sectionKey, goal.id)}
+          className="flex-shrink-0"
+        >
+          {goal.completed ? (
+            <CheckCircle2 className="h-6 w-6 text-green-500" />
+          ) : (
+            <Circle className="h-6 w-6 text-muted-foreground" />
+          )}
+        </button>
+        <div className="flex-1">
+          <p className="text-foreground font-semibold">
+            {goal.text}
+          </p>
+          <p className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
+            {goal.completed ? 'Completado' : `${goal.remaining} restante${goal.remaining !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+          </p>
+        </div>
       </div>
       <div className="flex items-center gap-2">
         <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-primary/30 text-primary font-medium">
