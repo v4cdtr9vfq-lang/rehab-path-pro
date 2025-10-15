@@ -60,6 +60,16 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        widget: {
+          mint: "hsl(var(--widget-mint))",
+          "mint-foreground": "hsl(var(--widget-mint-foreground))",
+          purple: "hsl(var(--widget-purple))",
+          "purple-foreground": "hsl(var(--widget-purple-foreground))",
+          yellow: "hsl(var(--widget-yellow))",
+          "yellow-foreground": "hsl(var(--widget-yellow-foreground))",
+          dark: "hsl(var(--widget-dark))",
+          "dark-foreground": "hsl(var(--widget-dark-foreground))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
