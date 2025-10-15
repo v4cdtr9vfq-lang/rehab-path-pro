@@ -426,7 +426,7 @@ export default function Plan() {
   };
 
   const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey: keyof typeof sections }) => {
-    const count = sections[sectionKey].goals.length;
+    const count = sections[sectionKey].goals.filter(g => g.instanceIndex === 0).length;
     return (
       <button
         onClick={() => toggleSection(sectionKey)}
@@ -631,9 +631,11 @@ export default function Plan() {
           </CardHeader>
           {sections.today.open && (
             <CardContent className="space-y-3">
-              {sections.today.goals.map(goal => (
-                <GoalItem key={goal.id} goal={goal} sectionKey="today" />
-              ))}
+              {sections.today.goals
+                .filter(goal => goal.instanceIndex === 0)
+                .map(goal => (
+                  <GoalItem key={goal.id} goal={goal} sectionKey="today" />
+                ))}
             </CardContent>
           )}
         </Card>
@@ -645,9 +647,11 @@ export default function Plan() {
           </CardHeader>
           {sections.week.open && (
             <CardContent className="space-y-3">
-              {sections.week.goals.map(goal => (
-                <GoalItem key={goal.id} goal={goal} sectionKey="week" />
-              ))}
+              {sections.week.goals
+                .filter(goal => goal.instanceIndex === 0)
+                .map(goal => (
+                  <GoalItem key={goal.id} goal={goal} sectionKey="week" />
+                ))}
             </CardContent>
           )}
         </Card>
@@ -659,9 +663,11 @@ export default function Plan() {
           </CardHeader>
           {sections.month.open && (
             <CardContent className="space-y-3">
-              {sections.month.goals.map(goal => (
-                <GoalItem key={goal.id} goal={goal} sectionKey="month" />
-              ))}
+              {sections.month.goals
+                .filter(goal => goal.instanceIndex === 0)
+                .map(goal => (
+                  <GoalItem key={goal.id} goal={goal} sectionKey="month" />
+                ))}
             </CardContent>
           )}
         </Card>
@@ -673,9 +679,11 @@ export default function Plan() {
           </CardHeader>
           {sections.onetime.open && (
             <CardContent className="space-y-3">
-              {sections.onetime.goals.map(goal => (
-                <GoalItem key={goal.id} goal={goal} sectionKey="onetime" />
-              ))}
+              {sections.onetime.goals
+                .filter(goal => goal.instanceIndex === 0)
+                .map(goal => (
+                  <GoalItem key={goal.id} goal={goal} sectionKey="onetime" />
+                ))}
             </CardContent>
           )}
         </Card>
