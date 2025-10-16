@@ -73,7 +73,9 @@ export default function Chat() {
     }
 
     setUserId(user.id);
-    setUserName(user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuario');
+    const fullName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuario';
+    console.log('Nombre del usuario:', fullName, 'Iniciales:', getInitials(fullName));
+    setUserName(fullName);
 
     // Load existing messages for current room
     const { data: existingMessages } = await supabase
