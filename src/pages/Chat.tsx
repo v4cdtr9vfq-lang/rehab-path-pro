@@ -154,8 +154,9 @@ export default function Chat() {
 
   const scrollToBottom = () => {
     setTimeout(() => {
-      if (scrollRef.current) {
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      const scrollArea = document.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollArea) {
+        scrollArea.scrollTop = scrollArea.scrollHeight;
       }
     }, 100);
   };
@@ -190,10 +191,12 @@ export default function Chat() {
   };
 
   const getInitials = (name: string) => {
-    const names = name.trim().split(' ').filter(n => n.length > 0);
+    const names = name.trim().split(/\s+/).filter(n => n.length > 0);
     if (names.length >= 2) {
+      // Dos o más nombres: primera letra de los dos primeros nombres
       return (names[0][0] + names[1][0]).toUpperCase();
     }
+    // Un solo nombre: solo la primera letra
     return names[0][0].toUpperCase();
   };
 
@@ -333,7 +336,7 @@ export default function Chat() {
         </div>
       </div>
 
-      <Card className="flex-1 flex flex-col border-primary/20 overflow-hidden min-h-0">
+      <Card className="flex-1 flex flex-col border-primary/20 overflow-hidden min-h-0" style={{ height: 'calc(100% + 110px)' }}>
         <div className="bg-muted/30 border-b shrink-0">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between mb-3">
@@ -348,7 +351,13 @@ export default function Chat() {
             <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="w-full">
               <TabsList className="grid w-full grid-cols-4 bg-background">
                 {CHAT_ROOMS.map((room) => (
-                  <TabsTrigger key={room.id} value={room.id} className="text-xs sm:text-sm whitespace-nowrap">
+                  <TabsTrigger 
+                    key={room.id} 
+                    value={room.id} 
+                    className={`text-xs sm:text-sm whitespace-nowrap ${
+                      currentRoom === room.id ? 'data-[state=active]:bg-red-500 data-[state=active]:text-white' : ''
+                    }`}
+                  >
                     {room.label}
                   </TabsTrigger>
                 ))}
