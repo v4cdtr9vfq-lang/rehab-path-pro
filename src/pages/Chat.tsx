@@ -363,7 +363,7 @@ export default function Chat() {
                   <TabsTrigger 
                     key={room.id} 
                     value={room.id} 
-                    className="text-xs sm:text-sm whitespace-nowrap data-[state=active]:text-red-500"
+                    className="text-xs sm:text-sm whitespace-nowrap data-[state=active]:text-[#FF7A5C]"
                   >
                     {room.label}
                   </TabsTrigger>
