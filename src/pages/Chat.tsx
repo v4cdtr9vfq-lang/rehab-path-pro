@@ -14,6 +14,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -46,6 +48,7 @@ export default function Chat() {
   const [reportingMessageId, setReportingMessageId] = useState<string | null>(null);
   const [reportReason, setReportReason] = useState("");
   const [reportedMessages, setReportedMessages] = useState<Set<string>>(new Set());
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const channelRef = useRef<any>(null);
 
@@ -156,7 +159,7 @@ export default function Chat() {
         .from('chat_messages')
         .insert({
           user_id: userId,
-          user_name: userName,
+          user_name: isAnonymous ? "Anónimo" : userName,
           message: newMessage.trim(),
         });
 
@@ -420,7 +423,7 @@ export default function Chat() {
             </div>
           </ScrollArea>
 
-          <form onSubmit={sendMessage} className="p-4 border-t">
+          <form onSubmit={sendMessage} className="p-4 border-t space-y-3">
             <div className="flex gap-2">
               <Input
                 value={newMessage}
@@ -433,6 +436,16 @@ export default function Chat() {
                 <Send className="h-4 w-4" />
                 Enviar
               </Button>
+            </div>
+            <div className="flex items-center gap-2">
+              <Switch
+                id="anonymous-mode"
+                checked={isAnonymous}
+                onCheckedChange={setIsAnonymous}
+              />
+              <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
+                Escribir en modo anónimo
+              </Label>
             </div>
           </form>
         </CardContent>
