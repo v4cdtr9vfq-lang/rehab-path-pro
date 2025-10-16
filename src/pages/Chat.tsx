@@ -358,8 +358,9 @@ export default function Chat() {
               value={room.id} 
               className="flex-1 flex flex-col m-0 data-[state=inactive]:hidden"
             >
-              <ScrollArea className="flex-1 p-4">
-                <div className="space-y-4">
+              <div className="flex-1 relative overflow-hidden">
+                <ScrollArea className="h-full p-4">
+                  <div className="space-y-4">
                     {messages.map((msg) => {
                       const isOwnMessage = msg.user_id === userId;
                       const isEditing = editingMessageId === msg.id;
@@ -479,10 +480,19 @@ export default function Chat() {
                         </div>
                       );
                     })}
+                  </div>
+                </ScrollArea>
+                
+                {/* Overlay sobre el área de mensajes */}
+                <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex items-center justify-center">
+                  <div className="text-center space-y-2">
+                    <p className="text-lg font-semibold text-foreground">Chat de Testing</p>
+                    <p className="text-sm text-muted-foreground">Mensajes ficticios para pruebas</p>
+                  </div>
                 </div>
-              </ScrollArea>
+              </div>
 
-              <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-background">
+              <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-background relative z-20">
                 <div className="flex gap-2">
                   <Input
                     value={newMessage}
