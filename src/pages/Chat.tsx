@@ -17,6 +17,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ChatMessage {
   id: string;
@@ -24,7 +25,15 @@ interface ChatMessage {
   user_name: string;
   message: string;
   created_at: string;
+  room: string;
 }
+
+const CHAT_ROOMS = [
+  { id: 'narcoticos', label: 'Narcóticos' },
+  { id: 'dependencia_emocional', label: 'Dependencia Emocional' },
+  { id: 'pornografia', label: 'Pornografía' },
+  { id: 'redes_sociales', label: 'Redes Sociales' },
+] as const;
 
 export default function Chat() {
   const { toast } = useToast();
@@ -32,7 +41,8 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState("");
   const [userName, setUserName] = useState("");
   const [userId, setUserId] = useState("");
-  const [onlineCount, setOnlineCount] = useState(0);
+  const [currentRoom, setCurrentRoom] = useState<string>('narcoticos');
+  const [onlineCountByRoom, setOnlineCountByRoom] = useState<Record<string, number>>({});
   const [isSending, setIsSending] = useState(false);
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editedMessage, setEditedMessage] = useState("");
@@ -48,7 +58,7 @@ export default function Chat() {
         supabase.removeChannel(channelRef.current);
       }
     };
-  }, []);
+  }, [currentRoom]);
 
   const initializeChat = async () => {
     // Get current user
@@ -65,10 +75,11 @@ export default function Chat() {
     setUserId(user.id);
     setUserName(user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuario');
 
-    // Load existing messages
+    // Load existing messages for current room
     const { data: existingMessages } = await supabase
       .from('chat_messages')
       .select('*')
+      .eq('room', currentRoom)
       .order('created_at', { ascending: true })
       .limit(50);
 
@@ -88,8 +99,8 @@ export default function Chat() {
       setReportedMessages(new Set(uniqueReportedIds));
     }
 
-    // Set up realtime channel for messages and presence
-    const channel = supabase.channel('chat-room', {
+    // Set up realtime channel for messages and presence for current room
+    const channel = supabase.channel(`chat-room-${currentRoom}`, {
       config: {
         presence: {
           key: user.id,
@@ -101,7 +112,13 @@ export default function Chat() {
     channel
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState();
-        setOnlineCount(Object.keys(state).length);
+        const roomUsers = Object.values(state).filter((presence: any) => 
+          presence[0]?.room === currentRoom
+        );
+        setOnlineCountByRoom(prev => ({
+          ...prev,
+          [currentRoom]: roomUsers.length
+        }));
       })
       .on('presence', { event: 'join' }, ({ key, newPresences }) => {
         console.log('User joined:', key);
@@ -112,17 +129,21 @@ export default function Chat() {
       .on('postgres_changes', {
         event: 'INSERT',
         schema: 'public',
-        table: 'chat_messages'
+        table: 'chat_messages',
+        filter: `room=eq.${currentRoom}`
       }, (payload) => {
         const newMsg = payload.new as ChatMessage;
-        setMessages(prev => [...prev, newMsg]);
-        scrollToBottom();
+        if (newMsg.room === currentRoom) {
+          setMessages(prev => [...prev, newMsg]);
+          scrollToBottom();
+        }
       })
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
           await channel.track({
             user_id: user.id,
             user_name: userName,
+            room: currentRoom,
             online_at: new Date().toISOString(),
           });
         }
@@ -151,6 +172,7 @@ export default function Chat() {
           user_id: userId,
           user_name: isAnonymous ? "Anónimo" : userName,
           message: newMessage.trim(),
+          room: currentRoom,
         });
 
       if (error) throw error;
@@ -296,180 +318,193 @@ export default function Chat() {
     }
   };
 
+  const currentRoomOnline = onlineCountByRoom[currentRoom] || 0;
+  
   return (
     <div className="h-[calc(100vh-8rem)] flex flex-col animate-in fade-in duration-500">
       <div className="mb-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold text-foreground mb-2">Chat Comunitario</h1>
-            <p className="text-muted-foreground text-lg">Conecta con otros miembros de la comunidad</p>
-          </div>
-          <Badge variant="secondary" className="gap-2 px-4 py-2 text-base">
-            <Users className="h-4 w-4" />
-            {onlineCount} en línea
-          </Badge>
+        <div>
+          <h1 className="text-4xl font-bold text-foreground mb-2">Chat Comunitario</h1>
+          <p className="text-muted-foreground text-lg">Conecta con otros miembros de la comunidad</p>
         </div>
       </div>
 
       <Card className="flex-1 flex flex-col border-primary/20 overflow-hidden">
-        <CardHeader className="border-b">
-          <CardTitle className="flex items-center gap-2">
-            Chat en Vivo
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
-          <ScrollArea className="flex-1 p-4" ref={scrollRef}>
-            <div className="space-y-4">
-              {messages.map((msg) => {
-                const isOwnMessage = msg.user_id === userId;
-                const isEditing = editingMessageId === msg.id;
-                const isReported = reportedMessages.has(msg.id);
-                
-                return (
-                  <div
-                    key={msg.id}
-                    className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-6 group`}
-                  >
-                    {isEditing ? (
-                      <div className="w-full max-w-[70%] space-y-2">
-                        <Textarea
-                          value={editedMessage}
-                          onChange={(e) => setEditedMessage(e.target.value)}
-                          className="min-h-[60px]"
-                        />
-                        <div className="flex gap-2">
-                          <Button size="sm" onClick={() => saveEdit(msg.id)}>
-                            Guardar
-                          </Button>
-                          <Button size="sm" variant="outline" onClick={cancelEditing}>
-                            Cancelar
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        {isOwnMessage ? (
-                          // Own messages: three dots - message - avatar (aligned to right)
-                          <div className="flex items-start gap-3 max-w-[80%]">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button 
-                                  variant="ghost" 
-                                  size="icon" 
-                                  className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                                >
-                                  <MoreVertical className="h-4 w-4" />
+        <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="flex-1 flex flex-col">
+          <CardHeader className="border-b pb-0">
+            <div className="flex items-center justify-between mb-3">
+              <CardTitle>Chat en Vivo</CardTitle>
+              <Badge variant="secondary" className="gap-2">
+                <Users className="h-4 w-4" />
+                {currentRoomOnline} en línea
+              </Badge>
+            </div>
+            <TabsList className="grid w-full grid-cols-4">
+              {CHAT_ROOMS.map((room) => (
+                <TabsTrigger key={room.id} value={room.id} className="text-xs sm:text-sm">
+                  {room.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </CardHeader>
+
+          {CHAT_ROOMS.map((room) => (
+            <TabsContent key={room.id} value={room.id} className="flex-1 flex flex-col m-0 data-[state=inactive]:hidden overflow-hidden">
+              <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
+                <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+                  <div className="space-y-4">
+                    {messages.map((msg) => {
+                      const isOwnMessage = msg.user_id === userId;
+                      const isEditing = editingMessageId === msg.id;
+                      const isReported = reportedMessages.has(msg.id);
+                      
+                      return (
+                        <div
+                          key={msg.id}
+                          className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-6 group`}
+                        >
+                          {isEditing ? (
+                            <div className="w-full max-w-[70%] space-y-2">
+                              <Textarea
+                                value={editedMessage}
+                                onChange={(e) => setEditedMessage(e.target.value)}
+                                className="min-h-[60px]"
+                              />
+                              <div className="flex gap-2">
+                                <Button size="sm" onClick={() => saveEdit(msg.id)}>
+                                  Guardar
                                 </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end" className="bg-popover z-[100]">
-                                <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
-                                  <Edit2 className="h-4 w-4 mr-2" />
-                                  Editar
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => deleteMessage(msg.id)} className="text-destructive">
-                                  <Trash2 className="h-4 w-4 mr-2" />
-                                  Eliminar
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                            
-                            <div className="flex flex-col items-end gap-1">
-                              <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white">
-                                <p className="text-sm">{msg.message}</p>
+                                <Button size="sm" variant="outline" onClick={cancelEditing}>
+                                  Cancelar
+                                </Button>
                               </div>
-                              <span className="text-xs text-muted-foreground pr-6">
-                                {new Date(msg.created_at).toLocaleTimeString('es-ES', {
-                                  hour: '2-digit',
-                                  minute: '2-digit'
-                                })}
-                              </span>
                             </div>
+                          ) : (
+                            <>
+                              {isOwnMessage ? (
+                                // Own messages: three dots - message - avatar (aligned to right)
+                                <div className="flex items-start gap-3 max-w-[80%]">
+                                  <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                      <Button 
+                                        variant="ghost" 
+                                        size="icon" 
+                                        className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                                      >
+                                        <MoreVertical className="h-4 w-4" />
+                                      </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end" className="bg-popover z-[100]">
+                                      <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
+                                        <Edit2 className="h-4 w-4 mr-2" />
+                                        Editar
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem onClick={() => deleteMessage(msg.id)} className="text-destructive">
+                                        <Trash2 className="h-4 w-4 mr-2" />
+                                        Eliminar
+                                      </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                  </DropdownMenu>
+                                  
+                                  <div className="flex flex-col items-end gap-1">
+                                    <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white">
+                                      <p className="text-sm">{msg.message}</p>
+                                    </div>
+                                    <span className="text-xs text-muted-foreground pr-6">
+                                      {new Date(msg.created_at).toLocaleTimeString('es-ES', {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                      })}
+                                    </span>
+                                  </div>
 
-                            <Avatar className="h-11 w-11 flex-shrink-0 mt-0">
-                              <AvatarFallback className="bg-[#FF7A5C] text-white text-sm font-semibold">
-                                {getInitials(msg.user_name)}
-                              </AvatarFallback>
-                            </Avatar>
-                          </div>
-                        ) : (
-                          // Other messages: avatar - name (above) + message + time (below)
-                          <div className="flex items-start gap-3 max-w-[80%]">
-                            <Avatar className="h-11 w-11 flex-shrink-0 mt-0">
-                              <AvatarFallback className="bg-white text-black text-sm font-semibold">
-                                {getInitials(msg.user_name)}
-                              </AvatarFallback>
-                            </Avatar>
-
-                            <div className="flex flex-col gap-1 flex-1">
-                              <span className="text-sm text-muted-foreground pl-6">
-                                {getFirstName(msg.user_name)}
-                              </span>
-                              <div className="flex items-start gap-2">
-                                <div className={`rounded-[28px] px-6 py-3 ${
-                                  isReported 
-                                    ? 'bg-black border-2 border-red-500' 
-                                    : 'bg-[#2A2A2A] text-white'
-                                }`}>
-                                  <p className={`text-sm ${isReported ? 'invisible' : ''}`}>
-                                    {msg.message}
-                                  </p>
+                                  <Avatar className="h-11 w-11 flex-shrink-0 mt-0">
+                                    <AvatarFallback className="bg-[#FF7A5C] text-white text-sm font-semibold">
+                                      {getInitials(msg.user_name)}
+                                    </AvatarFallback>
+                                  </Avatar>
                                 </div>
-                                
-                                <Button 
-                                  variant="ghost" 
-                                  size="icon" 
-                                  onClick={() => toggleReport(msg.id)}
-                                  className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                                  title={isReported ? "Quitar denuncia" : "Denunciar"}
-                                >
-                                  <Flag className={`h-4 w-4 ${isReported ? 'fill-red-500' : ''} text-red-500`} />
-                                </Button>
-                              </div>
-                              <span className="text-xs text-muted-foreground pl-6">
-                                {new Date(msg.created_at).toLocaleTimeString('es-ES', {
-                                  hour: '2-digit',
-                                  minute: '2-digit'
-                                })}
-                              </span>
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    )}
+                              ) : (
+                                // Other messages: avatar - name (above) + message + time (below)
+                                <div className="flex items-start gap-3 max-w-[80%]">
+                                  <Avatar className="h-11 w-11 flex-shrink-0 mt-0">
+                                    <AvatarFallback className="bg-white text-black text-sm font-semibold">
+                                      {getInitials(msg.user_name)}
+                                    </AvatarFallback>
+                                  </Avatar>
+
+                                  <div className="flex flex-col gap-1 flex-1">
+                                    <span className="text-sm text-muted-foreground pl-6">
+                                      {getFirstName(msg.user_name)}
+                                    </span>
+                                    <div className="flex items-start gap-2">
+                                      <div className={`rounded-[28px] px-6 py-3 ${
+                                        isReported 
+                                          ? 'bg-black border-2 border-red-500' 
+                                          : 'bg-[#2A2A2A] text-white'
+                                      }`}>
+                                        <p className={`text-sm ${isReported ? 'invisible' : ''}`}>
+                                          {msg.message}
+                                        </p>
+                                      </div>
+                                      
+                                      <Button 
+                                        variant="ghost" 
+                                        size="icon" 
+                                        onClick={() => toggleReport(msg.id)}
+                                        className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                                        title={isReported ? "Quitar denuncia" : "Denunciar"}
+                                      >
+                                        <Flag className={`h-4 w-4 ${isReported ? 'fill-red-500' : ''} text-red-500`} />
+                                      </Button>
+                                    </div>
+                                    <span className="text-xs text-muted-foreground pl-6">
+                                      {new Date(msg.created_at).toLocaleTimeString('es-ES', {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                      })}
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
-                );
-              })}
-            </div>
-          </ScrollArea>
+                </ScrollArea>
 
-          <form onSubmit={sendMessage} className="p-4 border-t space-y-3">
-            <div className="flex gap-2">
-              <Input
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Escribe un mensaje..."
-                className="flex-1"
-                disabled={isSending}
-              />
-              <Button type="submit" disabled={!newMessage.trim() || isSending} className="gap-2">
-                <Send className="h-4 w-4" />
-                Enviar
-              </Button>
-            </div>
-            <div className="flex items-center gap-2">
-              <Switch
-                id="anonymous-mode"
-                checked={isAnonymous}
-                onCheckedChange={setIsAnonymous}
-              />
-              <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
-                Escribir en modo anónimo
-              </Label>
-            </div>
-          </form>
-        </CardContent>
+                <form onSubmit={sendMessage} className="p-4 border-t space-y-3">
+                  <div className="flex gap-2">
+                    <Input
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      placeholder="Escribe un mensaje..."
+                      className="flex-1"
+                      disabled={isSending}
+                    />
+                    <Button type="submit" disabled={!newMessage.trim() || isSending} className="gap-2">
+                      <Send className="h-4 w-4" />
+                      Enviar
+                    </Button>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Switch
+                      id="anonymous-mode"
+                      checked={isAnonymous}
+                      onCheckedChange={setIsAnonymous}
+                    />
+                    <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
+                      Escribir en modo anónimo
+                    </Label>
+                  </div>
+                </form>
+              </CardContent>
+            </TabsContent>
+          ))}
+        </Tabs>
       </Card>
-
     </div>
   );
 }
