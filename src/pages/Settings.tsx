@@ -3,11 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Settings as SettingsIcon, User, Lock, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { Settings as SettingsIcon, User, Lock, Trash2, CreditCard, Check, RefreshCw } from "lucide-react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useSubscription, SUBSCRIPTION_PLANS } from "@/contexts/SubscriptionContext";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,11 +24,24 @@ import {
 export default function Settings() {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { subscribed, plan, subscriptionEnd, loading, checkSubscription, createCheckoutSession, openCustomerPortal } = useSubscription();
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isUpdatingEmail, setIsUpdatingEmail] = useState(false);
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success") === "true") {
+      toast({
+        title: "¡Suscripción activada!",
+        description: "Tu suscripción ha sido activada exitosamente. Disfruta de 30 días gratis.",
+      });
+      checkSubscription();
+      window.history.replaceState({}, "", "/settings");
+    }
+  }, []);
 
   const handleUpdateEmail = async () => {
     if (!newEmail.trim()) {
@@ -201,6 +215,147 @@ export default function Settings() {
               </Button>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CreditCard className="h-5 w-5 text-primary" />
+            Suscripción
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
+              <RefreshCw className="h-6 w-6 animate-spin text-primary" />
+            </div>
+          ) : (
+            <>
+              {/* Current Plan Status */}
+              {subscribed && (
+                <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Check className="h-5 w-5 text-primary" />
+                    <span className="font-semibold">
+                      {plan === "monthly" ? "Plan Mensual Activo" : "Plan Anual Activo"}
+                    </span>
+                  </div>
+                  {subscriptionEnd && (
+                    <p className="text-sm text-muted-foreground">
+                      Se renueva el: {new Date(subscriptionEnd).toLocaleDateString('es-ES')}
+                    </p>
+                  )}
+                  <Button 
+                    variant="outline" 
+                    onClick={openCustomerPortal}
+                    className="w-full mt-2"
+                  >
+                    Gestionar Suscripción
+                  </Button>
+                </div>
+              )}
+
+              {/* Subscription Plans */}
+              <div className="space-y-4">
+                <div className="text-center mb-4">
+                  <h3 className="text-lg font-semibold mb-2">
+                    {subscribed ? "Cambiar de Plan" : "Elige tu Plan"}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    30 días de prueba gratis en todos los planes
+                  </p>
+                </div>
+
+                {/* Monthly Plan */}
+                <div className={`border rounded-lg p-4 space-y-3 ${plan === "monthly" ? "border-primary bg-primary/5" : "border-border"}`}>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-semibold text-lg">Plan Mensual</h4>
+                      <p className="text-2xl font-bold text-primary mt-1">6€<span className="text-sm text-muted-foreground">/mes</span></p>
+                    </div>
+                    {plan === "monthly" && (
+                      <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
+                        Tu Plan
+                      </span>
+                    )}
+                  </div>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-primary" />
+                      Acceso completo a todas las funciones
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-primary" />
+                      Chat comunitario
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-primary" />
+                      Seguimiento personalizado
+                    </li>
+                  </ul>
+                  {plan !== "monthly" && (
+                    <Button 
+                      onClick={() => createCheckoutSession(SUBSCRIPTION_PLANS.monthly.priceId)}
+                      className="w-full"
+                    >
+                      {subscribed ? "Cambiar a Mensual" : "Comenzar Prueba Gratis"}
+                    </Button>
+                  )}
+                </div>
+
+                {/* Annual Plan */}
+                <div className={`border rounded-lg p-4 space-y-3 relative ${plan === "annual" ? "border-primary bg-primary/5" : "border-border"}`}>
+                  <div className="absolute -top-3 right-4 bg-primary text-primary-foreground text-xs px-3 py-1 rounded-full font-semibold">
+                    Ahorra 50%
+                  </div>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-semibold text-lg">Plan Anual</h4>
+                      <p className="text-2xl font-bold text-primary mt-1">30€<span className="text-sm text-muted-foreground">/año</span></p>
+                      <p className="text-xs text-muted-foreground">Solo 2.5€/mes</p>
+                    </div>
+                    {plan === "annual" && (
+                      <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
+                        Tu Plan
+                      </span>
+                    )}
+                  </div>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-primary" />
+                      Todo lo del plan mensual
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-primary" />
+                      Ahorra 42€ al año
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-primary" />
+                      Mejor valor por tu dinero
+                    </li>
+                  </ul>
+                  {plan !== "annual" && (
+                    <Button 
+                      onClick={() => createCheckoutSession(SUBSCRIPTION_PLANS.annual.priceId)}
+                      className="w-full"
+                    >
+                      {subscribed ? "Cambiar a Anual" : "Comenzar Prueba Gratis"}
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              <Button 
+                variant="ghost" 
+                onClick={checkSubscription}
+                className="w-full"
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Actualizar Estado de Suscripción
+              </Button>
+            </>
+          )}
         </CardContent>
       </Card>
 
