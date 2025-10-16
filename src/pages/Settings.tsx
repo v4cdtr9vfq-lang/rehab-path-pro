@@ -26,6 +26,7 @@ export default function Settings() {
   const navigate = useNavigate();
   const { subscribed, plan, subscriptionEnd, loading, checkSubscription, createCheckoutSession, openCustomerPortal } = useSubscription();
   const [newEmail, setNewEmail] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isUpdatingEmail, setIsUpdatingEmail] = useState(false);
@@ -76,10 +77,19 @@ export default function Settings() {
   };
 
   const handleUpdatePassword = async () => {
+    if (!currentPassword) {
+      toast({
+        title: "Error",
+        description: "Por favor ingresa tu contraseña actual",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!newPassword || newPassword.length < 6) {
       toast({
         title: "Error",
-        description: "La contraseña debe tener al menos 6 caracteres",
+        description: "La nueva contraseña debe tener al menos 6 caracteres",
         variant: "destructive",
       });
       return;
@@ -96,6 +106,25 @@ export default function Settings() {
 
     setIsUpdatingPassword(true);
     try {
+      // First, verify current password by attempting to sign in
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user?.email) throw new Error("No se pudo obtener el email del usuario");
+
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword,
+      });
+
+      if (signInError) {
+        toast({
+          title: "Error",
+          description: "La contraseña actual es incorrecta",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // If verification successful, update password
       const { error } = await supabase.auth.updateUser({ password: newPassword });
       
       if (error) throw error;
@@ -104,6 +133,7 @@ export default function Settings() {
         title: "Contraseña actualizada",
         description: "Tu contraseña ha sido actualizada exitosamente",
       });
+      setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error: any) {
@@ -185,6 +215,16 @@ export default function Settings() {
               <div className="flex items-center gap-2 mb-2">
                 <Lock className="h-5 w-5 text-primary" />
                 <Label>Cambiar Contraseña</Label>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="current-password">Contraseña Actual</Label>
+                <Input
+                  id="current-password"
+                  type="password"
+                  placeholder="Ingresa tu contraseña actual"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="new-password">Nueva Contraseña</Label>
