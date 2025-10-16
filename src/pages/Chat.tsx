@@ -302,6 +302,15 @@ export default function Chat() {
                       ) : (
                         <div className="w-full">
                           <div className="flex items-center gap-2 group/message">
+                            <div
+                              className={`rounded-2xl px-4 py-2 ${
+                                isOwnMessage
+                                  ? 'bg-primary text-primary-foreground'
+                                  : 'bg-muted'
+                              }`}
+                            >
+                              <p className="text-sm break-words">{msg.message}</p>
+                            </div>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button 
@@ -325,22 +334,15 @@ export default function Chat() {
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
-                            <div
-                              className={`rounded-2xl px-4 py-2 ${
-                                isOwnMessage
-                                  ? 'bg-primary text-primary-foreground'
-                                  : 'bg-muted'
-                              }`}
-                            >
-                              <p className="text-sm break-words">{msg.message}</p>
-                            </div>
                           </div>
-                          <span className={`text-xs text-muted-foreground mt-1 block ${isOwnMessage ? 'text-right' : 'text-left'}`}>
-                            {new Date(msg.created_at).toLocaleTimeString('es-ES', {
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
-                          </span>
+                          <div className="w-full flex justify-end mt-1">
+                            <span className="text-xs text-muted-foreground">
+                              {new Date(msg.created_at).toLocaleTimeString('es-ES', {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })}
+                            </span>
+                          </div>
                         </div>
                       )}
                     </div>
