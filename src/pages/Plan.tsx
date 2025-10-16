@@ -116,11 +116,12 @@ export default function Plan() {
         dates.push(date);
       }
     } else if (context === 'month') {
-      // Get current month days
+      // Get remaining days of current month (from today to end of month)
       const year = today.getFullYear();
       const month = today.getMonth();
+      const currentDay = today.getDate();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
-      for (let day = 1; day <= daysInMonth; day++) {
+      for (let day = currentDay; day <= daysInMonth; day++) {
         dates.push(new Date(year, month, day));
       }
     }
