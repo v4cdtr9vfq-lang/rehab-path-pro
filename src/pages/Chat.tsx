@@ -358,12 +358,12 @@ export default function Chat() {
           </CardHeader>
           <div className="px-6 pb-3">
             <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="w-full">
-              <TabsList className="grid w-full grid-cols-4 bg-background">
+              <TabsList className="grid w-full grid-cols-4 gap-0 bg-background">
                 {CHAT_ROOMS.map((room) => (
                   <TabsTrigger 
                     key={room.id} 
                     value={room.id} 
-                    className="text-xs sm:text-sm whitespace-nowrap data-[state=active]:text-[#FF7A5C]"
+                    className="text-xs sm:text-sm whitespace-nowrap data-[state=active]:text-[#FF7A5C] justify-center"
                   >
                     {room.label}
                   </TabsTrigger>
