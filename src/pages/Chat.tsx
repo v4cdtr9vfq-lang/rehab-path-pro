@@ -191,13 +191,20 @@ export default function Chat() {
   };
 
   const getInitials = (name: string) => {
-    const names = name.trim().split(/\s+/).filter(n => n.length > 0);
-    if (names.length >= 2) {
-      // Dos o más nombres: primera letra de los dos primeros nombres
-      return (names[0][0] + names[1][0]).toUpperCase();
+    if (!name) return '';
+    
+    // Eliminar espacios extras y dividir por espacios
+    const nameParts = name.trim().split(/\s+/).filter(part => part.length > 0);
+    
+    if (nameParts.length === 0) return '';
+    
+    if (nameParts.length === 1) {
+      // Un solo nombre: solo primera letra
+      return nameParts[0][0].toUpperCase();
     }
-    // Un solo nombre: solo la primera letra
-    return names[0][0].toUpperCase();
+    
+    // Dos o más nombres: primera letra de los primeros dos
+    return (nameParts[0][0] + nameParts[1][0]).toUpperCase();
   };
 
   const getFirstName = (fullName: string) => {
