@@ -35,10 +35,6 @@ const menuItems = [{
   label: "Valores",
   path: "/values"
 }, {
-  icon: MessageSquare,
-  label: "Mensaje Diario",
-  path: "/message"
-}, {
   icon: MessageCircle,
   label: "Chat",
   path: "/chat"
