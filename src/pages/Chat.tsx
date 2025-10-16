@@ -328,7 +328,7 @@ export default function Chat() {
   const currentRoomOnline = onlineCountByRoom[currentRoom] || 0;
   
   return (
-    <div className="h-[calc(100vh-8rem)] flex flex-col animate-in fade-in duration-500">
+    <div className="h-[calc(100vh-8rem+110px)] flex flex-col animate-in fade-in duration-500">
       <div className="mb-4">
         <div>
           <h1 className="text-4xl font-bold text-foreground mb-2">Chat Comunitario</h1>
@@ -336,7 +336,7 @@ export default function Chat() {
         </div>
       </div>
 
-      <Card className="flex-1 flex flex-col border-primary/20 overflow-hidden min-h-0" style={{ height: 'calc(100% + 110px)' }}>
+      <Card className="flex-1 flex flex-col border-primary/20 overflow-hidden min-h-0">
         <div className="bg-muted/30 border-b shrink-0">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between mb-3">
@@ -354,9 +354,7 @@ export default function Chat() {
                   <TabsTrigger 
                     key={room.id} 
                     value={room.id} 
-                    className={`text-xs sm:text-sm whitespace-nowrap ${
-                      currentRoom === room.id ? 'data-[state=active]:bg-red-500 data-[state=active]:text-white' : ''
-                    }`}
+                    className="text-xs sm:text-sm whitespace-nowrap data-[state=active]:text-red-500"
                   >
                     {room.label}
                   </TabsTrigger>
