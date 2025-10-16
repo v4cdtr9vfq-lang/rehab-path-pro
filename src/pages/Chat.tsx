@@ -47,6 +47,7 @@ export default function Chat() {
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editedMessage, setEditedMessage] = useState("");
   const [reportedMessages, setReportedMessages] = useState<Set<string>>(new Set());
+  const [myReports, setMyReports] = useState<Set<string>>(new Set());
   const [isAnonymous, setIsAnonymous] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const channelRef = useRef<any>(null);
@@ -93,12 +94,18 @@ export default function Chat() {
     // Load all reported messages (visible to all users)
     const { data: reports } = await supabase
       .from('message_reports')
-      .select('message_id');
+      .select('message_id, reported_by');
 
     if (reports) {
       // Get unique message IDs that have been reported
       const uniqueReportedIds = [...new Set(reports.map(r => r.message_id))];
       setReportedMessages(new Set(uniqueReportedIds));
+      
+      // Get message IDs reported by current user
+      const myReportedIds = reports
+        .filter(r => r.reported_by === user.id)
+        .map(r => r.message_id);
+      setMyReports(new Set(myReportedIds));
     }
 
     // Set up realtime channel for messages and presence for current room
@@ -251,9 +258,9 @@ export default function Chat() {
   };
 
   const toggleReport = async (messageId: string) => {
-    const isCurrentlyReported = reportedMessages.has(messageId);
+    const isReportedByMe = myReports.has(messageId);
 
-    if (isCurrentlyReported) {
+    if (isReportedByMe) {
       // Unreport: remove from database
       try {
         const { error } = await supabase
@@ -264,11 +271,26 @@ export default function Chat() {
 
         if (error) throw error;
 
-        setReportedMessages(prev => {
+        // Check if there are other reports for this message
+        const { data: remainingReports } = await supabase
+          .from('message_reports')
+          .select('id')
+          .eq('message_id', messageId);
+
+        setMyReports(prev => {
           const newSet = new Set(prev);
           newSet.delete(messageId);
           return newSet;
         });
+
+        // Only remove from reportedMessages if no other reports exist
+        if (!remainingReports || remainingReports.length === 0) {
+          setReportedMessages(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(messageId);
+            return newSet;
+          });
+        }
 
         toast({
           title: "Denuncia retirada",
@@ -295,6 +317,7 @@ export default function Chat() {
         if (error) throw error;
 
         setReportedMessages(prev => new Set([...prev, messageId]));
+        setMyReports(prev => new Set([...prev, messageId]));
 
         toast({
           title: "Mensaje denunciado",
@@ -478,9 +501,9 @@ export default function Chat() {
                                   size="icon" 
                                   onClick={() => toggleReport(msg.id)}
                                   className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                                  title={isReported ? "Quitar denuncia" : "Denunciar"}
+                                  title={myReports.has(msg.id) ? "Quitar denuncia" : "Denunciar"}
                                 >
-                                  <Flag className={`h-4 w-4 ${isReported ? 'fill-red-500' : ''} text-red-500`} />
+                                  <Flag className={`h-4 w-4 ${myReports.has(msg.id) ? 'fill-red-500' : ''} text-red-500`} />
                                 </Button>
                               </div>
                               <span className="text-xs text-muted-foreground pl-6">
