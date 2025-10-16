@@ -106,8 +106,9 @@ export function Sidebar() {
               const presences: any = state[key];
               if (Array.isArray(presences)) {
                 presences.forEach((presence: any) => {
-                  // Solo contar usuarios reales del chat (que tengan user_name, no observadores)
-                  if (presence?.user_id && presence?.room === room && presence?.user_name) {
+                  // Contar cualquier usuario con user_id que esté en esta room
+                  // (el Chat siempre incluye user_id y room en su presencia)
+                  if (presence?.user_id && presence?.room === room) {
                     usersInThisRoom.add(presence.user_id);
                     console.log(`[Sidebar] Found user ${presence.user_id} in room ${room}`);
                   }
