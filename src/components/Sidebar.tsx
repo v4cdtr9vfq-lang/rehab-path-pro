@@ -55,6 +55,70 @@ export function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [totalOnlineInChat, setTotalOnlineInChat] = useState(0);
+
+  useEffect(() => {
+    // Lista de todas las salas de chat
+    const rooms = ['narcoticos', 'dependencia_emocional', 'pornografia', 'redes_sociales'];
+    const channels: any[] = [];
+    const uniqueUsers = new Set<string>();
+
+    // Función para actualizar el contador total
+    const updateTotalCount = () => {
+      setTotalOnlineInChat(uniqueUsers.size);
+    };
+
+    // Suscribirse a cada sala para escuchar presencia
+    rooms.forEach(room => {
+      const channel = supabase.channel(`chat-room-${room}`, {
+        config: {
+          presence: {
+            key: 'sidebar-observer',
+          },
+        },
+      });
+
+      channel
+        .on('presence', { event: 'sync' }, () => {
+          const state = channel.presenceState();
+          
+          // Limpiar usuarios de esta sala del set
+          Array.from(uniqueUsers).forEach(userId => {
+            let foundInThisRoom = false;
+            Object.values(state).forEach((presences: any) => {
+              if (Array.isArray(presences) && presences.length > 0) {
+                const presence = presences[0];
+                if (presence?.room === room && presence?.user_id === userId) {
+                  foundInThisRoom = true;
+                }
+              }
+            });
+            if (!foundInThisRoom) {
+              uniqueUsers.delete(userId);
+            }
+          });
+
+          // Agregar usuarios activos de esta sala
+          Object.values(state).forEach((presences: any) => {
+            if (Array.isArray(presences) && presences.length > 0) {
+              const presence = presences[0];
+              if (presence?.room === room && presence?.user_id) {
+                uniqueUsers.add(presence.user_id);
+              }
+            }
+          });
+
+          updateTotalCount();
+        })
+        .subscribe();
+
+      channels.push(channel);
+    });
+
+    return () => {
+      channels.forEach(channel => supabase.removeChannel(channel));
+    };
+  }, []);
 
   const handleLogout = async () => {
     const {
@@ -77,9 +141,15 @@ export function Sidebar() {
         {menuItems.map(item => {
         const Icon = item.icon;
         const isActive = location.pathname === item.path;
+        const isChat = item.path === '/chat';
         return <Link key={item.path} to={item.path} onClick={() => setOpen(false)} className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all ${isActive ? "bg-primary text-primary-foreground font-semibold shadow-lg" : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"}`}>
               <Icon className="h-4 w-4 flex-shrink-0" />
               <span className="text-sm flex-1">{item.label}</span>
+              {isChat && (
+                <Badge variant="secondary" className="ml-auto text-xs px-2 py-0.5">
+                  {totalOnlineInChat}
+                </Badge>
+              )}
             </Link>;
       })}
       </nav>
