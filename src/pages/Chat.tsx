@@ -356,11 +356,10 @@ export default function Chat() {
             <TabsContent 
               key={room.id} 
               value={room.id} 
-              className="flex-1 m-0 data-[state=inactive]:hidden"
+              className="flex-1 flex flex-col m-0 data-[state=inactive]:hidden"
             >
-              <div className="h-full flex flex-col">
-                <ScrollArea className="flex-1 p-4">
-                  <div className="space-y-4">
+              <ScrollArea className="flex-1 p-4">
+                <div className="space-y-4">
                     {messages.map((msg) => {
                       const isOwnMessage = msg.user_id === userId;
                       const isEditing = editingMessageId === msg.id;
@@ -480,35 +479,34 @@ export default function Chat() {
                         </div>
                       );
                     })}
-                  </div>
-                </ScrollArea>
+                </div>
+              </ScrollArea>
 
-                <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-background">
-                  <div className="flex gap-2">
-                    <Input
-                      value={newMessage}
-                      onChange={(e) => setNewMessage(e.target.value)}
-                      placeholder="Escribe un mensaje..."
-                      className="flex-1"
-                      disabled={isSending}
-                    />
-                    <Button type="submit" disabled={!newMessage.trim() || isSending} className="gap-2">
-                      <Send className="h-4 w-4" />
-                      Enviar
-                    </Button>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Switch
-                      id="anonymous-mode"
-                      checked={isAnonymous}
-                      onCheckedChange={setIsAnonymous}
-                    />
-                    <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
-                      Escribir en modo anónimo
-                    </Label>
-                  </div>
-                </form>
-              </div>
+              <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-background">
+                <div className="flex gap-2">
+                  <Input
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder="Escribe un mensaje..."
+                    className="flex-1"
+                    disabled={isSending}
+                  />
+                  <Button type="submit" disabled={!newMessage.trim() || isSending} className="gap-2">
+                    <Send className="h-4 w-4" />
+                    Enviar
+                  </Button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Switch
+                    id="anonymous-mode"
+                    checked={isAnonymous}
+                    onCheckedChange={setIsAnonymous}
+                  />
+                  <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
+                    Escribir en modo anónimo
+                  </Label>
+                </div>
+              </form>
             </TabsContent>
           ))}
         </Tabs>
