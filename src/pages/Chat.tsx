@@ -221,7 +221,7 @@ export default function Chat() {
       const { error } = await supabase
         .from('chat_messages')
         .insert({
-          user_id: isAnonymous ? '00000000-0000-0000-0000-000000000000' : userId,
+          user_id: userId,
           user_name: displayName,
           message: newMessage.trim(),
           room: currentRoom,
@@ -232,6 +232,7 @@ export default function Chat() {
       setNewMessage("");
       setIsAnonymous(false);
     } catch (error: any) {
+      console.error('Error sending message:', error);
       toast({
         title: "Error",
         description: "No se pudo enviar el mensaje",
@@ -445,7 +446,7 @@ export default function Chat() {
           <ScrollArea className="h-full">
             <div className="space-y-4 p-4">
               {messages.map((msg) => {
-                const isAnonymousMessage = msg.user_id === '00000000-0000-0000-0000-000000000000';
+                const isAnonymousMessage = msg.user_name.startsWith('Anónimo');
                 const isOwnMessage = !isAnonymousMessage && msg.user_id === userId;
                 const isEditing = editingMessageId === msg.id;
                 const isReported = reportedMessages.has(msg.id);
