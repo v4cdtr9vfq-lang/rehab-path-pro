@@ -320,7 +320,7 @@ export default function Chat() {
                               <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white">
                                 <p className="text-sm">{msg.message}</p>
                               </div>
-                              <span className="text-xs text-muted-foreground">
+                              <span className="text-xs text-muted-foreground pr-6">
                                 {new Date(msg.created_at).toLocaleTimeString('es-ES', {
                                   hour: '2-digit',
                                   minute: '2-digit'
