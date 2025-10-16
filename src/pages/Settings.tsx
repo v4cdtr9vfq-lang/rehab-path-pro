@@ -323,19 +323,19 @@ export default function Settings() {
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-primary" />
-                      Gratuito durante 30 días de prueba
+                      Gratuito durante 30 días de prueba.
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-primary" />
-                      Acceso completo a todas las funciones
+                      Acceso completo a todas las funciones.
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-primary" />
-                      Chat comunitario
+                      Chat comunitario.
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-primary" />
-                      Seguimiento personalizado
+                      Seguimiento personalizado.
                     </li>
                   </ul>
                   {plan === "free" && (
@@ -365,15 +365,15 @@ export default function Settings() {
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-primary" />
-                      Acceso completo a todas las funciones
+                      Acceso completo a todas las funciones.
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-primary" />
-                      Chat comunitario
+                      Chat comunitario.
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-primary" />
-                      Seguimiento personalizado
+                      Seguimiento personalizado.
                     </li>
                   </ul>
                   {plan === "monthly" ? (
@@ -414,15 +414,15 @@ export default function Settings() {
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-primary" />
-                      Todo lo del plan mensual
+                      Todo lo del plan mensual.
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-primary" />
-                      Ahorra 42€ al año
+                      Ahorra 42€ al año.
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-primary" />
-                      Mejor valor por tu dinero
+                      Mejor valor por tu dinero.
                     </li>
                   </ul>
                   {plan === "annual" ? (
