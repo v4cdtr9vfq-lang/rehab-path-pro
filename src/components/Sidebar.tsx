@@ -58,98 +58,13 @@ export function Sidebar() {
   const [totalOnlineInChat, setTotalOnlineInChat] = useState(0);
 
   useEffect(() => {
-    const getUserId = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return null;
-      return user.id;
+    // Escuchar actualizaciones del contador de usuarios en chat
+    const handleChatUsersUpdate = (event: CustomEvent) => {
+      setTotalOnlineInChat(event.detail.totalUsers);
     };
 
-    const initPresence = async () => {
-      const currentUserId = await getUserId();
-      if (!currentUserId) {
-        console.log('[Sidebar] No user logged in');
-        return;
-      }
-
-      // Lista de todas las salas de chat
-      const rooms = ['narcoticos', 'dependencia_emocional', 'pornografia', 'redes_sociales'];
-      const channels: any[] = [];
-      const allUsersByRoom = new Map<string, Set<string>>();
-
-      // Inicializar map para cada sala
-      rooms.forEach(room => {
-        allUsersByRoom.set(room, new Set());
-      });
-
-      // Función para actualizar el contador total de usuarios únicos
-      const updateTotalCount = () => {
-        const uniqueUsers = new Set<string>();
-        allUsersByRoom.forEach((usersInRoom) => {
-          usersInRoom.forEach(userId => uniqueUsers.add(userId));
-        });
-        console.log('[Sidebar] Total unique users across all rooms:', uniqueUsers.size);
-        setTotalOnlineInChat(uniqueUsers.size);
-      };
-
-      // Suscribirse a cada sala para escuchar presencia (mismo canal que Chat)
-      rooms.forEach(room => {
-        const channel = supabase.channel(`chat-room-${room}`, {
-          config: {
-            presence: {
-              key: `sidebar-observer-${room}`,
-            },
-          },
-        });
-
-        channel
-          .on('presence', { event: 'sync' }, () => {
-            const state = channel.presenceState();
-            console.log(`[Sidebar] Presence sync for room ${room}:`, state);
-            
-            // Actualizar set de usuarios para esta sala
-            const usersInThisRoom = new Set<string>();
-            Object.keys(state).forEach((key) => {
-              // Ignorar las keys del sidebar observer
-              if (key.startsWith('sidebar-observer-')) return;
-              
-              const presences: any = state[key];
-              if (Array.isArray(presences)) {
-                presences.forEach((presence: any) => {
-                  // Contar usuarios reales del chat
-                  if (presence?.user_id && presence?.room === room) {
-                    usersInThisRoom.add(presence.user_id);
-                    console.log(`[Sidebar] Found user ${presence.user_id} in room ${room}`);
-                  }
-                });
-              }
-            });
-            
-            allUsersByRoom.set(room, usersInThisRoom);
-            console.log(`[Sidebar] Users in room ${room}:`, usersInThisRoom.size);
-            updateTotalCount();
-          })
-          .subscribe(async (status) => {
-            if (status === 'SUBSCRIBED') {
-              // Hacer track para recibir actualizaciones de presencia
-              await channel.track({
-                observer: true,
-                room: room,
-              });
-            }
-          });
-
-        channels.push(channel);
-      });
-
-      return () => {
-        channels.forEach(channel => supabase.removeChannel(channel));
-      };
-    };
-
-    const cleanup = initPresence();
-    return () => {
-      cleanup.then(cleanupFn => cleanupFn?.());
-    };
+    window.addEventListener('chatUsersUpdated', handleChatUsersUpdate as EventListener);
+    return () => window.removeEventListener('chatUsersUpdated', handleChatUsersUpdate as EventListener);
   }, []);
 
   const handleLogout = async () => {

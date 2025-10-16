@@ -146,6 +146,11 @@ export default function Chat() {
           ...prev,
           [currentRoom]: uniqueUsers.size
         }));
+        
+        // Emitir evento para actualizar el Sidebar
+        window.dispatchEvent(new CustomEvent('chatUsersUpdated', { 
+          detail: { totalUsers: uniqueUsers.size } 
+        }));
       })
       .on('presence', { event: 'join' }, ({ key, newPresences }) => {
         console.log('User joined:', key);
