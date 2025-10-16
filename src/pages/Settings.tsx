@@ -327,11 +327,15 @@ export default function Settings() {
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-primary" />
-                      Funciones básicas de seguimiento
+                      Acceso completo a todas las funciones
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-primary" />
-                      Acceso limitado a herramientas
+                      Chat comunitario
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-primary" />
+                      Seguimiento personalizado
                     </li>
                   </ul>
                   {plan === "free" && (
