@@ -190,7 +190,11 @@ export default function Chat() {
   };
 
   const getInitials = (name: string) => {
-    return name.substring(0, 2).toUpperCase();
+    const names = name.trim().split(' ').filter(n => n.length > 0);
+    if (names.length >= 2) {
+      return (names[0][0] + names[1][0]).toUpperCase();
+    }
+    return names[0][0].toUpperCase();
   };
 
   const getFirstName = (fullName: string) => {
