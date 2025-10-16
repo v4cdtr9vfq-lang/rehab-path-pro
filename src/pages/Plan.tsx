@@ -78,24 +78,97 @@ export default function Plan() {
     return `${year}-${month}-${day}`;
   };
 
-  // Get date key for localStorage
-  const getDateKey = () => {
-    return `goals_completed_${getLocalDateString()}`;
+  // Load completed instances from database for a specific date
+  const loadCompletedInstances = async (date: string): Promise<Set<string>> => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return new Set();
+
+      const { data, error } = await supabase
+        .from('goal_completions')
+        .select('goal_id, instance_index')
+        .eq('user_id', user.id)
+        .eq('completion_date', date);
+
+      if (error) throw error;
+
+      const completedSet = new Set<string>();
+      data?.forEach(completion => {
+        const instanceId = `${completion.goal_id}__${date}__${completion.instance_index}`;
+        completedSet.add(instanceId);
+      });
+
+      return completedSet;
+    } catch (error) {
+      console.error('Error loading completions:', error);
+      return new Set();
+    }
   };
 
-  // Load completed instances from localStorage for today
-  const loadCompletedInstances = (): Set<string> => {
-    const stored = localStorage.getItem(getDateKey());
-    return stored ? new Set(JSON.parse(stored)) : new Set();
+  // Load completed instances from database for a date range
+  const loadCompletedInstancesForRange = async (dates: Date[]): Promise<Set<string>> => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return new Set();
+
+      const dateStrings = dates.map(d => getLocalDateString(d));
+
+      const { data, error } = await supabase
+        .from('goal_completions')
+        .select('goal_id, instance_index, completion_date')
+        .eq('user_id', user.id)
+        .in('completion_date', dateStrings);
+
+      if (error) throw error;
+
+      const completedSet = new Set<string>();
+      data?.forEach(completion => {
+        const instanceId = `${completion.goal_id}__${completion.completion_date}__${completion.instance_index}`;
+        completedSet.add(instanceId);
+      });
+
+      return completedSet;
+    } catch (error) {
+      console.error('Error loading completions for range:', error);
+      return new Set();
+    }
   };
 
-  // Save completed instances to localStorage and notify other components
-  const saveCompletedInstances = (completedIds: Set<string>) => {
-    localStorage.setItem(getDateKey(), JSON.stringify([...completedIds]));
-    // Dispatch custom event to notify other components
-    window.dispatchEvent(new CustomEvent('goalsUpdated', { 
-      detail: { date: getDateKey(), completedIds: [...completedIds] } 
-    }));
+  // Save completion to database
+  const saveCompletion = async (goalId: string, instanceIndex: number, date: string, isCompleted: boolean) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      if (isCompleted) {
+        // Add completion
+        await supabase
+          .from('goal_completions')
+          .insert({
+            user_id: user.id,
+            goal_id: goalId,
+            completion_date: date,
+            instance_index: instanceIndex
+          });
+      } else {
+        // Remove completion
+        await supabase
+          .from('goal_completions')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('goal_id', goalId)
+          .eq('completion_date', date)
+          .eq('instance_index', instanceIndex);
+      }
+
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('goalsUpdated', { 
+        detail: { date } 
+      }));
+    } catch (error) {
+      console.error('Error saving completion:', error);
+      throw error;
+    }
   };
 
   // Get date range for context
@@ -126,46 +199,32 @@ export default function Plan() {
     return dates;
   };
 
-  // Load completed instances from localStorage for a date range
-  const loadCompletedInstancesForRange = (dates: Date[]): Set<string> => {
-    const allCompleted = new Set<string>();
-    dates.forEach(date => {
-      const key = `goals_completed_${getLocalDateString(date)}`;
-      const stored = localStorage.getItem(key);
-      if (stored) {
-        const completedIds = JSON.parse(stored);
-        completedIds.forEach((id: string) => allCompleted.add(id));
-      }
-    });
-    return allCompleted;
-  };
-
   // Expand goals into instances based on context
-  const expandGoals = (goals: Goal[], context: 'today' | 'week' | 'month' | 'onetime'): ExpandedGoal[] => {
+  const expandGoals = async (goals: Goal[], context: 'today' | 'week' | 'month' | 'onetime'): Promise<ExpandedGoal[]> => {
     const dates = context === 'onetime' ? [new Date()] : getDateRange(context);
     const expanded: ExpandedGoal[] = [];
+    
+    // Load all completions for the date range at once
+    const allCompletedInstances = await loadCompletedInstancesForRange(dates);
     
     goals.forEach(g => {
       if (context === 'onetime') {
         // One-time goals: simple expansion
-        const completedInstances = loadCompletedInstances();
+        const todayStr = getLocalDateString();
         for (let i = 0; i < g.remaining; i++) {
-          const instanceId = `${g.id}__${i}`;
+          const instanceId = `${g.id}__${todayStr}__${i}`;
           expanded.push({
             ...g,
             id: instanceId,
             originalId: g.id,
             instanceIndex: i,
-            completed: completedInstances.has(instanceId)
+            completed: allCompletedInstances.has(instanceId)
           });
         }
       } else {
         // Recurring goals: create instances per day
         dates.forEach((date, dayIndex) => {
           const dateStr = getLocalDateString(date);
-          const dateKey = `goals_completed_${dateStr}`;
-          const stored = localStorage.getItem(dateKey);
-          const completedForDay = stored ? new Set(JSON.parse(stored)) : new Set();
           
           // Check if periodic goal should appear on this date
           if (g.goal_type === 'periodic' && g.periodic_type) {
@@ -196,7 +255,7 @@ export default function Plan() {
                   id: instanceId,
                   originalId: g.id,
                   instanceIndex: dayIndex * g.remaining + i,
-                  completed: completedForDay.has(instanceId)
+                  completed: allCompletedInstances.has(instanceId)
                 });
               }
             }
@@ -209,7 +268,7 @@ export default function Plan() {
                 id: instanceId,
                 originalId: g.id,
                 instanceIndex: dayIndex * g.remaining + i,
-                completed: completedForDay.has(instanceId)
+                completed: allCompletedInstances.has(instanceId)
               });
             }
           }
@@ -260,19 +319,19 @@ export default function Plan() {
         const groupedGoals = {
           today: { 
             open: sections.today.open, 
-            goals: expandGoals([...todayGoals, ...periodicGoals, ...alwaysGoals], 'today')
+            goals: await expandGoals([...todayGoals, ...periodicGoals, ...alwaysGoals], 'today')
           },
           week: { 
             open: sections.week.open, 
-            goals: expandGoals([...weekGoals, ...periodicGoals, ...todayGoals, ...alwaysGoals], 'week')
+            goals: await expandGoals([...weekGoals, ...periodicGoals, ...todayGoals, ...alwaysGoals], 'week')
           },
           month: { 
             open: sections.month.open, 
-            goals: expandGoals([...monthGoals, ...periodicGoals, ...weekGoals, ...todayGoals, ...alwaysGoals], 'month')
+            goals: await expandGoals([...monthGoals, ...periodicGoals, ...weekGoals, ...todayGoals, ...alwaysGoals], 'month')
           },
           onetime: { 
             open: sections.onetime.open, 
-            goals: expandGoals(goals.filter(g => g.goal_type === 'onetime'), 'onetime')
+            goals: await expandGoals(goals.filter(g => g.goal_type === 'onetime'), 'onetime')
           }
         };
         setSections(groupedGoals);
@@ -298,103 +357,69 @@ export default function Plan() {
       const goal = sections[sectionKey].goals.find(g => g.id === goalId);
       if (!goal) return;
 
-      // Parse goalId format: uuid__date__index or uuid__index
+      // Parse goalId format: uuid__date__index or uuid__date (for onetime)
       const parts = goalId.split('__');
-      let dateKey: string;
+      let dateStr: string;
+      let instanceIndex: number;
       
       if (parts.length === 3) {
         // Format: uuid__yyyy-mm-dd__index
-        const dateStr = parts[1];
-        dateKey = `goals_completed_${dateStr}`;
+        dateStr = parts[1];
+        instanceIndex = parseInt(parts[2]);
       } else {
         // Format: uuid__index (onetime goal, use today)
-        dateKey = getDateKey();
+        dateStr = getLocalDateString();
+        instanceIndex = parseInt(parts[1]);
       }
 
-      console.log('[toggleGoal] Goal ID:', goalId, 'Date key:', dateKey);
+      const wasCompleted = goal.completed;
 
-      // Load completed instances from the specific date
-      const stored = localStorage.getItem(dateKey);
-      const completedInstances = stored ? new Set(JSON.parse(stored)) : new Set();
-      
-      console.log('[toggleGoal] Before toggle:', [...completedInstances]);
-      
-      // Toggle THIS instance
-      if (completedInstances.has(goalId)) {
-        completedInstances.delete(goalId);
-      } else {
-        completedInstances.add(goalId);
-      }
-
-      console.log('[toggleGoal] After toggle:', [...completedInstances]);
-
-      // Save to localStorage for the specific date and notify other components
-      localStorage.setItem(dateKey, JSON.stringify([...completedInstances]));
-      window.dispatchEvent(new CustomEvent('goalsUpdated', { 
-        detail: { date: dateKey, completedIds: [...completedInstances] } 
-      }));
+      // Save to database
+      await saveCompletion(goal.originalId, instanceIndex, dateStr, !wasCompleted);
 
       // Update local state for ALL sections that might contain this goal
       const updatedSections = { ...sections };
       
       // Update all sections
       Object.keys(updatedSections).forEach((key) => {
-        const sectionKey = key as keyof typeof sections;
-        updatedSections[sectionKey] = {
-          ...updatedSections[sectionKey],
-          goals: updatedSections[sectionKey].goals.map(g =>
-            g.id === goalId ? { ...g, completed: completedInstances.has(goalId) } : g
+        const sk = key as keyof typeof sections;
+        updatedSections[sk] = {
+          ...updatedSections[sk],
+          goals: updatedSections[sk].goals.map(g =>
+            g.id === goalId ? { ...g, completed: !wasCompleted } : g
           )
         };
       });
       
       setSections(updatedSections);
 
-      // Check if ALL instances of this goal are completed across all dates
+      // Check if ALL instances of this goal are completed
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Get all instances of this goal from all sections
       const allGoals = [
-        ...sections.today.goals,
-        ...sections.week.goals,
-        ...sections.month.goals,
-        ...sections.onetime.goals
+        ...updatedSections.today.goals,
+        ...updatedSections.week.goals,
+        ...updatedSections.month.goals,
+        ...updatedSections.onetime.goals
       ];
       
       const instancesOfThisGoal = allGoals.filter(g => g.originalId === goal.originalId);
-      
-      // Check completion across all dates
-      let allCompleted = true;
-      for (const instance of instancesOfThisGoal) {
-        const instanceParts = instance.id.split('__');
-        let instanceDateKey: string;
-        
-        if (instanceParts.length === 3) {
-          const instanceDateStr = instanceParts[1];
-          instanceDateKey = `goals_completed_${instanceDateStr}`;
-        } else {
-          instanceDateKey = getDateKey();
-        }
-        
-        const instanceStored = localStorage.getItem(instanceDateKey);
-        const instanceCompleted = instanceStored ? new Set(JSON.parse(instanceStored)) : new Set();
-        
-        if (!instanceCompleted.has(instance.id)) {
-          allCompleted = false;
-          break;
-        }
-      }
+      const allCompleted = instancesOfThisGoal.every(g => g.completed);
 
       // Update database: mark as completed only if ALL instances are done
-      const { error } = await supabase
+      await supabase
         .from('goals')
         .update({ completed: allCompleted })
         .eq('id', goal.originalId);
-
-      if (error) throw error;
 
       toast({
         title: "Meta actualizada",
         description: "El estado de la meta ha sido actualizado",
       });
     } catch (error: any) {
+      console.error('Error in toggleGoal:', error);
       toast({
         title: "Error",
         description: "No se pudo actualizar la meta",
@@ -483,13 +508,6 @@ export default function Plan() {
         }
       }));
 
-      // Clean up localStorage for this goal's instances
-      const completedInstances = loadCompletedInstances();
-      const updatedInstances = new Set(
-        [...completedInstances].filter(id => !id.startsWith(goalId))
-      );
-      saveCompletedInstances(updatedInstances);
-
       toast({
         title: "Meta eliminada",
         description: "La meta ha sido eliminada exitosamente",
@@ -576,35 +594,15 @@ export default function Plan() {
     );
   };
 
-  // Calculate remaining count for display - recalculate from localStorage
+  // Calculate remaining count for display - recalculate from goal completion status
   const getRemainingCount = (goal: ExpandedGoal, sectionKey: keyof typeof sections) => {
     // Get all instances of this specific goal in THIS section only
     const allGoalsInSection = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
     
-    // Count completed by checking localStorage for each instance's date
-    let completedCount = 0;
-    for (const instance of allGoalsInSection) {
-      const parts = instance.id.split('__');
-      let dateKey: string;
-      
-      if (parts.length === 3) {
-        // Format: uuid__yyyy-mm-dd__index
-        const dateStr = parts[1];
-        dateKey = `goals_completed_${dateStr}`;
-      } else {
-        // Format: uuid__index (onetime goal, use today)
-        dateKey = getDateKey();
-      }
-      
-      const stored = localStorage.getItem(dateKey);
-      const completedForDate = stored ? new Set(JSON.parse(stored)) : new Set();
-      
-      if (completedForDate.has(instance.id)) {
-        completedCount++;
-      }
-    }
-    
+    // Count completed instances
+    const completedCount = allGoalsInSection.filter(g => g.completed).length;
     const totalInstances = allGoalsInSection.length;
+    
     return totalInstances - completedCount;
   };
 

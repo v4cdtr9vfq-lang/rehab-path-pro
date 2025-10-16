@@ -29,24 +29,68 @@ export default function Home() {
     return `${year}-${month}-${day}`;
   };
 
-  // Get today's date key for localStorage
-  const getTodayKey = () => {
-    return `goals_completed_${getLocalDateString()}`;
+  // Load completed instances from database
+  const loadCompletedInstances = async (date: string): Promise<Set<string>> => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return new Set();
+
+      const { data, error } = await supabase
+        .from('goal_completions')
+        .select('goal_id, instance_index')
+        .eq('user_id', user.id)
+        .eq('completion_date', date);
+
+      if (error) throw error;
+
+      const completedSet = new Set<string>();
+      data?.forEach(completion => {
+        const instanceId = `${completion.goal_id}__${date}__${completion.instance_index}`;
+        completedSet.add(instanceId);
+      });
+
+      return completedSet;
+    } catch (error) {
+      console.error('Error loading completions:', error);
+      return new Set();
+    }
   };
 
-  // Load completed instances from localStorage
-  const loadCompletedInstances = (): Set<string> => {
-    const stored = localStorage.getItem(getTodayKey());
-    return stored ? new Set(JSON.parse(stored)) : new Set();
-  };
+  // Save completion to database
+  const saveCompletion = async (goalId: string, instanceIndex: number, date: string, isCompleted: boolean) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
 
-  // Save completed instances to localStorage and notify other components
-  const saveCompletedInstances = (completedIds: Set<string>) => {
-    localStorage.setItem(getTodayKey(), JSON.stringify([...completedIds]));
-    // Dispatch custom event to notify other components
-    window.dispatchEvent(new CustomEvent('goalsUpdated', { 
-      detail: { date: getTodayKey(), completedIds: [...completedIds] } 
-    }));
+      if (isCompleted) {
+        // Add completion
+        await supabase
+          .from('goal_completions')
+          .insert({
+            user_id: user.id,
+            goal_id: goalId,
+            completion_date: date,
+            instance_index: instanceIndex
+          });
+      } else {
+        // Remove completion
+        await supabase
+          .from('goal_completions')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('goal_id', goalId)
+          .eq('completion_date', date)
+          .eq('instance_index', instanceIndex);
+      }
+
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('goalsUpdated', { 
+        detail: { date } 
+      }));
+    } catch (error) {
+      console.error('Error saving completion:', error);
+      throw error;
+    }
   };
 
   const toggleGoal = async (goalId: string) => {
@@ -54,66 +98,38 @@ export default function Home() {
       const goal = activeGoals.find(g => g.id === goalId);
       if (!goal) return;
 
-      console.log('Toggling goal:', goalId);
+      const todayStr = getLocalDateString();
+      const wasCompleted = goal.status === 'completed';
 
-      // Load current completed instances
-      const completedInstances = loadCompletedInstances();
-      console.log('Current completed instances:', Array.from(completedInstances));
-      
-      // Toggle THIS instance
-      const wasCompleted = completedInstances.has(goalId);
-      if (wasCompleted) {
-        completedInstances.delete(goalId);
-      } else {
-        completedInstances.add(goalId);
-      }
+      // Save to database
+      await saveCompletion(goal.originalId, goal.instanceIndex, todayStr, !wasCompleted);
 
-      console.log('New completed instances:', Array.from(completedInstances));
-
-      // Save to localStorage
-      saveCompletedInstances(completedInstances);
-
-      // Update local state immediately
-      const updatedGoals = activeGoals.map(g => ({
-        ...g,
-        status: completedInstances.has(g.id) ? 'completed' : 'pending'
-      }));
+      // Update local state
+      const updatedGoals = activeGoals.map(g => 
+        g.id === goalId 
+          ? { ...g, status: wasCompleted ? 'pending' : 'completed' }
+          : g
+      );
 
       setActiveGoals(updatedGoals);
 
-      // Recalculate TODAY's completed count
+      // Recalculate completed count
       const totalCompletedToday = updatedGoals.filter(g => g.status === 'completed').length;
-      const totalTodayGoals = updatedGoals.length + 1; // All instances + check-in
-      
       setGoalsCompleted(totalCompletedToday + (checkInCompleted ? 1 : 0));
-      setTotalGoals(totalTodayGoals);
 
-      console.log('Goals completed:', totalCompletedToday, 'of', totalTodayGoals);
-
-      // Update database
+      // Update database: mark goal as completed only if ALL instances are done
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Count how many instances of this specific goal are completed
       const instancesOfThisGoal = updatedGoals.filter(g => g.originalId === goal.originalId);
       const completedInstancesOfGoal = instancesOfThisGoal.filter(g => g.status === 'completed').length;
       const allInstancesCompleted = completedInstancesOfGoal === instancesOfThisGoal.length;
 
-      console.log('Updating database for goal:', goal.originalId, 'completed:', allInstancesCompleted);
-
-      // Update database: mark as completed only if ALL instances are done
-      const { error } = await supabase
+      await supabase
         .from('goals')
         .update({ completed: allInstancesCompleted })
         .eq('id', goal.originalId)
         .eq('user_id', user.id);
-
-      if (error) {
-        console.error('Error updating goal in database:', error);
-        throw error;
-      }
-
-      console.log('Goal updated successfully in database');
 
       toast({
         title: "Meta actualizada",
@@ -177,9 +193,9 @@ export default function Home() {
           g.goal_type === 'always'
         );
         
-        // Load completed instances from localStorage
-        const completedInstances = loadCompletedInstances();
+        // Load completed instances from database
         const todayStr = getLocalDateString();
+        const completedInstances = await loadCompletedInstances(todayStr);
         
         // Expand goals based on remaining count for TODAY's display
         const expandedGoals: any[] = [];
@@ -221,9 +237,11 @@ export default function Home() {
 
   // Listen for goal updates from other components and force refresh
   useEffect(() => {
-    const handleGoalsUpdate = () => {
-      // Force reload of activeGoals
-      const completedInstances = loadCompletedInstances();
+    const handleGoalsUpdate = async () => {
+      // Force reload of activeGoals from database
+      const todayStr = getLocalDateString();
+      const completedInstances = await loadCompletedInstances(todayStr);
+      
       const updatedGoals = activeGoals.map(g => ({
         ...g,
         status: completedInstances.has(g.id) ? 'completed' : 'pending'

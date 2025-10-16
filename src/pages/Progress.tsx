@@ -94,35 +94,54 @@ export default function ProgressPage() {
     return dates;
   };
 
-  // Load completed instances from localStorage for a date range
-  const loadCompletedInstancesForRange = (dates: Date[]): Set<string> => {
-    const allCompleted = new Set<string>();
-    dates.forEach(date => {
-      const stored = localStorage.getItem(getDateKey(date));
-      if (stored) {
-        const completedIds = JSON.parse(stored);
-        completedIds.forEach((id: string) => allCompleted.add(id));
-      }
-    });
-    return allCompleted;
+  // Load completed instances from database for a date range
+  const loadCompletedInstancesForRange = async (dates: Date[]): Promise<Set<string>> => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return new Set();
+
+      const dateStrings = dates.map(d => getLocalDateString(d));
+
+      const { data, error } = await supabase
+        .from('goal_completions')
+        .select('goal_id, instance_index, completion_date')
+        .eq('user_id', user.id)
+        .in('completion_date', dateStrings);
+
+      if (error) throw error;
+
+      const completedSet = new Set<string>();
+      data?.forEach(completion => {
+        const instanceId = `${completion.goal_id}__${completion.completion_date}__${completion.instance_index}`;
+        completedSet.add(instanceId);
+      });
+
+      return completedSet;
+    } catch (error) {
+      console.error('Error loading completions for range:', error);
+      return new Set();
+    }
   };
 
-  const expandGoals = (goals: Goal[], context: 'daily' | 'weekly' | 'monthly'): ExpandedGoal[] => {
+  const expandGoals = async (goals: Goal[], context: 'daily' | 'weekly' | 'monthly'): Promise<ExpandedGoal[]> => {
     const dates = getDateRange(context);
     const expanded: ExpandedGoal[] = [];
+    
+    // Load all completions for the date range at once
+    const allCompletedInstances = await loadCompletedInstancesForRange(dates);
     
     goals.forEach(g => {
       if (g.goal_type === 'onetime') {
         // One-time goals: simple expansion for daily view only
         if (context === 'daily') {
-          const completedInstances = loadCompletedInstancesForRange([new Date()]);
+          const todayStr = getLocalDateString();
           for (let i = 0; i < g.remaining; i++) {
-            const instanceId = `${g.id}__${i}`;
+            const instanceId = `${g.id}__${todayStr}__${i}`;
             expanded.push({
               id: instanceId,
               originalId: g.id,
               text: g.text,
-              completed: completedInstances.has(instanceId),
+              completed: allCompletedInstances.has(instanceId),
               goal_type: g.goal_type,
               instanceIndex: i
             });
@@ -132,9 +151,6 @@ export default function ProgressPage() {
         // Recurring goals: create instances per day
         dates.forEach((date, dayIndex) => {
           const dateStr = getLocalDateString(date);
-          const dateKey = `goals_completed_${dateStr}`;
-          const stored = localStorage.getItem(dateKey);
-          const completedForDay = stored ? new Set(JSON.parse(stored)) : new Set();
           
           // How many instances per day based on goal type
           let instancesPerDay = g.remaining;
@@ -147,7 +163,7 @@ export default function ProgressPage() {
                   id: instanceId,
                   originalId: g.id,
                   text: g.text,
-                  completed: completedForDay.has(instanceId),
+                  completed: allCompletedInstances.has(instanceId),
                   goal_type: g.goal_type,
                   instanceIndex: dayIndex * g.remaining + i
                 });
@@ -161,7 +177,7 @@ export default function ProgressPage() {
                 id: instanceId,
                 originalId: g.id,
                 text: g.text,
-                completed: completedForDay.has(instanceId),
+                completed: allCompletedInstances.has(instanceId),
                 goal_type: g.goal_type,
                 instanceIndex: dayIndex * g.remaining + i
               });
@@ -244,9 +260,9 @@ export default function ProgressPage() {
         const weekly = goals.filter(g => g.goal_type === 'week' || g.goal_type === 'always' || g.goal_type === 'today');
         const monthly = goals.filter(g => g.goal_type === 'month' || g.goal_type === 'always' || g.goal_type === 'today' || g.goal_type === 'week');
 
-        setDailyGoals(expandGoals(daily, 'daily'));
-        setWeeklyGoals(expandGoals(weekly, 'weekly'));
-        setMonthlyGoals(expandGoals(monthly, 'monthly'));
+        setDailyGoals(await expandGoals(daily, 'daily'));
+        setWeeklyGoals(await expandGoals(weekly, 'weekly'));
+        setMonthlyGoals(await expandGoals(monthly, 'monthly'));
       }
     } catch (error) {
       console.error('Error fetching data:', error);

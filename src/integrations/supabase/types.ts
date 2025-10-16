@@ -101,6 +101,41 @@ export type Database = {
         }
         Relationships: []
       }
+      goal_completions: {
+        Row: {
+          completion_date: string
+          created_at: string | null
+          goal_id: string
+          id: string
+          instance_index: number
+          user_id: string
+        }
+        Insert: {
+          completion_date: string
+          created_at?: string | null
+          goal_id: string
+          id?: string
+          instance_index?: number
+          user_id: string
+        }
+        Update: {
+          completion_date?: string
+          created_at?: string | null
+          goal_id?: string
+          id?: string
+          instance_index?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goal_completions_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       goals: {
         Row: {
           completed: boolean
