@@ -332,8 +332,8 @@ export default function Chat() {
                               </span>
                             </div>
 
-                            <Avatar className="h-14 w-14 flex-shrink-0 mt-0">
-                              <AvatarFallback className="bg-[#FF7A5C] text-white text-base font-semibold">
+                            <Avatar className="h-11 w-11 flex-shrink-0 mt-0">
+                              <AvatarFallback className="bg-[#FF7A5C] text-white text-sm font-semibold">
                                 {getInitials(msg.user_name)}
                               </AvatarFallback>
                             </Avatar>
@@ -341,8 +341,8 @@ export default function Chat() {
                         ) : (
                           // Other messages: avatar - name (above) + message + time (below)
                           <div className="flex items-start gap-3 max-w-[80%]">
-                            <Avatar className="h-14 w-14 flex-shrink-0 mt-0">
-                              <AvatarFallback className="bg-white text-black text-base font-semibold">
+                            <Avatar className="h-11 w-11 flex-shrink-0 mt-0">
+                              <AvatarFallback className="bg-white text-black text-sm font-semibold">
                                 {getInitials(msg.user_name)}
                               </AvatarFallback>
                             </Avatar>
