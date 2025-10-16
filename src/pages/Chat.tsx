@@ -331,27 +331,35 @@ export default function Chat() {
 
       <Card className="flex-1 flex flex-col border-primary/20 overflow-hidden">
         <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="flex-1 flex flex-col">
-          <CardHeader className="border-b pb-0">
-            <div className="flex items-center justify-between mb-3">
-              <CardTitle>Chat en Vivo</CardTitle>
-              <Badge variant="secondary" className="gap-2">
-                <Users className="h-4 w-4" />
-                {currentRoomOnline} en línea
-              </Badge>
+          <div className="bg-muted/30 border-b">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between mb-3">
+                <CardTitle>Chat en Vivo</CardTitle>
+                <Badge variant="secondary" className="gap-2">
+                  <Users className="h-4 w-4" />
+                  {currentRoomOnline} en línea
+                </Badge>
+              </div>
+            </CardHeader>
+            <div className="px-6 pb-3">
+              <TabsList className="grid w-full grid-cols-4 bg-background">
+                {CHAT_ROOMS.map((room) => (
+                  <TabsTrigger key={room.id} value={room.id} className="text-xs sm:text-sm whitespace-nowrap">
+                    {room.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
             </div>
-            <TabsList className="grid w-full grid-cols-4">
-              {CHAT_ROOMS.map((room) => (
-                <TabsTrigger key={room.id} value={room.id} className="text-xs sm:text-sm">
-                  {room.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </CardHeader>
+          </div>
 
           {CHAT_ROOMS.map((room) => (
-            <TabsContent key={room.id} value={room.id} className="flex-1 flex flex-col m-0 data-[state=inactive]:hidden overflow-hidden">
-              <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
-                <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+            <TabsContent 
+              key={room.id} 
+              value={room.id} 
+              className="flex-1 m-0 data-[state=inactive]:hidden"
+            >
+              <div className="h-full flex flex-col">
+                <ScrollArea className="flex-1 p-4">
                   <div className="space-y-4">
                     {messages.map((msg) => {
                       const isOwnMessage = msg.user_id === userId;
@@ -475,7 +483,7 @@ export default function Chat() {
                   </div>
                 </ScrollArea>
 
-                <form onSubmit={sendMessage} className="p-4 border-t space-y-3">
+                <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-background">
                   <div className="flex gap-2">
                     <Input
                       value={newMessage}
@@ -500,7 +508,7 @@ export default function Chat() {
                     </Label>
                   </div>
                 </form>
-              </CardContent>
+              </div>
             </TabsContent>
           ))}
         </Tabs>
