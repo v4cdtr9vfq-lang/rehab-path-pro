@@ -337,7 +337,7 @@ export default function Chat() {
   const currentRoomOnline = onlineCountByRoom[currentRoom] || 0;
   
   return (
-    <div className="h-[calc(100vh-8rem+110px)] flex flex-col animate-in fade-in duration-500">
+    <div className="h-[calc(100vh-8rem+85px)] flex flex-col animate-in fade-in duration-500">
       <div className="mb-4">
         <div>
           <h1 className="text-4xl font-bold text-foreground mb-2">Chat Comunitario</h1>
