@@ -388,8 +388,28 @@ export default function Chat() {
                               <span className="text-sm text-muted-foreground pl-6">
                                 {getFirstName(msg.user_name)}
                               </span>
-                              <div className="rounded-[28px] px-6 py-3 bg-[#2A2A2A] text-white">
-                                <p className="text-sm">{msg.message}</p>
+                              <div className="flex items-start gap-2">
+                                <div className="rounded-[28px] px-6 py-3 bg-[#2A2A2A] text-white">
+                                  <p className="text-sm">{msg.message}</p>
+                                </div>
+                                
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button 
+                                      variant="ghost" 
+                                      size="icon" 
+                                      className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                                    >
+                                      <MoreVertical className="h-4 w-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="start" className="bg-popover z-[100]">
+                                    <DropdownMenuItem onClick={() => openReportDialog(msg.id)}>
+                                      <Flag className="h-4 w-4 mr-2" />
+                                      Denunciar
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </div>
                               <span className="text-xs text-muted-foreground pl-6">
                                 {new Date(msg.created_at).toLocaleTimeString('es-ES', {
@@ -398,24 +418,6 @@ export default function Chat() {
                                 })}
                               </span>
                             </div>
-                            
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button 
-                                  variant="ghost" 
-                                  size="icon" 
-                                  className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                                >
-                                  <MoreVertical className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="start" className="bg-popover z-[100]">
-                                <DropdownMenuItem onClick={() => openReportDialog(msg.id)}>
-                                  <Flag className="h-4 w-4 mr-2" />
-                                  Denunciar
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
                           </div>
                         )}
                       </>
