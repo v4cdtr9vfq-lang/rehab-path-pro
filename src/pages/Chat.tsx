@@ -390,10 +390,10 @@ export default function Chat() {
                               </span>
                               <div className={`rounded-[28px] px-6 py-3 ${
                                 isReported 
-                                  ? 'bg-transparent border-2 border-destructive min-h-[44px]' 
+                                  ? 'bg-transparent border-2 border-destructive' 
                                   : 'bg-[#2A2A2A] text-white'
                               }`}>
-                                {!isReported && <p className="text-sm">{msg.message}</p>}
+                                <p className={`text-sm ${isReported ? 'invisible' : ''}`}>{msg.message}</p>
                               </div>
                               <span className="text-xs text-muted-foreground pl-6">
                                 {new Date(msg.created_at).toLocaleTimeString('es-ES', {
