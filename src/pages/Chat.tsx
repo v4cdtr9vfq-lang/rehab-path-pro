@@ -572,7 +572,7 @@ export default function Chat() {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Escribe un mensaje..."
-              className="flex-1"
+              className="flex-1 pl-4"
               disabled={isSending}
             />
             <Button type="submit" disabled={!newMessage.trim() || isSending} className="gap-2">
