@@ -1,10 +1,11 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Home, Target, Bell, TrendingUp, Heart, ListChecks, MessageSquare, BookOpen, Smile, Wrench, Settings, Menu, LogOut } from "lucide-react";
+import { Home, Target, Bell, TrendingUp, Heart, ListChecks, MessageSquare, BookOpen, Smile, Wrench, Settings, Menu, LogOut, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Badge } from "@/components/ui/badge";
 const menuItems = [{
   icon: Home,
   label: "Mi centro",
@@ -38,6 +39,10 @@ const menuItems = [{
   label: "Mensaje Diario",
   path: "/message"
 }, {
+  icon: MessageCircle,
+  label: "Chat",
+  path: "/chat"
+}, {
   icon: Wrench,
   label: "Herramientas",
   path: "/tools"
@@ -54,6 +59,34 @@ export function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [onlineCount, setOnlineCount] = useState(0);
+
+  useEffect(() => {
+    // Set up presence tracking for online count
+    const channel = supabase.channel('sidebar-presence');
+    
+    channel
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.presenceState();
+        setOnlineCount(Object.keys(state).length);
+      })
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            await channel.track({
+              user_id: user.id,
+              online_at: new Date().toISOString(),
+            });
+          }
+        }
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
   const handleLogout = async () => {
     const {
       error
@@ -75,9 +108,15 @@ export function Sidebar() {
         {menuItems.map(item => {
         const Icon = item.icon;
         const isActive = location.pathname === item.path;
+        const isChat = item.path === '/chat';
         return <Link key={item.path} to={item.path} onClick={() => setOpen(false)} className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all ${isActive ? "bg-primary text-primary-foreground font-semibold shadow-lg" : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"}`}>
               <Icon className="h-4 w-4 flex-shrink-0" />
-              <span className="text-sm">{item.label}</span>
+              <span className="text-sm flex-1">{item.label}</span>
+              {isChat && onlineCount > 0 && (
+                <Badge variant="secondary" className="ml-auto text-xs px-2 py-0.5">
+                  {onlineCount}
+                </Badge>
+              )}
             </Link>;
       })}
       </nav>

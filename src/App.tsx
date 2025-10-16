@@ -18,6 +18,7 @@ import EmotionJournal from "./pages/EmotionJournal";
 import Tools from "./pages/Tools";
 import Reminders from "./pages/Reminders";
 import Message from "./pages/Message";
+import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -109,6 +110,13 @@ const App = () => (
             <ProtectedRoute>
               <Layout>
                 <Message />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/chat" element={
+            <ProtectedRoute>
+              <Layout>
+                <Chat />
               </Layout>
             </ProtectedRoute>
           } />
