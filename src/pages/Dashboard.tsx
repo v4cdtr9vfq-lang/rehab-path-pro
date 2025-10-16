@@ -124,11 +124,11 @@ export default function Home() {
           .update({ completed: false })
           .eq('user_id', user.id);
         
-        // Clear old localStorage keys (keep only today's)
+        // Clear ALL localStorage goals data
         const keysToRemove = [];
         for (let i = 0; i < localStorage.length; i++) {
           const key = localStorage.key(i);
-          if (key && key.startsWith('goals_completed_') && key !== getTodayKey()) {
+          if (key && key.startsWith('goals_completed_')) {
             keysToRemove.push(key);
           }
         }
@@ -137,6 +137,10 @@ export default function Home() {
         // Update last reset date
         localStorage.setItem('last_goals_reset', todayStr);
         console.log('Goals reset complete for new day:', todayStr);
+        
+        // Force page reload to ensure fresh data
+        window.location.reload();
+        return; // Stop execution here since we're reloading
       }
 
       // Fetch profile
