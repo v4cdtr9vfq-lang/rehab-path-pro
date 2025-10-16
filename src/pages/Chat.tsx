@@ -121,12 +121,17 @@ export default function Chat() {
     channel
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState();
-        const roomUsers = Object.values(state).filter((presence: any) => 
-          presence[0]?.room === currentRoom
-        );
+        // Count unique users in current room
+        const uniqueUsers = new Set();
+        Object.keys(state).forEach(userId => {
+          const presences = state[userId] as any[];
+          if (presences && presences.length > 0 && presences[0]?.room === currentRoom) {
+            uniqueUsers.add(userId);
+          }
+        });
         setOnlineCountByRoom(prev => ({
           ...prev,
-          [currentRoom]: roomUsers.length
+          [currentRoom]: uniqueUsers.size
         }));
       })
       .on('presence', { event: 'join' }, ({ key, newPresences }) => {
