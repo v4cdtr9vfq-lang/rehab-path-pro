@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Heart, Mail, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import { Heart, Mail } from "lucide-react";
 
 export function Footer() {
   return (
@@ -106,19 +106,14 @@ export function Footer() {
             © {new Date().getFullYear()} Rehapp. Todos los derechos reservados.
           </p>
           
-          {/* Social Media Links */}
-          <div className="flex items-center gap-4">
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors" aria-label="Facebook">
-              <Facebook className="h-5 w-5" />
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors" aria-label="Twitter">
-              <Twitter className="h-5 w-5" />
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors" aria-label="Instagram">
-              <Instagram className="h-5 w-5" />
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors" aria-label="LinkedIn">
-              <Linkedin className="h-5 w-5" />
+          {/* Contact Email */}
+          <div className="flex items-center gap-2">
+            <Mail className="h-5 w-5 text-primary" />
+            <a 
+              href="mailto:info@neurotropy.com" 
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              info@neurotropy.com
             </a>
           </div>
         </div>
