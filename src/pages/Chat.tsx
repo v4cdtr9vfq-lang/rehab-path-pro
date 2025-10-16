@@ -192,30 +192,27 @@ export default function Chat() {
       let displayName = userName;
       
       if (isAnonymous) {
-        // Count existing anonymous messages in current room
+        // Get all anonymous messages in current room to find the highest number
         const { data: anonymousMessages } = await supabase
           .from('chat_messages')
           .select('user_name')
           .eq('room', currentRoom)
-          .like('user_name', 'Anónimo%')
-          .order('created_at', { ascending: true });
+          .ilike('user_name', 'Anónimo%');
 
-        // Get unique anonymous numbers
-        const usedNumbers = new Set<number>();
+        // Extract all numbers and find the highest
+        let maxNumber = 0;
         anonymousMessages?.forEach(msg => {
           const match = msg.user_name.match(/Anónimo (\d+)/);
           if (match) {
-            usedNumbers.add(parseInt(match[1]));
+            const num = parseInt(match[1]);
+            if (num > maxNumber) {
+              maxNumber = num;
+            }
           }
         });
 
-        // Find next available number
-        let nextNumber = 1;
-        while (usedNumbers.has(nextNumber)) {
-          nextNumber++;
-        }
-        
-        displayName = `Anónimo ${nextNumber}`;
+        // Assign next number
+        displayName = `Anónimo ${maxNumber + 1}`;
       }
 
       const { error } = await supabase
