@@ -267,6 +267,44 @@ export default function Settings() {
                   </p>
                 </div>
 
+                {/* Basic Plan (Free) */}
+                <div className={`border rounded-lg p-4 space-y-3 ${plan === "free" ? "border-primary bg-primary/5" : "border-border"}`}>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-semibold text-lg">Plan Básico</h4>
+                      <p className="text-2xl font-bold text-primary mt-1">Gratis<span className="text-sm text-muted-foreground">/30 días</span></p>
+                    </div>
+                    {plan === "free" && (
+                      <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
+                        Tu Plan
+                      </span>
+                    )}
+                  </div>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-primary" />
+                      Gratuito durante 30 días de prueba
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-primary" />
+                      Funciones básicas de seguimiento
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-primary" />
+                      Acceso limitado a herramientas
+                    </li>
+                  </ul>
+                  {plan === "free" && (
+                    <Button 
+                      disabled
+                      variant="destructive"
+                      className="w-full"
+                    >
+                      Plan Actual
+                    </Button>
+                  )}
+                </div>
+
                 {/* Monthly Plan */}
                 <div className={`border rounded-lg p-4 space-y-3 ${plan === "monthly" ? "border-primary bg-primary/5" : "border-border"}`}>
                   <div className="flex items-start justify-between">
@@ -294,12 +332,20 @@ export default function Settings() {
                       Seguimiento personalizado
                     </li>
                   </ul>
-                  {plan !== "monthly" && (
+                  {plan === "monthly" ? (
+                    <Button 
+                      disabled
+                      variant="destructive"
+                      className="w-full"
+                    >
+                      Plan Actual
+                    </Button>
+                  ) : (
                     <Button 
                       onClick={() => createCheckoutSession(SUBSCRIPTION_PLANS.monthly.priceId)}
                       className="w-full"
                     >
-                      {subscribed ? "Cambiar a Mensual" : "Comenzar Prueba Gratis"}
+                      Actualiza tu plan
                     </Button>
                   )}
                 </div>
@@ -335,12 +381,20 @@ export default function Settings() {
                       Mejor valor por tu dinero
                     </li>
                   </ul>
-                  {plan !== "annual" && (
+                  {plan === "annual" ? (
+                    <Button 
+                      disabled
+                      variant="destructive"
+                      className="w-full"
+                    >
+                      Plan Actual
+                    </Button>
+                  ) : (
                     <Button 
                       onClick={() => createCheckoutSession(SUBSCRIPTION_PLANS.annual.priceId)}
                       className="w-full"
                     >
-                      {subscribed ? "Cambiar a Anual" : "Comenzar Prueba Gratis"}
+                      Actualiza tu plan
                     </Button>
                   )}
                 </div>
