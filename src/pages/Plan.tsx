@@ -1,4 +1,3 @@
-import { AbstinenceCounter } from "@/components/AbstinenceCounter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -43,7 +42,6 @@ interface ExpandedGoal extends Goal {
 
 export default function Plan() {
   const { toast } = useToast();
-  const startDate = new Date();
   
   const [sections, setSections] = useState<{
     today: { open: boolean; goals: ExpandedGoal[] };
@@ -693,8 +691,6 @@ export default function Plan() {
         <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight tracking-tight mb-3">Mi Plan</h1>
         <p className="text-muted-foreground text-lg">Rastrea tus metas y progreso de recuperación</p>
       </div>
-
-      <AbstinenceCounter startDate={startDate} />
 
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold text-foreground">Metas</h2>
