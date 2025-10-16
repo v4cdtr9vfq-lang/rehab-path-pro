@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Send, Users, MoreVertical, Edit2, Flag } from "lucide-react";
+import { Send, Users, MoreVertical, Edit2, Flag, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
@@ -45,6 +45,7 @@ export default function Chat() {
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
   const [reportingMessageId, setReportingMessageId] = useState<string | null>(null);
   const [reportReason, setReportReason] = useState("");
+  const [reportedMessages, setReportedMessages] = useState<Set<string>>(new Set());
   const scrollRef = useRef<HTMLDivElement>(null);
   const channelRef = useRef<any>(null);
 
@@ -82,6 +83,16 @@ export default function Chat() {
     if (existingMessages) {
       setMessages(existingMessages);
       scrollToBottom();
+    }
+
+    // Load reported messages by current user
+    const { data: reports } = await supabase
+      .from('message_reports')
+      .select('message_id')
+      .eq('reported_by', user.id);
+
+    if (reports) {
+      setReportedMessages(new Set(reports.map(r => r.message_id)));
     }
 
     // Set up realtime channel for messages and presence
@@ -227,6 +238,7 @@ export default function Chat() {
 
       if (error) throw error;
 
+      setReportedMessages(prev => new Set([...prev, reportingMessageId]));
       setReportDialogOpen(false);
       setReportingMessageId(null);
       setReportReason("");
@@ -239,6 +251,30 @@ export default function Chat() {
       toast({
         title: "Error",
         description: "No se pudo enviar la denuncia",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const deleteMessage = async (messageId: string) => {
+    try {
+      const { error } = await supabase
+        .from('chat_messages')
+        .delete()
+        .eq('id', messageId);
+
+      if (error) throw error;
+
+      setMessages(prev => prev.filter(msg => msg.id !== messageId));
+      
+      toast({
+        title: "Mensaje eliminado",
+        description: "Tu mensaje ha sido eliminado correctamente",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar el mensaje",
         variant: "destructive",
       });
     }
@@ -271,6 +307,7 @@ export default function Chat() {
               {messages.map((msg) => {
                 const isOwnMessage = msg.user_id === userId;
                 const isEditing = editingMessageId === msg.id;
+                const isReported = reportedMessages.has(msg.id);
                 
                 return (
                   <div
@@ -313,9 +350,9 @@ export default function Chat() {
                                   <Edit2 className="h-4 w-4 mr-2" />
                                   Editar
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => openReportDialog(msg.id)}>
-                                  <Flag className="h-4 w-4 mr-2" />
-                                  Denunciar
+                                <DropdownMenuItem onClick={() => deleteMessage(msg.id)} className="text-destructive">
+                                  <Trash2 className="h-4 w-4 mr-2" />
+                                  Eliminar
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
@@ -347,12 +384,16 @@ export default function Chat() {
                               </AvatarFallback>
                             </Avatar>
 
-                            <div className="flex flex-col gap-1">
+                            <div className="flex flex-col gap-1 flex-1">
                               <span className="text-sm text-muted-foreground pl-6">
                                 {getFirstName(msg.user_name)}
                               </span>
-                              <div className="rounded-[28px] px-6 py-3 bg-[#2A2A2A] text-white">
-                                <p className="text-sm">{msg.message}</p>
+                              <div className={`rounded-[28px] px-6 py-3 ${
+                                isReported 
+                                  ? 'bg-transparent border-2 border-destructive min-h-[44px]' 
+                                  : 'bg-[#2A2A2A] text-white'
+                              }`}>
+                                {!isReported && <p className="text-sm">{msg.message}</p>}
                               </div>
                               <span className="text-xs text-muted-foreground pl-6">
                                 {new Date(msg.created_at).toLocaleTimeString('es-ES', {
@@ -361,6 +402,26 @@ export default function Chat() {
                                 })}
                               </span>
                             </div>
+                            
+                            {!isReported && (
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button 
+                                    variant="ghost" 
+                                    size="icon" 
+                                    className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1"
+                                  >
+                                    <MoreVertical className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="start" className="bg-popover z-50">
+                                  <DropdownMenuItem onClick={() => openReportDialog(msg.id)}>
+                                    <Flag className="h-4 w-4 mr-2" />
+                                    Denunciar
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            )}
                           </div>
                         )}
                       </>
