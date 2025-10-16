@@ -121,14 +121,22 @@ export default function Chat() {
     channel
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState();
+        console.log('Presence state:', state);
+        console.log('Current room:', currentRoom);
+        
         // Count unique users in current room
         const uniqueUsers = new Set();
-        Object.keys(state).forEach(userId => {
-          const presences = state[userId] as any[];
-          if (presences && presences.length > 0 && presences[0]?.room === currentRoom) {
-            uniqueUsers.add(userId);
+        Object.values(state).forEach((presences: any) => {
+          if (Array.isArray(presences) && presences.length > 0) {
+            const presence = presences[0];
+            console.log('Checking presence:', presence);
+            if (presence?.room === currentRoom) {
+              uniqueUsers.add(presence.user_id);
+            }
           }
         });
+        
+        console.log('Unique users:', uniqueUsers.size);
         setOnlineCountByRoom(prev => ({
           ...prev,
           [currentRoom]: uniqueUsers.size
@@ -181,11 +189,40 @@ export default function Chat() {
 
     setIsSending(true);
     try {
+      let displayName = userName;
+      
+      if (isAnonymous) {
+        // Count existing anonymous messages in current room
+        const { data: anonymousMessages } = await supabase
+          .from('chat_messages')
+          .select('user_name')
+          .eq('room', currentRoom)
+          .like('user_name', 'Anónimo%')
+          .order('created_at', { ascending: true });
+
+        // Get unique anonymous numbers
+        const usedNumbers = new Set<number>();
+        anonymousMessages?.forEach(msg => {
+          const match = msg.user_name.match(/Anónimo (\d+)/);
+          if (match) {
+            usedNumbers.add(parseInt(match[1]));
+          }
+        });
+
+        // Find next available number
+        let nextNumber = 1;
+        while (usedNumbers.has(nextNumber)) {
+          nextNumber++;
+        }
+        
+        displayName = `Anónimo ${nextNumber}`;
+      }
+
       const { error } = await supabase
         .from('chat_messages')
         .insert({
-          user_id: userId,
-          user_name: isAnonymous ? "Anónimo" : userName,
+          user_id: isAnonymous ? '00000000-0000-0000-0000-000000000000' : userId,
+          user_name: displayName,
           message: newMessage.trim(),
           room: currentRoom,
         });
@@ -193,6 +230,7 @@ export default function Chat() {
       if (error) throw error;
 
       setNewMessage("");
+      setIsAnonymous(false);
     } catch (error: any) {
       toast({
         title: "Error",
@@ -407,7 +445,8 @@ export default function Chat() {
           <ScrollArea className="h-full">
             <div className="space-y-4 p-4">
               {messages.map((msg) => {
-                const isOwnMessage = msg.user_id === userId;
+                const isAnonymousMessage = msg.user_id === '00000000-0000-0000-0000-000000000000';
+                const isOwnMessage = !isAnonymousMessage && msg.user_id === userId;
                 const isEditing = editingMessageId === msg.id;
                 const isReported = reportedMessages.has(msg.id);
                 
