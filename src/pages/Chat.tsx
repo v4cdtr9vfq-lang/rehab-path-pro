@@ -393,23 +393,15 @@ export default function Chat() {
                                   <p className="text-sm">{msg.message}</p>
                                 </div>
                                 
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button 
-                                      variant="ghost" 
-                                      size="icon" 
-                                      className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                                    >
-                                      <MoreVertical className="h-4 w-4" />
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="start" className="bg-popover z-[100]">
-                                    <DropdownMenuItem onClick={() => openReportDialog(msg.id)}>
-                                      <Flag className="h-4 w-4 mr-2" />
-                                      Denunciar
-                                    </DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  onClick={() => openReportDialog(msg.id)}
+                                  className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                                  title="Denunciar"
+                                >
+                                  <Flag className="h-4 w-4" />
+                                </Button>
                               </div>
                               <span className="text-xs text-muted-foreground pl-6">
                                 {new Date(msg.created_at).toLocaleTimeString('es-ES', {
