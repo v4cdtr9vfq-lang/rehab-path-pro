@@ -112,17 +112,6 @@ export default function Home() {
   const fetchData = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
-      // Clear today's localStorage to show all goals as unchecked
-      const todayStr = getLocalDateString();
-      const todayKey = getTodayKey();
-      localStorage.removeItem(todayKey);
-      
-      // Reset all goals in database
-      await supabase
-        .from('goals')
-        .update({ completed: false })
-        .eq('user_id', user.id);
-
       // Fetch profile
       const { data: profile } = await supabase
         .from('profiles')
