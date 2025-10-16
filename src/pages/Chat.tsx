@@ -403,7 +403,7 @@ export default function Chat() {
                                   className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                                   title="Denunciar"
                                 >
-                                  <Flag className="h-4 w-4" />
+                                  <Flag className="h-4 w-4 text-red-500" />
                                 </Button>
                               </div>
                               <span className="text-xs text-muted-foreground pl-6">
