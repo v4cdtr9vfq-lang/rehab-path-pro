@@ -344,13 +344,13 @@ export default function Chat() {
                             </Avatar>
 
                             <div className="flex flex-col gap-1">
-                              <span className="text-sm text-muted-foreground">
+                              <span className="text-sm text-muted-foreground pl-6">
                                 {msg.user_name}
                               </span>
                               <div className="rounded-[28px] px-6 py-3 bg-[#2A2A2A] text-white">
                                 <p className="text-sm">{msg.message}</p>
                               </div>
-                              <span className="text-xs text-muted-foreground">
+                              <span className="text-xs text-muted-foreground pl-6">
                                 {new Date(msg.created_at).toLocaleTimeString('es-ES', {
                                   hour: '2-digit',
                                   minute: '2-digit'
