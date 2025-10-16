@@ -93,13 +93,7 @@ export function Sidebar() {
 
       // Suscribirse a cada sala para escuchar presencia (mismo canal que Chat)
       rooms.forEach(room => {
-        const channel = supabase.channel(`chat-room-${room}`, {
-          config: {
-            presence: {
-              key: `sidebar-${currentUserId}`,
-            },
-          },
-        });
+        const channel = supabase.channel(`chat-room-${room}`);
 
         channel
           .on('presence', { event: 'sync' }, () => {
@@ -112,8 +106,8 @@ export function Sidebar() {
               const presences: any = state[key];
               if (Array.isArray(presences)) {
                 presences.forEach((presence: any) => {
-                  // Solo contar usuarios que están activamente en el chat (no observadores)
-                  if (presence?.user_id && presence?.room === room && !presence?.is_sidebar_observer) {
+                  // Solo contar usuarios reales del chat (que tengan user_name, no observadores)
+                  if (presence?.user_id && presence?.room === room && presence?.user_name) {
                     usersInThisRoom.add(presence.user_id);
                     console.log(`[Sidebar] Found user ${presence.user_id} in room ${room}`);
                   }
@@ -125,16 +119,7 @@ export function Sidebar() {
             console.log(`[Sidebar] Users in room ${room}:`, usersInThisRoom.size);
             updateTotalCount();
           })
-          .subscribe(async (status) => {
-            if (status === 'SUBSCRIBED') {
-              // Track presence as sidebar observer to receive updates
-              await channel.track({
-                user_id: currentUserId,
-                is_sidebar_observer: true,
-                room: room,
-              });
-            }
-          });
+          .subscribe();
 
         channels.push(channel);
       });
