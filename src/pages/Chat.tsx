@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Send, Users, MoreVertical, Edit2, Flag, Trash2, MessageSquare } from "lucide-react";
+import { Send, Users, MoreVertical, Edit2, Flag, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
@@ -362,9 +362,9 @@ export default function Chat() {
               value={room.id} 
               className="flex-1 flex flex-col m-0 data-[state=inactive]:hidden"
             >
-              <div className="flex-1 relative overflow-hidden">
+              <CardContent className="flex-1 overflow-hidden p-0">
                 <ScrollArea className="h-full p-4">
-                  <div className="space-y-4">
+                  <div className="space-y-4" ref={scrollRef}>
                     {messages.map((msg) => {
                       const isOwnMessage = msg.user_id === userId;
                       const isEditing = editingMessageId === msg.id;
@@ -486,29 +486,9 @@ export default function Chat() {
                     })}
                   </div>
                 </ScrollArea>
-                
-                {/* Overlay sobre el área de mensajes */}
-                <div className="absolute inset-0 bg-background/95 backdrop-blur-sm z-10 flex items-center justify-center">
-                  <div className="text-center space-y-4 px-6 max-w-md">
-                    <div className="w-20 h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
-                      <MessageSquare className="h-10 w-10 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-foreground mb-2">Chat Comunitario</h3>
-                      <p className="text-muted-foreground">
-                        Conecta con otros miembros que están en el mismo proceso de recuperación. 
-                        Comparte experiencias, encuentra apoyo y crece junto a la comunidad.
-                      </p>
-                    </div>
-                    <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                      <Users className="h-4 w-4" />
-                      <span>Espacio seguro y confidencial</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              </CardContent>
 
-              <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-background relative z-20">
+              <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-background">
                 <div className="flex gap-2">
                   <Input
                     value={newMessage}
