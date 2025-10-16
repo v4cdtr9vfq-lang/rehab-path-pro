@@ -300,7 +300,7 @@ export default function Chat() {
                           </div>
                         </div>
                       ) : (
-                        <div className="w-full">
+                        <>
                           <div className="flex items-center gap-2 group/message">
                             <div
                               className={`rounded-2xl px-4 py-2 ${
@@ -335,15 +335,13 @@ export default function Chat() {
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </div>
-                          <div className="w-full flex justify-end mt-1">
-                            <span className="text-xs text-muted-foreground">
-                              {new Date(msg.created_at).toLocaleTimeString('es-ES', {
-                                hour: '2-digit',
-                                minute: '2-digit'
-                              })}
-                            </span>
-                          </div>
-                        </div>
+                          <span className="text-xs text-muted-foreground mt-1 self-end">
+                            {new Date(msg.created_at).toLocaleTimeString('es-ES', {
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </span>
+                        </>
                       )}
                     </div>
                   </div>
