@@ -271,81 +271,79 @@ export default function Chat() {
                 return (
                   <div
                     key={msg.id}
-                    className={`flex gap-3 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'} group`}
+                    className={`flex flex-col ${isOwnMessage ? 'items-end' : 'items-start'} group mb-6`}
                   >
-                    <Avatar className="h-8 w-8 flex-shrink-0">
-                      <AvatarFallback className={isOwnMessage ? 'bg-primary text-primary-foreground' : 'bg-secondary'}>
-                        {getInitials(msg.user_name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className={`flex flex-col ${isOwnMessage ? 'items-end' : 'items-start'} max-w-[70%] flex-1`}>
-                      <span className="text-xs text-muted-foreground mb-1">
-                        {isOwnMessage ? 'Tú' : msg.user_name}
-                      </span>
-                      
-                      {isEditing ? (
-                        <div className="w-full space-y-2">
-                          <Textarea
-                            value={editedMessage}
-                            onChange={(e) => setEditedMessage(e.target.value)}
-                            className="min-h-[60px]"
-                          />
-                          <div className="flex gap-2">
-                            <Button size="sm" onClick={() => saveEdit(msg.id)}>
-                              Guardar
-                            </Button>
-                            <Button size="sm" variant="outline" onClick={cancelEditing}>
-                              Cancelar
-                            </Button>
-                          </div>
+                    <span className="text-xs text-muted-foreground mb-2">
+                      {isOwnMessage ? 'Tú' : msg.user_name}
+                    </span>
+                    
+                    {isEditing ? (
+                      <div className="w-full max-w-[70%] space-y-2">
+                        <Textarea
+                          value={editedMessage}
+                          onChange={(e) => setEditedMessage(e.target.value)}
+                          className="min-h-[60px]"
+                        />
+                        <div className="flex gap-2">
+                          <Button size="sm" onClick={() => saveEdit(msg.id)}>
+                            Guardar
+                          </Button>
+                          <Button size="sm" variant="outline" onClick={cancelEditing}>
+                            Cancelar
+                          </Button>
                         </div>
-                      ) : (
-                        <div className="w-full">
-                          <div className="flex items-center gap-2 group/message">
-                            <div
-                              className={`rounded-2xl px-4 py-2 ${
-                                isOwnMessage
-                                  ? 'bg-primary text-primary-foreground'
-                                  : 'bg-muted'
-                              }`}
+                      </div>
+                    ) : (
+                      <div className={`flex ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'} items-center gap-3 max-w-[80%]`}>
+                        <Avatar className="h-12 w-12 flex-shrink-0">
+                          <AvatarFallback className={isOwnMessage ? 'bg-[#FF7A5C] text-white' : 'bg-white text-black'}>
+                            {getInitials(msg.user_name)}
+                          </AvatarFallback>
+                        </Avatar>
+                        
+                        <div className="flex flex-col">
+                          <div
+                            className={`rounded-3xl px-6 py-3 ${
+                              isOwnMessage
+                                ? 'bg-[#FF7A5C] text-white'
+                                : 'bg-[#2A2A2A] text-white'
+                            }`}
+                          >
+                            <p className="text-sm break-words">{msg.message}</p>
+                          </div>
+                          <span className={`text-xs text-muted-foreground mt-2 ${isOwnMessage ? 'text-right' : 'text-left'}`}>
+                            {new Date(msg.created_at).toLocaleTimeString('es-ES', {
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </span>
+                        </div>
+
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-10 w-10 rounded-full bg-muted/80 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity"
                             >
-                              <p className="text-sm break-words">{msg.message}</p>
-                            </div>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button 
-                                  variant="ghost" 
-                                  size="icon" 
-                                  className="h-8 w-8 opacity-0 group-hover/message:opacity-100 transition-opacity"
-                                >
-                                  <MoreVertical className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align={isOwnMessage ? "end" : "start"} className="bg-popover">
-                                {isOwnMessage && (
-                                  <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
-                                    <Edit2 className="h-4 w-4 mr-2" />
-                                    Editar
-                                  </DropdownMenuItem>
-                                )}
-                                <DropdownMenuItem onClick={() => openReportDialog(msg.id)}>
-                                  <Flag className="h-4 w-4 mr-2" />
-                                  Denunciar
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </div>
-                          <div className="w-full flex justify-end mt-1">
-                            <span className="text-xs text-muted-foreground">
-                              {new Date(msg.created_at).toLocaleTimeString('es-ES', {
-                                hour: '2-digit',
-                                minute: '2-digit'
-                              })}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                              <MoreVertical className="h-5 w-5" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align={isOwnMessage ? "end" : "start"} className="bg-popover">
+                            {isOwnMessage && (
+                              <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
+                                <Edit2 className="h-4 w-4 mr-2" />
+                                Editar
+                              </DropdownMenuItem>
+                            )}
+                            <DropdownMenuItem onClick={() => openReportDialog(msg.id)}>
+                              <Flag className="h-4 w-4 mr-2" />
+                              Denunciar
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    )}
                   </div>
                 );
               })}
