@@ -333,19 +333,19 @@ export default function Chat() {
         </div>
       </div>
 
-      <Card className="flex-1 flex flex-col border-primary/20 overflow-hidden">
-        <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="flex-1 flex flex-col">
-          <div className="bg-muted/30 border-b">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between mb-3">
-                <CardTitle>Chat en Vivo</CardTitle>
-                <Badge variant="secondary" className="gap-2">
-                  <Users className="h-4 w-4" />
-                  {currentRoomOnline} en línea
-                </Badge>
-              </div>
-            </CardHeader>
-            <div className="px-6 pb-3">
+      <Card className="flex-1 flex flex-col border-primary/20 overflow-hidden min-h-0">
+        <div className="bg-muted/30 border-b shrink-0">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between mb-3">
+              <CardTitle>Chat en Vivo</CardTitle>
+              <Badge variant="secondary" className="gap-2">
+                <Users className="h-4 w-4" />
+                {currentRoomOnline} en línea
+              </Badge>
+            </div>
+          </CardHeader>
+          <div className="px-6 pb-3">
+            <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="w-full">
               <TabsList className="grid w-full grid-cols-4 bg-background">
                 {CHAT_ROOMS.map((room) => (
                   <TabsTrigger key={room.id} value={room.id} className="text-xs sm:text-sm whitespace-nowrap">
@@ -353,169 +353,161 @@ export default function Chat() {
                   </TabsTrigger>
                 ))}
               </TabsList>
-            </div>
+            </Tabs>
           </div>
+        </div>
 
-          {CHAT_ROOMS.map((room) => (
-            <TabsContent 
-              key={room.id} 
-              value={room.id} 
-              className="flex-1 flex flex-col m-0 p-0 data-[state=inactive]:hidden"
-            >
-              <div className="flex-1 min-h-0 overflow-hidden">
-                <ScrollArea className="h-full">
-                  <div className="space-y-4 p-4" ref={scrollRef}>
-                    {messages.map((msg) => {
-                      const isOwnMessage = msg.user_id === userId;
-                      const isEditing = editingMessageId === msg.id;
-                      const isReported = reportedMessages.has(msg.id);
-                      
-                      return (
-                        <div
-                          key={msg.id}
-                          className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-6 group`}
-                        >
-                          {isEditing ? (
-                            <div className="w-full max-w-[70%] space-y-2">
-                              <Textarea
-                                value={editedMessage}
-                                onChange={(e) => setEditedMessage(e.target.value)}
-                                className="min-h-[60px]"
-                              />
-                              <div className="flex gap-2">
-                                <Button size="sm" onClick={() => saveEdit(msg.id)}>
-                                  Guardar
+        <div className="flex-1 min-h-0 overflow-hidden">
+          <ScrollArea className="h-full">
+            <div className="space-y-4 p-4">
+              {messages.map((msg) => {
+                const isOwnMessage = msg.user_id === userId;
+                const isEditing = editingMessageId === msg.id;
+                const isReported = reportedMessages.has(msg.id);
+                
+                return (
+                  <div
+                    key={msg.id}
+                    className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-6 group`}
+                  >
+                    {isEditing ? (
+                      <div className="w-full max-w-[70%] space-y-2">
+                        <Textarea
+                          value={editedMessage}
+                          onChange={(e) => setEditedMessage(e.target.value)}
+                          className="min-h-[60px]"
+                        />
+                        <div className="flex gap-2">
+                          <Button size="sm" onClick={() => saveEdit(msg.id)}>
+                            Guardar
+                          </Button>
+                          <Button size="sm" variant="outline" onClick={cancelEditing}>
+                            Cancelar
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        {isOwnMessage ? (
+                          // Own messages: three dots - message - avatar (aligned to right)
+                          <div className="flex items-start gap-3 max-w-[80%]">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                                >
+                                  <MoreVertical className="h-4 w-4" />
                                 </Button>
-                                <Button size="sm" variant="outline" onClick={cancelEditing}>
-                                  Cancelar
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end" className="bg-popover z-[100]">
+                                <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
+                                  <Edit2 className="h-4 w-4 mr-2" />
+                                  Editar
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => deleteMessage(msg.id)} className="text-destructive">
+                                  <Trash2 className="h-4 w-4 mr-2" />
+                                  Eliminar
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                            
+                            <div className="flex flex-col items-end gap-1">
+                              <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white">
+                                <p className="text-sm">{msg.message}</p>
+                              </div>
+                              <span className="text-xs text-muted-foreground pr-6">
+                                {new Date(msg.created_at).toLocaleTimeString('es-ES', {
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </span>
+                            </div>
+
+                            <Avatar className="h-11 w-11 flex-shrink-0 mt-0">
+                              <AvatarFallback className="bg-[#FF7A5C] text-white text-sm font-semibold">
+                                {getInitials(msg.user_name)}
+                              </AvatarFallback>
+                            </Avatar>
+                          </div>
+                        ) : (
+                          // Other messages: avatar - name (above) + message + time (below)
+                          <div className="flex items-start gap-3 max-w-[80%]">
+                            <Avatar className="h-11 w-11 flex-shrink-0 mt-0">
+                              <AvatarFallback className="bg-white text-black text-sm font-semibold">
+                                {getInitials(msg.user_name)}
+                              </AvatarFallback>
+                            </Avatar>
+
+                            <div className="flex flex-col gap-1 flex-1">
+                              <span className="text-sm text-muted-foreground pl-6">
+                                {getFirstName(msg.user_name)}
+                              </span>
+                              <div className="flex items-start gap-2">
+                                <div className={`rounded-[28px] px-6 py-3 ${
+                                  isReported 
+                                    ? 'bg-black border-2 border-red-500' 
+                                    : 'bg-[#2A2A2A] text-white'
+                                }`}>
+                                  <p className={`text-sm ${isReported ? 'invisible' : ''}`}>
+                                    {msg.message}
+                                  </p>
+                                </div>
+                                
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  onClick={() => toggleReport(msg.id)}
+                                  className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                                  title={isReported ? "Quitar denuncia" : "Denunciar"}
+                                >
+                                  <Flag className={`h-4 w-4 ${isReported ? 'fill-red-500' : ''} text-red-500`} />
                                 </Button>
                               </div>
+                              <span className="text-xs text-muted-foreground pl-6">
+                                {new Date(msg.created_at).toLocaleTimeString('es-ES', {
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </span>
                             </div>
-                          ) : (
-                            <>
-                              {isOwnMessage ? (
-                                // Own messages: three dots - message - avatar (aligned to right)
-                                <div className="flex items-start gap-3 max-w-[80%]">
-                                  <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                      <Button 
-                                        variant="ghost" 
-                                        size="icon" 
-                                        className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                                      >
-                                        <MoreVertical className="h-4 w-4" />
-                                      </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="bg-popover z-[100]">
-                                      <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
-                                        <Edit2 className="h-4 w-4 mr-2" />
-                                        Editar
-                                      </DropdownMenuItem>
-                                      <DropdownMenuItem onClick={() => deleteMessage(msg.id)} className="text-destructive">
-                                        <Trash2 className="h-4 w-4 mr-2" />
-                                        Eliminar
-                                      </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                  </DropdownMenu>
-                                  
-                                  <div className="flex flex-col items-end gap-1">
-                                    <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white">
-                                      <p className="text-sm">{msg.message}</p>
-                                    </div>
-                                    <span className="text-xs text-muted-foreground pr-6">
-                                      {new Date(msg.created_at).toLocaleTimeString('es-ES', {
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                      })}
-                                    </span>
-                                  </div>
-
-                                  <Avatar className="h-11 w-11 flex-shrink-0 mt-0">
-                                    <AvatarFallback className="bg-[#FF7A5C] text-white text-sm font-semibold">
-                                      {getInitials(msg.user_name)}
-                                    </AvatarFallback>
-                                  </Avatar>
-                                </div>
-                              ) : (
-                                // Other messages: avatar - name (above) + message + time (below)
-                                <div className="flex items-start gap-3 max-w-[80%]">
-                                  <Avatar className="h-11 w-11 flex-shrink-0 mt-0">
-                                    <AvatarFallback className="bg-white text-black text-sm font-semibold">
-                                      {getInitials(msg.user_name)}
-                                    </AvatarFallback>
-                                  </Avatar>
-
-                                  <div className="flex flex-col gap-1 flex-1">
-                                    <span className="text-sm text-muted-foreground pl-6">
-                                      {getFirstName(msg.user_name)}
-                                    </span>
-                                    <div className="flex items-start gap-2">
-                                      <div className={`rounded-[28px] px-6 py-3 ${
-                                        isReported 
-                                          ? 'bg-black border-2 border-red-500' 
-                                          : 'bg-[#2A2A2A] text-white'
-                                      }`}>
-                                        <p className={`text-sm ${isReported ? 'invisible' : ''}`}>
-                                          {msg.message}
-                                        </p>
-                                      </div>
-                                      
-                                      <Button 
-                                        variant="ghost" 
-                                        size="icon" 
-                                        onClick={() => toggleReport(msg.id)}
-                                        className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                                        title={isReported ? "Quitar denuncia" : "Denunciar"}
-                                      >
-                                        <Flag className={`h-4 w-4 ${isReported ? 'fill-red-500' : ''} text-red-500`} />
-                                      </Button>
-                                    </div>
-                                    <span className="text-xs text-muted-foreground pl-6">
-                                      {new Date(msg.created_at).toLocaleTimeString('es-ES', {
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                      })}
-                                    </span>
-                                  </div>
-                                </div>
-                              )}
-                            </>
-                          )}
-                        </div>
-                      );
-                    })}
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
-                </ScrollArea>
-              </div>
+                );
+              })}
+            </div>
+          </ScrollArea>
+        </div>
 
-              <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-card shrink-0">
-                <div className="flex gap-2">
-                  <Input
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="Escribe un mensaje..."
-                    className="flex-1"
-                    disabled={isSending}
-                  />
-                  <Button type="submit" disabled={!newMessage.trim() || isSending} className="gap-2">
-                    <Send className="h-4 w-4" />
-                    Enviar
-                  </Button>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Switch
-                    id="anonymous-mode"
-                    checked={isAnonymous}
-                    onCheckedChange={setIsAnonymous}
-                  />
-                  <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
-                    Escribir en modo anónimo
-                  </Label>
-                </div>
-              </form>
-            </TabsContent>
-          ))}
-        </Tabs>
+        <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-card shrink-0">
+          <div className="flex gap-2">
+            <Input
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              placeholder="Escribe un mensaje..."
+              className="flex-1"
+              disabled={isSending}
+            />
+            <Button type="submit" disabled={!newMessage.trim() || isSending} className="gap-2">
+              <Send className="h-4 w-4" />
+              Enviar
+            </Button>
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch
+              id="anonymous-mode"
+              checked={isAnonymous}
+              onCheckedChange={setIsAnonymous}
+            />
+            <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
+              Escribir en modo anónimo
+            </Label>
+          </div>
+        </form>
       </Card>
     </div>
   );
