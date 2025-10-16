@@ -360,11 +360,11 @@ export default function Chat() {
             <TabsContent 
               key={room.id} 
               value={room.id} 
-              className="flex-1 flex flex-col m-0 data-[state=inactive]:hidden"
+              className="flex-1 flex flex-col m-0 p-0 data-[state=inactive]:hidden"
             >
-              <CardContent className="flex-1 overflow-hidden p-0">
-                <ScrollArea className="h-full p-4">
-                  <div className="space-y-4" ref={scrollRef}>
+              <div className="flex-1 min-h-0 overflow-hidden">
+                <ScrollArea className="h-full">
+                  <div className="space-y-4 p-4" ref={scrollRef}>
                     {messages.map((msg) => {
                       const isOwnMessage = msg.user_id === userId;
                       const isEditing = editingMessageId === msg.id;
@@ -486,9 +486,9 @@ export default function Chat() {
                     })}
                   </div>
                 </ScrollArea>
-              </CardContent>
+              </div>
 
-              <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-background">
+              <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-card shrink-0">
                 <div className="flex gap-2">
                   <Input
                     value={newMessage}
