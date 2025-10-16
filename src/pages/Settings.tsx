@@ -516,12 +516,14 @@ export default function Settings() {
             <span className="text-muted-foreground">Versión</span>
             <span className="font-medium">1.0.0</span>
           </div>
-          <Button variant="link" className="p-0 h-auto">
-            Política de Privacidad
-          </Button>
-          <Button variant="link" className="p-0 h-auto">
-            Términos de Servicio
-          </Button>
+          <div className="flex flex-col gap-2">
+            <Button variant="link" className="p-0 h-auto justify-start">
+              Política de Privacidad
+            </Button>
+            <Button variant="link" className="p-0 h-auto justify-start">
+              Términos de Servicio
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
