@@ -54,39 +54,32 @@ export default function Home() {
       const goal = activeGoals.find(g => g.id === goalId);
       if (!goal) return;
 
+      console.log('Toggling goal:', goalId);
+
       // Load current completed instances
       const completedInstances = loadCompletedInstances();
+      console.log('Current completed instances:', Array.from(completedInstances));
       
       // Toggle THIS instance
-      if (completedInstances.has(goalId)) {
+      const wasCompleted = completedInstances.has(goalId);
+      if (wasCompleted) {
         completedInstances.delete(goalId);
       } else {
         completedInstances.add(goalId);
       }
 
+      console.log('New completed instances:', Array.from(completedInstances));
+
       // Save to localStorage
       saveCompletedInstances(completedInstances);
 
-      // Update local state
+      // Update local state immediately
       const updatedGoals = activeGoals.map(g => ({
         ...g,
         status: completedInstances.has(g.id) ? 'completed' : 'pending'
       }));
 
       setActiveGoals(updatedGoals);
-
-      // Count how many instances of this specific goal are completed
-      const instancesOfThisGoal = updatedGoals.filter(g => g.originalId === goal.originalId);
-      const completedInstancesOfGoal = instancesOfThisGoal.filter(g => g.status === 'completed').length;
-      const allInstancesCompleted = completedInstancesOfGoal === instancesOfThisGoal.length;
-
-      // Update database: mark as completed only if ALL instances are done
-      const { error } = await supabase
-        .from('goals')
-        .update({ completed: allInstancesCompleted })
-        .eq('id', goal.originalId);
-
-      if (error) throw error;
 
       // Recalculate TODAY's completed count
       const totalCompletedToday = updatedGoals.filter(g => g.status === 'completed').length;
@@ -95,11 +88,39 @@ export default function Home() {
       setGoalsCompleted(totalCompletedToday + (checkInCompleted ? 1 : 0));
       setTotalGoals(totalTodayGoals);
 
+      console.log('Goals completed:', totalCompletedToday, 'of', totalTodayGoals);
+
+      // Update database
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Count how many instances of this specific goal are completed
+      const instancesOfThisGoal = updatedGoals.filter(g => g.originalId === goal.originalId);
+      const completedInstancesOfGoal = instancesOfThisGoal.filter(g => g.status === 'completed').length;
+      const allInstancesCompleted = completedInstancesOfGoal === instancesOfThisGoal.length;
+
+      console.log('Updating database for goal:', goal.originalId, 'completed:', allInstancesCompleted);
+
+      // Update database: mark as completed only if ALL instances are done
+      const { error } = await supabase
+        .from('goals')
+        .update({ completed: allInstancesCompleted })
+        .eq('id', goal.originalId)
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('Error updating goal in database:', error);
+        throw error;
+      }
+
+      console.log('Goal updated successfully in database');
+
       toast({
         title: "Meta actualizada",
-        description: "El estado de la meta ha sido actualizado",
+        description: wasCompleted ? "Meta marcada como pendiente" : "¡Meta completada!",
       });
     } catch (error: any) {
+      console.error('Error in toggleGoal:', error);
       toast({
         title: "Error",
         description: "No se pudo actualizar la meta",
