@@ -21,6 +21,7 @@ import Reminders from "./pages/Reminders";
 import Message from "./pages/Message";
 import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
+import TrialEnded from "./pages/TrialEnded";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -127,6 +128,11 @@ const App = () => (
               <Layout>
                 <Settings />
               </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/trial-ended" element={
+            <ProtectedRoute>
+              <TrialEnded />
             </ProtectedRoute>
           } />
           

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -10,6 +11,8 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const { isTrialExpired, subscribed, loading: subscriptionLoading } = useSubscription();
+  const location = useLocation();
 
   useEffect(() => {
     // Set up auth state listener
@@ -29,7 +32,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     return () => subscription.unsubscribe();
   }, []);
 
-  if (loading) {
+  if (loading || subscriptionLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
@@ -42,6 +45,12 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   if (!user) {
     return <Navigate to="/auth?mode=login" replace />;
+  }
+
+  // Redirect to trial-ended page if trial expired and not subscribed
+  // Except if already on trial-ended page or settings page
+  if (isTrialExpired && !subscribed && location.pathname !== "/trial-ended" && location.pathname !== "/settings") {
+    return <Navigate to="/trial-ended" replace />;
   }
 
   return <>{children}</>;

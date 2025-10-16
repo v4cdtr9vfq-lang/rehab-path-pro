@@ -302,9 +302,6 @@ export default function Settings() {
                   <h3 className="text-lg font-semibold mb-2">
                     {subscribed ? "Cambiar de Plan" : "Elige tu Plan"}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
-                    30 días de prueba gratis en todos los planes
-                  </p>
                 </div>
 
                 {/* Basic Plan (Free) */}
@@ -321,10 +318,6 @@ export default function Settings() {
                     )}
                   </div>
                   <ul className="space-y-2 text-sm">
-                    <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-primary" />
-                      Gratuito durante 30 días de prueba.
-                    </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-primary" />
                       Acceso completo a todas las funciones.

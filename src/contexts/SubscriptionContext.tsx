@@ -7,6 +7,8 @@ interface SubscriptionContextType {
   plan: "free" | "monthly" | "annual";
   subscriptionEnd: string | null;
   loading: boolean;
+  trialDaysRemaining: number;
+  isTrialExpired: boolean;
   checkSubscription: () => Promise<void>;
   createCheckoutSession: (priceId: string) => Promise<void>;
   openCustomerPortal: () => Promise<void>;
@@ -35,6 +37,8 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const [plan, setPlan] = useState<"free" | "monthly" | "annual">("free");
   const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [trialDaysRemaining, setTrialDaysRemaining] = useState(30);
+  const [isTrialExpired, setIsTrialExpired] = useState(false);
 
   const checkSubscription = async () => {
     try {
@@ -45,7 +49,26 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         setSubscribed(false);
         setPlan("free");
         setSubscriptionEnd(null);
+        setTrialDaysRemaining(30);
+        setIsTrialExpired(false);
         return;
+      }
+
+      // Check profile creation date for trial calculation
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('created_at')
+        .eq('user_id', session.user.id)
+        .single();
+
+      if (profile?.created_at) {
+        const createdAt = new Date(profile.created_at);
+        const now = new Date();
+        const daysSinceCreation = Math.floor((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24));
+        const daysRemaining = Math.max(0, 30 - daysSinceCreation);
+        
+        setTrialDaysRemaining(daysRemaining);
+        setIsTrialExpired(daysRemaining === 0);
       }
 
       const { data, error } = await supabase.functions.invoke("check-subscription");
@@ -138,6 +161,8 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         plan,
         subscriptionEnd,
         loading,
+        trialDaysRemaining,
+        isTrialExpired,
         checkSubscription,
         createCheckoutSession,
         openCustomerPortal,
