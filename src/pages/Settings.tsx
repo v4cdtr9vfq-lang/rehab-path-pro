@@ -335,7 +335,7 @@ export default function Settings() {
                     <Button 
                       disabled
                       variant="destructive"
-                      className="w-full mt-12"
+                      className="w-full mt-16"
                     >
                       Plan Actual
                     </Button>
@@ -373,14 +373,14 @@ export default function Settings() {
                     <Button 
                       disabled
                       variant="destructive"
-                      className="w-full mt-12"
+                      className="w-full mt-16"
                     >
                       Plan Actual
                     </Button>
                   ) : (
                     <Button 
                       onClick={() => createCheckoutSession(SUBSCRIPTION_PLANS.monthly.priceId)}
-                      className="w-full mt-12"
+                      className="w-full mt-16"
                     >
                       Actualiza tu plan
                     </Button>
@@ -422,14 +422,14 @@ export default function Settings() {
                     <Button 
                       disabled
                       variant="destructive"
-                      className="w-full mt-12"
+                      className="w-full mt-16"
                     >
                       Plan Actual
                     </Button>
                   ) : (
                     <Button 
                       onClick={() => createCheckoutSession(SUBSCRIPTION_PLANS.annual.priceId)}
-                      className="w-full mt-12"
+                      className="w-full mt-16"
                     >
                       Actualiza tu plan
                     </Button>
