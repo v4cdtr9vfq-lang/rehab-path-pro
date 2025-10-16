@@ -77,14 +77,15 @@ export default function Chat() {
       scrollToBottom();
     }
 
-    // Load reported messages by current user
+    // Load all reported messages (visible to all users)
     const { data: reports } = await supabase
       .from('message_reports')
-      .select('message_id')
-      .eq('reported_by', user.id);
+      .select('message_id');
 
     if (reports) {
-      setReportedMessages(new Set(reports.map(r => r.message_id)));
+      // Get unique message IDs that have been reported
+      const uniqueReportedIds = [...new Set(reports.map(r => r.message_id))];
+      setReportedMessages(new Set(uniqueReportedIds));
     }
 
     // Set up realtime channel for messages and presence
