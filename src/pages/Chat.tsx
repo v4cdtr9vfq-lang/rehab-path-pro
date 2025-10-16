@@ -4,10 +4,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Send, Users } from "lucide-react";
+import { Send, Users, MoreVertical, Edit2, Flag } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ChatMessage {
   id: string;
@@ -25,6 +40,11 @@ export default function Chat() {
   const [userId, setUserId] = useState("");
   const [onlineCount, setOnlineCount] = useState(0);
   const [isSending, setIsSending] = useState(false);
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [editedMessage, setEditedMessage] = useState("");
+  const [reportDialogOpen, setReportDialogOpen] = useState(false);
+  const [reportingMessageId, setReportingMessageId] = useState<string | null>(null);
+  const [reportReason, setReportReason] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const channelRef = useRef<any>(null);
 
@@ -147,6 +167,79 @@ export default function Chat() {
     return name.substring(0, 2).toUpperCase();
   };
 
+  const startEditing = (messageId: string, currentMessage: string) => {
+    setEditingMessageId(messageId);
+    setEditedMessage(currentMessage);
+  };
+
+  const cancelEditing = () => {
+    setEditingMessageId(null);
+    setEditedMessage("");
+  };
+
+  const saveEdit = async (messageId: string) => {
+    if (!editedMessage.trim()) return;
+
+    try {
+      const { error } = await supabase
+        .from('chat_messages')
+        .update({ message: editedMessage.trim() })
+        .eq('id', messageId);
+
+      if (error) throw error;
+
+      setEditingMessageId(null);
+      setEditedMessage("");
+      
+      toast({
+        title: "Mensaje editado",
+        description: "Tu mensaje ha sido actualizado correctamente",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "No se pudo editar el mensaje",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const openReportDialog = (messageId: string) => {
+    setReportingMessageId(messageId);
+    setReportDialogOpen(true);
+  };
+
+  const submitReport = async () => {
+    if (!reportingMessageId || !reportReason.trim()) return;
+
+    try {
+      const { error } = await supabase
+        .from('message_reports')
+        .insert({
+          message_id: reportingMessageId,
+          reported_by: userId,
+          reason: reportReason.trim(),
+        });
+
+      if (error) throw error;
+
+      setReportDialogOpen(false);
+      setReportingMessageId(null);
+      setReportReason("");
+      
+      toast({
+        title: "Denuncia enviada",
+        description: "Gracias por ayudar a mantener la comunidad segura",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "No se pudo enviar la denuncia",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="h-[calc(100vh-8rem)] flex flex-col animate-in fade-in duration-500">
       <div className="mb-4">
@@ -173,6 +266,8 @@ export default function Chat() {
             <div className="space-y-4">
               {messages.map((msg) => {
                 const isOwnMessage = msg.user_id === userId;
+                const isEditing = editingMessageId === msg.id;
+                
                 return (
                   <div
                     key={msg.id}
@@ -183,25 +278,67 @@ export default function Chat() {
                         {getInitials(msg.user_name)}
                       </AvatarFallback>
                     </Avatar>
-                    <div className={`flex flex-col ${isOwnMessage ? 'items-end' : 'items-start'} max-w-[70%]`}>
-                      <span className="text-xs text-muted-foreground mb-1">
-                        {isOwnMessage ? 'Tú' : msg.user_name}
-                      </span>
-                      <div
-                        className={`rounded-2xl px-4 py-2 ${
-                          isOwnMessage
-                            ? 'bg-primary text-primary-foreground'
-                            : 'bg-muted'
-                        }`}
-                      >
-                        <p className="text-sm break-words">{msg.message}</p>
+                    <div className={`flex flex-col ${isOwnMessage ? 'items-end' : 'items-start'} max-w-[70%] flex-1`}>
+                      <div className={`flex items-center gap-2 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'}`}>
+                        <span className="text-xs text-muted-foreground mb-1">
+                          {isOwnMessage ? 'Tú' : msg.user_name}
+                        </span>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-6 w-6 mb-1">
+                              <MoreVertical className="h-3 w-3" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align={isOwnMessage ? "end" : "start"}>
+                            {isOwnMessage && (
+                              <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
+                                <Edit2 className="h-4 w-4 mr-2" />
+                                Editar
+                              </DropdownMenuItem>
+                            )}
+                            <DropdownMenuItem onClick={() => openReportDialog(msg.id)}>
+                              <Flag className="h-4 w-4 mr-2" />
+                              Denunciar
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
-                      <span className="text-xs text-muted-foreground mt-1">
-                        {new Date(msg.created_at).toLocaleTimeString('es-ES', {
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </span>
+                      
+                      {isEditing ? (
+                        <div className="w-full space-y-2">
+                          <Textarea
+                            value={editedMessage}
+                            onChange={(e) => setEditedMessage(e.target.value)}
+                            className="min-h-[60px]"
+                          />
+                          <div className="flex gap-2">
+                            <Button size="sm" onClick={() => saveEdit(msg.id)}>
+                              Guardar
+                            </Button>
+                            <Button size="sm" variant="outline" onClick={cancelEditing}>
+                              Cancelar
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div
+                            className={`rounded-2xl px-4 py-2 ${
+                              isOwnMessage
+                                ? 'bg-primary text-primary-foreground'
+                                : 'bg-muted'
+                            }`}
+                          >
+                            <p className="text-sm break-words">{msg.message}</p>
+                          </div>
+                          <span className="text-xs text-muted-foreground mt-1">
+                            {new Date(msg.created_at).toLocaleTimeString('es-ES', {
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </span>
+                        </>
+                      )}
                     </div>
                   </div>
                 );
@@ -226,6 +363,31 @@ export default function Chat() {
           </form>
         </CardContent>
       </Card>
+
+      <Dialog open={reportDialogOpen} onOpenChange={setReportDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Denunciar mensaje</DialogTitle>
+            <DialogDescription>
+              Por favor, describe el motivo de tu denuncia. Nuestro equipo revisará este mensaje.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            value={reportReason}
+            onChange={(e) => setReportReason(e.target.value)}
+            placeholder="Describe el problema con este mensaje..."
+            className="min-h-[100px]"
+          />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setReportDialogOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={submitReport} disabled={!reportReason.trim()}>
+              Enviar denuncia
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
