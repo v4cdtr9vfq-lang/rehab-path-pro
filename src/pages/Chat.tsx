@@ -16,14 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 
 interface ChatMessage {
@@ -44,9 +36,6 @@ export default function Chat() {
   const [isSending, setIsSending] = useState(false);
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editedMessage, setEditedMessage] = useState("");
-  const [reportDialogOpen, setReportDialogOpen] = useState(false);
-  const [reportingMessageId, setReportingMessageId] = useState<string | null>(null);
-  const [reportReason, setReportReason] = useState("");
   const [reportedMessages, setReportedMessages] = useState<Set<string>>(new Set());
   const [isAnonymous, setIsAnonymous] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -222,40 +211,63 @@ export default function Chat() {
     }
   };
 
-  const openReportDialog = (messageId: string) => {
-    setReportingMessageId(messageId);
-    setReportDialogOpen(true);
-  };
+  const toggleReport = async (messageId: string) => {
+    const isCurrentlyReported = reportedMessages.has(messageId);
 
-  const submitReport = async () => {
-    if (!reportingMessageId || !reportReason.trim()) return;
+    if (isCurrentlyReported) {
+      // Unreport: remove from database
+      try {
+        const { error } = await supabase
+          .from('message_reports')
+          .delete()
+          .eq('message_id', messageId)
+          .eq('reported_by', userId);
 
-    try {
-      const { error } = await supabase
-        .from('message_reports')
-        .insert({
-          message_id: reportingMessageId,
-          reported_by: userId,
-          reason: reportReason.trim(),
+        if (error) throw error;
+
+        setReportedMessages(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(messageId);
+          return newSet;
         });
 
-      if (error) throw error;
+        toast({
+          title: "Denuncia retirada",
+          description: "Has retirado tu denuncia de este mensaje",
+        });
+      } catch (error: any) {
+        toast({
+          title: "Error",
+          description: "No se pudo retirar la denuncia",
+          variant: "destructive",
+        });
+      }
+    } else {
+      // Report: add to database
+      try {
+        const { error } = await supabase
+          .from('message_reports')
+          .insert({
+            message_id: messageId,
+            reported_by: userId,
+            reason: "Mensaje reportado por el usuario",
+          });
 
-      setReportedMessages(prev => new Set([...prev, reportingMessageId]));
-      setReportDialogOpen(false);
-      setReportingMessageId(null);
-      setReportReason("");
-      
-      toast({
-        title: "Denuncia enviada",
-        description: "Gracias por ayudar a mantener la comunidad segura",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: "No se pudo enviar la denuncia",
-        variant: "destructive",
-      });
+        if (error) throw error;
+
+        setReportedMessages(prev => new Set([...prev, messageId]));
+
+        toast({
+          title: "Mensaje denunciado",
+          description: "Has marcado este mensaje como inapropiado",
+        });
+      } catch (error: any) {
+        toast({
+          title: "Error",
+          description: "No se pudo denunciar el mensaje",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -392,18 +404,24 @@ export default function Chat() {
                                 {getFirstName(msg.user_name)}
                               </span>
                               <div className="flex items-start gap-2">
-                                <div className="rounded-[28px] px-6 py-3 bg-[#2A2A2A] text-white">
-                                  <p className="text-sm">{msg.message}</p>
+                                <div className={`rounded-[28px] px-6 py-3 ${
+                                  isReported 
+                                    ? 'bg-black border-2 border-red-500' 
+                                    : 'bg-[#2A2A2A] text-white'
+                                }`}>
+                                  <p className={`text-sm ${isReported ? 'invisible' : ''}`}>
+                                    {msg.message}
+                                  </p>
                                 </div>
                                 
                                 <Button 
                                   variant="ghost" 
                                   size="icon" 
-                                  onClick={() => openReportDialog(msg.id)}
+                                  onClick={() => toggleReport(msg.id)}
                                   className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                                  title="Denunciar"
+                                  title={isReported ? "Quitar denuncia" : "Denunciar"}
                                 >
-                                  <Flag className="h-4 w-4 text-red-500" />
+                                  <Flag className={`h-4 w-4 ${isReported ? 'fill-red-500' : ''} text-red-500`} />
                                 </Button>
                               </div>
                               <span className="text-xs text-muted-foreground pl-6">
@@ -451,30 +469,6 @@ export default function Chat() {
         </CardContent>
       </Card>
 
-      <Dialog open={reportDialogOpen} onOpenChange={setReportDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Denunciar mensaje</DialogTitle>
-            <DialogDescription>
-              Por favor, describe el motivo de tu denuncia. Nuestro equipo revisará este mensaje.
-            </DialogDescription>
-          </DialogHeader>
-          <Textarea
-            value={reportReason}
-            onChange={(e) => setReportReason(e.target.value)}
-            placeholder="Describe el problema con este mensaje..."
-            className="min-h-[100px]"
-          />
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setReportDialogOpen(false)}>
-              Cancelar
-            </Button>
-            <Button onClick={submitReport} disabled={!reportReason.trim()}>
-              Enviar denuncia
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
