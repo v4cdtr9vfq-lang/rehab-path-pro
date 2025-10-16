@@ -292,7 +292,7 @@ export default function Chat() {
                     ) : (
                       <>
                         {isOwnMessage ? (
-                          // Own messages: three dots - message - avatar
+                          // Own messages: three dots - message - avatar (aligned to right)
                           <div className="flex items-start gap-3 max-w-[80%]">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
@@ -304,7 +304,7 @@ export default function Chat() {
                                   <MoreVertical className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end" className="bg-popover">
+                              <DropdownMenuContent align="end" className="bg-popover z-50">
                                 <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
                                   <Edit2 className="h-4 w-4 mr-2" />
                                   Editar
@@ -316,11 +316,11 @@ export default function Chat() {
                               </DropdownMenuContent>
                             </DropdownMenu>
                             
-                            <div className="flex flex-col items-end flex-1">
+                            <div className="flex flex-col items-end gap-1">
                               <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white">
                                 <p className="text-sm">{msg.message}</p>
                               </div>
-                              <span className="text-xs text-muted-foreground mt-1.5">
+                              <span className="text-xs text-muted-foreground">
                                 {new Date(msg.created_at).toLocaleTimeString('es-ES', {
                                   hour: '2-digit',
                                   minute: '2-digit'
@@ -335,7 +335,7 @@ export default function Chat() {
                             </Avatar>
                           </div>
                         ) : (
-                          // Other messages: avatar - name/message/time
+                          // Other messages: avatar - name (above) + message + time (below)
                           <div className="flex items-start gap-3 max-w-[80%]">
                             <Avatar className="h-14 w-14 flex-shrink-0">
                               <AvatarFallback className="bg-white text-black text-base font-semibold">
@@ -343,14 +343,14 @@ export default function Chat() {
                               </AvatarFallback>
                             </Avatar>
 
-                            <div className="flex flex-col flex-1">
-                              <span className="text-sm text-muted-foreground mb-2">
+                            <div className="flex flex-col gap-1">
+                              <span className="text-sm text-muted-foreground">
                                 {msg.user_name}
                               </span>
                               <div className="rounded-[28px] px-6 py-3 bg-[#2A2A2A] text-white">
                                 <p className="text-sm">{msg.message}</p>
                               </div>
-                              <span className="text-xs text-muted-foreground mt-1.5">
+                              <span className="text-xs text-muted-foreground">
                                 {new Date(msg.created_at).toLocaleTimeString('es-ES', {
                                   hour: '2-digit',
                                   minute: '2-digit'
