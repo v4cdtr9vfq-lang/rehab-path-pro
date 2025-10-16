@@ -345,7 +345,7 @@ export default function Chat() {
                                   <MoreVertical className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end" className="bg-popover z-50">
+                              <DropdownMenuContent align="end" className="bg-popover z-[100]">
                                 <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
                                   <Edit2 className="h-4 w-4 mr-2" />
                                   Editar
@@ -409,7 +409,7 @@ export default function Chat() {
                                   <MoreVertical className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent align="start" className="bg-popover z-50">
+                              <DropdownMenuContent align="start" className="bg-popover z-[100]">
                                 <DropdownMenuItem onClick={() => openReportDialog(msg.id)}>
                                   <Flag className="h-4 w-4 mr-2" />
                                   Denunciar
