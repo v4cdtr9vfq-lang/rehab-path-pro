@@ -112,6 +112,33 @@ export default function Home() {
   const fetchData = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
+      // Check if it's a new day and reset goals FIRST
+      const lastResetDate = localStorage.getItem('last_goals_reset');
+      const todayStr = getLocalDateString();
+      
+      if (lastResetDate !== todayStr) {
+        console.log('New day detected, resetting all goals');
+        // It's a new day, reset all goals in database
+        await supabase
+          .from('goals')
+          .update({ completed: false })
+          .eq('user_id', user.id);
+        
+        // Clear old localStorage keys (keep only today's)
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith('goals_completed_') && key !== getTodayKey()) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+        
+        // Update last reset date
+        localStorage.setItem('last_goals_reset', todayStr);
+        console.log('Goals reset complete for new day:', todayStr);
+      }
+
       // Fetch profile
       const { data: profile } = await supabase
         .from('profiles')
@@ -121,21 +148,6 @@ export default function Home() {
       
       if (profile?.abstinence_start_date) {
         setStartDate(new Date(profile.abstinence_start_date));
-      }
-
-      // Check if it's a new day and reset goals automatically
-      const lastResetDate = localStorage.getItem('last_goals_reset');
-      const todayStr = getLocalDateString();
-      
-      if (lastResetDate !== todayStr) {
-        // It's a new day, reset all goals
-        await supabase
-          .from('goals')
-          .update({ completed: false })
-          .eq('user_id', user.id);
-        
-        // Update last reset date
-        localStorage.setItem('last_goals_reset', todayStr);
       }
 
       // Fetch today's check-in
