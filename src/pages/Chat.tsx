@@ -271,12 +271,8 @@ export default function Chat() {
                 return (
                   <div
                     key={msg.id}
-                    className={`flex flex-col ${isOwnMessage ? 'items-end' : 'items-start'} group mb-6`}
+                    className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-6 group`}
                   >
-                    <span className="text-xs text-muted-foreground mb-2">
-                      {isOwnMessage ? 'Tú' : msg.user_name}
-                    </span>
-                    
                     {isEditing ? (
                       <div className="w-full max-w-[70%] space-y-2">
                         <Textarea
@@ -294,55 +290,76 @@ export default function Chat() {
                         </div>
                       </div>
                     ) : (
-                      <div className={`flex ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'} items-center gap-3 max-w-[80%]`}>
-                        <Avatar className="h-12 w-12 flex-shrink-0">
-                          <AvatarFallback className={isOwnMessage ? 'bg-[#FF7A5C] text-white' : 'bg-white text-black'}>
-                            {getInitials(msg.user_name)}
-                          </AvatarFallback>
-                        </Avatar>
-                        
-                        <div className="flex flex-col">
-                          <div
-                            className={`rounded-3xl px-6 py-3 ${
-                              isOwnMessage
-                                ? 'bg-[#FF7A5C] text-white'
-                                : 'bg-[#2A2A2A] text-white'
-                            }`}
-                          >
-                            <p className="text-sm break-words">{msg.message}</p>
-                          </div>
-                          <span className={`text-xs text-muted-foreground mt-2 ${isOwnMessage ? 'text-right' : 'text-left'}`}>
-                            {new Date(msg.created_at).toLocaleTimeString('es-ES', {
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
-                          </span>
-                        </div>
+                      <>
+                        {isOwnMessage ? (
+                          // Own messages: three dots - message - avatar
+                          <div className="flex items-start gap-3 max-w-[80%]">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1"
+                                >
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end" className="bg-popover">
+                                <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
+                                  <Edit2 className="h-4 w-4 mr-2" />
+                                  Editar
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => openReportDialog(msg.id)}>
+                                  <Flag className="h-4 w-4 mr-2" />
+                                  Denunciar
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                            
+                            <div className="flex flex-col items-end flex-1">
+                              <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white">
+                                <p className="text-sm">{msg.message}</p>
+                              </div>
+                              <span className="text-xs text-muted-foreground mt-1.5">
+                                {new Date(msg.created_at).toLocaleTimeString('es-ES', {
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </span>
+                            </div>
 
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-10 w-10 rounded-full bg-muted/80 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity"
-                            >
-                              <MoreVertical className="h-5 w-5" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align={isOwnMessage ? "end" : "start"} className="bg-popover">
-                            {isOwnMessage && (
-                              <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
-                                <Edit2 className="h-4 w-4 mr-2" />
-                                Editar
-                              </DropdownMenuItem>
-                            )}
-                            <DropdownMenuItem onClick={() => openReportDialog(msg.id)}>
-                              <Flag className="h-4 w-4 mr-2" />
-                              Denunciar
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
+                            <Avatar className="h-14 w-14 flex-shrink-0">
+                              <AvatarFallback className="bg-[#FF7A5C] text-white text-base font-semibold">
+                                {getInitials(msg.user_name)}
+                              </AvatarFallback>
+                            </Avatar>
+                          </div>
+                        ) : (
+                          // Other messages: avatar - name/message/time
+                          <div className="flex items-start gap-3 max-w-[80%]">
+                            <Avatar className="h-14 w-14 flex-shrink-0">
+                              <AvatarFallback className="bg-white text-black text-base font-semibold">
+                                {getInitials(msg.user_name)}
+                              </AvatarFallback>
+                            </Avatar>
+
+                            <div className="flex flex-col flex-1">
+                              <span className="text-sm text-muted-foreground mb-2">
+                                {msg.user_name}
+                              </span>
+                              <div className="rounded-[28px] px-6 py-3 bg-[#2A2A2A] text-white">
+                                <p className="text-sm">{msg.message}</p>
+                              </div>
+                              <span className="text-xs text-muted-foreground mt-1.5">
+                                {new Date(msg.created_at).toLocaleTimeString('es-ES', {
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 );
