@@ -273,7 +273,7 @@ export default function Chat() {
                     key={msg.id}
                     className={`flex gap-3 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'} group`}
                   >
-                    <Avatar className="h-8 w-8 flex-shrink-0">
+                    <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarFallback className={isOwnMessage ? 'bg-primary text-primary-foreground' : 'bg-secondary'}>
                         {getInitials(msg.user_name)}
                       </AvatarFallback>
@@ -300,8 +300,17 @@ export default function Chat() {
                           </div>
                         </div>
                       ) : (
-                        <div className="w-full">
-                          <div className="flex items-center gap-2 group/message">
+                        <div className="w-full flex flex-col gap-1">
+                          <div className={`flex items-center gap-2 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'} group/message`}>
+                            <div
+                              className={`rounded-2xl px-4 py-2 ${
+                                isOwnMessage
+                                  ? 'bg-primary text-primary-foreground'
+                                  : 'bg-muted'
+                              }`}
+                            >
+                              <p className="text-sm break-words">{msg.message}</p>
+                            </div>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button 
@@ -325,17 +334,8 @@ export default function Chat() {
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
-                            <div
-                              className={`rounded-2xl px-4 py-2 ${
-                                isOwnMessage
-                                  ? 'bg-primary text-primary-foreground'
-                                  : 'bg-muted'
-                              }`}
-                            >
-                              <p className="text-sm break-words">{msg.message}</p>
-                            </div>
                           </div>
-                          <span className={`text-xs text-muted-foreground mt-1 block ${isOwnMessage ? 'text-right' : 'text-left'}`}>
+                          <span className={`text-xs text-muted-foreground ${isOwnMessage ? 'text-right pr-10' : 'text-left pl-0'}`}>
                             {new Date(msg.created_at).toLocaleTimeString('es-ES', {
                               hour: '2-digit',
                               minute: '2-digit'
