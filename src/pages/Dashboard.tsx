@@ -137,10 +137,6 @@ export default function Home() {
         // Update last reset date
         localStorage.setItem('last_goals_reset', todayStr);
         console.log('Goals reset complete for new day:', todayStr);
-        
-        // Force page reload to ensure fresh data
-        window.location.reload();
-        return; // Stop execution here since we're reloading
       }
 
       // Fetch profile
