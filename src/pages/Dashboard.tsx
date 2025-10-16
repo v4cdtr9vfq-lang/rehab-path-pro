@@ -123,24 +123,19 @@ export default function Home() {
         setStartDate(new Date(profile.abstinence_start_date));
       }
 
-      // Check yesterday's check-in to determine if we need to reset
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = yesterday.toISOString().split('T')[0];
+      // Check if it's a new day and reset goals automatically
+      const lastResetDate = localStorage.getItem('last_goals_reset');
+      const todayStr = getLocalDateString();
       
-      const { data: yesterdayCheckIn } = await supabase
-        .from('check_ins')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('check_in_date', yesterdayStr)
-        .maybeSingle();
-
-      // If no check-in yesterday, reset all goals
-      if (!yesterdayCheckIn) {
+      if (lastResetDate !== todayStr) {
+        // It's a new day, reset all goals
         await supabase
           .from('goals')
           .update({ completed: false })
           .eq('user_id', user.id);
+        
+        // Update last reset date
+        localStorage.setItem('last_goals_reset', todayStr);
       }
 
       // Fetch today's check-in
