@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { BookOpen, Plus, Search } from "lucide-react";
-import { useState } from "react";
+import { BookOpen, Plus, Search, Mic, Square, Loader2 } from "lucide-react";
+import { useState, useRef } from "react";
 import { AudioRecorder } from "@/components/AudioRecorder";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface JournalEntry {
   id: string;
@@ -15,12 +17,107 @@ interface JournalEntry {
 }
 
 export default function Journal() {
+  const { toast } = useToast();
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [showNewEntry, setShowNewEntry] = useState(false);
   const [entryContent, setEntryContent] = useState("");
+  const [isRecordingQuick, setIsRecordingQuick] = useState(false);
+  const [isProcessingQuick, setIsProcessingQuick] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
 
   const handleTranscriptionComplete = (text: string) => {
     setEntryContent(prev => prev ? `${prev}\n\n${text}` : text);
+  };
+
+  const startQuickRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      chunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          chunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = async () => {
+        setIsProcessingQuick(true);
+        const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        await transcribeAndCreateEntry(audioBlob);
+        
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      mediaRecorder.start();
+      setIsRecordingQuick(true);
+      
+      toast({
+        title: "Grabando",
+        description: "Habla ahora para crear una entrada automática...",
+      });
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo acceder al micrófono",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const stopQuickRecording = () => {
+    if (mediaRecorderRef.current && isRecordingQuick) {
+      mediaRecorderRef.current.stop();
+      setIsRecordingQuick(false);
+    }
+  };
+
+  const transcribeAndCreateEntry = async (audioBlob: Blob) => {
+    try {
+      const reader = new FileReader();
+      reader.readAsDataURL(audioBlob);
+      
+      reader.onloadend = async () => {
+        const base64Audio = (reader.result as string).split(',')[1];
+        
+        const { data, error } = await supabase.functions.invoke('transcribe-audio', {
+          body: { audio: base64Audio }
+        });
+
+        if (error) throw error;
+
+        if (data?.text) {
+          // Crear una nueva entrada automáticamente con el texto transcrito
+          const newEntry: JournalEntry = {
+            id: crypto.randomUUID(),
+            date: new Date(),
+            title: "Entrada de voz - " + new Date().toLocaleDateString('es-ES'),
+            content: data.text,
+            tags: ["voz"]
+          };
+          
+          setEntries(prev => [newEntry, ...prev]);
+          
+          toast({
+            title: "Entrada creada",
+            description: "Tu audio ha sido transcrito y guardado como nueva entrada",
+          });
+        }
+        
+        setIsProcessingQuick(false);
+      };
+    } catch (error) {
+      console.error('Error transcribing audio:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo transcribir el audio",
+        variant: "destructive",
+      });
+      setIsProcessingQuick(false);
+    }
   };
 
   return (
@@ -40,10 +137,45 @@ export default function Journal() {
             />
           </div>
         </div>
-        <Button onClick={() => setShowNewEntry(true)} className="gap-2">
-          <Plus className="h-4 w-4" />
-          Nueva Entrada
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => setShowNewEntry(true)} className="gap-2">
+            <Plus className="h-4 w-4" />
+            Nueva Entrada
+          </Button>
+          
+          {!isRecordingQuick && !isProcessingQuick && (
+            <Button
+              variant="outline"
+              onClick={startQuickRecording}
+              className="gap-2"
+            >
+              <Mic className="h-4 w-4" />
+              Grabar Audio
+            </Button>
+          )}
+          
+          {isRecordingQuick && (
+            <Button
+              variant="destructive"
+              onClick={stopQuickRecording}
+              className="gap-2 animate-pulse"
+            >
+              <Square className="h-4 w-4" />
+              Detener
+            </Button>
+          )}
+          
+          {isProcessingQuick && (
+            <Button
+              variant="outline"
+              disabled
+              className="gap-2"
+            >
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Transcribiendo...
+            </Button>
+          )}
+        </div>
       </div>
 
       {showNewEntry && (
