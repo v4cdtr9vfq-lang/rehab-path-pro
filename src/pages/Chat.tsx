@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Send, Users, MoreVertical, Edit2, Flag, Trash2 } from "lucide-react";
+import { Send, Users, MoreVertical, Edit2, Flag, Trash2, MessageSquare } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
@@ -484,10 +484,22 @@ export default function Chat() {
                 </ScrollArea>
                 
                 {/* Overlay sobre el área de mensajes */}
-                <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex items-center justify-center">
-                  <div className="text-center space-y-2">
-                    <p className="text-lg font-semibold text-foreground">Chat de Testing</p>
-                    <p className="text-sm text-muted-foreground">Mensajes ficticios para pruebas</p>
+                <div className="absolute inset-0 bg-background/95 backdrop-blur-sm z-10 flex items-center justify-center">
+                  <div className="text-center space-y-4 px-6 max-w-md">
+                    <div className="w-20 h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
+                      <MessageSquare className="h-10 w-10 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-foreground mb-2">Chat Comunitario</h3>
+                      <p className="text-muted-foreground">
+                        Conecta con otros miembros que están en el mismo proceso de recuperación. 
+                        Comparte experiencias, encuentra apoyo y crece junto a la comunidad.
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                      <Users className="h-4 w-4" />
+                      <span>Espacio seguro y confidencial</span>
+                    </div>
                   </div>
                 </div>
               </div>
