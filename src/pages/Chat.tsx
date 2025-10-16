@@ -167,6 +167,10 @@ export default function Chat() {
     return name.substring(0, 2).toUpperCase();
   };
 
+  const getFirstName = (fullName: string) => {
+    return fullName.split(' ')[0];
+  };
+
   const startEditing = (messageId: string, currentMessage: string) => {
     setEditingMessageId(messageId);
     setEditedMessage(currentMessage);
@@ -328,7 +332,7 @@ export default function Chat() {
                               </span>
                             </div>
 
-                            <Avatar className="h-14 w-14 flex-shrink-0">
+                            <Avatar className="h-14 w-14 flex-shrink-0 mt-0">
                               <AvatarFallback className="bg-[#FF7A5C] text-white text-base font-semibold">
                                 {getInitials(msg.user_name)}
                               </AvatarFallback>
@@ -337,7 +341,7 @@ export default function Chat() {
                         ) : (
                           // Other messages: avatar - name (above) + message + time (below)
                           <div className="flex items-start gap-3 max-w-[80%]">
-                            <Avatar className="h-14 w-14 flex-shrink-0">
+                            <Avatar className="h-14 w-14 flex-shrink-0 mt-0">
                               <AvatarFallback className="bg-white text-black text-base font-semibold">
                                 {getInitials(msg.user_name)}
                               </AvatarFallback>
@@ -345,7 +349,7 @@ export default function Chat() {
 
                             <div className="flex flex-col gap-1">
                               <span className="text-sm text-muted-foreground pl-6">
-                                {msg.user_name}
+                                {getFirstName(msg.user_name)}
                               </span>
                               <div className="rounded-[28px] px-6 py-3 bg-[#2A2A2A] text-white">
                                 <p className="text-sm">{msg.message}</p>
