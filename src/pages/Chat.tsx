@@ -42,7 +42,12 @@ export default function Chat() {
   const [userName, setUserName] = useState("");
   const [userId, setUserId] = useState("");
   const [currentRoom, setCurrentRoom] = useState<string>('narcoticos');
-  const [onlineCountByRoom, setOnlineCountByRoom] = useState<Record<string, number>>({});
+  const [onlineCountByRoom, setOnlineCountByRoom] = useState<Record<string, number>>({
+    narcoticos: 0,
+    dependencia_emocional: 0,
+    pornografia: 0,
+    redes_sociales: 0
+  });
   const [isSending, setIsSending] = useState(false);
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editedMessage, setEditedMessage] = useState("");
