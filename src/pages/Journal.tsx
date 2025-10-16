@@ -28,7 +28,7 @@ export default function Journal() {
   const [entryTags, setEntryTags] = useState("");
   const [isRecordingQuick, setIsRecordingQuick] = useState(false);
   const [isProcessingQuick, setIsProcessingQuick] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
 
@@ -52,6 +52,8 @@ export default function Journal() {
         description: "No se pudieron cargar las entradas",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -180,7 +182,6 @@ export default function Journal() {
     }
 
     try {
-      setIsLoading(true);
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
@@ -226,8 +227,6 @@ export default function Journal() {
         description: "No se pudo guardar la entrada",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -318,9 +317,8 @@ export default function Journal() {
               <Button 
                 className="flex-1" 
                 onClick={saveEntry}
-                disabled={isLoading}
               >
-                {isLoading ? "Guardando..." : "Guardar Entrada"}
+                Guardar Entrada
               </Button>
               <Button variant="outline" onClick={() => setShowNewEntry(false)}>
                 Cancelar
@@ -332,7 +330,14 @@ export default function Journal() {
 
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold text-foreground">Entradas Recientes</h2>
-        {entries.length === 0 ? (
+        {isLoading ? (
+          <Card className="border-primary/20">
+            <CardContent className="p-12 text-center">
+              <Loader2 className="h-12 w-12 text-muted-foreground mx-auto mb-4 animate-spin" />
+              <p className="text-muted-foreground">Cargando entradas...</p>
+            </CardContent>
+          </Card>
+        ) : entries.length === 0 ? (
           <Card className="border-primary/20">
             <CardContent className="p-12 text-center">
               <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
