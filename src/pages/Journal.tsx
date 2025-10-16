@@ -3,17 +3,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { BookOpen, Plus, Search, Mic, Square, Loader2 } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { AudioRecorder } from "@/components/AudioRecorder";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 interface JournalEntry {
   id: string;
-  date: Date;
+  user_id: string;
   title: string;
   content: string;
   tags: string[];
+  entry_date: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export default function Journal() {
@@ -21,10 +24,36 @@ export default function Journal() {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [showNewEntry, setShowNewEntry] = useState(false);
   const [entryContent, setEntryContent] = useState("");
+  const [entryTitle, setEntryTitle] = useState("");
+  const [entryTags, setEntryTags] = useState("");
   const [isRecordingQuick, setIsRecordingQuick] = useState(false);
   const [isProcessingQuick, setIsProcessingQuick] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+
+  useEffect(() => {
+    loadEntries();
+  }, []);
+
+  const loadEntries = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('journal_entries')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      if (data) setEntries(data);
+    } catch (error) {
+      console.error('Error loading entries:', error);
+      toast({
+        title: "Error",
+        description: "No se pudieron cargar las entradas",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleTranscriptionComplete = (text: string) => {
     setEntryContent(prev => prev ? `${prev}\n\n${text}` : text);
@@ -90,21 +119,41 @@ export default function Journal() {
         if (error) throw error;
 
         if (data?.text) {
-          // Crear una nueva entrada automáticamente con el texto transcrito
-          const newEntry: JournalEntry = {
-            id: crypto.randomUUID(),
-            date: new Date(),
-            title: "Entrada de voz - " + new Date().toLocaleDateString('es-ES'),
-            content: data.text,
-            tags: ["voz"]
-          };
+          // Obtener el usuario actual
+          const { data: { user } } = await supabase.auth.getUser();
           
-          setEntries(prev => [newEntry, ...prev]);
-          
-          toast({
-            title: "Entrada creada",
-            description: "Tu audio ha sido transcrito y guardado como nueva entrada",
-          });
+          if (!user) {
+            toast({
+              title: "Error",
+              description: "Debes iniciar sesión para guardar entradas",
+              variant: "destructive",
+            });
+            setIsProcessingQuick(false);
+            return;
+          }
+
+          // Guardar en la base de datos
+          const { data: newEntry, error: insertError } = await supabase
+            .from('journal_entries')
+            .insert({
+              user_id: user.id,
+              title: "Entrada de voz - " + new Date().toLocaleDateString('es-ES'),
+              content: data.text,
+              tags: ["voz"]
+            })
+            .select()
+            .single();
+
+          if (insertError) throw insertError;
+
+          if (newEntry) {
+            setEntries(prev => [newEntry, ...prev]);
+            
+            toast({
+              title: "Entrada creada",
+              description: "Tu audio ha sido transcrito y guardado como nueva entrada",
+            });
+          }
         }
         
         setIsProcessingQuick(false);
@@ -117,6 +166,68 @@ export default function Journal() {
         variant: "destructive",
       });
       setIsProcessingQuick(false);
+    }
+  };
+
+  const saveEntry = async () => {
+    if (!entryTitle.trim() || !entryContent.trim()) {
+      toast({
+        title: "Error",
+        description: "Por favor completa el título y contenido",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "Debes iniciar sesión para guardar entradas",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const tags = entryTags.split(',').map(tag => tag.trim()).filter(tag => tag);
+
+      const { data: newEntry, error } = await supabase
+        .from('journal_entries')
+        .insert({
+          user_id: user.id,
+          title: entryTitle,
+          content: entryContent,
+          tags
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (newEntry) {
+        setEntries(prev => [newEntry, ...prev]);
+        setShowNewEntry(false);
+        setEntryTitle("");
+        setEntryContent("");
+        setEntryTags("");
+        
+        toast({
+          title: "Entrada guardada",
+          description: "Tu entrada ha sido guardada exitosamente",
+        });
+      }
+    } catch (error) {
+      console.error('Error saving entry:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo guardar la entrada",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -184,7 +295,11 @@ export default function Journal() {
             <CardTitle>Nueva Entrada de Diario</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Input placeholder="Título de la entrada..." />
+            <Input 
+              placeholder="Título de la entrada..." 
+              value={entryTitle}
+              onChange={(e) => setEntryTitle(e.target.value)}
+            />
             <div className="space-y-2">
               <Textarea
                 placeholder="Escribe tus pensamientos..."
@@ -194,9 +309,19 @@ export default function Journal() {
               />
               <AudioRecorder onTranscriptionComplete={handleTranscriptionComplete} />
             </div>
-            <Input placeholder="Etiquetas (separadas por comas)" />
+            <Input 
+              placeholder="Etiquetas (separadas por comas)" 
+              value={entryTags}
+              onChange={(e) => setEntryTags(e.target.value)}
+            />
             <div className="flex gap-2">
-              <Button className="flex-1">Guardar Entrada</Button>
+              <Button 
+                className="flex-1" 
+                onClick={saveEntry}
+                disabled={isLoading}
+              >
+                {isLoading ? "Guardando..." : "Guardar Entrada"}
+              </Button>
               <Button variant="outline" onClick={() => setShowNewEntry(false)}>
                 Cancelar
               </Button>
@@ -226,7 +351,7 @@ export default function Journal() {
                   <div className="space-y-1">
                     <CardTitle className="text-xl">{entry.title}</CardTitle>
                     <p className="text-sm text-muted-foreground">
-                      {entry.date.toLocaleDateString('es-ES', { 
+                      {new Date(entry.created_at).toLocaleDateString('es-ES', { 
                         weekday: 'long', 
                         year: 'numeric', 
                         month: 'long', 
