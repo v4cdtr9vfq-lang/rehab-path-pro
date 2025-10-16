@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { BookOpen, Plus, Search, Mic, Square, Loader2 } from "lucide-react";
+import { BookOpen, Plus, Search, Mic, Square, Loader2, Pencil, Trash2 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { AudioRecorder } from "@/components/AudioRecorder";
 import { useToast } from "@/hooks/use-toast";
@@ -29,6 +29,7 @@ export default function Journal() {
   const [isRecordingQuick, setIsRecordingQuick] = useState(false);
   const [isProcessingQuick, setIsProcessingQuick] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
 
@@ -195,31 +196,59 @@ export default function Journal() {
 
       const tags = entryTags.split(',').map(tag => tag.trim()).filter(tag => tag);
 
-      const { data: newEntry, error } = await supabase
-        .from('journal_entries')
-        .insert({
-          user_id: user.id,
-          title: entryTitle,
-          content: entryContent,
-          tags
-        })
-        .select()
-        .single();
+      if (editingEntryId) {
+        // Update existing entry
+        const { error } = await supabase
+          .from('journal_entries')
+          .update({
+            title: entryTitle,
+            content: entryContent,
+            tags
+          })
+          .eq('id', editingEntryId);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      if (newEntry) {
-        setEntries(prev => [newEntry, ...prev]);
-        setShowNewEntry(false);
-        setEntryTitle("");
-        setEntryContent("");
-        setEntryTags("");
-        
+        setEntries(prev => prev.map(entry => 
+          entry.id === editingEntryId 
+            ? { ...entry, title: entryTitle, content: entryContent, tags }
+            : entry
+        ));
+
         toast({
-          title: "Entrada guardada",
-          description: "Tu entrada ha sido guardada exitosamente",
+          title: "Entrada actualizada",
+          description: "Tu entrada ha sido actualizada exitosamente",
         });
+      } else {
+        // Create new entry
+        const { data: newEntry, error } = await supabase
+          .from('journal_entries')
+          .insert({
+            user_id: user.id,
+            title: entryTitle,
+            content: entryContent,
+            tags
+          })
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        if (newEntry) {
+          setEntries(prev => [newEntry, ...prev]);
+          
+          toast({
+            title: "Entrada guardada",
+            description: "Tu entrada ha sido guardada exitosamente",
+          });
+        }
       }
+
+      setShowNewEntry(false);
+      setEditingEntryId(null);
+      setEntryTitle("");
+      setEntryContent("");
+      setEntryTags("");
     } catch (error) {
       console.error('Error saving entry:', error);
       toast({
@@ -228,6 +257,39 @@ export default function Journal() {
         variant: "destructive",
       });
     }
+  };
+
+  const deleteEntry = async (entryId: string) => {
+    try {
+      const { error } = await supabase
+        .from('journal_entries')
+        .delete()
+        .eq('id', entryId);
+
+      if (error) throw error;
+
+      setEntries(prev => prev.filter(entry => entry.id !== entryId));
+      
+      toast({
+        title: "Entrada eliminada",
+        description: "La entrada ha sido eliminada exitosamente",
+      });
+    } catch (error) {
+      console.error('Error deleting entry:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar la entrada",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const startEditEntry = (entry: JournalEntry) => {
+    setEditingEntryId(entry.id);
+    setEntryTitle(entry.title);
+    setEntryContent(entry.content);
+    setEntryTags(entry.tags.join(', '));
+    setShowNewEntry(true);
   };
 
   return (
@@ -291,7 +353,7 @@ export default function Journal() {
       {showNewEntry && (
         <Card className="border-primary/20">
           <CardHeader>
-            <CardTitle>Nueva Entrada de Diario</CardTitle>
+            <CardTitle>{editingEntryId ? 'Editar Entrada' : 'Nueva Entrada de Diario'}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <Input 
@@ -318,9 +380,15 @@ export default function Journal() {
                 className="flex-1" 
                 onClick={saveEntry}
               >
-                Guardar Entrada
+                {editingEntryId ? 'Actualizar Entrada' : 'Guardar Entrada'}
               </Button>
-              <Button variant="outline" onClick={() => setShowNewEntry(false)}>
+              <Button variant="outline" onClick={() => {
+                setShowNewEntry(false);
+                setEditingEntryId(null);
+                setEntryTitle("");
+                setEntryContent("");
+                setEntryTags("");
+              }}>
                 Cancelar
               </Button>
             </div>
@@ -350,10 +418,10 @@ export default function Journal() {
           </Card>
         ) : (
           entries.map((entry) => (
-            <Card key={entry.id} className="border-primary/20 hover:shadow-medium transition-all cursor-pointer">
+            <Card key={entry.id} className="border-primary/20 hover:shadow-medium transition-all">
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <div className="space-y-1">
+                  <div className="space-y-1 flex-1">
                     <CardTitle className="text-xl">{entry.title}</CardTitle>
                     <p className="text-sm text-muted-foreground">
                       {new Date(entry.created_at).toLocaleDateString('es-ES', { 
@@ -364,7 +432,24 @@ export default function Journal() {
                       })}
                     </p>
                   </div>
-                  <BookOpen className="h-5 w-5 text-primary" />
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => startEditEntry(entry)}
+                      className="h-8 w-8"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => deleteEntry(entry.id)}
+                      className="h-8 w-8 text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
