@@ -12,8 +12,12 @@ export function AbstinenceCounter({
   });
   useEffect(() => {
     const calculateTime = () => {
+      // Normalize both dates to midnight to count calendar days, not hours
       const now = new Date();
-      const diff = now.getTime() - startDate.getTime();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+      
+      const diff = today.getTime() - start.getTime();
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const years = Math.floor(days / 365);
       const months = Math.floor(days % 365 / 30);
