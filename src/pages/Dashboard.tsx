@@ -112,32 +112,16 @@ export default function Home() {
   const fetchData = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
-      // Check if it's a new day and reset goals FIRST
-      const lastResetDate = localStorage.getItem('last_goals_reset');
+      // Clear today's localStorage to show all goals as unchecked
       const todayStr = getLocalDateString();
+      const todayKey = getTodayKey();
+      localStorage.removeItem(todayKey);
       
-      if (lastResetDate !== todayStr) {
-        console.log('New day detected, resetting all goals');
-        // It's a new day, reset all goals in database
-        await supabase
-          .from('goals')
-          .update({ completed: false })
-          .eq('user_id', user.id);
-        
-        // Clear ALL localStorage goals data
-        const keysToRemove = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key && key.startsWith('goals_completed_')) {
-            keysToRemove.push(key);
-          }
-        }
-        keysToRemove.forEach(key => localStorage.removeItem(key));
-        
-        // Update last reset date
-        localStorage.setItem('last_goals_reset', todayStr);
-        console.log('Goals reset complete for new day:', todayStr);
-      }
+      // Reset all goals in database
+      await supabase
+        .from('goals')
+        .update({ completed: false })
+        .eq('user_id', user.id);
 
       // Fetch profile
       const { data: profile } = await supabase
