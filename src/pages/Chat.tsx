@@ -271,7 +271,7 @@ export default function Chat() {
                 return (
                   <div
                     key={msg.id}
-                    className={`flex gap-3 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'}`}
+                    className={`flex gap-3 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'} group`}
                   >
                     <Avatar className="h-8 w-8 flex-shrink-0">
                       <AvatarFallback className={isOwnMessage ? 'bg-primary text-primary-foreground' : 'bg-secondary'}>
@@ -279,30 +279,9 @@ export default function Chat() {
                       </AvatarFallback>
                     </Avatar>
                     <div className={`flex flex-col ${isOwnMessage ? 'items-end' : 'items-start'} max-w-[70%] flex-1`}>
-                      <div className={`flex items-center gap-2 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'}`}>
-                        <span className="text-xs text-muted-foreground mb-1">
-                          {isOwnMessage ? 'Tú' : msg.user_name}
-                        </span>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-6 w-6 mb-1">
-                              <MoreVertical className="h-3 w-3" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align={isOwnMessage ? "end" : "start"}>
-                            {isOwnMessage && (
-                              <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
-                                <Edit2 className="h-4 w-4 mr-2" />
-                                Editar
-                              </DropdownMenuItem>
-                            )}
-                            <DropdownMenuItem onClick={() => openReportDialog(msg.id)}>
-                              <Flag className="h-4 w-4 mr-2" />
-                              Denunciar
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
+                      <span className="text-xs text-muted-foreground mb-1">
+                        {isOwnMessage ? 'Tú' : msg.user_name}
+                      </span>
                       
                       {isEditing ? (
                         <div className="w-full space-y-2">
@@ -322,14 +301,39 @@ export default function Chat() {
                         </div>
                       ) : (
                         <>
-                          <div
-                            className={`rounded-2xl px-4 py-2 ${
-                              isOwnMessage
-                                ? 'bg-primary text-primary-foreground'
-                                : 'bg-muted'
-                            }`}
-                          >
-                            <p className="text-sm break-words">{msg.message}</p>
+                          <div className="flex items-center gap-2 group/message">
+                            <div
+                              className={`rounded-2xl px-4 py-2 ${
+                                isOwnMessage
+                                  ? 'bg-primary text-primary-foreground'
+                                  : 'bg-muted'
+                              }`}
+                            >
+                              <p className="text-sm break-words">{msg.message}</p>
+                            </div>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-8 w-8 opacity-0 group-hover/message:opacity-100 transition-opacity"
+                                >
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align={isOwnMessage ? "end" : "start"} className="bg-popover">
+                                {isOwnMessage && (
+                                  <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
+                                    <Edit2 className="h-4 w-4 mr-2" />
+                                    Editar
+                                  </DropdownMenuItem>
+                                )}
+                                <DropdownMenuItem onClick={() => openReportDialog(msg.id)}>
+                                  <Flag className="h-4 w-4 mr-2" />
+                                  Denunciar
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </div>
                           <span className="text-xs text-muted-foreground mt-1">
                             {new Date(msg.created_at).toLocaleTimeString('es-ES', {
