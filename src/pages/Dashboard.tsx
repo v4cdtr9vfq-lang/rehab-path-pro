@@ -21,6 +21,28 @@ export default function Home() {
   const goalsProgress = totalGoals > 0 ? (goalsCompleted / totalGoals) * 100 : 0;
   const [activeGoals, setActiveGoals] = useState<any[]>([]);
 
+  const allQuotes = [
+    { text: "Siempre es lo simple lo que produce lo maravilloso.", author: "Amelia Barr" },
+    { text: "La confianza se construye con consistencia.", author: "Lincoln Chafee" },
+    { text: "Un viaje de mil millas comienza con un solo paso.", author: "Lao Tzu" },
+    { text: "La valentía no es la ausencia del miedo, sino el triunfo sobre él.", author: "Nelson Mandela" },
+    { text: "El éxito es la suma de pequeños esfuerzos repetidos día tras día.", author: "Robert Collier" },
+    { text: "No cuentes los días, haz que los días cuenten.", author: "Muhammad Ali" },
+    { text: "La recuperación no es un destino, es un viaje.", author: "Anónimo" },
+    { text: "Cada día es una nueva oportunidad para comenzar de nuevo.", author: "Desconocido" },
+    { text: "La fuerza no viene de lo que puedes hacer. Viene de superar las cosas que creías que no podías hacer.", author: "Rikki Rogers" },
+    { text: "El primer paso no te lleva donde quieres ir, pero te saca de donde estás.", author: "Anónimo" }
+  ];
+
+  // Get quote of the day based on date
+  const getQuoteOfTheDay = () => {
+    const today = new Date();
+    const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
+    return allQuotes[dayOfYear % allQuotes.length];
+  };
+
+  const dailyQuote = getQuoteOfTheDay();
+
   // Get local date string without UTC conversion
   const getLocalDateString = (date: Date = new Date()): string => {
     const year = date.getFullYear();
@@ -440,9 +462,9 @@ export default function Home() {
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
         <CardContent className="p-6">
           <p className="text-center text-foreground text-xl font-medium leading-relaxed mb-2">
-            "La confianza se construye con consistencia."
+            "{dailyQuote.text}"
           </p>
-          <p className="text-center text-muted-foreground text-sm">- Lincoln Chafee</p>
+          <p className="text-center text-muted-foreground text-sm">- {dailyQuote.author}</p>
           <div className="flex justify-center mt-4">
             <Link to="/message">
               <Button variant="ghost" size="sm" className="text-primary text-xs">Ver más mensajes</Button>
