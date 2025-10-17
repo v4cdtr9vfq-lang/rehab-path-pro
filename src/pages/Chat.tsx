@@ -469,19 +469,19 @@ export default function Chat() {
                     </span>
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent className="bg-popover z-[100] min-w-[250px]">
+                <SelectContent className="bg-popover z-[100]">
                   {CHAT_ROOMS.map((room) => (
-                    <SelectItem key={room.id} value={room.id} className="cursor-pointer">
-                      <div className="flex items-center justify-between w-full gap-4 pr-2">
-                        <span className="flex-1">{room.label}</span>
+                    <SelectItem key={room.id} value={room.id} className="cursor-pointer pr-4">
+                      <span className="flex items-center justify-between w-full">
+                        <span>{room.label}</span>
                         <Badge 
                           variant="secondary" 
-                          className="flex-shrink-0 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5"
+                          className="ml-auto inline-flex gap-1 text-xs px-1.5 py-0.5 h-5"
                         >
                           <Users className="h-3 w-3" />
                           {onlineCountByRoom[room.id] || 0}
                         </Badge>
-                      </div>
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
