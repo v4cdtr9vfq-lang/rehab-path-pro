@@ -537,12 +537,12 @@ export default function ProgressPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <span className="text-lg">📊</span>
-            Gráficos del progreso
+            Gráfico del progreso:
           </CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="week" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-3 mb-6">
               <TabsTrigger value="week">Semana</TabsTrigger>
               <TabsTrigger value="month">Mes</TabsTrigger>
               <TabsTrigger value="year">Año</TabsTrigger>
