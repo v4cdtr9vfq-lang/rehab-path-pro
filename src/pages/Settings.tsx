@@ -435,7 +435,7 @@ export default function Settings() {
                 <div className={`border rounded-lg p-4 space-y-3 ${plan === "free" ? "border-primary bg-primary/5" : "border-border"}`}>
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-semibold text-lg">Plan Básico</h4>
+                      <h4 className="font-semibold text-2xl">Plan Básico</h4>
                       <p className="text-2xl font-bold text-primary mt-1">Gratis<span className="text-sm text-muted-foreground">/30 días</span></p>
                     </div>
                     {plan === "free" && (
@@ -462,7 +462,7 @@ export default function Settings() {
                     <Button 
                       disabled
                       variant="destructive"
-                      className="w-full mt-16"
+                      className="w-full mt-48"
                     >
                       Plan Actual
                     </Button>
