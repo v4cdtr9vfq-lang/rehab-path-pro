@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
-
 const menuItems = [{
   emoji: "🏠",
   label: "Mi centro",
@@ -57,17 +56,14 @@ export function Sidebar() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [totalOnlineInChat, setTotalOnlineInChat] = useState(0);
-
   useEffect(() => {
     // Escuchar actualizaciones del contador de usuarios en chat
     const handleChatUsersUpdate = (event: CustomEvent) => {
       setTotalOnlineInChat(event.detail.totalUsers);
     };
-
     window.addEventListener('chatUsersUpdated', handleChatUsersUpdate as EventListener);
     return () => window.removeEventListener('chatUsersUpdated', handleChatUsersUpdate as EventListener);
   }, []);
-
   const handleLogout = async () => {
     const {
       error
@@ -82,23 +78,20 @@ export function Sidebar() {
   const SidebarContent = () => <div className="flex flex-col h-full">
       <Link to="/dashboard" className="mb-5 px-6 pt-5 block hover:opacity-80 transition-opacity" onClick={() => setOpen(false)}>
         <h1 className="text-2xl font-bold text-sidebar-foreground tracking-tight">Rehapp</h1>
-        <p className="text-xs text-sidebar-foreground/60 mt-1">Tu proceso hacia la reconexión</p>
+        <p className="text-xs text-sidebar-foreground/60 mt-1">Tu proceso hacia la reconexión.</p>
       </Link>
       
       <nav className="flex flex-col gap-1.5 px-5 flex-1 overflow-y-auto">
         {menuItems.map(item => {
         // "Mi centro" también incluye /checkin
-        const isActive = location.pathname === item.path || 
-                        (item.path === '/dashboard' && location.pathname === '/checkin');
+        const isActive = location.pathname === item.path || item.path === '/dashboard' && location.pathname === '/checkin';
         const isChat = item.path === '/chat';
         return <Link key={item.path} to={item.path} onClick={() => setOpen(false)} className={`flex items-center gap-3 rounded-xl px-3 py-2 transition-all ${isActive ? "bg-primary text-primary-foreground font-semibold shadow-lg" : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"}`}>
               <span className="text-lg flex-shrink-0">{item.emoji}</span>
               <span className="text-sm flex-1">{item.label}</span>
-              {isChat && (
-                <Badge variant="secondary" className="ml-auto text-xs px-2 py-0.5">
+              {isChat && <Badge variant="secondary" className="ml-auto text-xs px-2 py-0.5">
                   {totalOnlineInChat}
-                </Badge>
-              )}
+                </Badge>}
             </Link>;
       })}
       </nav>
