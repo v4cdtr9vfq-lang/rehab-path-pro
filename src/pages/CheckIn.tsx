@@ -114,39 +114,85 @@ export default function CheckIn() {
 
       // If answered "yes" to trigger question and has description, save as journal entry
       if (answers[2] === "yes" && triggerDescription.trim()) {
-        const { error: journalError } = await supabase
+        // Check if entry already exists
+        const { data: existingEntry } = await supabase
           .from('journal_entries')
-          .upsert({
-            user_id: user.id,
-            entry_date: today,
-            title: "Gatillos emocionales",
-            content: triggerDescription.trim(),
-            tags: ["gatillos", "check-in"]
-          }, {
-            onConflict: 'user_id,entry_date,title'
-          });
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('entry_date', today)
+          .eq('title', "Gatillos emocionales")
+          .maybeSingle();
 
-        if (journalError) {
-          console.error("Error saving journal entry:", journalError);
+        if (existingEntry) {
+          // Update existing entry
+          const { error: journalError } = await supabase
+            .from('journal_entries')
+            .update({
+              content: triggerDescription.trim(),
+              tags: ["gatillos", "check-in"]
+            })
+            .eq('id', existingEntry.id);
+
+          if (journalError) {
+            console.error("Error updating journal entry:", journalError);
+          }
+        } else {
+          // Insert new entry
+          const { error: journalError } = await supabase
+            .from('journal_entries')
+            .insert({
+              user_id: user.id,
+              entry_date: today,
+              title: "Gatillos emocionales",
+              content: triggerDescription.trim(),
+              tags: ["gatillos", "check-in"]
+            });
+
+          if (journalError) {
+            console.error("Error inserting journal entry:", journalError);
+          }
         }
       }
 
       // If answered "no" to values question and has description, save as journal entry
       if (answers[7] === "no" && valuesDescription.trim()) {
-        const { error: journalError } = await supabase
+        // Check if entry already exists
+        const { data: existingEntry } = await supabase
           .from('journal_entries')
-          .upsert({
-            user_id: user.id,
-            entry_date: today,
-            title: "Cuándo soy infiel a mis valores",
-            content: valuesDescription.trim(),
-            tags: ["valores", "check-in"]
-          }, {
-            onConflict: 'user_id,entry_date,title'
-          });
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('entry_date', today)
+          .eq('title', "Cuándo soy infiel a mis valores")
+          .maybeSingle();
 
-        if (journalError) {
-          console.error("Error saving journal entry:", journalError);
+        if (existingEntry) {
+          // Update existing entry
+          const { error: journalError } = await supabase
+            .from('journal_entries')
+            .update({
+              content: valuesDescription.trim(),
+              tags: ["valores", "check-in"]
+            })
+            .eq('id', existingEntry.id);
+
+          if (journalError) {
+            console.error("Error updating journal entry:", journalError);
+          }
+        } else {
+          // Insert new entry
+          const { error: journalError } = await supabase
+            .from('journal_entries')
+            .insert({
+              user_id: user.id,
+              entry_date: today,
+              title: "Cuándo soy infiel a mis valores",
+              content: valuesDescription.trim(),
+              tags: ["valores", "check-in"]
+            });
+
+          if (journalError) {
+            console.error("Error inserting journal entry:", journalError);
+          }
         }
       }
 
