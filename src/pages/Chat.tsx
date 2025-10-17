@@ -647,7 +647,7 @@ export default function Chat() {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Escribe un mensaje..."
-                className="w-full px-[10px] py-[10px] resize-none min-h-[60px] text-sm placeholder:text-sm"
+                className="w-full px-[15px] py-[10px] resize-none min-h-[60px] text-sm placeholder:text-sm"
                 disabled={isSending}
                 rows={3}
               />
@@ -671,7 +671,7 @@ export default function Chat() {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Escribe un mensaje..."
-                className="flex-1 px-[10px] py-[10px] resize-none min-h-[44px] max-h-[44px] text-sm placeholder:text-sm"
+                className="flex-1 px-[15px] py-[10px] resize-none min-h-[44px] max-h-[44px] text-sm placeholder:text-sm"
                 disabled={isSending}
                 rows={2}
               />
