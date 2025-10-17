@@ -155,8 +155,19 @@ export default function SupportNetwork() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      <div>
+    <div className="relative space-y-6 animate-in fade-in duration-500">
+      {/* Emoji Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
+        <div className="absolute inset-0 flex flex-wrap justify-around items-center gap-8 text-success text-6xl select-none">
+          {['🤝', '💚', '👥', '🫂', '💪', '❤️', '🌟', '🤲', '👨‍👩‍👧‍👦', '🙏', '💙', '✨', '🌈', '🤗', '💖'].map((emoji, index) => (
+            <span key={index} className="animate-pulse" style={{ animationDelay: `${index * 0.2}s` }}>
+              {emoji}
+            </span>
+          ))}
+        </div>
+      </div>
+      
+      <div className="relative z-10">
         <h1 className="text-4xl font-bold text-foreground mb-2">Mi Red de Apoyo</h1>
         <p className="text-muted-foreground text-lg">Gestiona tus contactos de confianza</p>
       </div>
