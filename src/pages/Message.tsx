@@ -219,15 +219,6 @@ export default function Message() {
         </CardContent>
       </Card>
 
-      <Card className="border-accent/20 bg-gradient-to-br from-accent/5 to-transparent">
-        <CardContent className="p-6">
-          <h3 className="font-semibold text-foreground mb-3">💡 Reflexión del Día</h3>
-          <p className="text-foreground/80">
-            {getReflectionOfTheDay()}
-          </p>
-        </CardContent>
-      </Card>
-
       {savedQuotes.length > 0 && (
         <Card className="border-border/50">
           <CardHeader>

@@ -43,6 +43,24 @@ export default function Home() {
 
   const dailyQuote = getQuoteOfTheDay();
 
+  const reflections = [
+    "¿Cómo puedes practicar la simplicidad en tu recuperación hoy? ¿Qué pequeña acción consistente puedes tomar para construir confianza contigo mismo y con los demás?",
+    "¿Qué obstáculo te está deteniendo hoy? ¿Cómo puedes transformarlo en una oportunidad de crecimiento?",
+    "¿Qué cosa pequeña puedes hacer hoy para cuidar mejor de ti mismo?",
+    "¿A quién puedes agradecer hoy por su apoyo en tu camino de recuperación?",
+    "¿Qué has aprendido sobre ti mismo en los últimos días? ¿Cómo puedes aplicar esa lección hoy?",
+    "¿Qué te hace sentir más fuerte en tu recuperación? ¿Cómo puedes incorporar más de eso en tu día?",
+    "¿Qué significa para ti el progreso hoy? ¿Cómo lo vas a medir?",
+    "¿Qué cosa puedes perdonarte hoy? ¿Qué paso puedes dar hacia adelante?"
+  ];
+
+  // Get reflection of the day based on date
+  const getReflectionOfTheDay = () => {
+    const today = new Date();
+    const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
+    return reflections[dayOfYear % reflections.length];
+  };
+
   // Get local date string without UTC conversion
   const getLocalDateString = (date: Date = new Date()): string => {
     const year = date.getFullYear();
@@ -470,6 +488,16 @@ export default function Home() {
               <Button variant="ghost" size="sm" className="text-primary text-xs">Ver más mensajes</Button>
             </Link>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Daily Reflection */}
+      <Card className="border-accent/20 bg-gradient-to-br from-accent/5 to-transparent">
+        <CardContent className="p-6">
+          <h3 className="font-semibold text-foreground mb-3">💡 Reflexión del Día</h3>
+          <p className="text-foreground/80">
+            {getReflectionOfTheDay()}
+          </p>
         </CardContent>
       </Card>
     </div>
