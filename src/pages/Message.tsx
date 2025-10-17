@@ -286,7 +286,7 @@ export default function Message() {
         <CardContent>
           <form onSubmit={submitProposedQuote} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="quote">Frase</Label>
+              <Label htmlFor="quote">frase</Label>
               <Textarea
                 id="quote"
                 placeholder="Escribe la frase que quieres compartir..."
