@@ -532,7 +532,7 @@ export default function EmotionJournal() {
                   {entry.sub_emotions && entry.sub_emotions.length > 0 && (
                     <div>
                       <div className="flex flex-wrap gap-2">
-                        {entry.sub_emotions.map((emotion, idx) => (
+                        {[...entry.sub_emotions].reverse().map((emotion, idx) => (
                           <span
                             key={idx}
                             className="px-3 py-1 rounded-full bg-primary/20 text-primary text-sm"
