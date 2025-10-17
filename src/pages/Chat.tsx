@@ -458,7 +458,7 @@ export default function Chat() {
                 setCurrentRoom(value);
                 localStorage.setItem('chat_last_room_mobile', value);
               }}>
-                <SelectTrigger className="w-full bg-black text-white flex items-center pr-[15px] pl-3 relative [&>svg]:ml-[15px]">
+                <SelectTrigger className="w-full bg-muted/50 border-border flex items-center pr-[15px] pl-3 relative [&>svg]:ml-[15px]">
                   <span className="flex-1 text-left">
                     {CHAT_ROOMS.find(room => room.id === currentRoom)?.label}
                   </span>
@@ -489,7 +489,7 @@ export default function Chat() {
               </Select>
             ) : (
               <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="w-full">
-                <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-black p-[15px] text-muted-foreground w-full flex-wrap gap-1">
+                <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-muted/50 border border-border p-[15px] text-muted-foreground w-full flex-wrap gap-1">
                   {CHAT_ROOMS.map((room, index) => (
                     <TabsTrigger 
                       key={room.id} 
@@ -596,7 +596,7 @@ export default function Chat() {
                           <div className="flex items-start gap-3 w-full pl-[15px]">
                             <div className="flex flex-col items-center gap-2 flex-shrink-0">
                               <Avatar className="h-11 w-11">
-                                <AvatarFallback className="bg-white text-black text-sm font-semibold">
+                                <AvatarFallback className="bg-muted text-foreground text-sm font-semibold">
                                   {getInitials(msg.user_name)}
                                 </AvatarFallback>
                               </Avatar>
@@ -642,8 +642,8 @@ export default function Chat() {
                               </span>
                               <div className={`rounded-[28px] px-6 py-3 max-w-full ${
                                 isReported 
-                                  ? 'bg-black border-2 border-red-500' 
-                                  : 'bg-[#2A2A2A] text-white'
+                                  ? 'bg-background border-2 border-red-500' 
+                                  : 'bg-muted/70 text-foreground'
                               }`}>
                                 <p className={`text-xs ${isReported ? 'invisible' : ''}`}>
                                   {msg.message}
@@ -667,7 +667,7 @@ export default function Chat() {
           </ScrollArea>
         </div>
 
-        <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-black shrink-0">
+        <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-muted/30 shrink-0">
           {isMobile ? (
             <div className="flex flex-col gap-2.5">
               <Textarea
@@ -678,7 +678,7 @@ export default function Chat() {
                 disabled={isSending}
                 rows={3}
               />
-              <Button type="submit" disabled={!newMessage.trim() || isSending} className="w-full bg-white text-black hover:bg-green-500 hover:text-white">
+              <Button type="submit" disabled={!newMessage.trim() || isSending} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
                 Enviar
               </Button>
               <div className="flex items-center gap-2 pl-[15px]">
@@ -702,7 +702,7 @@ export default function Chat() {
                 disabled={isSending}
                 rows={2}
               />
-              <Button type="submit" disabled={!newMessage.trim() || isSending} className="h-[44px] bg-white text-black hover:bg-green-500 hover:text-white">
+              <Button type="submit" disabled={!newMessage.trim() || isSending} className="h-[44px] bg-primary text-primary-foreground hover:bg-primary/90">
                 Enviar
               </Button>
             </div>
