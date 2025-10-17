@@ -76,10 +76,10 @@ export type Database = {
           created_at: string
           entry_date: string
           id: string
-          main_emotion: string
+          main_emotion: string | null
           primary_emotion: string | null
           secondary_emotions: string[] | null
-          sub_emotions: string[]
+          sub_emotions: string[] | null
           tertiary_emotions: string[] | null
           updated_at: string
           user_id: string
@@ -88,10 +88,10 @@ export type Database = {
           created_at?: string
           entry_date?: string
           id?: string
-          main_emotion: string
+          main_emotion?: string | null
           primary_emotion?: string | null
           secondary_emotions?: string[] | null
-          sub_emotions: string[]
+          sub_emotions?: string[] | null
           tertiary_emotions?: string[] | null
           updated_at?: string
           user_id: string
@@ -100,10 +100,10 @@ export type Database = {
           created_at?: string
           entry_date?: string
           id?: string
-          main_emotion?: string
+          main_emotion?: string | null
           primary_emotion?: string | null
           secondary_emotions?: string[] | null
-          sub_emotions?: string[]
+          sub_emotions?: string[] | null
           tertiary_emotions?: string[] | null
           updated_at?: string
           user_id?: string
