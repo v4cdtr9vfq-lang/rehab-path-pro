@@ -30,7 +30,7 @@ interface ChatMessage {
 
 const CHAT_ROOMS = [
   { id: 'narcoticos', label: 'Narcóticos' },
-  { id: 'dependencia_emocional', label: 'Dependencia Emocional' },
+  { id: 'dependencia_emocional', label: 'Codependencia' },
   { id: 'pornografia', label: 'Pornografía' },
   { id: 'redes_sociales', label: 'Redes Sociales' },
   { id: 'otros', label: 'Otros' },
