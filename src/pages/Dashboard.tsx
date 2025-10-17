@@ -624,9 +624,9 @@ export default function Home() {
             )}
           </button>
           <div>
-            <p className="font-semibold text-foreground">{goal.title}</p>
+            <p className="font-semibold text-foreground text-sm md:text-base">{goal.title}</p>
             <p
-              className={`text-sm ${
+              className={`text-xs md:text-sm ${
                 goal.status === "completed"
                   ? "text-green-500"
                   : "text-muted-foreground"
