@@ -187,11 +187,6 @@ export default function Message() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Mensaje Diario</h1>
-        <p className="text-muted-foreground text-lg">Inspiración y sabiduría para tu camino</p>
-      </div>
-
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
         <CardHeader>
           <div className="flex items-center justify-between">
