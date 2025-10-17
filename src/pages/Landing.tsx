@@ -42,7 +42,7 @@ export default function Landing() {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center space-y-8">
             <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-sky-blue/10 border border-sky-blue/30">
-              <span className="text-base font-semibold text-sky-blue">Un aliado en la rehabilitación</span>
+              <span className="text-base font-semibold text-foreground">Un aliado en la rehabilitación</span>
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight">
