@@ -380,16 +380,74 @@ export default function EmotionJournal() {
 
   return (
     <div className="py-8 space-y-6 animate-fade-in">
-      <div className="flex items-center justify-between">
+      {/* Emotion Log Widget */}
+      {savedEntries.length > 0 && (
         <div>
-          <h1 className="text-4xl font-bold text-foreground mb-2">
-            Diario de Emociones
-          </h1>
-          <p className="text-muted-foreground">
-            ¿Cómo te sientes hoy? Selecciona las emociones que mejor describan tu estado
-          </p>
+          <h2 className="text-2xl font-bold text-foreground mb-6">Registro de Emociones</h2>
+          <div className="space-y-4">
+            {savedEntries.map((entry) => (
+              <Card key={entry.id} className="p-6 bg-card border-border">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Calendar className="h-4 w-4" />
+                    <span className="text-sm font-medium">
+                      {format(new Date(entry.created_at), "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
+                    </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleEdit(entry)}
+                      className="h-8 w-8 p-0"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleDelete(entry.id)}
+                      className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <h3 className="text-sm font-semibold text-foreground/70 mb-2">Emociones Principales</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {entry.main_emotion.split(', ').map((emotion, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm font-medium"
+                        >
+                          {emotion}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-semibold text-foreground/70 mb-2">Emociones Específicas</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {entry.sub_emotions.map((emotion, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3 py-1 rounded-full bg-primary/20 text-primary text-sm"
+                        >
+                          {emotion}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <Card className="p-8 bg-card border-border">
         <div className="space-y-8">
@@ -492,74 +550,6 @@ export default function EmotionJournal() {
         </div>
       )}
 
-      {/* Emotion Log Widget */}
-      {savedEntries.length > 0 && (
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Registro de Emociones</h2>
-          <div className="space-y-4">
-            {savedEntries.map((entry) => (
-              <Card key={entry.id} className="p-6 bg-card border-border">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    <span className="text-sm font-medium">
-                      {format(new Date(entry.created_at), "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
-                    </span>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => handleEdit(entry)}
-                      className="h-8 w-8 p-0"
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => handleDelete(entry.id)}
-                      className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <div>
-                    <h3 className="text-sm font-semibold text-foreground/70 mb-2">Emociones Principales</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {entry.main_emotion.split(', ').map((emotion, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm font-medium"
-                        >
-                          {emotion}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-semibold text-foreground/70 mb-2">Emociones Específicas</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {entry.sub_emotions.map((emotion, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1 rounded-full bg-primary/20 text-primary text-sm"
-                        >
-                          {emotion}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
