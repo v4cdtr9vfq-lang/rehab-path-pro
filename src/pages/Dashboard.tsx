@@ -679,6 +679,16 @@ export default function Home() {
         </CardContent>
       </Card>
 
+      {/* Daily Reflection */}
+      <Card className="border-sky-blue/30 bg-gradient-to-br from-sky-blue/10 to-transparent">
+        <CardContent className="p-6">
+          <h3 className="font-semibold text-foreground mb-3">💡 Reflexión del día</h3>
+          <p className="text-foreground/80">
+            {getReflectionOfTheDay()}
+          </p>
+        </CardContent>
+      </Card>
+
       {/* Active Goals Summary */}
       <Card className="border-border/50">
         <CardHeader className="flex flex-row items-center justify-between">
@@ -737,16 +747,6 @@ export default function Home() {
         })}
         </div>
       </div>
-
-      {/* Daily Reflection */}
-      <Card className="border-sky-blue/30 bg-gradient-to-br from-sky-blue/10 to-transparent">
-        <CardContent className="p-6">
-          <h3 className="font-semibold text-foreground mb-3">💡 Reflexión del día</h3>
-          <p className="text-foreground/80">
-            {getReflectionOfTheDay()}
-          </p>
-        </CardContent>
-      </Card>
 
       {/* Medals Widget */}
       <div>
