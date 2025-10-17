@@ -343,7 +343,7 @@ export default function CheckIn() {
               ) : (
                 <Input
                   placeholder="Escribe..."
-                  value={answers[question.id] || ""}
+                  value={answers[question.id] || (question.id === 3 ? "Lo mejor está por llegar" : "")}
                   onChange={(e) => handleAnswer(question.id, e.target.value)}
                   className="text-base"
                 />
