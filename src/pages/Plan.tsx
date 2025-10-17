@@ -545,6 +545,11 @@ export default function Plan() {
         updateData.notes = editingGoal.notes || null;
       }
       
+      // Add instructions if provided
+      if (editingGoal.instructions !== undefined) {
+        updateData.instructions = editingGoal.instructions || null;
+      }
+      
       const {
         error
       } = await supabase.from('goals').update(updateData).eq('id', editingGoal.id);
@@ -810,7 +815,7 @@ export default function Plan() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-notes">Observaciones | Instrucciones</Label>
+              <Label htmlFor="edit-goal-notes">Observaciones</Label>
               <Textarea 
                 id="edit-goal-notes" 
                 placeholder="Observaciones sobre la meta..." 
@@ -818,6 +823,21 @@ export default function Plan() {
                 onChange={e => setEditingGoal(prev => ({
                   ...prev,
                   notes: e.target.value
+                }))}
+                rows={3}
+                className="resize-none"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="edit-goal-instructions">Instrucciones</Label>
+              <Textarea 
+                id="edit-goal-instructions" 
+                placeholder="Instrucciones para la meta..." 
+                value={editingGoal?.instructions || ""} 
+                onChange={e => setEditingGoal(prev => ({
+                  ...prev,
+                  instructions: e.target.value
                 }))}
                 rows={3}
                 className="resize-none"

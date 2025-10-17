@@ -182,6 +182,7 @@ export type Database = {
           description: string | null
           goal_type: string
           id: string
+          instructions: string | null
           notes: string | null
           order_index: number | null
           periodic_type: string | null
@@ -197,6 +198,7 @@ export type Database = {
           description?: string | null
           goal_type: string
           id?: string
+          instructions?: string | null
           notes?: string | null
           order_index?: number | null
           periodic_type?: string | null
@@ -212,6 +214,7 @@ export type Database = {
           description?: string | null
           goal_type?: string
           id?: string
+          instructions?: string | null
           notes?: string | null
           order_index?: number | null
           periodic_type?: string | null
