@@ -161,6 +161,7 @@ export default function SupportNetwork() {
           {contacts.length === 0 ? (
             <div className="text-center py-12">
               <Phone className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-foreground mb-2">Mi Red de Apoyo</h2>
               <p className="text-muted-foreground mb-4">No tienes contactos guardados aún</p>
               <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
                 <DialogTrigger asChild>
