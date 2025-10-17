@@ -155,7 +155,7 @@ export default function CheckIn() {
         description: "Tu progreso diario ha sido registrado exitosamente",
       });
 
-      navigate('/');
+      navigate('/dashboard');
     } catch (error: any) {
       toast({
         title: "Error",
