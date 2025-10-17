@@ -524,6 +524,7 @@ export default function EmotionJournal() {
 
                 <div className="space-y-3">
                   <div>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Principales:</h3>
                     <div className="flex flex-wrap gap-2">
                       {entry.main_emotion.split(', ').map((emotion, idx) => (
                         <span
@@ -538,11 +539,12 @@ export default function EmotionJournal() {
 
                   {entry.sub_emotions && entry.sub_emotions.length > 0 && (
                     <div>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Específicas:</h3>
                       <div className="flex flex-wrap gap-2">
                         {[...entry.sub_emotions].reverse().map((emotion, idx) => (
                           <span
                             key={idx}
-                            className="px-3 py-1 rounded-full bg-primary/20 text-primary text-sm"
+                            className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm"
                           >
                             {emotion}
                           </span>
