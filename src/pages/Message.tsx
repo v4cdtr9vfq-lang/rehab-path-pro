@@ -225,7 +225,7 @@ export default function Message() {
       if (error) throw error;
 
       toast({
-        title: "¡Frase propuesta!",
+        title: "Frase propuesta",
         description: "Tu frase ha sido enviada a la comunidad",
       });
 

@@ -162,7 +162,7 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
             </span>
           </div>
           <p className="text-base text-foreground mt-3 font-medium">
-            🎤 Grabando... Habla claramente
+            Grabando... Habla claramente
           </p>
         </div>
       )}

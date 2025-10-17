@@ -452,7 +452,7 @@ export default function Plan() {
         // Refresh all goals to get correct expansion
         await fetchGoals();
         toast({
-          title: "¡Meta añadida!",
+          title: "Meta añadida",
           description: "Tu meta ha sido guardada exitosamente."
         });
       }

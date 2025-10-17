@@ -96,7 +96,7 @@ export default function Gratitude() {
         if (error) throw error;
 
         toast({
-          title: "¡Guardado!",
+          title: "Guardado",
           description: "Tu entrada de gratitud ha sido guardada"
         });
 

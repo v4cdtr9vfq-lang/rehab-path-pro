@@ -60,7 +60,7 @@ export default function Settings() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "true") {
       toast({
-        title: "¡Suscripción activada!",
+        title: "Suscripción activada",
         description: "Tu suscripción ha sido activada exitosamente. Disfruta de 40 días gratis.",
       });
       checkSubscription();
@@ -310,7 +310,6 @@ export default function Settings() {
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <span className="text-lg">👤</span>
             Cuenta
           </CardTitle>
         </CardHeader>
@@ -340,7 +339,6 @@ export default function Settings() {
 
             <div className="border-t pt-4 space-y-4">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">🔒</span>
                 <Label>Cambiar Contraseña</Label>
               </div>
               <div className="space-y-2">
@@ -388,7 +386,6 @@ export default function Settings() {
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <span className="text-lg">💳</span>
             Suscripción
           </CardTitle>
         </CardHeader>
@@ -403,7 +400,6 @@ export default function Settings() {
               {subscribed && (
                 <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 space-y-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-lg text-primary">✅</span>
                     <span className="font-semibold">
                       {plan === "monthly" ? "Plan mensual activo" : "Plan anual activo"}
                     </span>
@@ -446,15 +442,12 @@ export default function Settings() {
                   </div>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
-                      <span className="text-primary">✅</span>
                       Acceso completo a todas las funciones.
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-primary">✅</span>
                       Chat comunitario.
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-primary">✅</span>
                       Seguimiento personalizado.
                     </li>
                   </ul>
@@ -484,15 +477,12 @@ export default function Settings() {
                   </div>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
-                      <span className="text-primary">✅</span>
                       Acceso completo a todas las funciones.
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-primary">✅</span>
                       Chat comunitario.
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-primary">✅</span>
                       Seguimiento personalizado.
                     </li>
                   </ul>

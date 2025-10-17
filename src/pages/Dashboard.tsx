@@ -189,23 +189,13 @@ export default function Home() {
         completed: allInstancesCompleted
       }).eq('id', goal.originalId).eq('user_id', user.id);
       toast({
-        title: (
-          <span className="flex items-start justify-between w-full">
-            <span>Meta actualizada</span>
-            <span className="text-lg ml-2">{wasCompleted ? "⏸️" : "✅"}</span>
-          </span>
-        ) as any,
+        title: "Meta actualizada",
         description: wasCompleted ? "Meta marcada como pendiente." : "¡Meta completada!."
       });
     } catch (error: any) {
       console.error('Error in toggleGoal:', error);
       toast({
-        title: (
-          <span className="flex items-start justify-between w-full">
-            <span>Error</span>
-            <span className="text-lg ml-2">⚠️</span>
-          </span>
-        ) as any,
+        title: "Error",
         description: "No se pudo actualizar la meta.",
         variant: "destructive"
       });
@@ -421,12 +411,7 @@ export default function Home() {
     } catch (error) {
       console.error('Error updating goal order:', error);
       toast({
-        title: (
-          <span className="flex items-start justify-between w-full">
-            <span>Error</span>
-            <span className="text-lg ml-2">⚠️</span>
-          </span>
-        ) as any,
+        title: "Error",
         description: "No se pudo guardar el orden de las metas.",
         variant: "destructive",
       });
@@ -441,12 +426,7 @@ export default function Home() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
-          title: (
-            <span className="flex items-start justify-between w-full">
-              <span>Error</span>
-              <span className="text-lg ml-2">⚠️</span>
-            </span>
-          ) as any,
+          title: "Error",
           description: "Debes iniciar sesión para guardar frases.",
           variant: "destructive",
         });
@@ -493,12 +473,7 @@ export default function Home() {
         if (error) throw error;
 
         toast({
-          title: (
-            <span className="flex items-start justify-between w-full">
-              <span>Frase guardada</span>
-              <span className="text-lg ml-2">⭐</span>
-            </span>
-          ) as any,
+          title: "Frase guardada",
           description: "La frase ha sido guardada exitosamente.",
         });
         

@@ -339,7 +339,7 @@ export default function EmotionJournal() {
       if (error) throw error;
 
       toast({
-        title: "¡Guardado!",
+        title: "Guardado",
         description: "Tus emociones han sido registradas exitosamente"
       });
 
@@ -416,7 +416,7 @@ export default function EmotionJournal() {
       if (error) throw error;
 
       toast({
-        title: "¡Actualizado!",
+        title: "Actualizado",
         description: "Tu entrada ha sido actualizada exitosamente."
       });
 

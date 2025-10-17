@@ -87,16 +87,11 @@ export default function Help() {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        toast({
-          title: (
-            <span className="flex items-start justify-between w-full">
-              <span>Error</span>
-              <span className="text-lg ml-2">⚠️</span>
-            </span>
-          ) as any,
-          description: "Debes iniciar sesión para enviar preguntas.",
-          variant: "destructive",
-        });
+      toast({
+        title: "Error",
+        description: "Debes iniciar sesión para enviar preguntas.",
+        variant: "destructive",
+      });
         return;
       }
 
@@ -111,12 +106,7 @@ export default function Help() {
       if (error) throw error;
 
       toast({
-        title: (
-          <span className="flex items-start justify-between w-full">
-            <span>¡Pregunta enviada!</span>
-            <span className="text-lg ml-2">📮</span>
-          </span>
-        ) as any,
+        title: "Pregunta enviada",
         description: "Tu pregunta ha sido enviada. Los administradores la responderán pronto.",
       });
 
@@ -124,12 +114,7 @@ export default function Help() {
     } catch (error: any) {
       console.error("Error submitting question:", error);
       toast({
-        title: (
-          <span className="flex items-start justify-between w-full">
-            <span>Error</span>
-            <span className="text-lg ml-2">⚠️</span>
-          </span>
-        ) as any,
+        title: "Error",
         description: "No se pudo enviar tu pregunta.",
         variant: "destructive",
       });

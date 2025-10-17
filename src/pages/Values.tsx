@@ -282,7 +282,7 @@ export default function Values() {
         setNewValueName("");
         setIsDialogOpen(false);
         toast({
-          title: "¡Valor añadido!",
+          title: "Valor añadido",
           description: "Tu valor ha sido guardado exitosamente",
         });
       }

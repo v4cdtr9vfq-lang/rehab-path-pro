@@ -197,24 +197,14 @@ export default function CheckIn() {
       }
 
       toast({
-        title: (
-          <span className="flex items-start justify-between w-full">
-            <span>¡Check-in guardado!</span>
-            <span className="text-lg ml-2">✅</span>
-          </span>
-        ) as any,
+        title: "Check-in guardado",
         description: "Tu progreso diario ha sido registrado exitosamente",
       });
 
       navigate('/dashboard');
     } catch (error: any) {
       toast({
-        title: (
-          <span className="flex items-start justify-between w-full">
-            <span>Error</span>
-            <span className="text-lg ml-2">⚠️</span>
-          </span>
-        ) as any,
+        title: "Error",
         description: error.message || "No se pudo guardar el check-in",
         variant: "destructive",
       });
