@@ -442,8 +442,8 @@ export default function ProgressPage() {
 
   const getBarColor = (percentage: number): string => {
     if (percentage === 100) return '#22c55e'; // Verde
-    if (percentage >= 20 && percentage < 100) return '#e6c25c'; // Amarillo mostaza
-    return 'hsl(var(--primary))'; // Azul
+    if (percentage >= 21 && percentage < 100) return '#e6c25c'; // Amarillo mostaza
+    return '#ef4444'; // Rojo
   };
 
   return (
@@ -462,16 +462,16 @@ export default function ProgressPage() {
             <div className={`inline-flex items-center justify-center w-40 h-40 rounded-full border-8 ${
               overallProgress === 100 
                 ? 'border-green-500/30 bg-green-500/5' 
-                : overallProgress >= 20 && overallProgress < 100
+                : overallProgress >= 21 && overallProgress < 100
                   ? 'border-[#e6c25c]/30 bg-[#e6c25c]/10'
-                  : 'border-sky-blue/30 bg-sky-blue/10'
+                  : 'border-red-500/30 bg-red-500/10'
             } transition-colors duration-500`}>
               <span className={`text-4xl font-bold ${
                 overallProgress === 100 
                   ? 'text-green-500' 
-                  : overallProgress >= 20 && overallProgress < 100
+                  : overallProgress >= 21 && overallProgress < 100
                     ? 'text-[#e6c25c]'
-                    : 'text-sky-blue'
+                    : 'text-red-500'
               } transition-colors duration-500`}>{overallProgress}%</span>
             </div>
             <p className="text-sm text-muted-foreground mt-4">Completitud Total de Metas</p>
