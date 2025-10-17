@@ -4,7 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CheckCircle2, Clock, Circle, Star, GripVertical } from "lucide-react";
+import { CheckCircle2, Clock, Circle, Star, GripVertical, PartyPopper } from "lucide-react";
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -40,6 +41,10 @@ export default function Home() {
   const [activeGoals, setActiveGoals] = useState<any[]>([]);
   const [isQuoteSaved, setIsQuoteSaved] = useState(false);
   const [savedQuotes, setSavedQuotes] = useState<any[]>([]);
+  const [medals, setMedals] = useState<any[]>([]);
+  const [showMedalPopup, setShowMedalPopup] = useState(false);
+  const [newMedal, setNewMedal] = useState<{type: string, name: string, emoji: string} | null>(null);
+  const [sobrietyDays, setSobrietyDays] = useState(0);
   const allQuotes = [{
     text: "Siempre es lo simple lo que produce lo maravilloso.",
     author: "Amelia Barr"
@@ -217,8 +222,17 @@ export default function Home() {
       const {
         data: profile
       } = await supabase.from('profiles').select('abstinence_start_date').eq('user_id', user.id).single();
+      
+      let diffDays = 0;
       if (profile?.abstinence_start_date) {
-        setStartDate(new Date(profile.abstinence_start_date));
+        const absDate = new Date(profile.abstinence_start_date);
+        setStartDate(absDate);
+        
+        // Calculate sobriety days
+        const today = new Date();
+        const diffTime = Math.abs(today.getTime() - absDate.getTime());
+        diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        setSobrietyDays(diffDays);
       }
 
       // Fetch saved quotes
@@ -233,6 +247,19 @@ export default function Home() {
         );
         setIsQuoteSaved(saved);
       }
+
+      // Fetch medals
+      const { data: userMedals } = await supabase
+        .from('medals')
+        .select('*')
+        .eq('user_id', user.id);
+      
+      if (userMedals) {
+        setMedals(userMedals);
+      }
+
+      // Check and unlock medals based on sobriety days
+      await checkAndUnlockMedals(user.id, diffDays, userMedals || []);
 
       // Fetch today's check-in
       const today = new Date().toISOString().split('T')[0];
@@ -456,6 +483,75 @@ export default function Home() {
     }
   };
 
+  // Check and unlock medals
+  const checkAndUnlockMedals = async (userId: string, days: number, currentMedals: any[]) => {
+    const medalsToCheck = [
+      { type: 'valor', days: 0, name: 'Valor', emoji: '🥉' },
+      { type: 'constancia', days: 40, name: 'Constancia', emoji: '🥈' },
+      { type: 'recuperacion', days: 90, name: 'Recuperación', emoji: '🥇' },
+      { type: 'servicio', days: 180, name: 'Servicio', emoji: '🏆' }
+    ];
+
+    for (const medal of medalsToCheck) {
+      const alreadyHas = currentMedals.some(m => m.medal_type === medal.type);
+      
+      if (!alreadyHas && days >= medal.days) {
+        // Unlock medal
+        const { data, error } = await supabase
+          .from('medals')
+          .insert({
+            user_id: userId,
+            medal_type: medal.type,
+            popup_shown: false
+          })
+          .select()
+          .single();
+
+        if (data && !error) {
+          setMedals(prev => [...prev, data]);
+          
+          // Show popup if not shown before
+          if (!data.popup_shown && medal.days > 0) {
+            setNewMedal({ type: medal.type, name: medal.name, emoji: medal.emoji });
+            setShowMedalPopup(true);
+            
+            // Mark popup as shown
+            await supabase
+              .from('medals')
+              .update({ popup_shown: true })
+              .eq('id', data.id);
+          }
+        }
+      }
+    }
+  };
+
+  const closeMedalPopup = () => {
+    setShowMedalPopup(false);
+    setNewMedal(null);
+  };
+
+  // Medal configuration
+  const medalConfig = [
+    { type: 'valor', name: 'Valor', emoji: '🥉', requiredDays: 0 },
+    { type: 'constancia', name: 'Constancia', emoji: '🥈', requiredDays: 40 },
+    { type: 'recuperacion', name: 'Recuperación', emoji: '🥇', requiredDays: 90 },
+    { type: 'servicio', name: 'Servicio', emoji: '🏆', requiredDays: 180 }
+  ];
+
+  const getMedalStatus = (medalType: string, requiredDays: number) => {
+    const isUnlocked = medals.some(m => m.medal_type === medalType);
+    const progress = sobrietyDays;
+    const remaining = Math.max(0, requiredDays - progress);
+    
+    return {
+      isUnlocked,
+      progress,
+      remaining,
+      opacity: isUnlocked ? 'opacity-100' : 'opacity-30'
+    };
+  };
+
   // Quick tools - configurable
   const quickTools = [{
     emoji: "🫁",
@@ -674,5 +770,60 @@ export default function Home() {
         })}
         </div>
       </div>
+
+      {/* Medals Widget */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4 text-foreground">Mis Medallas</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {medalConfig.map(medal => {
+            const status = getMedalStatus(medal.type, medal.requiredDays);
+            return (
+              <Card key={medal.type} className="border-border/50 h-full">
+                <CardContent className="p-5 text-center space-y-3">
+                  <div className={`mx-auto w-12 h-12 rounded-2xl bg-sky-blue flex items-center justify-center ${status.opacity} transition-opacity duration-300`}>
+                    <span className="text-2xl">{medal.emoji}</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground text-xs leading-tight mb-1">{medal.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {status.isUnlocked 
+                        ? '¡Conseguido!' 
+                        : `+${status.progress} / ${medal.requiredDays} días`
+                      }
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Medal Unlock Popup */}
+      <AlertDialog open={showMedalPopup} onOpenChange={setShowMedalPopup}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <div className="flex justify-center mb-4">
+              <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center animate-scale-in">
+                <span className="text-6xl">{newMedal?.emoji}</span>
+              </div>
+            </div>
+            <AlertDialogTitle className="text-center text-2xl">
+              ¡Conseguido!
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-center text-lg">
+              <span className="font-bold text-primary">{sobrietyDays} días libre!</span>
+              <br />
+              Has desbloqueado la medalla <span className="font-semibold">{newMedal?.name}</span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-center mt-4">
+            <Button onClick={closeMedalPopup} className="rounded-xl">
+              <PartyPopper className="mr-2 h-4 w-4" />
+              ¡Genial!
+            </Button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>;
 }
