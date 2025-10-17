@@ -7,166 +7,215 @@ import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
-interface Emotion {
+interface TertiaryEmotion {
+  name: string;
+}
+
+interface SecondaryEmotion {
   id: string;
   name: string;
-  subEmotions: string[];
+  tertiaryEmotions: string[];
+}
+
+interface PrimaryCategory {
+  id: string;
+  name: string;
+  secondaryEmotions: SecondaryEmotion[];
 }
 
 interface SavedEmotionEntry {
   id: string;
-  main_emotion: string;
-  sub_emotions: string[];
+  primary_emotion: string;
+  secondary_emotions: string[];
+  tertiary_emotions: string[];
   entry_date: string;
   created_at: string;
 }
 
-const emotions: Emotion[] = [
-  {
-    id: "afectuoso",
-    name: "Afectuoso",
-    subEmotions: ["Compasivo", "Amigable", "Amoroso", "De corazón abierto", "Simpático", "Tierno", "Cálido"]
-  },
-  {
-    id: "agradecido",
-    name: "Agradecido",
-    subEmotions: ["Humildad", "Asombro", "Alegría suave", "Calidez", "Generosidad", "Reconocimiento"]
-  },
-  {
-    id: "alegre",
-    name: "Alegre",
-    subEmotions: ["Divertido", "Encantado", "Contento", "Feliz", "Jubiloso", "Complacido", "Alegre"]
-  },
-  {
-    id: "anhelo",
-    name: "Anhelo",
-    subEmotions: ["Envidioso", "Celoso", "Anhelante", "Nostálgico", "Deseoso", "Melancólico"]
-  },
-  {
-    id: "asustado",
-    name: "Asustado",
-    subEmotions: ["Aprensivo", "Temor", "Presentimiento", "Atemorizado", "Desconfiado", "En pánico", "Petrificado", "Asustado", "Sospechoso", "Aterrorizado", "Cauteloso", "Preocupado"]
-  },
-  {
-    id: "avergonzado",
-    name: "Avergonzado",
-    subEmotions: ["Avergonzado", "Mortificado", "Turbado", "Culpable", "Cohibido"]
-  },
-  {
-    id: "comprometido",
-    name: "Comprometido",
-    subEmotions: ["Absorto", "Alerta", "Curioso", "Absorto", "Encantado", "Fascinado", "Interesado", "Intrigado", "Involucrado", "Estimulado"]
-  },
-  {
-    id: "confundido",
-    name: "Confundido",
-    subEmotions: ["Ambivalente", "Desconcertado", "Perplejo", "Aturdido", "Vacilante", "Perdido", "Desconcertado", "Confuso", "Dividido"]
-  },
-  {
-    id: "confiado",
-    name: "Confiado",
-    subEmotions: ["Empoderado", "Abierto", "Orgulloso", "Seguro", "Protegido"]
-  },
+const emotionCategories: PrimaryCategory[] = [
   {
     id: "conectado",
     name: "Conectado",
-    subEmotions: ["Empatía", "Complicidad", "Afiliación", "Sintonía", "Cuidado"]
-  },
-  {
-    id: "descansado",
-    name: "Descansado",
-    subEmotions: ["Revitalizado", "Renovado", "Descansado", "Restaurado", "Revivido"]
+    secondaryEmotions: [
+      {
+        id: "afectuoso",
+        name: "Afectuoso",
+        tertiaryEmotions: ["Compasivo", "Amigable", "Amoroso", "De corazón abierto", "Simpático", "Tierno", "Cálido"]
+      },
+      {
+        id: "agradecido",
+        name: "Agradecido",
+        tertiaryEmotions: ["Humildad", "Asombro", "Alegría suave", "Calidez", "Generosidad", "Reconocimiento"]
+      },
+      {
+        id: "comprometido",
+        name: "Comprometido",
+        tertiaryEmotions: ["Absorto", "Alerta", "Curioso", "Absorto", "Encantado", "Fascinado", "Interesado", "Intrigado", "Involucrado", "Estimulado"]
+      },
+      {
+        id: "conectado",
+        name: "Conectado",
+        tertiaryEmotions: ["Empatía", "Complicidad", "Afiliación", "Sintonía", "Cuidado"]
+      },
+      {
+        id: "confiado",
+        name: "Confiado",
+        tertiaryEmotions: ["Empoderado", "Abierto", "Orgulloso", "Seguro", "Protegido"]
+      },
+      {
+        id: "seguro",
+        name: "Seguro",
+        tertiaryEmotions: ["Tranquilidad", "Confianza", "Calma", "Aceptación", "Pertenencia", "Previsibilidad", "Intimidad"]
+      },
+      {
+        id: "pacifico",
+        name: "Pacífico",
+        tertiaryEmotions: ["Calmado", "Despejado", "Cómodo", "Centrado", "Contento", "Ecuánime", "Realizado", "Tranquilo", "Quieto", "Relajado", "Aliviado", "Satisfecho", "Sereno", "Confiado"]
+      }
+    ]
   },
   {
     id: "desconectado",
     name: "Desconectado",
-    subEmotions: ["Alienado", "Distante", "Apático", "Aburrido", "Frío", "Desapegado", "Distraído", "Indiferente", "Adormecido", "Alejado", "Desinteresado", "Retraído"]
+    secondaryEmotions: [
+      {
+        id: "desconectado",
+        name: "Desconectado",
+        tertiaryEmotions: ["Alienado", "Distante", "Apático", "Aburrido", "Frío", "Desapegado", "Distraído", "Indiferente", "Adormecido", "Alejado", "Desinteresado", "Retraído"]
+      },
+      {
+        id: "descansado",
+        name: "Descansado",
+        tertiaryEmotions: ["Revitalizado", "Renovado", "Descansado", "Restaurado", "Revivido"]
+      }
+    ]
   },
   {
-    id: "dolor",
-    name: "Dolor",
-    subEmotions: ["Agonía", "Angustiado", "Afligido", "Devastado", "Duelo", "Desconsolado", "Herido", "Solo", "Miserable", "Arrepentido", "Remordido"]
+    id: "energico",
+    name: "Enérgico",
+    secondaryEmotions: [
+      {
+        id: "alegre",
+        name: "Alegre",
+        tertiaryEmotions: ["Divertido", "Encantado", "Contento", "Feliz", "Jubiloso", "Complacido", "Alegre"]
+      },
+      {
+        id: "entusiasmado",
+        name: "Entusiasmado",
+        tertiaryEmotions: ["Animado", "Ardiente", "Emocionado", "Asombrado", "Deslumbrado", "Ansioso", "Enérgico", "Entusiasta", "Vigorizado", "Animado", "Apasionado", "Sorprendido", "Vibrante"]
+      },
+      {
+        id: "esperanzado",
+        name: "Esperanzado",
+        tertiaryEmotions: ["Expectante", "Alentado", "Optimista"]
+      },
+      {
+        id: "inspirado",
+        name: "Inspirado",
+        tertiaryEmotions: ["Asombrado", "Maravillado", "Admirado"]
+      },
+      {
+        id: "euforico",
+        name: "Eufórico",
+        tertiaryEmotions: ["Dichoso", "Extático", "Exaltado", "Embelesado", "Exuberante", "Radiante", "Arrebatado", "Emocionado", "Hechizado"]
+      }
+    ]
   },
   {
-    id: "enojado",
-    name: "Enojado",
-    subEmotions: ["Enfurecido", "Furioso", "Indignado", "Airado", "Iracundo", "Lívido", "Ultrajado", "Resentido"]
-  },
-  {
-    id: "entusiasmado",
-    name: "Entusiasmado",
-    subEmotions: ["Animado", "Ardiente", "Emocionado", "Asombrado", "Deslumbrado", "Ansioso", "Enérgico", "Entusiasta", "Vigorizado", "Animado", "Apasionado", "Sorprendido", "Vibrante"]
-  },
-  {
-    id: "esperanzado",
-    name: "Esperanzado",
-    subEmotions: ["Expectante", "Alentado", "Optimista"]
-  },
-  {
-    id: "euforico",
-    name: "Eufórico",
-    subEmotions: ["Dichoso", "Extático", "Exaltado", "Embelesado", "Exuberante", "Radiante", "Arrebatado", "Emocionado", "Hechizado"]
-  },
-  {
-    id: "fatigado",
-    name: "Fatigado",
-    subEmotions: ["Agotado", "Quemado", "Agotado", "Exhausto", "Letárgico", "Apático", "Somnoliento", "Cansado", "Fatigado"]
-  },
-  {
-    id: "incomodo",
-    name: "Incómodo",
-    subEmotions: ["Incómodo", "Intranquilo", "Nervioso", "Inquieto", "Molesto"]
-  },
-  {
-    id: "inquieto",
-    name: "Inquieto",
-    subEmotions: ["Agitado", "Alarmado", "Desconcertado", "Perturbado", "Alterado", "Inquieto", "Conmocionado", "Sobresaltado", "Sorprendido", "Preocupado", "Turbulento", "Agitación"]
-  },
-  {
-    id: "inspirado",
-    name: "Inspirado",
-    subEmotions: ["Asombrado", "Maravillado", "Admirado"]
-  },
-  {
-    id: "molesto",
-    name: "Molesto",
-    subEmotions: ["Agravado", "Consternado", "Disgustado", "Descontento", "Exasperado", "Frustrado", "Impaciente", "Irritado", "Molesto"]
-  },
-  {
-    id: "pacifico",
-    name: "Pacífico",
-    subEmotions: ["Calmado", "Despejado", "Cómodo", "Centrado", "Contento", "Ecuánime", "Realizado", "Tranquilo", "Quieto", "Relajado", "Aliviado", "Satisfecho", "Sereno", "Confiado"]
-  },
-  {
-    id: "rechazo",
-    name: "Rechazo",
-    subEmotions: ["Animosidad", "Horrorizado", "Desprecio", "Disgustado", "Desagrado", "Odio", "Hostil", "Repulsado"]
-  },
-  {
-    id: "seguro",
-    name: "Seguro",
-    subEmotions: ["Tranquilidad", "Confianza", "Calma", "Aceptación", "Pertenencia", "Previsibilidad", "Intimidad"]
-  },
-  {
-    id: "tenso",
-    name: "Tenso",
-    subEmotions: ["Ansioso", "Angustiado", "Consternado", "Nervioso", "Inquieto", "Estresado", "Irritable", "Abrumado", "Estresado"]
-  },
-  {
-    id: "triste",
-    name: "Triste",
-    subEmotions: ["Deprimido", "Abatido", "Desesperado", "Desalentado", "Decepcionado", "Desanimado", "Descorazonado", "Desolado", "Sombrío", "Sin esperanza", "Melancólico", "Infeliz", "Desdichado"]
+    id: "cerrado",
+    name: "Cerrado",
+    secondaryEmotions: [
+      {
+        id: "rechazo",
+        name: "Rechazo",
+        tertiaryEmotions: ["Animosidad", "Horrorizado", "Desprecio", "Disgustado", "Desagrado", "Odio", "Hostil", "Repulsado"]
+      },
+      {
+        id: "triste",
+        name: "Triste",
+        tertiaryEmotions: ["Deprimido", "Abatido", "Desesperado", "Desalentado", "Decepcionado", "Desanimado", "Descorazonado", "Desolado", "Sombrío", "Sin esperanza", "Melancólico", "Infeliz", "Desdichado"]
+      }
+    ]
   },
   {
     id: "vulnerable",
     name: "Vulnerable",
-    subEmotions: ["Frágil", "Indefenso", "Inseguro", "Cauteloso", "Reservado", "Sensible", "Tembloroso"]
+    secondaryEmotions: [
+      {
+        id: "dolor",
+        name: "Dolor",
+        tertiaryEmotions: ["Agonía", "Angustiado", "Afligido", "Devastado", "Duelo", "Desconsolado", "Herido", "Solo", "Miserable", "Arrepentido", "Remordido"]
+      },
+      {
+        id: "vulnerable",
+        name: "Vulnerable",
+        tertiaryEmotions: ["Frágil", "Indefenso", "Inseguro", "Cauteloso", "Reservado", "Sensible", "Tembloroso"]
+      },
+      {
+        id: "avergonzado",
+        name: "Avergonzado",
+        tertiaryEmotions: ["Avergonzado", "Mortificado", "Turbado", "Culpable", "Cohibido"]
+      }
+    ]
+  },
+  {
+    id: "reactivo",
+    name: "Reactivo",
+    secondaryEmotions: [
+      {
+        id: "enojado",
+        name: "Enojado",
+        tertiaryEmotions: ["Enfurecido", "Furioso", "Indignado", "Airado", "Iracundo", "Lívido", "Ultrajado", "Resentido"]
+      },
+      {
+        id: "molesto",
+        name: "Molesto",
+        tertiaryEmotions: ["Agravado", "Consternado", "Disgustado", "Descontento", "Exasperado", "Frustrado", "Impaciente", "Irritado", "Molesto"]
+      },
+      {
+        id: "inquieto",
+        name: "Inquieto",
+        tertiaryEmotions: ["Agitado", "Alarmado", "Desconcertado", "Perturbado", "Alterado", "Inquieto", "Conmocionado", "Sobresaltado", "Sorprendido", "Preocupado", "Turbulento", "Agitación"]
+      },
+      {
+        id: "tenso",
+        name: "Tenso",
+        tertiaryEmotions: ["Ansioso", "Angustiado", "Consternado", "Nervioso", "Inquieto", "Estresado", "Irritable", "Abrumado", "Estresado"]
+      }
+    ]
+  },
+  {
+    id: "confundido",
+    name: "Confundido",
+    secondaryEmotions: [
+      {
+        id: "confundido",
+        name: "Confundido",
+        tertiaryEmotions: ["Ambivalente", "Desconcertado", "Perplejo", "Aturdido", "Vacilante", "Perdido", "Desconcertado", "Confuso", "Dividido"]
+      },
+      {
+        id: "asustado",
+        name: "Asustado",
+        tertiaryEmotions: ["Aprensivo", "Temor", "Presentimiento", "Atemorizado", "Desconfiado", "En pánico", "Petrificado", "Asustado", "Sospechoso", "Aterrorizado", "Cauteloso", "Preocupado"]
+      },
+      {
+        id: "incomodo",
+        name: "Incómodo",
+        tertiaryEmotions: ["Incómodo", "Intranquilo", "Nervioso", "Inquieto", "Molesto"]
+      },
+      {
+        id: "fatigado",
+        name: "Fatigado",
+        tertiaryEmotions: ["Agotado", "Quemado", "Agotado", "Exhausto", "Letárgico", "Apático", "Somnoliento", "Cansado", "Fatigado"]
+      }
+    ]
   }
 ];
 
 export default function EmotionJournal() {
-  const [selectedMainEmotions, setSelectedMainEmotions] = useState<string[]>([]);
-  const [selectedSubEmotions, setSelectedSubEmotions] = useState<string[]>([]);
+  const [selectedPrimary, setSelectedPrimary] = useState<string | null>(null);
+  const [selectedSecondary, setSelectedSecondary] = useState<string[]>([]);
+  const [selectedTertiary, setSelectedTertiary] = useState<string[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [savedEntries, setSavedEntries] = useState<SavedEmotionEntry[]>([]);
   const [editingEntry, setEditingEntry] = useState<string | null>(null);
@@ -194,14 +243,29 @@ export default function EmotionJournal() {
     }
   };
 
-  const toggleMainEmotion = (emotionId: string) => {
-    setSelectedMainEmotions(prev => {
+  const togglePrimary = (categoryId: string) => {
+    if (selectedPrimary === categoryId) {
+      // Deselect and clear all selections
+      setSelectedPrimary(null);
+      setSelectedSecondary([]);
+      setSelectedTertiary([]);
+    } else {
+      // Select new primary and clear secondary/tertiary
+      setSelectedPrimary(categoryId);
+      setSelectedSecondary([]);
+      setSelectedTertiary([]);
+    }
+  };
+
+  const toggleSecondary = (emotionId: string) => {
+    setSelectedSecondary(prev => {
       if (prev.includes(emotionId)) {
-        // Remove main emotion and its sub-emotions
-        const emotion = emotions.find(e => e.id === emotionId);
-        const subEmotionsToRemove = emotion?.subEmotions || [];
-        setSelectedSubEmotions(current => 
-          current.filter(sub => !subEmotionsToRemove.includes(sub))
+        // Remove secondary emotion and its tertiary emotions
+        const category = emotionCategories.find(c => c.id === selectedPrimary);
+        const emotion = category?.secondaryEmotions.find(e => e.id === emotionId);
+        const tertiaryToRemove = emotion?.tertiaryEmotions || [];
+        setSelectedTertiary(current => 
+          current.filter(t => !tertiaryToRemove.includes(t))
         );
         return prev.filter(id => id !== emotionId);
       } else {
@@ -210,19 +274,28 @@ export default function EmotionJournal() {
     });
   };
 
-  const toggleSubEmotion = (subEmotion: string) => {
-    setSelectedSubEmotions(prev => 
-      prev.includes(subEmotion)
-        ? prev.filter(e => e !== subEmotion)
-        : [...prev, subEmotion]
+  const toggleTertiary = (tertiaryEmotion: string) => {
+    setSelectedTertiary(prev => 
+      prev.includes(tertiaryEmotion)
+        ? prev.filter(e => e !== tertiaryEmotion)
+        : [...prev, tertiaryEmotion]
     );
   };
 
   const handleSubmit = async () => {
-    if (selectedMainEmotions.length === 0) {
+    if (!selectedPrimary) {
       toast({
         title: "Error",
-        description: "Debes seleccionar al menos una emoción principal",
+        description: "Debes seleccionar una categoría principal",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (selectedSecondary.length === 0) {
+      toast({
+        title: "Error",
+        description: "Debes seleccionar al menos una emoción secundaria",
         variant: "destructive"
       });
       return;
@@ -240,22 +313,21 @@ export default function EmotionJournal() {
         return;
       }
 
-      const mainEmotionNames = selectedMainEmotions
-        .map(id => emotions.find(e => e.id === id)?.name)
-        .filter(Boolean);
-      
-      console.log('Guardando:', {
-        mainEmotions: selectedMainEmotions,
-        mainEmotionNames,
-        subEmotions: selectedSubEmotions
-      });
+      const primaryCategory = emotionCategories.find(c => c.id === selectedPrimary);
+      const secondaryNames = selectedSecondary
+        .map(id => {
+          const emotion = primaryCategory?.secondaryEmotions.find(e => e.id === id);
+          return emotion?.name;
+        })
+        .filter(Boolean) as string[];
 
       const { error } = await (supabase as any)
         .from('emotion_journal')
         .insert({
           user_id: user.id,
-          main_emotion: mainEmotionNames.join(', '),
-          sub_emotions: selectedSubEmotions,
+          primary_emotion: primaryCategory?.name,
+          secondary_emotions: secondaryNames,
+          tertiary_emotions: selectedTertiary,
           entry_date: new Date().toISOString().split('T')[0]
         });
 
@@ -266,9 +338,9 @@ export default function EmotionJournal() {
         description: "Tus emociones han sido registradas exitosamente"
       });
 
-      // Reset selections
-      setSelectedMainEmotions([]);
-      setSelectedSubEmotions([]);
+      setSelectedPrimary(null);
+      setSelectedSecondary([]);
+      setSelectedTertiary([]);
       await loadSavedEntries();
     } catch (error) {
       console.error('Error saving emotions:', error);
@@ -284,25 +356,34 @@ export default function EmotionJournal() {
 
   const handleEdit = (entry: SavedEmotionEntry) => {
     setEditingEntry(entry.id);
-    const mainEmotionNames = entry.main_emotion.split(', ');
-    const mainEmotionIds = mainEmotionNames
-      .map(name => emotions.find(e => e.name === name)?.id)
-      .filter(Boolean) as string[];
     
-    setSelectedMainEmotions(mainEmotionIds);
-    setSelectedSubEmotions(entry.sub_emotions);
+    // Find primary category
+    const primaryCategory = emotionCategories.find(c => c.name === entry.primary_emotion);
+    if (primaryCategory) {
+      setSelectedPrimary(primaryCategory.id);
+      
+      // Map secondary emotion names to IDs
+      const secondaryIds = entry.secondary_emotions
+        .map(name => {
+          const emotion = primaryCategory.secondaryEmotions.find(e => e.name === name);
+          return emotion?.id;
+        })
+        .filter(Boolean) as string[];
+      
+      setSelectedSecondary(secondaryIds);
+      setSelectedTertiary(entry.tertiary_emotions);
+    }
     
-    // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleUpdate = async () => {
     if (!editingEntry) return;
 
-    if (selectedMainEmotions.length === 0) {
+    if (!selectedPrimary || selectedSecondary.length === 0) {
       toast({
         title: "Error",
-        description: "Debes seleccionar al menos una emoción principal",
+        description: "Debes seleccionar una categoría principal y al menos una emoción secundaria",
         variant: "destructive"
       });
       return;
@@ -310,15 +391,20 @@ export default function EmotionJournal() {
 
     setIsSaving(true);
     try {
-      const mainEmotionNames = selectedMainEmotions
-        .map(id => emotions.find(e => e.id === id)?.name)
-        .filter(Boolean);
+      const primaryCategory = emotionCategories.find(c => c.id === selectedPrimary);
+      const secondaryNames = selectedSecondary
+        .map(id => {
+          const emotion = primaryCategory?.secondaryEmotions.find(e => e.id === id);
+          return emotion?.name;
+        })
+        .filter(Boolean) as string[];
       
       const { error } = await (supabase as any)
         .from('emotion_journal')
         .update({
-          main_emotion: mainEmotionNames.join(', '),
-          sub_emotions: selectedSubEmotions
+          primary_emotion: primaryCategory?.name,
+          secondary_emotions: secondaryNames,
+          tertiary_emotions: selectedTertiary
         })
         .eq('id', editingEntry);
 
@@ -330,8 +416,9 @@ export default function EmotionJournal() {
       });
 
       setEditingEntry(null);
-      setSelectedMainEmotions([]);
-      setSelectedSubEmotions([]);
+      setSelectedPrimary(null);
+      setSelectedSecondary([]);
+      setSelectedTertiary([]);
       await loadSavedEntries();
     } catch (error) {
       console.error('Error updating entry:', error);
@@ -372,35 +459,39 @@ export default function EmotionJournal() {
 
   const handleCancelEdit = () => {
     setEditingEntry(null);
-    setSelectedMainEmotions([]);
-    setSelectedSubEmotions([]);
+    setSelectedPrimary(null);
+    setSelectedSecondary([]);
+    setSelectedTertiary([]);
   };
 
-  // Filter and reverse so the last selected emotion appears first
-  const selectedEmotionsData = emotions
-    .filter(e => selectedMainEmotions.includes(e.id))
+  // Get selected category data
+  const selectedCategory = emotionCategories.find(c => c.id === selectedPrimary);
+  
+  // Get selected secondary emotions data (reversed for last-selected-first display)
+  const selectedSecondaryData = selectedCategory?.secondaryEmotions
+    .filter(e => selectedSecondary.includes(e.id))
     .sort((a, b) => {
-      const indexA = selectedMainEmotions.indexOf(a.id);
-      const indexB = selectedMainEmotions.indexOf(b.id);
-      return indexB - indexA; // Reverse order - last selected first
-    });
+      const indexA = selectedSecondary.indexOf(a.id);
+      const indexB = selectedSecondary.indexOf(b.id);
+      return indexB - indexA;
+    }) || [];
 
   return (
     <div className="space-y-6 animate-fade-in">
       <Card className="p-8 bg-card border-border">
         <div className="space-y-8">
-          {/* Main Emotions */}
+          {/* Primary Categories */}
           <div>
             <h2 className="text-xl font-semibold text-foreground mb-4">¿Cómo te sientes aquí y ahora?</h2>
             <div className="flex flex-wrap gap-3">
-              {emotions.map((emotion) => {
-                const isSelected = selectedMainEmotions.includes(emotion.id);
+              {emotionCategories.map((category) => {
+                const isSelected = selectedPrimary === category.id;
                 return (
                   <Button
-                    key={emotion.id}
+                    key={category.id}
                     variant={isSelected ? "accent" : "outline"}
                     size="lg"
-                    onClick={() => toggleMainEmotion(emotion.id)}
+                    onClick={() => togglePrimary(category.id)}
                     className={`rounded-full px-6 h-12 text-base font-medium transition-all ${
                       isSelected 
                         ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
@@ -410,10 +501,10 @@ export default function EmotionJournal() {
                     {isSelected ? (
                       <>
                         <Check className="h-4 w-4 mr-2" />
-                        {emotion.name}
+                        {category.name}
                       </>
                     ) : (
-                      <>+ {emotion.name}</>
+                      <>+ {category.name}</>
                     )}
                   </Button>
                 );
@@ -421,23 +512,57 @@ export default function EmotionJournal() {
             </div>
           </div>
 
-          {/* Sub Emotions */}
-          {selectedMainEmotions.length > 0 && (
+          {/* Secondary Emotions */}
+          {selectedPrimary && selectedCategory && (
+            <div>
+              <h2 className="text-xl font-semibold text-foreground mb-4">Emociones Secundarias:</h2>
+              <div className="flex flex-wrap gap-3">
+                {selectedCategory.secondaryEmotions.map((emotion) => {
+                  const isSelected = selectedSecondary.includes(emotion.id);
+                  return (
+                    <Button
+                      key={emotion.id}
+                      variant={isSelected ? "accent" : "outline"}
+                      size="lg"
+                      onClick={() => toggleSecondary(emotion.id)}
+                      className={`rounded-full px-6 h-12 text-base font-medium transition-all ${
+                        isSelected 
+                          ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
+                          : "hover:bg-primary/10 hover:border-primary/50"
+                      }`}
+                    >
+                      {isSelected ? (
+                        <>
+                          <Check className="h-4 w-4 mr-2" />
+                          {emotion.name}
+                        </>
+                      ) : (
+                        <>+ {emotion.name}</>
+                      )}
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Tertiary Emotions */}
+          {selectedSecondary.length > 0 && (
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-4">Emociones Específicas:</h2>
               <div className="space-y-6">
-                {selectedEmotionsData.map((emotion) => (
+                {selectedSecondaryData.map((emotion) => (
                   <div key={emotion.id}>
                     <h3 className="text-lg font-medium text-foreground/80 mb-3">{emotion.name}</h3>
                     <div className="flex flex-wrap gap-3">
-                      {emotion.subEmotions.map((subEmotion) => {
-                        const isSelected = selectedSubEmotions.includes(subEmotion);
+                      {emotion.tertiaryEmotions.map((tertiaryEmotion) => {
+                        const isSelected = selectedTertiary.includes(tertiaryEmotion);
                         return (
                           <Button
-                            key={subEmotion}
+                            key={tertiaryEmotion}
                             variant={isSelected ? "accent" : "outline"}
                             size="lg"
-                            onClick={() => toggleSubEmotion(subEmotion)}
+                            onClick={() => toggleTertiary(tertiaryEmotion)}
                             className={`rounded-full px-6 h-12 text-base font-medium transition-all ${
                               isSelected 
                                 ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
@@ -447,10 +572,10 @@ export default function EmotionJournal() {
                             {isSelected ? (
                               <>
                                 <Check className="h-4 w-4 mr-2" />
-                                {subEmotion}
+                                {tertiaryEmotion}
                               </>
                             ) : (
-                              <>+ {subEmotion}</>
+                              <>+ {tertiaryEmotion}</>
                             )}
                           </Button>
                         );
@@ -463,8 +588,8 @@ export default function EmotionJournal() {
           )}
         </div>
 
-        {/* Save/Update Button - Inside the card, bottom right */}
-        {selectedMainEmotions.length > 0 && (
+        {/* Save/Update Button */}
+        {selectedPrimary && selectedSecondary.length > 0 && (
           <div className="flex justify-end gap-4 mt-6">
             {editingEntry && (
               <Button
@@ -523,25 +648,36 @@ export default function EmotionJournal() {
                 </div>
 
                 <div className="space-y-3">
-                  <div>
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Principales:</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {entry.main_emotion.split(', ').map((emotion, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm font-medium"
-                        >
-                          {emotion}
-                        </span>
-                      ))}
+                  {entry.primary_emotion && (
+                    <div>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Categoría:</h3>
+                      <span className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm font-medium">
+                        {entry.primary_emotion}
+                      </span>
                     </div>
-                  </div>
+                  )}
 
-                  {entry.sub_emotions && entry.sub_emotions.length > 0 && (
+                  {entry.secondary_emotions && entry.secondary_emotions.length > 0 && (
+                    <div>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Secundarias:</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {entry.secondary_emotions.map((emotion, idx) => (
+                          <span
+                            key={idx}
+                            className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm font-medium"
+                          >
+                            {emotion}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {entry.tertiary_emotions && entry.tertiary_emotions.length > 0 && (
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground mb-2">Específicas:</h3>
                       <div className="flex flex-wrap gap-2">
-                        {[...entry.sub_emotions].reverse().map((emotion, idx) => (
+                        {[...entry.tertiary_emotions].reverse().map((emotion, idx) => (
                           <span
                             key={idx}
                             className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm"

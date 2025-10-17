@@ -77,7 +77,10 @@ export type Database = {
           entry_date: string
           id: string
           main_emotion: string
+          primary_emotion: string | null
+          secondary_emotions: string[] | null
           sub_emotions: string[]
+          tertiary_emotions: string[] | null
           updated_at: string
           user_id: string
         }
@@ -86,7 +89,10 @@ export type Database = {
           entry_date?: string
           id?: string
           main_emotion: string
+          primary_emotion?: string | null
+          secondary_emotions?: string[] | null
           sub_emotions: string[]
+          tertiary_emotions?: string[] | null
           updated_at?: string
           user_id: string
         }
@@ -95,7 +101,10 @@ export type Database = {
           entry_date?: string
           id?: string
           main_emotion?: string
+          primary_emotion?: string | null
+          secondary_emotions?: string[] | null
           sub_emotions?: string[]
+          tertiary_emotions?: string[] | null
           updated_at?: string
           user_id?: string
         }
