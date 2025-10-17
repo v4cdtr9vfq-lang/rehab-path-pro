@@ -190,7 +190,23 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="space-y-3">
+      {/* Recording timer - large and visible */}
+      {isRecording && (
+        <div className="bg-destructive/10 border-2 border-destructive rounded-lg p-4 text-center animate-pulse">
+          <div className="flex items-center justify-center gap-3">
+            <div className="w-3 h-3 bg-destructive rounded-full animate-pulse" />
+            <span className="text-2xl font-bold text-destructive">
+              {recordingDuration.toFixed(1)}s
+            </span>
+          </div>
+          <p className="text-sm text-muted-foreground mt-2">
+            🎤 Grabando... Habla claramente hacia el micrófono
+          </p>
+        </div>
+      )}
+
+      {/* Control buttons */}
       <div className="flex items-center gap-2">
         {!isRecording && !isProcessing && (
           <Button
@@ -211,10 +227,10 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
             variant="destructive"
             size="sm"
             onClick={stopRecording}
-            className="gap-2 animate-pulse"
+            className="gap-2"
           >
             <Square className="h-4 w-4" />
-            Detener ({recordingDuration.toFixed(1)}s)
+            Detener Grabación
           </Button>
         )}
         
@@ -231,12 +247,6 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
           </Button>
         )}
       </div>
-      
-      {isRecording && (
-        <p className="text-xs text-muted-foreground">
-          🎤 Habla claramente... (mínimo 1 segundo)
-        </p>
-      )}
     </div>
   );
 };
