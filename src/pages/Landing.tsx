@@ -52,7 +52,7 @@ export default function Landing() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              <span className="inline-flex items-center gap-2">
+              <span className="inline-flex items-center gap-2 relative top-[2px] -left-[2px]">
                 <Heart className="h-6 w-6 text-primary flex-shrink-0" />
                 <span className="font-semibold">rehabp.org</span>
               </span> te acompaña en cada paso de tu proceso de crecimiento con herramientas diseñadas para mantenerte motivado y enfocado.
