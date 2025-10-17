@@ -28,7 +28,7 @@ export function Footer() {
               </li>
               <li>
                 <Link to="/plan" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Mi 🎯
+                  Mi Plan
                 </Link>
               </li>
               <li>
