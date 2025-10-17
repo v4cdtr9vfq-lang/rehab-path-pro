@@ -387,7 +387,7 @@ export default function Home() {
 
   // Quick tools - configurable
   const quickTools = [{
-    emoji: "🌬️",
+    emoji: "🫁",
     label: "Respiración guiada",
     path: "/tools",
     color: "text-primary"
