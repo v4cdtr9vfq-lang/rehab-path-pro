@@ -678,7 +678,7 @@ export default function Plan() {
                 periodic_type: undefined
               }))}>
                   <SelectTrigger id="goal-type">
-                    <SelectValue />
+                    <SelectValue placeholder="Seleccionar tipo" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="today">Hoy</SelectItem>
