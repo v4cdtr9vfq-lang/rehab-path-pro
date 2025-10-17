@@ -8,6 +8,16 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Question {
   id: number;
@@ -36,6 +46,7 @@ export default function CheckIn() {
   const [limitingDescription, setLimitingDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userValues, setUserValues] = useState<string[]>([]);
+  const [showRelapseDialog, setShowRelapseDialog] = useState(false);
 
   useEffect(() => {
     const loadExistingCheckIn = async () => {
@@ -82,6 +93,52 @@ export default function CheckIn() {
 
   const handleAnswer = (questionId: number, answer: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: answer }));
+    
+    // Show relapse dialog if question 1 is answered "no"
+    if (questionId === 1 && answer === "no") {
+      setShowRelapseDialog(true);
+    }
+  };
+
+  const handleRelapseInventory = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const today = new Date().toISOString().split('T')[0];
+
+      // Create journal entry
+      const { error: journalError } = await supabase
+        .from('journal_entries')
+        .insert({
+          user_id: user.id,
+          entry_date: today,
+          title: "Inventario de una recaída",
+          content: "",
+          tags: ["recaída", "inventario"]
+        });
+
+      if (journalError) throw journalError;
+
+      // Reset abstinence counter
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({
+          abstinence_start_date: new Date().toISOString()
+        })
+        .eq('user_id', user.id);
+
+      if (profileError) throw profileError;
+
+      setShowRelapseDialog(false);
+      navigate('/journal');
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo crear el inventario",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleSubmit = async () => {
@@ -257,7 +314,13 @@ export default function CheckIn() {
                     </Button>
                     <Button
                       variant={answers[question.id] === "no" ? "default" : "outline"}
-                      className={`flex-1 ${answers[question.id] === "no" && [2, 4, 6, 8].includes(question.id) ? "bg-green-600 hover:bg-green-700 text-white" : ""}`}
+                      className={`flex-1 ${
+                        answers[question.id] === "no" && question.id === 1 
+                          ? "bg-red-600 hover:bg-red-700 text-white" 
+                          : answers[question.id] === "no" && [2, 4, 6, 8].includes(question.id) 
+                          ? "bg-green-600 hover:bg-green-700 text-white" 
+                          : ""
+                      }`}
                       onClick={() => handleAnswer(question.id, "no")}
                     >
                       NO
@@ -370,6 +433,23 @@ export default function CheckIn() {
           </p>
         </CardContent>
       </Card>
+
+      <AlertDialog open={showRelapseDialog} onOpenChange={setShowRelapseDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Nada de culpa. ¡Seguimos!</AlertDialogTitle>
+            <AlertDialogDescription>
+              Las recaídas son parte del proceso. Lo importante es aprender de ellas.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cerrar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleRelapseInventory}>
+              Inventario
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
