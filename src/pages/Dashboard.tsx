@@ -189,7 +189,12 @@ export default function Home() {
         completed: allInstancesCompleted
       }).eq('id', goal.originalId).eq('user_id', user.id);
       toast({
-        title: "Meta actualizada",
+        title: (
+          <span className="flex items-start justify-between w-full">
+            <span>Meta actualizada</span>
+            <span className="text-lg ml-2">{wasCompleted ? "⏸️" : "✅"}</span>
+          </span>
+        ) as any,
         description: wasCompleted ? "Meta marcada como pendiente." : "¡Meta completada!."
       });
     } catch (error: any) {
