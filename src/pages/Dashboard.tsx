@@ -700,7 +700,7 @@ export default function Home() {
             <Button variant="ghost" size="sm" className="text-primary flex-shrink-0">Escribir</Button>
           </Link>
         </CardHeader>
-        <CardContent className="pt-2 px-6 pb-6">
+        <CardContent className="-mt-5 px-6 pb-6">
           <p className="text-foreground/80 text-base leading-relaxed">
             {getReflectionOfTheDay()}
           </p>
