@@ -455,7 +455,7 @@ export default function Chat() {
                 setCurrentRoom(value);
                 localStorage.setItem('chat_last_room_mobile', value);
               }}>
-                <SelectTrigger className="w-full bg-black text-white flex items-center pr-[15px] pl-3 relative">
+                <SelectTrigger className="w-full bg-black text-white flex items-center pr-[15px] pl-3 relative [&>svg]:hidden">
                   <span className="flex-1 text-left">
                     {CHAT_ROOMS.find(room => room.id === currentRoom)?.label}
                   </span>
@@ -467,7 +467,7 @@ export default function Chat() {
                     {onlineCountByRoom[currentRoom] || 0}
                   </Badge>
                 </SelectTrigger>
-                <SelectContent className="bg-popover z-[100]">
+                <SelectContent className="bg-popover z-[100] mt-1">
                   {CHAT_ROOMS.map((room) => (
                     <SelectItem key={room.id} value={room.id} className="cursor-pointer pr-[15px] pl-3">
                       <span className="flex items-center justify-between w-full pr-[40px]">
