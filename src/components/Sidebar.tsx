@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
+import { ThemeToggle } from "@/components/ThemeToggle";
 const menuItems = [{
   emoji: "🏠",
   label: "Mi centro",
@@ -96,12 +97,15 @@ export function Sidebar() {
       })}
       </nav>
 
-      {/* Logout Button - Fixed at bottom */}
-      <div className="p-5 border-t border-sidebar-border">
-        <button onClick={handleLogout} className="flex items-center gap-3 w-full rounded-xl px-3 py-2 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 font-medium">
-          <span className="text-lg flex-shrink-0">🫥</span>
-          <span className="text-sm">Cerrar sesión</span>
-        </button>
+      {/* Logout Button and Theme Toggle - Fixed at bottom */}
+      <div className="p-5 border-t border-sidebar-border space-y-3">
+        <div className="flex items-center gap-3">
+          <button onClick={handleLogout} className="flex items-center gap-2 flex-1 rounded-xl px-3 py-2 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 font-medium">
+            <span className="text-lg flex-shrink-0">🫥</span>
+            <span className="text-sm">Cerrar sesión</span>
+          </button>
+          <ThemeToggle />
+        </div>
       </div>
     </div>;
   return <>
