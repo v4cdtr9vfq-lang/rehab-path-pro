@@ -510,7 +510,7 @@ export default function Settings() {
 
               <Button 
                 variant="ghost" 
-                onClick={checkSubscription}
+                onClick={() => checkSubscription()}
                 className="w-full"
               >
                 <RefreshCw className="h-4 w-4 mr-2" />

@@ -9,7 +9,7 @@ interface SubscriptionContextType {
   loading: boolean;
   trialDaysRemaining: number;
   isTrialExpired: boolean;
-  checkSubscription: () => Promise<void>;
+  checkSubscription: (showLoading?: boolean) => Promise<void>;
   createCheckoutSession: (priceId: string) => Promise<void>;
   openCustomerPortal: () => Promise<void>;
 }
@@ -40,9 +40,11 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const [trialDaysRemaining, setTrialDaysRemaining] = useState(30);
   const [isTrialExpired, setIsTrialExpired] = useState(false);
 
-  const checkSubscription = async () => {
+  const checkSubscription = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) {
+        setLoading(true);
+      }
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
@@ -145,8 +147,8 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    // Refresh subscription status every minute
-    const interval = setInterval(checkSubscription, 60000);
+    // Refresh subscription status every 5 minutes in background (no loading spinner)
+    const interval = setInterval(() => checkSubscription(false), 300000);
 
     return () => {
       subscription.unsubscribe();
