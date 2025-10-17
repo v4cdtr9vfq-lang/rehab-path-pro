@@ -450,7 +450,7 @@ export default function Chat() {
   
   return (
     <div className="h-[calc(100vh-8rem+85px)] flex flex-col animate-in fade-in duration-500">
-      <Card className="flex-1 flex flex-col border-primary/20 overflow-hidden min-h-0">
+      <Card className="flex-1 flex flex-col border-border overflow-hidden min-h-0">
         <div className="bg-muted/30 border-b shrink-0">
           <div className="px-4 pb-3 pt-3">
             {isMobile ? (
