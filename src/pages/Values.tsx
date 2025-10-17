@@ -35,6 +35,29 @@ export default function Values() {
   useEffect(() => {
     initializeValues();
     fetchStats();
+
+    // Check for day change every minute
+    const checkDayChange = () => {
+      const now = new Date();
+      const currentDate = now.toISOString().split('T')[0];
+      const storedDate = localStorage.getItem('valuesLastDate');
+      
+      if (storedDate && storedDate !== currentDate) {
+        // Day has changed, reset selections
+        fetchValues();
+        fetchStats();
+      }
+      
+      localStorage.setItem('valuesLastDate', currentDate);
+    };
+
+    // Check immediately
+    checkDayChange();
+
+    // Set up interval to check every minute
+    const intervalId = setInterval(checkDayChange, 60000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   const initializeValues = async () => {
