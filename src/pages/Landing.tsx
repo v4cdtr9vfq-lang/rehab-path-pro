@@ -41,8 +41,8 @@ export default function Landing() {
       <section className="relative overflow-hidden py-20 md:py-32">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
-              <span className="text-sm font-medium text-primary">Un aliado en la rehabilitación</span>
+            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-success/10 border border-success/30">
+              <span className="text-base font-semibold text-success">Un aliado en la rehabilitación</span>
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight">
