@@ -444,12 +444,7 @@ export default function Chat() {
 
       <Card className="flex-1 flex flex-col border-primary/20 overflow-hidden min-h-0">
         <div className="bg-muted/30 border-b shrink-0">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between mb-3">
-              <CardTitle>Chat en vivo</CardTitle>
-            </div>
-          </CardHeader>
-          <div className="px-4 pb-3">
+          <div className="px-4 pb-3 pt-3">
             <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="w-full">
               <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-black p-[15px] text-muted-foreground w-full flex-wrap gap-1">
                 {CHAT_ROOMS.map((room, index) => (
