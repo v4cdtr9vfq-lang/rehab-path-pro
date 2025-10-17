@@ -222,11 +222,11 @@ export default function CheckIn() {
                   {question.id === 7 && answers[7] === "no" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                       <Label htmlFor="values-description" className="text-sm font-medium text-foreground">
-                        A qué valor has sido infiel. Cómo y porqué has sido infiel. Cómo puedes enmendarlo.
+                        Describe la situación
                       </Label>
                       <Textarea
                         id="values-description"
-                        placeholder="Reflexiona sobre tu infidelidad a tus valores..."
+                        placeholder="A qué valor has sido infiel. Cómo y porqué has sido infiel. Cómo puedes enmendarlo."
                         value={valuesDescription}
                         onChange={(e) => setValuesDescription(e.target.value)}
                         className="min-h-[100px]"
