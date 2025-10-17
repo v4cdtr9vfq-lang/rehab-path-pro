@@ -483,7 +483,7 @@ export default function EmotionJournal() {
         <div className="space-y-8">
           {/* Primary Categories */}
           <div>
-            <h2 className="text-xl font-semibold text-foreground mb-4">¿Cómo te sientes aquí y ahora?</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">¿Cómo te sientes aquí y ahora?</h2>
             <div className="flex flex-wrap gap-3">
               {emotionCategories.map((category) => {
                 const isSelected = selectedPrimary === category.id;
@@ -617,7 +617,7 @@ export default function EmotionJournal() {
       {/* Emotion Log Widget */}
       {savedEntries.length > 0 && (
         <div>
-          <h2 className="text-2xl font-bold text-foreground mb-6">Registro de emociones:</h2>
+          <h2 className="text-xl font-bold text-foreground mb-6">Registro de emociones:</h2>
           <div className="space-y-4">
             {savedEntries.map((entry) => (
               <Card key={entry.id} className="p-6 bg-card border-border">
