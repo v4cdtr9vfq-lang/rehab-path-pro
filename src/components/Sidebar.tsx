@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Home, Target, Bell, TrendingUp, Heart, ListChecks, MessageSquare, BookOpen, Smile, Wrench, Settings, Menu, LogOut, MessageCircle } from "lucide-react";
+import { Home, Target, Bell, TrendingUp, Heart, ListChecks, MessageSquare, BookOpen, Smile, Wrench, Settings, Menu, LogOut, MessageCircle, ClipboardCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
@@ -10,6 +10,10 @@ const menuItems = [{
   icon: Home,
   label: "Mi centro",
   path: "/dashboard"
+}, {
+  icon: ClipboardCheck,
+  label: "Check in Diario",
+  path: "/checkin"
 }, {
   icon: Target,
   label: "Mi Plan",
