@@ -608,17 +608,17 @@ export default function Plan() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 self-center">
           {goal.instanceIndex === 0 && <>
-              <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 font-medium ${goal.completed ? 'border-green-500 text-green-500' : 'border-primary/30 text-primary'}`}>
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 font-medium flex-shrink-0 ${goal.completed ? 'border-green-500 text-green-500' : 'border-primary/30 text-primary'}`}>
                 {sections[sectionKey].goals.filter(g => g.originalId === goal.originalId).length}
               </div>
-              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEditDialog(goal, sectionKey)}>
-                <Pencil className="h-4 w-4" />
+              <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+                <Pencil className="h-4 w-4" onClick={() => openEditDialog(goal, sectionKey)} />
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive flex-shrink-0">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </AlertDialogTrigger>
