@@ -25,112 +25,112 @@ const emotions: Emotion[] = [
   {
     id: "afecto",
     name: "Afecto",
-    subEmotions: ["Afectuosa", "Amorosa", "Cariñosa", "Compasiva", "Comprensiva", "Simpática", "Tierna"]
+    subEmotions: ["Afectuoso", "Amoroso", "Cariñoso", "Compasivo", "Comprensivo", "Simpático", "Tierno"]
   },
   {
     id: "anhelo",
     name: "Anhelo",
-    subEmotions: ["Añorada", "Celosa", "Deseosa", "Envidiosa", "Melancólica", "Nostálgica", "Sola"]
+    subEmotions: ["Añorado", "Celoso", "Deseoso", "Envidioso", "Melancólico", "Nostálgico", "Solo"]
   },
   {
     id: "aversion",
     name: "Aversión",
-    subEmotions: ["Asco", "Desdeñosa", "Horrorizada", "Desprecio", "Odio", "Repugnada"]
+    subEmotions: ["Asco", "Desdeñoso", "Horrorizado", "Desprecio", "Odio", "Repugnado"]
   },
   {
     id: "cansancio",
     name: "Cansancio",
-    subEmotions: ["Abatida", "Agotada", "Cansada", "Débil", "Dolorida", "Fatigada", "Afligida", "Angustiada", "Desconsolada", "Deshecha"]
+    subEmotions: ["Abatido", "Agotado", "Cansado", "Débil", "Dolorido", "Fatigado", "Afligido", "Angustiado", "Desconsolado", "Deshecho"]
   },
   {
     id: "confianza",
     name: "Confianza",
-    subEmotions: ["Capaz", "Confiada", "Fuerte", "Ilusionada", "Orgullosa", "Receptiva", "Segura"]
+    subEmotions: ["Capaz", "Confiado", "Fuerte", "Ilusionado", "Orgulloso", "Receptivo", "Seguro"]
   },
   {
     id: "confusion",
     name: "Confusión",
-    subEmotions: ["Bloqueada", "Confusa", "Desorientada", "Dividida", "Dudosa", "Escéptica", "Espesa", "Indecisa", "Paralizada", "Pensativa", "Perdida", "Perpleja", "Vacilante"]
+    subEmotions: ["Bloqueado", "Confuso", "Desorientado", "Dividido", "Dudoso", "Escéptico", "Espeso", "Indeciso", "Paralizado", "Pensativo", "Perdido", "Perplejo", "Vacilante"]
   },
   {
     id: "desconexion",
     name: "Desconexión",
-    subEmotions: ["Aburrida", "Afectada", "Aislada", "Apática", "Desconectada", "Desidiosa", "Distante", "Fría", "Indiferente"]
+    subEmotions: ["Aburrido", "Afectado", "Aislado", "Apático", "Desconectado", "Desidioso", "Distante", "Frío", "Indiferente"]
   },
   {
     id: "enfado",
     name: "Enfado",
-    subEmotions: ["Disgustada", "Enfadada", "Furiosa", "Indignada", "Ira", "Molesta", "Resentida"]
+    subEmotions: ["Disgustado", "Enfadado", "Furioso", "Indignado", "Ira", "Molesto", "Resentido"]
   },
   {
     id: "entusiasmo",
     name: "Entusiasmo",
-    subEmotions: ["Animada", "Apasionada", "Entusiasmada", "Estimulada", "Excitada", "Fascinada", "Ilusionada", "Impresionada", "Sorprendida"]
+    subEmotions: ["Animado", "Apasionado", "Entusiasmado", "Estimulado", "Excitado", "Fascinado", "Ilusionado", "Impresionado", "Sorprendido"]
   },
   {
     id: "esperanza",
     name: "Esperanza",
-    subEmotions: ["Alentada", "Esperanzada", "Expectante", "Optimista"]
+    subEmotions: ["Alentado", "Esperanzado", "Expectante", "Optimista"]
   },
   {
     id: "euforia",
     name: "Euforia",
-    subEmotions: ["Eufórica", "Exultante", "Efusiva"]
+    subEmotions: ["Eufórico", "Exultante", "Efusivo"]
   },
   {
     id: "felicidad",
     name: "Felicidad",
-    subEmotions: ["Alegre", "Complacida", "Feliz", "Gozosa", "Placentera"]
+    subEmotions: ["Alegre", "Complacido", "Feliz", "Gozoso", "Placentero"]
   },
   {
     id: "gratitud",
     name: "Gratitud",
-    subEmotions: ["Agradecida", "Conmovida", "Emocionada", "Generosa", "Plena"]
+    subEmotions: ["Agradecido", "Conmovido", "Emocionado", "Generoso", "Pleno"]
   },
   {
     id: "inspiracion",
     name: "Inspiración",
-    subEmotions: ["Impresionada", "Inspirada", "Maravillada", "Parada"]
+    subEmotions: ["Impresionado", "Inspirado", "Maravillado", "Parado"]
   },
   {
     id: "inquietud",
     name: "Inquietud",
-    subEmotions: ["Agitada", "Agobiada", "Alarmada", "Arrepentida", "Avergonzada", "Desconcertada", "Escandalizada", "Incómoda", "Inquieta", "Intranquila", "Preocupada", "Sobresaltada", "Sorprendida", "Temblorosa"]
+    subEmotions: ["Agitado", "Agobiado", "Alarmado", "Arrepentido", "Avergonzado", "Desconcertado", "Escandalizado", "Incómodo", "Inquieto", "Intranquilo", "Preocupado", "Sobresaltado", "Sorprendido", "Tembloroso"]
   },
   {
     id: "interes",
     name: "Interés",
-    subEmotions: ["Abierta", "Atenta", "Atraída", "Comprometida", "Curiosa", "Decidida", "Dispuesta", "Inspirada", "Interesada", "Intrigada", "Involucrada", "Motivada"]
+    subEmotions: ["Abierto", "Atento", "Atraído", "Comprometido", "Curioso", "Decidido", "Dispuesto", "Inspirado", "Interesado", "Intrigado", "Involucrado", "Motivado"]
   },
   {
     id: "irritacion",
     name: "Irritación",
-    subEmotions: ["Consternada", "Frustrada", "Impaciente", "Irascible", "Irritada", "Malhumorada", "Molesta"]
+    subEmotions: ["Consternado", "Frustrado", "Impaciente", "Irascible", "Irritado", "Malhumorado", "Molesto"]
   },
   {
     id: "miedo",
     name: "Miedo",
-    subEmotions: ["Acongojada", "Asustada", "Atemorizada", "Aterrorizada", "Desconfiada", "Pánico", "Preocupada"]
+    subEmotions: ["Acongojado", "Asustado", "Atemorizado", "Aterrorizado", "Desconfiado", "Pánico", "Preocupado"]
   },
   {
     id: "paz",
     name: "Paz",
-    subEmotions: ["Aliviada", "Sosegada", "Calmada", "Centrada", "Cercana", "Cómoda", "Contenta", "Desahogada", "Despreocupada", "Lúcida", "Plácida", "Realizada", "Relajada", "Satisfecha", "Serena", "Tranquila"]
+    subEmotions: ["Aliviado", "Sosegado", "Calmado", "Centrado", "Cercano", "Cómodo", "Contento", "Desahogado", "Despreocupado", "Lúcido", "Plácido", "Realizado", "Relajado", "Satisfecho", "Sereno", "Tranquilo"]
   },
   {
     id: "tension",
     name: "Tensión",
-    subEmotions: ["Ansiosa", "Conmocionada", "Desbordada", "Estresada", "Irritable", "Nerviosa", "Sobrecargada", "Sobrepasada", "Tensa"]
+    subEmotions: ["Ansioso", "Conmocionado", "Desbordado", "Estresado", "Irritable", "Nervioso", "Sobrecargado", "Sobrepasado", "Tenso"]
   },
   {
     id: "tristeza",
     name: "Tristeza",
-    subEmotions: ["Decepcionada", "Deprimida", "Desanimada", "Desgraciada", "Desilusionada", "Infeliz", "Triste"]
+    subEmotions: ["Decepcionado", "Deprimido", "Desanimado", "Desgraciado", "Desilusionado", "Infeliz", "Triste"]
   },
   {
     id: "vulnerabilidad",
     name: "Vulnerabilidad",
-    subEmotions: ["Frágil", "Impotente", "Insegura", "Sensible", "Tímida", "Vulnerable"]
+    subEmotions: ["Frágil", "Impotente", "Inseguro", "Sensible", "Tímido", "Vulnerable"]
   }
 ];
 
