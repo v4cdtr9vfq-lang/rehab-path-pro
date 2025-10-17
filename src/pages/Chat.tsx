@@ -639,7 +639,7 @@ export default function Chat() {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Escribe un mensaje..."
-                className="w-full pl-4 resize-none min-h-[60px] text-xs"
+                className="w-full pl-4 resize-none min-h-[60px] text-[11px]"
                 disabled={isSending}
                 rows={3}
               />
