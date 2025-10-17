@@ -160,11 +160,7 @@ export default function Plan() {
           .eq('completion_date', date)
           .eq('instance_index', instanceIndex);
       }
-
-      // Dispatch custom event to notify other components
-      window.dispatchEvent(new CustomEvent('goalsUpdated', { 
-        detail: { date } 
-      }));
+      // Realtime will handle the update automatically
     } catch (error) {
       console.error('Error saving completion:', error);
       throw error;
@@ -292,10 +288,12 @@ export default function Plan() {
           schema: 'public',
           table: 'goal_completions'
         },
-        async (payload) => {
-          console.log('Goal completion change detected in Plan:', payload);
-          // Reload all goals when changes are detected
-          fetchGoals();
+        async () => {
+          // Only reload goals when changes come from other devices
+          // Use a small delay to batch multiple rapid changes
+          setTimeout(() => {
+            fetchGoals();
+          }, 300);
         }
       )
       .subscribe();
@@ -383,13 +381,8 @@ export default function Plan() {
 
       const wasCompleted = goal.completed;
 
-      // Save to database
-      await saveCompletion(goal.originalId, instanceIndex, dateStr, !wasCompleted);
-
-      // Update local state for ALL sections that might contain this goal
+      // Optimistically update UI
       const updatedSections = { ...sections };
-      
-      // Update all sections
       Object.keys(updatedSections).forEach((key) => {
         const sk = key as keyof typeof sections;
         updatedSections[sk] = {
@@ -402,11 +395,13 @@ export default function Plan() {
       
       setSections(updatedSections);
 
+      // Save to database (realtime will sync to other devices)
+      await saveCompletion(goal.originalId, instanceIndex, dateStr, !wasCompleted);
+
       // Check if ALL instances of this goal are completed
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Get all instances of this goal from all sections
       const allGoals = [
         ...updatedSections.today.goals,
         ...updatedSections.week.goals,
@@ -434,6 +429,8 @@ export default function Plan() {
         description: "No se pudo actualizar la meta",
         variant: "destructive",
       });
+      // Revert on error
+      fetchGoals();
     }
   };
 

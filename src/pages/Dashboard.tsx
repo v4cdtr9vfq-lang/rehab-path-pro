@@ -82,11 +82,7 @@ export default function Home() {
           .eq('completion_date', date)
           .eq('instance_index', instanceIndex);
       }
-
-      // Dispatch custom event to notify other components
-      window.dispatchEvent(new CustomEvent('goalsUpdated', { 
-        detail: { date } 
-      }));
+      // Realtime will handle the update automatically
     } catch (error) {
       console.error('Error saving completion:', error);
       throw error;
@@ -101,10 +97,7 @@ export default function Home() {
       const todayStr = getLocalDateString();
       const wasCompleted = goal.status === 'completed';
 
-      // Save to database
-      await saveCompletion(goal.originalId, goal.instanceIndex, todayStr, !wasCompleted);
-
-      // Update local state
+      // Optimistically update UI immediately
       const updatedGoals = activeGoals.map(g => 
         g.id === goalId 
           ? { ...g, status: wasCompleted ? 'pending' : 'completed' }
@@ -116,6 +109,9 @@ export default function Home() {
       // Recalculate completed count
       const totalCompletedToday = updatedGoals.filter(g => g.status === 'completed').length;
       setGoalsCompleted(totalCompletedToday + (checkInCompleted ? 1 : 0));
+
+      // Save to database (realtime will sync to other devices)
+      await saveCompletion(goal.originalId, goal.instanceIndex, todayStr, !wasCompleted);
 
       // Update database: mark goal as completed only if ALL instances are done
       const { data: { user } } = await supabase.auth.getUser();
@@ -142,13 +138,22 @@ export default function Home() {
         description: "No se pudo actualizar la meta",
         variant: "destructive",
       });
+      // Revert optimistic update on error
+      const todayStr = getLocalDateString();
+      const completedInstances = await loadCompletedInstances(todayStr);
+      const revertedGoals = activeGoals.map(g => ({
+        ...g,
+        status: completedInstances.has(g.id) ? 'completed' : 'pending'
+      }));
+      setActiveGoals(revertedGoals);
     }
   };
 
   useEffect(() => {
-  const fetchData = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
+    const fetchData = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
       // Fetch profile
       const { data: profile } = await supabase
         .from('profiles')
@@ -181,9 +186,6 @@ export default function Home() {
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
-
-      console.log('Goals data:', goals);
-      console.log('Goals error:', goalsError);
 
       if (goals && goals.length > 0) {
         // Filter goals that should appear today
@@ -228,9 +230,8 @@ export default function Home() {
         setTotalGoals(1);
         setActiveGoals([]);
       }
-    }
-    setLoading(false);
-  };
+      setLoading(false);
+    };
 
     fetchData();
 
@@ -245,22 +246,22 @@ export default function Home() {
           table: 'goal_completions'
         },
         async (payload) => {
-          console.log('Goal completion change detected:', payload);
-          // Reload goals when changes are detected
-          const { data: { user } } = await supabase.auth.getUser();
-          if (user) {
-            const todayStr = getLocalDateString();
-            const completedInstances = await loadCompletedInstances(todayStr);
-            
-            const updatedGoals = activeGoals.map(g => ({
-              ...g,
-              status: completedInstances.has(g.id) ? 'completed' : 'pending'
-            }));
-            
-            setActiveGoals(updatedGoals);
-            const completedCount = updatedGoals.filter(g => g.status === 'completed').length;
-            setGoalsCompleted(completedCount + (checkInCompleted ? 1 : 0));
-          }
+          // Only update if the change is from another device/session
+          const todayStr = getLocalDateString();
+          const completedInstances = await loadCompletedInstances(todayStr);
+          
+          // Update only the completion status without refetching everything
+          setActiveGoals(prev => prev.map(g => ({
+            ...g,
+            status: completedInstances.has(g.id) ? 'completed' : 'pending'
+          })));
+          
+          setGoalsCompleted(prev => {
+            const newCompleted = Array.from(completedInstances).filter(id => 
+              activeGoals.some(g => g.id === id)
+            ).length;
+            return newCompleted + (checkInCompleted ? 1 : 0);
+          });
         }
       )
       .subscribe();

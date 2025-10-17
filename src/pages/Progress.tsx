@@ -49,10 +49,11 @@ export default function ProgressPage() {
           schema: 'public',
           table: 'goal_completions'
         },
-        async (payload) => {
-          console.log('Goal completion change detected in Progress:', payload);
-          // Reload data when changes are detected
-          fetchData();
+        async () => {
+          // Use a small delay to batch multiple rapid changes
+          setTimeout(() => {
+            fetchData();
+          }, 300);
         }
       )
       .subscribe();
