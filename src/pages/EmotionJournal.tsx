@@ -48,11 +48,6 @@ const emotions: Emotion[] = [
     subEmotions: ["Aprensivo", "Temor", "Presentimiento", "Atemorizado", "Desconfiado", "En pánico", "Petrificado", "Asustado", "Sospechoso", "Aterrorizado", "Cauteloso", "Preocupado"]
   },
   {
-    id: "rechazo",
-    name: "Rechazo",
-    subEmotions: ["Animosidad", "Horrorizado", "Desprecio", "Disgustado", "Desagrado", "Odio", "Hostil", "Repulsado"]
-  },
-  {
     id: "avergonzado",
     name: "Avergonzado",
     subEmotions: ["Avergonzado", "Mortificado", "Turbado", "Culpable", "Cohibido"]
@@ -76,6 +71,11 @@ const emotions: Emotion[] = [
     id: "conectado",
     name: "Conectado",
     subEmotions: ["Empatía", "Complicidad", "Afiliación", "Sintonía", "Cuidado"]
+  },
+  {
+    id: "descansado",
+    name: "Descansado",
+    subEmotions: ["Revitalizado", "Renovado", "Descansado", "Restaurado", "Revivido"]
   },
   {
     id: "desconectado",
@@ -138,9 +138,9 @@ const emotions: Emotion[] = [
     subEmotions: ["Calmado", "Despejado", "Cómodo", "Centrado", "Contento", "Ecuánime", "Realizado", "Tranquilo", "Quieto", "Relajado", "Aliviado", "Satisfecho", "Sereno", "Confiado"]
   },
   {
-    id: "descansado",
-    name: "Descansado",
-    subEmotions: ["Revitalizado", "Renovado", "Descansado", "Restaurado", "Revivido"]
+    id: "rechazo",
+    name: "Rechazo",
+    subEmotions: ["Animosidad", "Horrorizado", "Desprecio", "Disgustado", "Desagrado", "Odio", "Hostil", "Repulsado"]
   },
   {
     id: "seguro",
