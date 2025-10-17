@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CheckCircle2, Circle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface ProgressArea {
   name: string;
@@ -35,9 +36,13 @@ export default function ProgressPage() {
   const [monthlyGoals, setMonthlyGoals] = useState<ExpandedGoal[]>([]);
   const [currentTab, setCurrentTab] = useState('daily');
   const [overallProgress, setOverallProgress] = useState(0);
+  const [weeklyChartData, setWeeklyChartData] = useState<any[]>([]);
+  const [monthlyChartData, setMonthlyChartData] = useState<any[]>([]);
+  const [yearlyChartData, setYearlyChartData] = useState<any[]>([]);
 
   useEffect(() => {
     fetchData();
+    calculateChartData();
 
     // Set up realtime subscription for goal completions
     const channel = supabase
@@ -53,6 +58,7 @@ export default function ProgressPage() {
           // Use a small delay to batch multiple rapid changes
           setTimeout(() => {
             fetchData();
+            calculateChartData();
           }, 300);
         }
       )
@@ -246,6 +252,81 @@ export default function ProgressPage() {
     setOverallProgress(total > 0 ? Math.round((completed / total) * 100) : 0);
   };
 
+  const calculateChartData = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Calcular datos semanales (últimos 7 días)
+      const weekData = [];
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = getLocalDateString(date);
+        
+        const { data: completions } = await supabase
+          .from('goal_completions')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('completion_date', dateStr);
+
+        const dayName = date.toLocaleDateString('es-ES', { weekday: 'short' });
+        weekData.push({
+          name: dayName,
+          progreso: completions?.length || 0
+        });
+      }
+      setWeeklyChartData(weekData);
+
+      // Calcular datos mensuales (últimas 4 semanas)
+      const monthData = [];
+      for (let i = 3; i >= 0; i--) {
+        const endDate = new Date();
+        endDate.setDate(endDate.getDate() - (i * 7));
+        const startDate = new Date(endDate);
+        startDate.setDate(startDate.getDate() - 6);
+
+        const { data: completions } = await supabase
+          .from('goal_completions')
+          .select('*')
+          .eq('user_id', user.id)
+          .gte('completion_date', getLocalDateString(startDate))
+          .lte('completion_date', getLocalDateString(endDate));
+
+        monthData.push({
+          name: `Sem ${4 - i}`,
+          progreso: completions?.length || 0
+        });
+      }
+      setMonthlyChartData(monthData);
+
+      // Calcular datos anuales (últimos 12 meses)
+      const yearData = [];
+      for (let i = 11; i >= 0; i--) {
+        const date = new Date();
+        date.setMonth(date.getMonth() - i);
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        
+        const { data: completions } = await supabase
+          .from('goal_completions')
+          .select('*')
+          .eq('user_id', user.id)
+          .gte('completion_date', `${year}-${month.toString().padStart(2, '0')}-01`)
+          .lt('completion_date', `${year}-${(month + 1).toString().padStart(2, '0')}-01`);
+
+        const monthName = date.toLocaleDateString('es-ES', { month: 'short' });
+        yearData.push({
+          name: monthName,
+          progreso: completions?.length || 0
+        });
+      }
+      setYearlyChartData(yearData);
+    } catch (error) {
+      console.error('Error calculating chart data:', error);
+    }
+  };
+
   const fetchData = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -412,6 +493,85 @@ export default function ProgressPage() {
         </TabsContent>
 
       </Tabs>
+
+      {/* Chart Widget */}
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <span className="text-lg">📊</span>
+            Gráficos de Progreso
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="week" className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="week">Semana</TabsTrigger>
+              <TabsTrigger value="month">Mes</TabsTrigger>
+              <TabsTrigger value="year">Año</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="week" className="mt-6">
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={weeklyChartData}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                    <XAxis dataKey="name" className="text-xs" />
+                    <YAxis className="text-xs" />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--background))', 
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px'
+                      }}
+                    />
+                    <Bar dataKey="progreso" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="month" className="mt-6">
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={monthlyChartData}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                    <XAxis dataKey="name" className="text-xs" />
+                    <YAxis className="text-xs" />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--background))', 
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px'
+                      }}
+                    />
+                    <Bar dataKey="progreso" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="year" className="mt-6">
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={yearlyChartData}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                    <XAxis dataKey="name" className="text-xs" />
+                    <YAxis className="text-xs" />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--background))', 
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px'
+                      }}
+                    />
+                    <Bar dataKey="progreso" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
     </div>
   );
 }
