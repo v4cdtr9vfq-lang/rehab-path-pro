@@ -311,11 +311,6 @@ export default function ProgressPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Progreso</h1>
-        <p className="text-muted-foreground text-lg">Rastrea tu camino de recuperación en diferentes áreas</p>
-      </div>
-
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
