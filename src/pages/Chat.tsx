@@ -652,7 +652,7 @@ export default function Chat() {
               <Button type="submit" disabled={!newMessage.trim() || isSending} className="w-full bg-white text-black hover:bg-green-500 hover:text-white">
                 Enviar
               </Button>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 pl-[15px]">
                 <Switch
                   id="anonymous-mode"
                   checked={isAnonymous}
@@ -679,7 +679,7 @@ export default function Chat() {
             </div>
           )}
           {!isMobile && (
-            <div className="flex items-center gap-2 pl-3">
+            <div className="flex items-center gap-2 pl-[15px]">
               <Switch
                 id="anonymous-mode"
                 checked={isAnonymous}
