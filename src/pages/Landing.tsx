@@ -1,25 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle2, Target, TrendingUp, Users, Heart, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSolarTheme } from "@/hooks/useSolarTheme";
 
 export default function Landing() {
   useSolarTheme();
   const benefits = [{
-    icon: Target,
+    emoji: "🎯",
     title: "Seguimiento de progreso",
     description: "Monitorea tu abstinencia día a día y celebra cada logro alcanzado"
   }, {
-    icon: Calendar,
+    emoji: "📅",
     title: "Check-In Diario",
     description: "Registra tu estado emocional y mantén el control de tu recuperación"
   }, {
-    icon: TrendingUp,
+    emoji: "📈",
     title: "Metas personalizadas",
     description: "Establece y alcanza objetivos adaptados a tu proceso de recuperación"
   }, {
-    icon: Users,
+    emoji: "👥",
     title: "Red de apoyo",
     description: "Conecta con tu red de soporte cuando más lo necesites"
   }];
@@ -42,7 +41,7 @@ export default function Landing() {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center space-y-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
-              <Heart className="h-4 w-4 text-primary" />
+              <span className="text-lg">❤️</span>
               <span className="text-sm font-medium text-primary">Tu aliado en la rehabilitación</span>
             </div>
             
@@ -53,7 +52,7 @@ export default function Landing() {
             
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               <span className="inline-flex items-center gap-2 relative top-[2px] -left-[2px]">
-                <Heart className="h-6 w-6 text-primary flex-shrink-0" />
+                <span className="text-2xl">❤️</span>
                 <span className="font-semibold">rehabp.org</span>
               </span> te acompaña en cada paso de tu proceso de crecimiento con herramientas diseñadas para mantenerte motivado y enfocado.
             </p>
@@ -84,12 +83,11 @@ export default function Landing() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {benefits.map((benefit, index) => {
-            const Icon = benefit.icon;
             return <Card key={index} className="border-border/50 hover:border-primary/20 transition-all duration-300">
                   <CardContent className="p-8">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <Icon className="h-6 w-6 text-primary" />
+                      <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0 text-2xl">
+                        {benefit.emoji}
                       </div>
                       <div>
                         <h3 className="text-xl font-semibold text-foreground mb-2">{benefit.title}</h3>
