@@ -101,7 +101,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-[68px] pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-6">
             {/* About Us Button */}
             <a 
