@@ -464,7 +464,7 @@ export default function Chat() {
                   </span>
                   <Badge 
                     variant="secondary" 
-                    className="flex-shrink-0 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-primary text-primary-foreground dark:bg-secondary dark:text-secondary-foreground"
+                    className="flex-shrink-0 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-black text-white dark:bg-secondary dark:text-secondary-foreground"
                   >
                     <Users className="h-3 w-3" />
                     {onlineCountByRoom[currentRoom] || 0}
@@ -477,7 +477,7 @@ export default function Chat() {
                         <span>{room.label}</span>
                         <Badge 
                           variant="secondary" 
-                          className="absolute right-[15px] inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-primary text-primary-foreground dark:bg-secondary dark:text-secondary-foreground"
+                          className="absolute right-[15px] inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-black text-white dark:bg-secondary dark:text-secondary-foreground"
                         >
                           <Users className="h-3 w-3" />
                           {onlineCountByRoom[room.id] || 0}
@@ -500,7 +500,7 @@ export default function Chat() {
                         {room.label}
                         <Badge 
                           variant="secondary" 
-                          className="inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-primary text-primary-foreground dark:bg-secondary dark:text-secondary-foreground"
+                          className="inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-black text-white dark:bg-secondary dark:text-secondary-foreground"
                         >
                           <Users className="h-3 w-3" />
                           {onlineCountByRoom[room.id] || 0}
