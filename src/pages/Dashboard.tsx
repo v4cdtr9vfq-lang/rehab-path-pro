@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CheckCircle2, Clock, Star, GripVertical } from "lucide-react";
+import { CheckCircle2, Clock, Circle, Star, GripVertical } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -510,8 +510,12 @@ export default function Home() {
           >
             <GripVertical className="h-5 w-5 text-muted-foreground" />
           </button>
-          <button onClick={() => toggleGoal(goal.id)} className="flex-shrink-0 text-2xl">
-            {goal.status === "completed" ? "🏅" : "⭕"}
+          <button onClick={() => toggleGoal(goal.id)} className="flex-shrink-0">
+            {goal.status === "completed" ? (
+              <CheckCircle2 className="h-6 w-6 text-green-500" />
+            ) : (
+              <Circle className="h-6 w-6 text-muted-foreground" />
+            )}
           </button>
           <div>
             <p className="font-semibold text-foreground">{goal.title}</p>
@@ -552,8 +556,8 @@ export default function Home() {
           {/* Daily Check-In Status */}
           <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
             <div className="flex items-center gap-3">
-              <button className="flex-shrink-0 cursor-default text-2xl">
-                {checkInCompleted ? "🏅" : "⭕"}
+              <button className="flex-shrink-0 cursor-default">
+                {checkInCompleted ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
               </button>
               <div>
                 <p className="font-semibold text-foreground">Check-In Diario</p>
