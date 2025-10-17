@@ -439,7 +439,8 @@ export default function Chat() {
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between mb-3">
               <CardTitle>Chat en Vivo</CardTitle>
-              <Badge variant="secondary" className="gap-2">
+              {/* Mobile: Show current room online count */}
+              <Badge variant="secondary" className="gap-2 lg:hidden">
                 <Users className="h-4 w-4" />
                 {currentRoomOnline} en línea
               </Badge>
@@ -452,11 +453,21 @@ export default function Chat() {
                   <TabsTrigger 
                     key={room.id} 
                     value={room.id} 
-                    className={`text-xs sm:text-sm whitespace-nowrap data-[state=active]:text-[#FF7A5C] px-3 ${
+                    className={`text-xs sm:text-sm whitespace-nowrap data-[state=active]:text-[#FF7A5C] px-3 relative ${
                       index < CHAT_ROOMS.length - 1 ? 'mr-2' : ''
                     }`}
                   >
-                    {room.label}
+                    <span className="flex items-center gap-2">
+                      {room.label}
+                      {/* Desktop: Show badge for each room */}
+                      <Badge 
+                        variant="secondary" 
+                        className="hidden lg:inline-flex gap-1 text-xs px-2 py-0.5 h-5"
+                      >
+                        <Users className="h-3 w-3" />
+                        {onlineCountByRoom[room.id] || 0}
+                      </Badge>
+                    </span>
                   </TabsTrigger>
                 ))}
               </TabsList>
