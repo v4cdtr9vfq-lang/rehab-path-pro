@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Target, ClipboardCheck, Phone, Wind, BookOpen, AlertCircle, CheckCircle2, Clock, Circle } from "lucide-react";
+import { CheckCircle2, Clock, Circle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -296,10 +296,10 @@ export default function Home() {
 
   // Quick tools - configurable
   const quickTools = [
-    { icon: Wind, label: "Respiración guiada", path: "/tools", color: "text-primary" },
-    { icon: Phone, label: "Contacto de apoyo", path: "/message", color: "text-accent" },
-    { icon: BookOpen, label: "Diario", path: "/journal", color: "text-primary" },
-    { icon: AlertCircle, label: "Plan de emergencia", path: "/tools", color: "text-destructive" },
+    { emoji: "🌬️", label: "Respiración guiada", path: "/tools", color: "text-primary" },
+    { emoji: "📞", label: "Contacto de apoyo", path: "/message", color: "text-accent" },
+    { emoji: "📔", label: "Diario", path: "/journal", color: "text-primary" },
+    { emoji: "🚨", label: "Plan de emergencia", path: "/tools", color: "text-destructive" },
   ];
 
   return (
@@ -376,7 +376,7 @@ export default function Home() {
               <p className="text-muted-foreground mb-4">No tienes metas activas aún</p>
               <Link to="/plan">
                 <Button className="rounded-xl">
-                  <Target className="h-4 w-4 mr-2" />
+                  <span className="mr-2">🎯</span>
                   Añadir meta
                 </Button>
               </Link>
@@ -420,13 +420,12 @@ export default function Home() {
         <h2 className="text-2xl font-bold mb-4 text-foreground">Herramientas Rápidas</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {quickTools.map((tool) => {
-            const Icon = tool.icon;
             return (
               <Link key={tool.label} to={tool.path}>
                 <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-border/50 h-full">
                   <CardContent className="p-5 text-center space-y-3">
                     <div className={`mx-auto w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center ${tool.color}`}>
-                      <Icon className="h-6 w-6" />
+                      <span className="text-2xl">{tool.emoji}</span>
                     </div>
                     <p className="font-semibold text-foreground text-xs leading-tight">{tool.label}</p>
                   </CardContent>

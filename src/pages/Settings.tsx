@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Settings as SettingsIcon, User, Lock, Trash2, CreditCard, Check } from "lucide-react";
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -254,7 +254,7 @@ export default function Settings() {
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <User className="h-5 w-5 text-primary" />
+            <span className="text-lg">👤</span>
             Cuenta
           </CardTitle>
         </CardHeader>
@@ -284,7 +284,7 @@ export default function Settings() {
 
             <div className="border-t pt-4 space-y-4">
               <div className="flex items-center gap-2 mb-2">
-                <Lock className="h-5 w-5 text-primary" />
+                <span className="text-lg">🔒</span>
                 <Label>Cambiar Contraseña</Label>
               </div>
               <div className="space-y-2">
@@ -332,7 +332,7 @@ export default function Settings() {
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CreditCard className="h-5 w-5 text-primary" />
+            <span className="text-lg">💳</span>
             Suscripción
           </CardTitle>
         </CardHeader>
@@ -347,7 +347,7 @@ export default function Settings() {
               {subscribed && (
                 <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 space-y-2">
                   <div className="flex items-center gap-2">
-                    <Check className="h-5 w-5 text-primary" />
+                    <span className="text-lg text-primary">✅</span>
                     <span className="font-semibold">
                       {plan === "monthly" ? "Plan Mensual Activo" : "Plan Anual Activo"}
                     </span>
@@ -390,15 +390,15 @@ export default function Settings() {
                   </div>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-primary" />
+                      <span className="text-primary">✅</span>
                       Acceso completo a todas las funciones.
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-primary" />
+                      <span className="text-primary">✅</span>
                       Chat comunitario.
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-primary" />
+                      <span className="text-primary">✅</span>
                       Seguimiento personalizado.
                     </li>
                   </ul>
@@ -428,15 +428,15 @@ export default function Settings() {
                   </div>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-primary" />
+                      <span className="text-primary">✅</span>
                       Acceso completo a todas las funciones.
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-primary" />
+                      <span className="text-primary">✅</span>
                       Chat comunitario.
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-primary" />
+                      <span className="text-primary">✅</span>
                       Seguimiento personalizado.
                     </li>
                   </ul>
@@ -477,15 +477,15 @@ export default function Settings() {
                   </div>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-primary" />
+                      <span className="text-primary">✅</span>
                       Todo lo del plan mensual.
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-primary" />
+                      <span className="text-primary">✅</span>
                       Ahorra 42€ al año.
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-primary" />
+                      <span className="text-primary">✅</span>
                       Mejor valor por tu dinero.
                     </li>
                   </ul>
@@ -516,7 +516,7 @@ export default function Settings() {
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <SettingsIcon className="h-5 w-5 text-primary" />
+            <span className="text-lg">⚙️</span>
             Configuración de Recuperación
           </CardTitle>
         </CardHeader>
@@ -602,7 +602,7 @@ export default function Settings() {
       <Card className="border-destructive/50 bg-destructive/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive">
-            <Trash2 className="h-5 w-5" />
+            <span className="text-lg">🗑️</span>
             Zona de Peligro
           </CardTitle>
         </CardHeader>
@@ -615,7 +615,7 @@ export default function Settings() {
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive" className="w-full">
-                  <Trash2 className="h-4 w-4 mr-2" />
+                  <span className="mr-2">🗑️</span>
                   Eliminar mi cuenta
                 </Button>
               </AlertDialogTrigger>

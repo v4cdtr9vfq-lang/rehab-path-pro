@@ -1,53 +1,54 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Home, Target, Bell, TrendingUp, Heart, ListChecks, MessageSquare, BookOpen, Smile, Wrench, Settings, Menu, LogOut, MessageCircle } from "lucide-react";
+import { Menu, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
+
 const menuItems = [{
-  icon: Home,
+  emoji: "🏠",
   label: "Mi centro",
   path: "/dashboard"
 }, {
-  icon: Target,
+  emoji: "🎯",
   label: "Mi Plan",
   path: "/plan"
 }, {
-  icon: TrendingUp,
+  emoji: "📈",
   label: "Progreso",
   path: "/progress"
 }, {
-  icon: Smile,
+  emoji: "😊",
   label: "Diario de Emociones",
   path: "/emotion-journal"
 }, {
-  icon: BookOpen,
+  emoji: "📔",
   label: "Diario",
   path: "/journal"
 }, {
-  icon: ListChecks,
+  emoji: "🙏",
   label: "Lista de Gratitud",
   path: "/gratitude"
 }, {
-  icon: Heart,
+  emoji: "💝",
   label: "Valores",
   path: "/values"
 }, {
-  icon: MessageCircle,
+  emoji: "💬",
   label: "Chat",
   path: "/chat"
 }, {
-  icon: Wrench,
+  emoji: "🛠️",
   label: "Herramientas",
   path: "/tools"
 }, {
-  icon: Bell,
+  emoji: "🔔",
   label: "Recordatorios",
   path: "/reminders"
 }, {
-  icon: Settings,
+  emoji: "⚙️",
   label: "Configuración",
   path: "/settings"
 }];
@@ -86,13 +87,12 @@ export function Sidebar() {
       
       <nav className="flex flex-col gap-1.5 px-5 flex-1 overflow-y-auto">
         {menuItems.map(item => {
-        const Icon = item.icon;
         // "Mi centro" también incluye /checkin
         const isActive = location.pathname === item.path || 
                         (item.path === '/dashboard' && location.pathname === '/checkin');
         const isChat = item.path === '/chat';
         return <Link key={item.path} to={item.path} onClick={() => setOpen(false)} className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all ${isActive ? "bg-primary text-primary-foreground font-semibold shadow-lg" : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"}`}>
-              <Icon className="h-4 w-4 flex-shrink-0" />
+              <span className="text-lg flex-shrink-0">{item.emoji}</span>
               <span className="text-sm flex-1">{item.label}</span>
               {isChat && (
                 <Badge variant="secondary" className="ml-auto text-xs px-2 py-0.5">
@@ -106,7 +106,7 @@ export function Sidebar() {
       {/* Logout Button - Fixed at bottom */}
       <div className="p-5 border-t border-sidebar-border">
         <button onClick={handleLogout} className="flex items-center gap-3 w-full rounded-xl px-3 py-2.5 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 font-medium">
-          <LogOut className="h-4 w-4 flex-shrink-0" />
+          <span className="text-lg flex-shrink-0">🚪</span>
           <span className="text-sm">Cerrar sesión</span>
         </button>
       </div>

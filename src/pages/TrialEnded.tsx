@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, AlertCircle } from "lucide-react";
+
 import { useNavigate } from "react-router-dom";
 import { SUBSCRIPTION_PLANS, useSubscription } from "@/contexts/SubscriptionContext";
 
@@ -18,7 +18,7 @@ export default function TrialEnded() {
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-            <AlertCircle className="h-8 w-8 text-primary" />
+            <span className="text-4xl">⚠️</span>
           </div>
           <h1 className="text-4xl font-bold">Tu periodo de prueba ha terminado</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -41,15 +41,15 @@ export default function TrialEnded() {
             <CardContent className="space-y-6 flex-1 flex flex-col">
               <ul className="space-y-3 flex-1">
                 <li className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span className="text-xl text-primary flex-shrink-0">✅</span>
                   <span>Acceso completo a todas las funciones.</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span className="text-xl text-primary flex-shrink-0">✅</span>
                   <span>Chat comunitario.</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span className="text-xl text-primary flex-shrink-0">✅</span>
                   <span>Seguimiento personalizado.</span>
                 </li>
               </ul>
@@ -79,15 +79,15 @@ export default function TrialEnded() {
             <CardContent className="space-y-6 flex-1 flex flex-col">
               <ul className="space-y-3 flex-1">
                 <li className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span className="text-xl text-primary flex-shrink-0">✅</span>
                   <span>Todo lo del plan mensual.</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span className="text-xl text-primary flex-shrink-0">✅</span>
                   <span>Ahorra 42€ al año.</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span className="text-xl text-primary flex-shrink-0">✅</span>
                   <span>Mejor valor por tu dinero.</span>
                 </li>
               </ul>
