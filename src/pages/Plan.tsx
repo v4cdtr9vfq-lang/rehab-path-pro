@@ -594,23 +594,29 @@ export default function Plan() {
     // Read completion status directly from the goal prop (which comes from expanded goals)
     // The goal.completed is already synced from localStorage in expandGoals
     const isClickable = sectionKey !== 'week' && sectionKey !== 'month';
+    
+    // For week/month views, check if ALL instances are completed
+    const allInstancesOfGoal = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
+    const allCompleted = allInstancesOfGoal.every(g => g.completed);
+    const displayCompleted = (sectionKey === 'week' || sectionKey === 'month') ? allCompleted : goal.completed;
+    
     return <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
         <div className="flex items-center gap-3 flex-1">
           <button onClick={isClickable ? () => toggleGoal(sectionKey, goal.id) : undefined} className={`flex-shrink-0 ${!isClickable ? 'cursor-default' : ''}`} disabled={!isClickable}>
-            {goal.completed ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
+            {displayCompleted ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
           </button>
           <div className="flex-1">
             <p className="text-foreground font-semibold">
               {goal.text}
             </p>
-            <p className={`text-sm ${goal.completed ? 'text-green-500' : 'text-muted-foreground'}`}>
-              {goal.completed ? 'Completado' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+            <p className={`text-sm ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
+              {displayCompleted ? 'Completado' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2 self-center">
           {goal.instanceIndex === 0 && <>
-              <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 font-medium flex-shrink-0 ${goal.completed ? 'border-green-500 text-green-500' : 'border-primary/30 text-primary'}`}>
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 font-medium flex-shrink-0 ${displayCompleted ? 'border-green-500 text-green-500' : 'border-primary/30 text-primary'}`}>
                 {sections[sectionKey].goals.filter(g => g.originalId === goal.originalId).length}
               </div>
               <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
