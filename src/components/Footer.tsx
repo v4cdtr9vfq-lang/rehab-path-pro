@@ -9,7 +9,7 @@ export function Footer() {
           {/* About Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <h3 className="text-lg font-bold text-foreground">Neurotropy</h3>
+              <h3 className="text-lg font-bold text-foreground">Rehabp.org</h3>
               <Heart className="h-6 w-6 text-primary" />
             </div>
             <p className="text-sm text-muted-foreground">
