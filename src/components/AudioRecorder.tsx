@@ -20,13 +20,30 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
 
   const startRecording = async () => {
     try {
+      // Get all available audio devices
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const audioInputs = devices.filter(device => device.kind === 'audioinput');
+      
+      console.log('Available audio devices:', audioInputs);
+      
+      if (audioInputs.length === 0) {
+        throw new Error('No se encontró ningún micrófono');
+      }
+
+      // Request microphone with specific constraints
       const stream = await navigator.mediaDevices.getUserMedia({ 
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          autoGainControl: true
+          autoGainControl: true,
+          deviceId: audioInputs[0].deviceId // Use first available mic
         } 
       });
+
+      // Log audio track info
+      const audioTrack = stream.getAudioTracks()[0];
+      console.log('Using audio device:', audioTrack.label);
+      console.log('Audio track settings:', audioTrack.getSettings());
       
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'audio/webm;codecs=opus'
