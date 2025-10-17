@@ -1,8 +1,97 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wind, Anchor, Phone, AlertCircle, HeartPulse } from "lucide-react";
+import { Wind, Anchor, Phone, AlertCircle, HeartPulse, Trash2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { AddContactDialog } from "@/components/AddContactDialog";
+
+interface SupportContact {
+  id: string;
+  name: string;
+  phone: string;
+  relationship: string;
+  notes?: string;
+}
 
 export default function Tools() {
+  const [contacts, setContacts] = useState<SupportContact[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  useEffect(() => {
+    fetchContacts();
+  }, []);
+
+  const fetchContacts = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("support_contacts")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setContacts(data || []);
+    } catch (error) {
+      console.error("Error fetching contacts:", error);
+      toast.error("Error al cargar contactos");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddContact = async (contact: {
+    name: string;
+    phone: string;
+    relationship: string;
+    notes?: string;
+  }) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from("support_contacts")
+        .insert({
+          ...contact,
+          user_id: user.id,
+        });
+
+      if (error) throw error;
+      
+      toast.success("Contacto añadido correctamente");
+      fetchContacts();
+    } catch (error) {
+      console.error("Error adding contact:", error);
+      toast.error("Error al añadir contacto");
+    }
+  };
+
+  const handleDeleteContact = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from("support_contacts")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+      
+      toast.success("Contacto eliminado");
+      fetchContacts();
+    } catch (error) {
+      console.error("Error deleting contact:", error);
+      toast.error("Error al eliminar contacto");
+    }
+  };
+
+  const handleCallContact = (phone: string, name: string) => {
+    window.location.href = `tel:${phone}`;
+    toast.success(`Llamando a ${name}...`);
+  };
   const tools = [
     {
       icon: Wind,
@@ -105,15 +194,66 @@ export default function Tools() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="text-center py-8">
-            <p className="text-muted-foreground mb-4">No tienes contactos guardados aún</p>
-            <Button className="gap-2">
-              <Phone className="h-4 w-4" />
-              Añadir Contacto
-            </Button>
-          </div>
+          {loading ? (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">Cargando contactos...</p>
+            </div>
+          ) : contacts.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground mb-4">No tienes contactos guardados aún</p>
+              <Button className="gap-2" onClick={() => setDialogOpen(true)}>
+                <Phone className="h-4 w-4" />
+                Añadir Contacto
+              </Button>
+            </div>
+          ) : (
+            <>
+              <div className="space-y-2">
+                {contacts.map((contact) => (
+                  <div
+                    key={contact.id}
+                    className="flex items-center justify-between p-3 rounded-lg bg-accent/5 hover:bg-accent/10 transition-colors"
+                  >
+                    <div className="flex-1">
+                      <p className="font-medium text-foreground">{contact.name}</p>
+                      <p className="text-sm text-muted-foreground capitalize">{contact.relationship}</p>
+                      {contact.notes && (
+                        <p className="text-xs text-muted-foreground mt-1">{contact.notes}</p>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleCallContact(contact.phone, contact.name)}
+                      >
+                        <Phone className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleDeleteContact(contact.id)}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Button className="w-full gap-2" onClick={() => setDialogOpen(true)}>
+                <Phone className="h-4 w-4" />
+                Añadir Contacto
+              </Button>
+            </>
+          )}
         </CardContent>
       </Card>
+
+      <AddContactDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onSave={handleAddContact}
+      />
     </div>
   );
 }
