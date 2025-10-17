@@ -332,7 +332,7 @@ export default function SupportNetwork() {
 
               <div className="grid md:grid-cols-2 gap-4">
                 {contacts.map((contact) => (
-                  <Card key={contact.id} className="border-primary/10 hover:shadow-md transition-all">
+                  <Card key={contact.id} className="border-primary/10 hover:border-primary/20 transition-all">
                     <CardContent className="p-5">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">

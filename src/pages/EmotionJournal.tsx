@@ -609,7 +609,7 @@ export default function EmotionJournal() {
               size="lg"
               onClick={editingEntry ? handleUpdate : handleSubmit}
               disabled={isSaving}
-              className="rounded-full px-12 h-14 text-lg font-semibold bg-primary hover:bg-primary/90 shadow-lg"
+              className="rounded-full px-12 h-14 text-lg font-semibold bg-primary hover:bg-primary/90"
             >
               {isSaving ? (editingEntry ? "Actualizando..." : "Guardando...") : (editingEntry ? "Actualizar" : "Guardar")}
             </Button>

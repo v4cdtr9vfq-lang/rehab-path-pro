@@ -59,7 +59,7 @@ export default function Landing() {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
               <Link to="/auth?mode=signup">
-                <Button size="lg" className="text-lg px-8 py-6 rounded-2xl shadow-lg hover:scale-105 transition-transform">Comienza tu proceso</Button>
+                <Button size="lg" className="text-lg px-8 py-6 rounded-2xl hover:scale-105 transition-transform">Comienza tu proceso</Button>
               </Link>
               <Link to="/auth?mode=login">
                 <Button variant="outline" size="lg" className="text-lg px-8 py-6 rounded-2xl">
@@ -157,7 +157,7 @@ export default function Landing() {
             Únete a miles de personas que ya están transformando sus vidas
           </p>
           <Link to="/auth?mode=signup">
-            <Button size="lg" className="text-lg px-12 py-6 rounded-2xl shadow-lg hover:scale-105 transition-transform">
+            <Button size="lg" className="text-lg px-12 py-6 rounded-2xl hover:scale-105 transition-transform">
               Registrarse gratis
             </Button>
           </Link>

@@ -481,7 +481,7 @@ export default function Journal() {
           </Card>
         ) : (
           filteredEntries.map((entry) => (
-            <Card key={entry.id} className="border-primary/20 hover:shadow-medium transition-all">
+            <Card key={entry.id} className="border-primary/20 hover:border-primary/40 transition-all">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="space-y-1 flex-1">

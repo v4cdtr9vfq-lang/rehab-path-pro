@@ -785,7 +785,7 @@ export default function Plan() {
 
       <div className="space-y-4">
         {/* Today */}
-        <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-sm">
+        <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl">
           <CardHeader>
             <SectionHeader title="Hoy" sectionKey="today" />
           </CardHeader>
@@ -795,7 +795,7 @@ export default function Plan() {
         </Card>
 
         {/* This Week */}
-        <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-sm">
+        <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl">
           <CardHeader>
             <SectionHeader title="Esta semana (L-D)" sectionKey="week" />
           </CardHeader>
@@ -805,7 +805,7 @@ export default function Plan() {
         </Card>
 
         {/* This Month */}
-        <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-sm">
+        <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl">
           <CardHeader>
             <SectionHeader title="Este mes" sectionKey="month" />
           </CardHeader>
@@ -815,7 +815,7 @@ export default function Plan() {
         </Card>
 
         {/* One-Time Goals */}
-        <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-sm">
+        <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl">
           <CardHeader>
             <SectionHeader title="Metas únicas" sectionKey="onetime" />
           </CardHeader>

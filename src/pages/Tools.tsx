@@ -75,7 +75,7 @@ export default function Tools() {
           return (
             <Card
               key={index}
-              className="border-primary/20 hover:shadow-medium transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+              className="border-primary/20 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
             >
               <CardHeader>
                 <div className="flex items-center gap-4">
@@ -94,7 +94,7 @@ export default function Tools() {
 
         {/* Mi red de apoyo card with link to dedicated page */}
         <Link to="/support-network" className="md:col-span-2">
-          <Card className="border-primary/20 hover:shadow-medium transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+          <Card className="border-primary/20 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
             <CardHeader>
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-full bg-sky-blue/10">
