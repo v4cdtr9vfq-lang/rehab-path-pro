@@ -86,7 +86,7 @@ export function Sidebar() {
         // "Mi centro" también incluye /checkin
         const isActive = location.pathname === item.path || item.path === '/dashboard' && location.pathname === '/checkin';
         const isChat = item.path === '/chat';
-        return <Link key={item.path} to={item.path} onClick={() => setOpen(false)} className={`flex items-center gap-3 rounded-xl px-3 py-2 transition-all ${isActive ? "bg-primary text-primary-foreground font-semibold shadow-lg" : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"}`}>
+        return <Link key={item.path} to={item.path} onClick={() => setOpen(false)} className={`flex items-center ${isChat ? 'gap-4' : 'gap-3'} rounded-xl px-3 py-2 transition-all ${isActive ? "bg-primary text-primary-foreground font-semibold shadow-lg" : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"}`}>
               <span className="text-lg flex-shrink-0">{item.emoji}</span>
               <span className="text-sm flex-1">{item.label}</span>
               {isChat && <Badge variant="secondary" className="ml-auto text-xs px-2 py-0.5">
