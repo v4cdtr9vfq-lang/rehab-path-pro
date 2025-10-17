@@ -20,66 +20,58 @@ interface SavedQuote {
 export default function Message() {
   const { toast } = useToast();
   const [dailyQuote, setDailyQuote] = useState<Quote | null>(null);
-  const [dailyReflection, setDailyReflection] = useState<string>("");
-  const [isSaved, setIsSaved] = useState(false);
   const [savedQuotes, setSavedQuotes] = useState<SavedQuote[]>([]);
+  const [isSaved, setIsSaved] = useState(false);
 
-  const quotes: Quote[] = [
+  const allQuotes: Quote[] = [
     { text: "Siempre es lo simple lo que produce lo maravilloso.", author: "Amelia Barr" },
     { text: "La confianza se construye con consistencia.", author: "Lincoln Chafee" },
-    { text: "El primer paso hacia el cambio es la conciencia. El segundo es la aceptación.", author: "Nathaniel Branden" },
-    { text: "La recuperación es un proceso, no un evento.", author: "Anónimo" },
-    { text: "No se trata de ser perfecto, se trata de progresar.", author: "Anónimo" },
-    { text: "La valentía no siempre ruge. A veces la valentía es la voz al final del día que dice: Lo intentaré de nuevo mañana.", author: "Mary Anne Radmacher" },
-    { text: "Un día a la vez es suficiente. No mires hacia atrás ni te preocupes por el futuro.", author: "Alcohólicos Anónimos" },
-    { text: "La gratitud convierte lo que tenemos en suficiente.", author: "Melody Beattie" },
+    { text: "Un viaje de mil millas comienza con un solo paso.", author: "Lao Tzu" },
+    { text: "La valentía no es la ausencia del miedo, sino el triunfo sobre él.", author: "Nelson Mandela" },
+    { text: "El éxito es la suma de pequeños esfuerzos repetidos día tras día.", author: "Robert Collier" },
+    { text: "No cuentes los días, haz que los días cuenten.", author: "Muhammad Ali" },
+    { text: "La recuperación no es un destino, es un viaje.", author: "Anónimo" },
+    { text: "Cada día es una nueva oportunidad para comenzar de nuevo.", author: "Desconocido" },
+    { text: "La fuerza no viene de lo que puedes hacer. Viene de superar las cosas que creías que no podías hacer.", author: "Rikki Rogers" },
+    { text: "El primer paso no te lleva donde quieres ir, pero te saca de donde estás.", author: "Anónimo" }
   ];
 
-  const reflections: string[] = [
+  const reflections = [
     "¿Cómo puedes practicar la simplicidad en tu recuperación hoy? ¿Qué pequeña acción consistente puedes tomar para construir confianza contigo mismo y con los demás?",
-    "¿Qué puedes aceptar hoy que has estado resistiendo? ¿Cómo puedes ser más consciente de tus pensamientos y emociones?",
-    "¿Qué progreso has hecho esta semana, por pequeño que sea? Reconoce tus logros.",
-    "¿Qué desafío enfrentaste recientemente? ¿Qué aprendiste de esa experiencia?",
-    "¿Por qué tres cosas estás agradecido hoy? ¿Cómo puedes expresar esa gratitud?",
-    "¿Qué necesitas soltar hoy para avanzar en tu camino de recuperación?",
-    "¿Cómo puedes ser más amable contigo mismo hoy? ¿Qué acto de autocuidado puedes realizar?",
+    "¿Qué obstáculo te está deteniendo hoy? ¿Cómo puedes transformarlo en una oportunidad de crecimiento?",
+    "¿Qué cosa pequeña puedes hacer hoy para cuidar mejor de ti mismo?",
+    "¿A quién puedes agradecer hoy por su apoyo en tu camino de recuperación?",
+    "¿Qué has aprendido sobre ti mismo en los últimos días? ¿Cómo puedes aplicar esa lección hoy?",
+    "¿Qué te hace sentir más fuerte en tu recuperación? ¿Cómo puedes incorporar más de eso en tu día?",
+    "¿Qué significa para ti el progreso hoy? ¿Cómo lo vas a medir?",
+    "¿Qué cosa puedes perdonarte hoy? ¿Qué paso puedes dar hacia adelante?"
   ];
 
   // Get quote of the day based on date
-  const getQuoteOfDay = () => {
+  const getQuoteOfTheDay = () => {
     const today = new Date();
     const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
-    return quotes[dayOfYear % quotes.length];
+    return allQuotes[dayOfYear % allQuotes.length];
   };
 
   // Get reflection of the day based on date
-  const getReflectionOfDay = () => {
+  const getReflectionOfTheDay = () => {
     const today = new Date();
     const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
     return reflections[dayOfYear % reflections.length];
   };
 
-  // Check if current quote is saved
-  const checkIfSaved = async (quote: Quote) => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+  useEffect(() => {
+    setDailyQuote(getQuoteOfTheDay());
+    loadSavedQuotes();
+  }, []);
 
-      const { data, error } = await supabase
-        .from('saved_quotes')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('quote_text', quote.text)
-        .maybeSingle();
-
-      if (error) throw error;
-      setIsSaved(!!data);
-    } catch (error) {
-      console.error('Error checking saved status:', error);
+  useEffect(() => {
+    if (dailyQuote) {
+      checkIfSaved();
     }
-  };
+  }, [dailyQuote, savedQuotes]);
 
-  // Load saved quotes
   const loadSavedQuotes = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -93,12 +85,19 @@ export default function Message() {
 
       if (error) throw error;
       setSavedQuotes(data || []);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading saved quotes:', error);
     }
   };
 
-  // Save/unsave quote
+  const checkIfSaved = () => {
+    if (!dailyQuote) return;
+    const saved = savedQuotes.some(
+      sq => sq.quote_text === dailyQuote.text && sq.quote_author === dailyQuote.author
+    );
+    setIsSaved(saved);
+  };
+
   const toggleSaveQuote = async () => {
     if (!dailyQuote) return;
 
@@ -115,41 +114,43 @@ export default function Message() {
 
       if (isSaved) {
         // Remove from saved
-        const { error } = await supabase
-          .from('saved_quotes')
-          .delete()
-          .eq('user_id', user.id)
-          .eq('quote_text', dailyQuote.text);
+        const quoteToRemove = savedQuotes.find(
+          sq => sq.quote_text === dailyQuote.text && sq.quote_author === dailyQuote.author
+        );
+        
+        if (quoteToRemove) {
+          const { error } = await supabase
+            .from('saved_quotes')
+            .delete()
+            .eq('id', quoteToRemove.id);
 
-        if (error) throw error;
+          if (error) throw error;
 
-        setIsSaved(false);
-        toast({
-          title: "Frase eliminada",
-          description: "La frase ha sido eliminada de tus favoritos",
-        });
+          toast({
+            title: "Frase eliminada",
+            description: "La frase ha sido eliminada de tus guardados",
+          });
+        }
       } else {
-        // Save quote
+        // Add to saved
         const { error } = await supabase
           .from('saved_quotes')
           .insert({
             user_id: user.id,
             quote_text: dailyQuote.text,
-            quote_author: dailyQuote.author,
+            quote_author: dailyQuote.author
           });
 
         if (error) throw error;
 
-        setIsSaved(true);
         toast({
           title: "Frase guardada",
-          description: "La frase ha sido añadida a tus favoritos",
+          description: "La frase ha sido guardada exitosamente",
         });
       }
 
-      loadSavedQuotes();
+      await loadSavedQuotes();
     } catch (error: any) {
-      console.error('Error toggling save:', error);
       toast({
         title: "Error",
         description: "No se pudo guardar la frase",
@@ -158,7 +159,6 @@ export default function Message() {
     }
   };
 
-  // Delete saved quote
   const deleteSavedQuote = async (id: string) => {
     try {
       const { error } = await supabase
@@ -170,17 +170,11 @@ export default function Message() {
 
       toast({
         title: "Frase eliminada",
-        description: "La frase ha sido eliminada de tus favoritos",
+        description: "La frase ha sido eliminada de tus guardados",
       });
 
-      loadSavedQuotes();
-      
-      // Check if daily quote needs to update its saved status
-      if (dailyQuote) {
-        checkIfSaved(dailyQuote);
-      }
-    } catch (error) {
-      console.error('Error deleting saved quote:', error);
+      await loadSavedQuotes();
+    } catch (error: any) {
       toast({
         title: "Error",
         description: "No se pudo eliminar la frase",
@@ -189,14 +183,7 @@ export default function Message() {
     }
   };
 
-  useEffect(() => {
-    const quote = getQuoteOfDay();
-    const reflection = getReflectionOfDay();
-    setDailyQuote(quote);
-    setDailyReflection(reflection);
-    checkIfSaved(quote);
-    loadSavedQuotes();
-  }, []);
+  if (!dailyQuote) return null;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -205,77 +192,70 @@ export default function Message() {
         <p className="text-muted-foreground text-lg">Inspiración y sabiduría para tu camino</p>
       </div>
 
-      {dailyQuote && (
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <MessageSquare className="h-6 w-6 text-primary" />
-                <CardTitle className="text-2xl">Frase del Día</CardTitle>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleSaveQuote}
-                className="h-10 w-10"
-              >
-                <Star
-                  className={`h-5 w-5 ${isSaved ? 'fill-yellow-500 text-yellow-500' : 'text-muted-foreground'}`}
-                />
-              </Button>
+      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <MessageSquare className="h-6 w-6 text-primary" />
+              <CardTitle className="text-2xl">Frase del Día</CardTitle>
             </div>
-            <p className="text-sm text-muted-foreground">
-              {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSaveQuote}
+              className="h-10 w-10"
+            >
+              <Star className={`h-5 w-5 ${isSaved ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`} />
+            </Button>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+          </p>
+        </CardHeader>
+        <CardContent>
+          <blockquote className="border-l-4 border-primary pl-6 py-2">
+            <p className="text-xl italic text-foreground/90 mb-3">
+              "{dailyQuote.text}"
             </p>
-          </CardHeader>
-          <CardContent>
-            <blockquote className="border-l-4 border-primary pl-6 py-2">
-              <p className="text-xl italic text-foreground/90 mb-3">
-                "{dailyQuote.text}"
-              </p>
-              <footer className="text-muted-foreground">
-                — {dailyQuote.author}
-              </footer>
-            </blockquote>
-          </CardContent>
-        </Card>
-      )}
+            <footer className="text-muted-foreground">
+              — {dailyQuote.author}
+            </footer>
+          </blockquote>
+        </CardContent>
+      </Card>
 
       <Card className="border-accent/20 bg-gradient-to-br from-accent/5 to-transparent">
         <CardContent className="p-6">
           <h3 className="font-semibold text-foreground mb-3">💡 Reflexión del Día</h3>
           <p className="text-foreground/80">
-            {dailyReflection}
+            {getReflectionOfTheDay()}
           </p>
         </CardContent>
       </Card>
 
       {savedQuotes.length > 0 && (
-        <Card>
+        <Card className="border-border/50">
           <CardHeader>
             <CardTitle className="text-xl">Frases Guardadas</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {savedQuotes.map((saved) => (
-              <div
-                key={saved.id}
-                className="border-l-4 border-primary/50 pl-6 py-3 bg-muted/30 rounded-r-lg flex items-start justify-between gap-4"
-              >
+            {savedQuotes.map((quote) => (
+              <div key={quote.id} className="flex items-start justify-between p-4 rounded-lg bg-muted/30 border border-border/30">
                 <blockquote className="flex-1">
                   <p className="text-base italic text-foreground/90 mb-2">
-                    "{saved.quote_text}"
+                    "{quote.quote_text}"
                   </p>
                   <footer className="text-sm text-muted-foreground">
-                    — {saved.quote_author}
+                    — {quote.quote_author}
                   </footer>
                 </blockquote>
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => deleteSavedQuote(saved.id)}
-                  className="h-8 w-8 flex-shrink-0"
+                  onClick={() => deleteSavedQuote(quote.id)}
+                  className="h-8 w-8 text-destructive hover:text-destructive"
                 >
-                  <Trash2 className="h-4 w-4 text-destructive" />
+                  <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
             ))}
