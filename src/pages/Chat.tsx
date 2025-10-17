@@ -33,6 +33,7 @@ const CHAT_ROOMS = [
   { id: 'dependencia_emocional', label: 'Dependencia Emocional' },
   { id: 'pornografia', label: 'Pornografía' },
   { id: 'redes_sociales', label: 'Redes Sociales' },
+  { id: 'otros', label: 'Otros' },
 ] as const;
 
 export default function Chat() {
@@ -46,7 +47,8 @@ export default function Chat() {
     narcoticos: 0,
     dependencia_emocional: 0,
     pornografia: 0,
-    redes_sociales: 0
+    redes_sociales: 0,
+    otros: 0
   });
   const [isSending, setIsSending] = useState(false);
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
