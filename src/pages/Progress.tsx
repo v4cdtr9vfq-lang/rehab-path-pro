@@ -474,7 +474,7 @@ export default function ProgressPage() {
                     : 'text-red-500'
               } transition-colors duration-500`}>{overallProgress}%</span>
             </div>
-            <p className="text-sm text-muted-foreground mt-4">Completitud Total de Metas</p>
+            <p className="text-sm text-green-500 font-semibold mt-4">¡Metas completadas!</p>
           </div>
         </CardContent>
       </Card>
