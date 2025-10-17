@@ -778,7 +778,7 @@ export default function Home() {
                       <p className={`text-sm ${status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
                         {status.isUnlocked 
                           ? '¡Conseguido!' 
-                          : `${status.progress} / ${medal.requiredDays} días`
+                          : `+ ${status.progress} / ${medal.requiredDays} días.`
                         }
                       </p>
                     </div>
