@@ -320,7 +320,9 @@ export default function ProgressPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             <span className="text-2xl">📈</span>
-            Progreso General
+            {currentTab === 'daily' && 'Progreso hoy'}
+            {currentTab === 'week' && 'Progreso semana'}
+            {currentTab === 'month' && 'Progreso mensual'}
           </CardTitle>
         </CardHeader>
         <CardContent>
