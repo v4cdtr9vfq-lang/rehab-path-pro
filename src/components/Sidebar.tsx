@@ -102,7 +102,7 @@ export function Sidebar() {
         <div className="flex items-center gap-3">
           <button onClick={handleLogout} className="flex items-center gap-2 flex-1 rounded-xl px-3 py-2 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 font-medium">
             <span className="text-lg flex-shrink-0">🫥</span>
-            <span className="text-sm">Cerrar sesión</span>
+            <span className="text-sm">Salir</span>
           </button>
           <ThemeToggle />
         </div>
