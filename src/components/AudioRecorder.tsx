@@ -57,6 +57,7 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
       // Update duration every 100ms
       durationIntervalRef.current = setInterval(() => {
         const duration = (Date.now() - startTimeRef.current) / 1000;
+        console.log('Timer update - duration:', duration);
         setRecordingDuration(duration);
       }, 100);
 
@@ -100,6 +101,8 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
 
       mediaRecorder.start(100); // Collect data every 100ms
       setIsRecording(true);
+      console.log('Recording started! isRecording should now be true');
+      console.log('Timer interval started, initial duration:', 0);
       
       toast({
         title: "Grabando",
@@ -189,6 +192,8 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
     }
   };
 
+  console.log('AudioRecorder render - isRecording:', isRecording, 'duration:', recordingDuration);
+  
   return (
     <div className="space-y-3">
       {/* Recording timer - large and visible */}
