@@ -242,14 +242,14 @@ export default function CheckIn() {
                   <div className="flex gap-3">
                     <Button
                       variant={answers[question.id] === "yes" ? "default" : "outline"}
-                      className={`flex-1 ${answers[question.id] === "yes" ? "bg-green-600 hover:bg-green-700 text-white" : ""}`}
+                      className={`flex-1 ${answers[question.id] === "yes" && question.id !== 2 ? "bg-green-600 hover:bg-green-700 text-white" : ""}`}
                       onClick={() => handleAnswer(question.id, "yes")}
                     >
                       SÍ
                     </Button>
                     <Button
                       variant={answers[question.id] === "no" ? "default" : "outline"}
-                      className="flex-1"
+                      className={`flex-1 ${answers[question.id] === "no" && question.id === 2 ? "bg-green-600 hover:bg-green-700 text-white" : ""}`}
                       onClick={() => handleAnswer(question.id, "no")}
                     >
                       NO
