@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Menu, LogOut } from "lucide-react";
+import { Menu, LogOut, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
@@ -78,7 +78,10 @@ export function Sidebar() {
   };
   const SidebarContent = () => <div className="flex flex-col h-full">
       <Link to="/dashboard" className="mb-5 px-6 pt-5 block hover:opacity-80 transition-opacity" onClick={() => setOpen(false)}>
-        <h1 className="text-2xl font-bold text-sidebar-foreground tracking-tight">rehabp.org</h1>
+        <div className="flex items-center gap-2">
+          <Heart className="h-6 w-6 text-primary" />
+          <h1 className="text-2xl font-bold text-sidebar-foreground tracking-tight">rehabp.org</h1>
+        </div>
         <p className="text-xs text-sidebar-foreground/60 mt-1">Asistencia en tu rehabilitación.</p>
       </Link>
       
@@ -112,7 +115,8 @@ export function Sidebar() {
       {/* Mobile Menu Button */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-card backdrop-blur-sm border-b border-border">
         <div className="flex items-center justify-between p-4">
-          <Link to="/dashboard" onClick={() => setOpen(false)}>
+          <Link to="/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-2">
+            <Heart className="h-5 w-5 text-primary" />
             <h1 className="text-xl font-bold text-primary">rehabp.org</h1>
           </Link>
           <Sheet open={open} onOpenChange={setOpen}>
