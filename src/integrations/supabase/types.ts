@@ -151,6 +151,7 @@ export type Database = {
           created_at: string
           goal_type: string
           id: string
+          order_index: number | null
           periodic_type: string | null
           remaining: number
           target_date: string | null
@@ -163,6 +164,7 @@ export type Database = {
           created_at?: string
           goal_type: string
           id?: string
+          order_index?: number | null
           periodic_type?: string | null
           remaining?: number
           target_date?: string | null
@@ -175,6 +177,7 @@ export type Database = {
           created_at?: string
           goal_type?: string
           id?: string
+          order_index?: number | null
           periodic_type?: string | null
           remaining?: number
           target_date?: string | null

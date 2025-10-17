@@ -4,11 +4,28 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CheckCircle2, Clock, Circle, Star } from "lucide-react";
+import { CheckCircle2, Clock, Circle, Star, GripVertical } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 export default function Home() {
   const {
     toast
@@ -228,12 +245,12 @@ export default function Home() {
         if (reminder) setTodayReminder(reminder);
       }
 
-      // Fetch today's goals (including 'always' type)
+      // Fetch today's goals (including 'always' type), ordered by order_index
       const {
         data: goals,
         error: goalsError
-      } = await supabase.from('goals').select('*').eq('user_id', user.id).order('created_at', {
-        ascending: false
+      } = await supabase.from('goals').select('*').eq('user_id', user.id).order('order_index', {
+        ascending: true
       });
       if (goals && goals.length > 0) {
         // Filter goals that should appear today
@@ -323,6 +340,60 @@ export default function Home() {
     };
   }, []);
 
+  // Drag and drop sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Handle drag end
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    const oldIndex = activeGoals.findIndex((goal) => goal.id === active.id);
+    const newIndex = activeGoals.findIndex((goal) => goal.id === over.id);
+
+    // Optimistically update UI
+    const newGoals = arrayMove(activeGoals, oldIndex, newIndex);
+    setActiveGoals(newGoals);
+
+    // Save new order to database
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Get unique original goal IDs in the new order
+      const uniqueGoalIds = Array.from(new Set(newGoals.map(g => g.originalId)));
+      
+      // Update order_index for each unique goal
+      const updates = uniqueGoalIds.map((goalId, index) => 
+        supabase
+          .from('goals')
+          .update({ order_index: index })
+          .eq('id', goalId)
+          .eq('user_id', user.id)
+      );
+
+      await Promise.all(updates);
+    } catch (error) {
+      console.error('Error updating goal order:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo guardar el orden de las metas",
+        variant: "destructive",
+      });
+      // Revert on error
+      const revertedGoals = arrayMove(newGoals, newIndex, oldIndex);
+      setActiveGoals(revertedGoals);
+    }
+  };
+
   const toggleSaveQuote = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -407,6 +478,62 @@ export default function Home() {
     path: "/tools",
     color: "text-destructive"
   }];
+
+  // Sortable Goal Item Component
+  function SortableGoalItem({ goal }: { goal: any }) {
+    const {
+      attributes,
+      listeners,
+      setNodeRef,
+      transform,
+      transition,
+      isDragging,
+    } = useSortable({ id: goal.id });
+
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+      opacity: isDragging ? 0.5 : 1,
+    };
+
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50"
+      >
+        <div className="flex items-center gap-3 flex-1">
+          <button
+            {...attributes}
+            {...listeners}
+            className="flex-shrink-0 cursor-grab active:cursor-grabbing touch-none"
+          >
+            <GripVertical className="h-5 w-5 text-muted-foreground" />
+          </button>
+          <button onClick={() => toggleGoal(goal.id)} className="flex-shrink-0">
+            {goal.status === "completed" ? (
+              <CheckCircle2 className="h-6 w-6 text-green-500" />
+            ) : (
+              <Circle className="h-6 w-6 text-muted-foreground" />
+            )}
+          </button>
+          <div>
+            <p className="font-semibold text-foreground">{goal.title}</p>
+            <p
+              className={`text-sm ${
+                goal.status === "completed"
+                  ? "text-green-500"
+                  : "text-muted-foreground"
+              }`}
+            >
+              {goal.status === "completed" ? "Completado" : goal.period}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return <div className="space-y-6 animate-in fade-in duration-500">
       {/* Header - Abstinence Counter */}
       <AbstinenceCounter startDate={startDate} />
@@ -465,7 +592,8 @@ export default function Home() {
           </Link>
         </CardHeader>
         <CardContent>
-          {activeGoals.length === 0 ? <div className="text-center py-8">
+          {activeGoals.length === 0 ? (
+            <div className="text-center py-8">
               <p className="text-muted-foreground mb-4">No tienes metas activas aún</p>
               <Link to="/plan">
                 <Button className="rounded-xl">
@@ -473,23 +601,25 @@ export default function Home() {
                   Añadir meta
                 </Button>
               </Link>
-            </div> : <div className="space-y-3">
-              {activeGoals.map(goal => <div key={goal.id} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
-                  <div className="flex items-center gap-3">
-                    <button onClick={() => toggleGoal(goal.id)} className="flex-shrink-0">
-                      {goal.status === "completed" ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
-                    </button>
-                    <div>
-                      <p className="font-semibold text-foreground">
-                        {goal.title}
-                      </p>
-                      <p className={`text-sm ${goal.status === "completed" ? "text-green-500" : "text-muted-foreground"}`}>
-                        {goal.status === "completed" ? "Completado" : goal.period}
-                      </p>
-                    </div>
-                  </div>
-                </div>)}
-            </div>}
+            </div>
+          ) : (
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={activeGoals.map(g => g.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className="space-y-3">
+                  {activeGoals.map((goal) => (
+                    <SortableGoalItem key={goal.id} goal={goal} />
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
+          )}
         </CardContent>
       </Card>
 
