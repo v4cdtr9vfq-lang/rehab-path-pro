@@ -63,6 +63,11 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Empoderado", "Abierto", "Orgulloso", "Seguro", "Protegido"]
       },
       {
+        id: "abierto",
+        name: "Abierto",
+        tertiaryEmotions: ["Receptivo", "Disponible", "Accesible", "Transparente", "Sincero"]
+      },
+      {
         id: "seguro",
         name: "Seguro",
         tertiaryEmotions: ["Tranquilidad", "Confianza", "Calma", "Aceptación", "Pertenencia", "Previsibilidad", "Intimidad"]
@@ -515,7 +520,7 @@ export default function EmotionJournal() {
           {/* Secondary Emotions */}
           {selectedPrimary && selectedCategory && (
             <div>
-              <h2 className="text-xl font-semibold text-foreground mb-4">Emociones Secundarias:</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">Emociones primarias:</h2>
               <div className="flex flex-wrap gap-3">
                 {selectedCategory.secondaryEmotions.map((emotion) => {
                   const isSelected = selectedSecondary.includes(emotion.id);
@@ -549,7 +554,7 @@ export default function EmotionJournal() {
           {/* Tertiary Emotions */}
           {selectedSecondary.length > 0 && (
             <div>
-              <h2 className="text-xl font-semibold text-foreground mb-4">Emociones Específicas:</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">Emociones secundarias:</h2>
               <div className="space-y-6">
                 {selectedSecondaryData.map((emotion) => (
                   <div key={emotion.id}>
@@ -659,7 +664,7 @@ export default function EmotionJournal() {
 
                   {entry.secondary_emotions && entry.secondary_emotions.length > 0 && (
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Secundarias:</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Primarias:</h3>
                       <div className="flex flex-wrap gap-2">
                         {entry.secondary_emotions.map((emotion, idx) => (
                           <span
@@ -675,7 +680,7 @@ export default function EmotionJournal() {
 
                   {entry.tertiary_emotions && entry.tertiary_emotions.length > 0 && (
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Específicas:</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Secundarias:</h3>
                       <div className="flex flex-wrap gap-2">
                         {[...entry.tertiary_emotions].reverse().map((emotion, idx) => (
                           <span
