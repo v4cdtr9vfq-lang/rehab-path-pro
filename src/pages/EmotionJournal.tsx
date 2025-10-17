@@ -455,31 +455,31 @@ export default function EmotionJournal() {
             </div>
           )}
         </div>
-      </Card>
 
-      {/* Save/Update Button - Outside the card */}
-      {selectedMainEmotions.length > 0 && (
-        <div className="flex justify-center gap-4">
-          {editingEntry && (
+        {/* Save/Update Button - Inside the card, bottom right */}
+        {selectedMainEmotions.length > 0 && (
+          <div className="flex justify-end gap-4 mt-6">
+            {editingEntry && (
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={handleCancelEdit}
+                className="rounded-full px-8 h-14 text-lg font-semibold"
+              >
+                Cancelar
+              </Button>
+            )}
             <Button
               size="lg"
-              variant="outline"
-              onClick={handleCancelEdit}
-              className="rounded-full px-8 h-14 text-lg font-semibold"
+              onClick={editingEntry ? handleUpdate : handleSubmit}
+              disabled={isSaving}
+              className="rounded-full px-12 h-14 text-lg font-semibold bg-primary hover:bg-primary/90 shadow-lg"
             >
-              Cancelar
+              {isSaving ? (editingEntry ? "Actualizando..." : "Guardando...") : (editingEntry ? "Actualizar" : "Guardar")}
             </Button>
-          )}
-          <Button
-            size="lg"
-            onClick={editingEntry ? handleUpdate : handleSubmit}
-            disabled={isSaving}
-            className="rounded-full px-12 h-14 text-lg font-semibold bg-primary hover:bg-primary/90 shadow-lg"
-          >
-            {isSaving ? (editingEntry ? "Actualizando..." : "Guardando...") : (editingEntry ? "Actualizar" : "Guardar")}
-          </Button>
-        </div>
-      )}
+          </div>
+        )}
+      </Card>
 
       {/* Emotion Log Widget */}
       {savedEntries.length > 0 && (
