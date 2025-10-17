@@ -520,7 +520,7 @@ export default function Home() {
           <p className="text-center text-muted-foreground text-sm">— {dailyQuote.author}</p>
           <div className="flex justify-center mt-4">
             <Link to="/message">
-              <Button variant="ghost" size="sm" className="text-primary text-xs">Ver mensajes guardados</Button>
+              <Button variant="ghost" size="sm" className="text-primary text-xs">Ver mensajes guardados.</Button>
             </Link>
           </div>
         </CardContent>
