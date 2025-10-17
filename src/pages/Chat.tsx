@@ -494,7 +494,7 @@ export default function Chat() {
                     <TabsTrigger 
                       key={room.id} 
                       value={room.id} 
-                      className="text-xs sm:text-sm whitespace-nowrap text-black dark:text-white data-[state=active]:bg-[#FF7A5C] data-[state=active]:text-black px-2 relative"
+                      className="text-xs sm:text-sm whitespace-nowrap text-black dark:text-white data-[state=active]:bg-[#FF7A5C] data-[state=active]:text-white px-2 pl-[15px] relative"
                     >
                       <span className="flex items-center justify-between gap-2 w-full">
                         {room.label}
