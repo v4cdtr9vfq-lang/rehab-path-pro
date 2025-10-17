@@ -179,8 +179,10 @@ export type Database = {
         Row: {
           completed: boolean
           created_at: string
+          description: string | null
           goal_type: string
           id: string
+          notes: string | null
           order_index: number | null
           periodic_type: string | null
           remaining: number
@@ -192,8 +194,10 @@ export type Database = {
         Insert: {
           completed?: boolean
           created_at?: string
+          description?: string | null
           goal_type: string
           id?: string
+          notes?: string | null
           order_index?: number | null
           periodic_type?: string | null
           remaining?: number
@@ -205,8 +209,10 @@ export type Database = {
         Update: {
           completed?: boolean
           created_at?: string
+          description?: string | null
           goal_type?: string
           id?: string
+          notes?: string | null
           order_index?: number | null
           periodic_type?: string | null
           remaining?: number

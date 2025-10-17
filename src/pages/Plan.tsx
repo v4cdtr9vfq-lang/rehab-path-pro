@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Plus, ChevronDown, ChevronUp, Pencil, Trash2, CheckCircle2, Circle, CalendarIcon } from "lucide-react";
@@ -74,10 +75,12 @@ export default function Plan() {
     remaining: number;
     target_date?: Date;
     periodic_type?: string;
+    description?: string;
   }>({
     text: "",
     type: "today",
-    remaining: 1
+    remaining: 1,
+    description: ""
   });
   const [editingGoal, setEditingGoal] = useState<any>(null);
 
@@ -445,7 +448,8 @@ export default function Plan() {
         remaining: newGoal.remaining,
         completed: false,
         target_date: newGoal.target_date ? format(newGoal.target_date, 'yyyy-MM-dd') : null,
-        periodic_type: newGoal.periodic_type || null
+        periodic_type: newGoal.periodic_type || null,
+        description: newGoal.description || null
       }).select().single();
       if (error) throw error;
       if (goal) {
@@ -461,7 +465,8 @@ export default function Plan() {
         type: "today",
         remaining: 1,
         target_date: undefined,
-        periodic_type: undefined
+        periodic_type: undefined,
+        description: ""
       });
       setIsDialogOpen(false);
     } catch (error: any) {
@@ -534,6 +539,12 @@ export default function Plan() {
       if (editingGoal.goal_type === 'periodic') {
         updateData.periodic_type = editingGoal.periodic_type;
       }
+      
+      // Add notes if provided
+      if (editingGoal.notes !== undefined) {
+        updateData.notes = editingGoal.notes || null;
+      }
+      
       const {
         error
       } = await supabase.from('goals').update(updateData).eq('id', editingGoal.id);
@@ -669,6 +680,21 @@ export default function Plan() {
                 text: e.target.value
               }))} />
               </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="goal-description">Descripción</Label>
+                <Textarea 
+                  id="goal-description" 
+                  placeholder="Descripción de la meta..." 
+                  value={newGoal.description || ""} 
+                  onChange={e => setNewGoal(prev => ({
+                    ...prev,
+                    description: e.target.value
+                  }))}
+                  rows={2}
+                  className="resize-none"
+                />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="goal-type">Tipo</Label>
                 <Select value={newGoal.type} onValueChange={value => setNewGoal(prev => ({
@@ -781,6 +807,21 @@ export default function Plan() {
               ...prev,
               remaining: parseInt(e.target.value) || 1
             }))} />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="edit-goal-notes">Observaciones</Label>
+              <Textarea 
+                id="edit-goal-notes" 
+                placeholder="Observaciones sobre la meta..." 
+                value={editingGoal?.notes || ""} 
+                onChange={e => setEditingGoal(prev => ({
+                  ...prev,
+                  notes: e.target.value
+                }))}
+                rows={3}
+                className="resize-none"
+              />
             </div>
             <Button onClick={updateGoal} className="w-full">
               Guardar cambios
