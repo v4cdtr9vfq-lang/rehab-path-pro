@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { ArrowRight, Calendar } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,6 +29,7 @@ export default function CheckIn() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [triggerDescription, setTriggerDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -45,6 +47,10 @@ export default function CheckIn() {
 
       if (checkIn?.answers) {
         setAnswers(checkIn.answers as Record<number, string>);
+        // Load trigger description if exists
+        if ((checkIn.answers as any).trigger_description) {
+          setTriggerDescription((checkIn.answers as any).trigger_description);
+        }
       }
     };
 
@@ -69,17 +75,44 @@ export default function CheckIn() {
         return;
       }
 
-      const { error } = await supabase
+      // Save check-in with trigger description
+      const answersWithTrigger = {
+        ...answers,
+        trigger_description: triggerDescription
+      };
+
+      const { error: checkInError } = await supabase
         .from('check_ins')
         .upsert({
           user_id: user.id,
           check_in_date: new Date().toISOString().split('T')[0],
-          answers: answers,
+          answers: answersWithTrigger,
         }, {
           onConflict: 'user_id,check_in_date'
         });
 
-      if (error) throw error;
+      if (checkInError) throw checkInError;
+
+      // If answered "yes" to trigger question and has description, save as journal entry
+      if (answers[2] === "yes" && triggerDescription.trim()) {
+        const today = new Date().toISOString().split('T')[0];
+        
+        const { error: journalError } = await supabase
+          .from('journal_entries')
+          .upsert({
+            user_id: user.id,
+            entry_date: today,
+            title: "Gatillos emocionales",
+            content: triggerDescription.trim(),
+            tags: ["gatillos", "check-in"]
+          }, {
+            onConflict: 'user_id,entry_date,title'
+          });
+
+        if (journalError) {
+          console.error("Error saving journal entry:", journalError);
+        }
+      }
 
       toast({
         title: "¡Check-in guardado!",
@@ -123,22 +156,43 @@ export default function CheckIn() {
               </Label>
               
               {question.type === "yesno" ? (
-                <div className="flex gap-3">
-                  <Button
-                    variant={answers[question.id] === "yes" ? "default" : "outline"}
-                    className="flex-1"
-                    onClick={() => handleAnswer(question.id, "yes")}
-                  >
-                    SÍ
-                  </Button>
-                  <Button
-                    variant={answers[question.id] === "no" ? "default" : "outline"}
-                    className="flex-1"
-                    onClick={() => handleAnswer(question.id, "no")}
-                  >
-                    NO
-                  </Button>
-                </div>
+                <>
+                  <div className="flex gap-3">
+                    <Button
+                      variant={answers[question.id] === "yes" ? "default" : "outline"}
+                      className="flex-1"
+                      onClick={() => handleAnswer(question.id, "yes")}
+                    >
+                      SÍ
+                    </Button>
+                    <Button
+                      variant={answers[question.id] === "no" ? "default" : "outline"}
+                      className="flex-1"
+                      onClick={() => handleAnswer(question.id, "no")}
+                    >
+                      NO
+                    </Button>
+                  </div>
+                  
+                  {/* Show trigger description field if question 2 answered "yes" */}
+                  {question.id === 2 && answers[2] === "yes" && (
+                    <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <Label htmlFor="trigger-description" className="text-sm font-medium text-foreground">
+                        Describe la situación
+                      </Label>
+                      <Textarea
+                        id="trigger-description"
+                        placeholder="Describe qué situación te provocó y cómo te sentiste..."
+                        value={triggerDescription}
+                        onChange={(e) => setTriggerDescription(e.target.value)}
+                        className="min-h-[100px]"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Esta descripción se guardará automáticamente como entrada en tu diario con el título "Gatillos emocionales"
+                      </p>
+                    </div>
+                  )}
+                </>
               ) : (
                 <Input
                   placeholder="Escribe..."
