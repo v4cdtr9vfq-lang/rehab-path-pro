@@ -810,7 +810,7 @@ export default function Plan() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-notes">Observaciones</Label>
+              <Label htmlFor="edit-goal-notes">Observaciones | Instrucciones</Label>
               <Textarea 
                 id="edit-goal-notes" 
                 placeholder="Observaciones sobre la meta..." 
