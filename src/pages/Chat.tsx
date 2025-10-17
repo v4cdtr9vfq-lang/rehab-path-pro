@@ -516,7 +516,7 @@ export default function Chat() {
             <div className="space-y-4 p-4">
               {messages.map((msg) => {
                 const isAnonymousMessage = msg.user_name.startsWith('Anónimo');
-                const isOwnMessage = !isAnonymousMessage && msg.user_id === userId;
+                const isOwnMessage = msg.user_id === userId;
                 const isEditing = editingMessageId === msg.id;
                 const isReported = reportedMessages.has(msg.id);
                 
