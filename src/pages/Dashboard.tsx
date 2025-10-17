@@ -785,7 +785,7 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="font-semibold text-foreground text-xs leading-tight mb-1">{medal.name}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className={`text-xs ${status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
                       {status.isUnlocked 
                         ? '¡Conseguido!' 
                         : `+${status.progress} / ${medal.requiredDays} días`
