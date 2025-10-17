@@ -33,7 +33,7 @@ const questions: Question[] = [
   { id: 5, text: "¿Fui honesto con mis sentimientos hoy?", type: "yesno" },
   { id: 6, text: "¿Me aislé hoy?", type: "yesno" },
   { id: 7, text: "¿Seguí mis valores diarios?", type: "yesno" },
-  { id: 8, text: "¿Has hecho algo que crees que te limitan en lugar de expandirte?", type: "yesno" },
+  { id: 8, text: "¿Has hecho algo que crees que te limita en lugar de expandirte?", type: "yesno" },
   { id: 9, text: "¿Cómo calificarías tu descanso ayer por la noche?", type: "scale" },
 ];
 
