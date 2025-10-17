@@ -13,18 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 interface Goal {
   id: string;
   text: string;
@@ -34,27 +23,49 @@ interface Goal {
   target_date?: string;
   periodic_type?: string;
 }
-
 interface ExpandedGoal extends Goal {
   originalId: string;
   instanceIndex: number;
 }
-
 export default function Plan() {
-  const { toast } = useToast();
-  
+  const {
+    toast
+  } = useToast();
   const [sections, setSections] = useState<{
-    today: { open: boolean; goals: ExpandedGoal[] };
-    week: { open: boolean; goals: ExpandedGoal[] };
-    month: { open: boolean; goals: ExpandedGoal[] };
-    onetime: { open: boolean; goals: ExpandedGoal[] };
+    today: {
+      open: boolean;
+      goals: ExpandedGoal[];
+    };
+    week: {
+      open: boolean;
+      goals: ExpandedGoal[];
+    };
+    month: {
+      open: boolean;
+      goals: ExpandedGoal[];
+    };
+    onetime: {
+      open: boolean;
+      goals: ExpandedGoal[];
+    };
   }>({
-    today: { open: true, goals: [] },
-    week: { open: false, goals: [] },
-    month: { open: false, goals: [] },
-    onetime: { open: false, goals: [] }
+    today: {
+      open: true,
+      goals: []
+    },
+    week: {
+      open: false,
+      goals: []
+    },
+    month: {
+      open: false,
+      goals: []
+    },
+    onetime: {
+      open: false,
+      goals: []
+    }
   });
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [newGoal, setNewGoal] = useState<{
@@ -81,23 +92,22 @@ export default function Plan() {
   // Load completed instances from database for a specific date
   const loadCompletedInstances = async (date: string): Promise<Set<string>> => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) return new Set();
-
-      const { data, error } = await supabase
-        .from('goal_completions')
-        .select('goal_id, instance_index')
-        .eq('user_id', user.id)
-        .eq('completion_date', date);
-
+      const {
+        data,
+        error
+      } = await supabase.from('goal_completions').select('goal_id, instance_index').eq('user_id', user.id).eq('completion_date', date);
       if (error) throw error;
-
       const completedSet = new Set<string>();
       data?.forEach(completion => {
         const instanceId = `${completion.goal_id}__${date}__${completion.instance_index}`;
         completedSet.add(instanceId);
       });
-
       return completedSet;
     } catch (error) {
       console.error('Error loading completions:', error);
@@ -108,25 +118,23 @@ export default function Plan() {
   // Load completed instances from database for a date range
   const loadCompletedInstancesForRange = async (dates: Date[]): Promise<Set<string>> => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) return new Set();
-
       const dateStrings = dates.map(d => getLocalDateString(d));
-
-      const { data, error } = await supabase
-        .from('goal_completions')
-        .select('goal_id, instance_index, completion_date')
-        .eq('user_id', user.id)
-        .in('completion_date', dateStrings);
-
+      const {
+        data,
+        error
+      } = await supabase.from('goal_completions').select('goal_id, instance_index, completion_date').eq('user_id', user.id).in('completion_date', dateStrings);
       if (error) throw error;
-
       const completedSet = new Set<string>();
       data?.forEach(completion => {
         const instanceId = `${completion.goal_id}__${completion.completion_date}__${completion.instance_index}`;
         completedSet.add(instanceId);
       });
-
       return completedSet;
     } catch (error) {
       console.error('Error loading completions for range:', error);
@@ -137,28 +145,23 @@ export default function Plan() {
   // Save completion to database
   const saveCompletion = async (goalId: string, instanceIndex: number, date: string, isCompleted: boolean) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) return;
-
       if (isCompleted) {
         // Add completion
-        await supabase
-          .from('goal_completions')
-          .insert({
-            user_id: user.id,
-            goal_id: goalId,
-            completion_date: date,
-            instance_index: instanceIndex
-          });
+        await supabase.from('goal_completions').insert({
+          user_id: user.id,
+          goal_id: goalId,
+          completion_date: date,
+          instance_index: instanceIndex
+        });
       } else {
         // Remove completion
-        await supabase
-          .from('goal_completions')
-          .delete()
-          .eq('user_id', user.id)
-          .eq('goal_id', goalId)
-          .eq('completion_date', date)
-          .eq('instance_index', instanceIndex);
+        await supabase.from('goal_completions').delete().eq('user_id', user.id).eq('goal_id', goalId).eq('completion_date', date).eq('instance_index', instanceIndex);
       }
       // Realtime will handle the update automatically
     } catch (error) {
@@ -172,7 +175,6 @@ export default function Plan() {
     const dates: Date[] = [];
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
     if (context === 'today') {
       dates.push(today);
     } else if (context === 'week') {
@@ -199,10 +201,9 @@ export default function Plan() {
   const expandGoals = async (goals: Goal[], context: 'today' | 'week' | 'month' | 'onetime'): Promise<ExpandedGoal[]> => {
     const dates = context === 'onetime' ? [new Date()] : getDateRange(context);
     const expanded: ExpandedGoal[] = [];
-    
+
     // Load all completions for the date range at once
     const allCompletedInstances = await loadCompletedInstancesForRange(dates);
-    
     goals.forEach(g => {
       if (context === 'onetime') {
         // One-time goals: simple expansion
@@ -221,13 +222,12 @@ export default function Plan() {
         // Recurring goals: create instances per day
         dates.forEach((date, dayIndex) => {
           const dateStr = getLocalDateString(date);
-          
+
           // For today/week contexts, periodic goals only show on their specific day
           // For month context, show periodic goals every day (they'll complete on their specific day)
           if (g.goal_type === 'periodic' && g.periodic_type && context !== 'month') {
             const dayOfMonth = date.getDate();
             const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-            
             let shouldShow = false;
             if (g.periodic_type === 'inicio_mes' && dayOfMonth === 1) {
               shouldShow = true;
@@ -236,10 +236,9 @@ export default function Plan() {
             } else if (g.periodic_type === 'final_mes' && dayOfMonth === lastDayOfMonth) {
               shouldShow = true;
             }
-            
             if (!shouldShow) return; // Skip for today/week if not the right day
           }
-          
+
           // How many instances per day based on goal type
           let instancesPerDay = g.remaining;
           if (g.goal_type === 'week' && context === 'month') {
@@ -272,73 +271,63 @@ export default function Plan() {
         });
       }
     });
-    
     return expanded;
   };
-
   useEffect(() => {
     fetchGoals();
 
     // Set up realtime subscription for goal completions
-    const channel = supabase
-      .channel('plan_goal_completions')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'goal_completions'
-        },
-        async () => {
-          // Only reload goals when changes come from other devices
-          // Use a small delay to batch multiple rapid changes
-          setTimeout(() => {
-            fetchGoals();
-          }, 300);
-        }
-      )
-      .subscribe();
-
+    const channel = supabase.channel('plan_goal_completions').on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'goal_completions'
+    }, async () => {
+      // Only reload goals when changes come from other devices
+      // Use a small delay to batch multiple rapid changes
+      setTimeout(() => {
+        fetchGoals();
+      }, 300);
+    }).subscribe();
     return () => {
       supabase.removeChannel(channel);
     };
   }, []);
-
   const fetchGoals = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) return;
-
-      const { data: goals, error } = await supabase
-        .from('goals')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
+      const {
+        data: goals,
+        error
+      } = await supabase.from('goals').select('*').eq('user_id', user.id).order('created_at', {
+        ascending: false
+      });
       if (error) throw error;
-
       if (goals) {
         const alwaysGoals = goals.filter(g => g.goal_type === 'always');
         const todayGoals = goals.filter(g => g.goal_type === 'today');
         const weekGoals = goals.filter(g => g.goal_type === 'week');
         const monthGoals = goals.filter(g => g.goal_type === 'month');
         const periodicGoals = goals.filter(g => g.goal_type === 'periodic');
-        
         const groupedGoals = {
-          today: { 
-            open: sections.today.open, 
+          today: {
+            open: sections.today.open,
             goals: await expandGoals([...todayGoals, ...periodicGoals, ...alwaysGoals], 'today')
           },
-          week: { 
-            open: sections.week.open, 
+          week: {
+            open: sections.week.open,
             goals: await expandGoals([...weekGoals, ...periodicGoals, ...todayGoals, ...alwaysGoals], 'week')
           },
-          month: { 
-            open: sections.month.open, 
+          month: {
+            open: sections.month.open,
             goals: await expandGoals([...monthGoals, ...periodicGoals, ...weekGoals, ...todayGoals, ...alwaysGoals], 'month')
           },
-          onetime: { 
-            open: sections.onetime.open, 
+          onetime: {
+            open: sections.onetime.open,
             goals: await expandGoals(goals.filter(g => g.goal_type === 'onetime'), 'onetime')
           }
         };
@@ -348,18 +337,19 @@ export default function Plan() {
       toast({
         title: "Error",
         description: "No se pudieron cargar las metas",
-        variant: "destructive",
+        variant: "destructive"
       });
     }
   };
-
   const toggleSection = (section: keyof typeof sections) => {
     setSections(prev => ({
       ...prev,
-      [section]: { ...prev[section], open: !prev[section].open }
+      [section]: {
+        ...prev[section],
+        open: !prev[section].open
+      }
     }));
   };
-
   const toggleGoal = async (sectionKey: keyof typeof sections, goalId: string) => {
     try {
       const goal = sections[sectionKey].goals.find(g => g.id === goalId);
@@ -369,7 +359,6 @@ export default function Plan() {
       const parts = goalId.split('__');
       let dateStr: string;
       let instanceIndex: number;
-      
       if (parts.length === 3) {
         // Format: uuid__yyyy-mm-dd__index
         dateStr = parts[1];
@@ -379,120 +368,115 @@ export default function Plan() {
         dateStr = getLocalDateString();
         instanceIndex = parseInt(parts[1]);
       }
-
       const wasCompleted = goal.completed;
 
       // Optimistically update UI
-      const updatedSections = { ...sections };
-      Object.keys(updatedSections).forEach((key) => {
+      const updatedSections = {
+        ...sections
+      };
+      Object.keys(updatedSections).forEach(key => {
         const sk = key as keyof typeof sections;
         updatedSections[sk] = {
           ...updatedSections[sk],
-          goals: updatedSections[sk].goals.map(g =>
-            g.id === goalId ? { ...g, completed: !wasCompleted } : g
-          )
+          goals: updatedSections[sk].goals.map(g => g.id === goalId ? {
+            ...g,
+            completed: !wasCompleted
+          } : g)
         };
       });
-      
       setSections(updatedSections);
 
       // Save to database (realtime will sync to other devices)
       await saveCompletion(goal.originalId, instanceIndex, dateStr, !wasCompleted);
 
       // Check if ALL instances of this goal are completed
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) return;
-
-      const allGoals = [
-        ...updatedSections.today.goals,
-        ...updatedSections.week.goals,
-        ...updatedSections.month.goals,
-        ...updatedSections.onetime.goals
-      ];
-      
+      const allGoals = [...updatedSections.today.goals, ...updatedSections.week.goals, ...updatedSections.month.goals, ...updatedSections.onetime.goals];
       const instancesOfThisGoal = allGoals.filter(g => g.originalId === goal.originalId);
       const allCompleted = instancesOfThisGoal.every(g => g.completed);
 
       // Update database: mark as completed only if ALL instances are done
-      await supabase
-        .from('goals')
-        .update({ completed: allCompleted })
-        .eq('id', goal.originalId);
-
+      await supabase.from('goals').update({
+        completed: allCompleted
+      }).eq('id', goal.originalId);
       toast({
         title: "Meta actualizada",
-        description: "El estado de la meta ha sido actualizado",
+        description: "El estado de la meta ha sido actualizado"
       });
     } catch (error: any) {
       console.error('Error in toggleGoal:', error);
       toast({
         title: "Error",
         description: "No se pudo actualizar la meta",
-        variant: "destructive",
+        variant: "destructive"
       });
       // Revert on error
       fetchGoals();
     }
   };
-
   const addGoal = async () => {
     if (!newGoal.text.trim()) return;
-
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) {
         toast({
           title: "Error",
           description: "Debes iniciar sesión para añadir metas",
-          variant: "destructive",
+          variant: "destructive"
         });
         return;
       }
-
-      const { data: goal, error } = await supabase
-        .from('goals')
-        .insert({
-          user_id: user.id,
-          text: newGoal.text,
-          goal_type: newGoal.type,
-          remaining: newGoal.remaining,
-          completed: false,
-          target_date: newGoal.target_date ? format(newGoal.target_date, 'yyyy-MM-dd') : null,
-          periodic_type: newGoal.periodic_type || null
-        })
-        .select()
-        .single();
-
+      const {
+        data: goal,
+        error
+      } = await supabase.from('goals').insert({
+        user_id: user.id,
+        text: newGoal.text,
+        goal_type: newGoal.type,
+        remaining: newGoal.remaining,
+        completed: false,
+        target_date: newGoal.target_date ? format(newGoal.target_date, 'yyyy-MM-dd') : null,
+        periodic_type: newGoal.periodic_type || null
+      }).select().single();
       if (error) throw error;
-
       if (goal) {
         // Refresh all goals to get correct expansion
         await fetchGoals();
-
         toast({
           title: "¡Meta añadida!",
-          description: "Tu meta ha sido guardada exitosamente",
+          description: "Tu meta ha sido guardada exitosamente"
         });
       }
-
-      setNewGoal({ text: "", type: "today", remaining: 1, target_date: undefined, periodic_type: undefined });
+      setNewGoal({
+        text: "",
+        type: "today",
+        remaining: 1,
+        target_date: undefined,
+        periodic_type: undefined
+      });
       setIsDialogOpen(false);
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message || "No se pudo guardar la meta",
-        variant: "destructive",
+        variant: "destructive"
       });
     }
   };
-
   const deleteGoal = async (sectionKey: keyof typeof sections, goalId: string) => {
     try {
-      const { error } = await supabase
-        .from('goals')
-        .delete()
-        .eq('id', goalId);
-
+      const {
+        error
+      } = await supabase.from('goals').delete().eq('id', goalId);
       if (error) throw error;
 
       // Remove all instances of this goal from all sections
@@ -514,38 +498,32 @@ export default function Plan() {
           goals: prev.onetime.goals.filter(g => g.originalId !== goalId)
         }
       }));
-
       toast({
         title: "Meta eliminada",
-        description: "La meta ha sido eliminada exitosamente",
+        description: "La meta ha sido eliminada exitosamente"
       });
     } catch (error: any) {
       toast({
         title: "Error",
         description: "No se pudo eliminar la meta",
-        variant: "destructive",
+        variant: "destructive"
       });
     }
   };
-
   const openEditDialog = (goal: ExpandedGoal, sectionKey: string) => {
     // Find the original goal data
-    const originalGoalData = sections[sectionKey as keyof typeof sections].goals.find(
-      g => g.originalId === goal.originalId && g.instanceIndex === 0
-    );
+    const originalGoalData = sections[sectionKey as keyof typeof sections].goals.find(g => g.originalId === goal.originalId && g.instanceIndex === 0);
     if (originalGoalData) {
-      setEditingGoal({ 
-        ...originalGoalData, 
+      setEditingGoal({
+        ...originalGoalData,
         id: goal.originalId,
-        sectionKey 
+        sectionKey
       });
       setIsEditDialogOpen(true);
     }
   };
-
   const updateGoal = async () => {
     if (!editingGoal || !editingGoal.text.trim()) return;
-
     try {
       const updateData: any = {
         text: editingGoal.text,
@@ -556,40 +534,36 @@ export default function Plan() {
       if (editingGoal.goal_type === 'periodic') {
         updateData.periodic_type = editingGoal.periodic_type;
       }
-
-      const { error } = await supabase
-        .from('goals')
-        .update(updateData)
-        .eq('id', editingGoal.id);
-
+      const {
+        error
+      } = await supabase.from('goals').update(updateData).eq('id', editingGoal.id);
       if (error) throw error;
 
       // Refetch to get updated expanded goals
       await fetchGoals();
-
       toast({
         title: "Meta actualizada",
-        description: "La meta ha sido actualizada exitosamente",
+        description: "La meta ha sido actualizada exitosamente"
       });
-
       setIsEditDialogOpen(false);
       setEditingGoal(null);
     } catch (error: any) {
       toast({
         title: "Error",
         description: "No se pudo actualizar la meta",
-        variant: "destructive",
+        variant: "destructive"
       });
     }
   };
-
-  const SectionHeader = ({ title, sectionKey }: { title: string; sectionKey: keyof typeof sections }) => {
+  const SectionHeader = ({
+    title,
+    sectionKey
+  }: {
+    title: string;
+    sectionKey: keyof typeof sections;
+  }) => {
     const count = sections[sectionKey].goals.filter(g => g.instanceIndex === 0).length;
-    return (
-      <button
-        onClick={() => toggleSection(sectionKey)}
-        className="flex items-center justify-between w-full text-left"
-      >
+    return <button onClick={() => toggleSection(sectionKey)} className="flex items-center justify-between w-full text-left">
         <div className="flex items-center gap-2">
           <span className="text-primary">✓</span>
           <h3 className="text-xl font-semibold text-foreground">
@@ -597,40 +571,33 @@ export default function Plan() {
           </h3>
         </div>
         {sections[sectionKey].open ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
-      </button>
-    );
+      </button>;
   };
 
   // Calculate remaining count for display - recalculate from goal completion status
   const getRemainingCount = (goal: ExpandedGoal, sectionKey: keyof typeof sections) => {
     // Get all instances of this specific goal in THIS section only
     const allGoalsInSection = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
-    
+
     // Count completed instances
     const completedCount = allGoalsInSection.filter(g => g.completed).length;
     const totalInstances = allGoalsInSection.length;
-    
     return totalInstances - completedCount;
   };
-
-  const GoalItem = ({ goal, sectionKey }: { goal: ExpandedGoal; sectionKey: keyof typeof sections }) => {
+  const GoalItem = ({
+    goal,
+    sectionKey
+  }: {
+    goal: ExpandedGoal;
+    sectionKey: keyof typeof sections;
+  }) => {
     // Read completion status directly from the goal prop (which comes from expanded goals)
     // The goal.completed is already synced from localStorage in expandGoals
     const isClickable = sectionKey !== 'week' && sectionKey !== 'month';
-    
-    return (
-      <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
+    return <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
         <div className="flex items-center gap-3 flex-1">
-          <button
-            onClick={isClickable ? () => toggleGoal(sectionKey, goal.id) : undefined}
-            className={`flex-shrink-0 ${!isClickable ? 'cursor-default' : ''}`}
-            disabled={!isClickable}
-          >
-            {goal.completed ? (
-              <CheckCircle2 className="h-6 w-6 text-green-500" />
-            ) : (
-              <Circle className="h-6 w-6 text-muted-foreground" />
-            )}
+          <button onClick={isClickable ? () => toggleGoal(sectionKey, goal.id) : undefined} className={`flex-shrink-0 ${!isClickable ? 'cursor-default' : ''}`} disabled={!isClickable}>
+            {goal.completed ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
           </button>
           <div className="flex-1">
             <p className="text-foreground font-semibold">
@@ -642,26 +609,16 @@ export default function Plan() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {goal.instanceIndex === 0 && (
-            <>
+          {goal.instanceIndex === 0 && <>
               <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 font-medium ${goal.completed ? 'border-green-500 text-green-500' : 'border-primary/30 text-primary'}`}>
                 {sections[sectionKey].goals.filter(g => g.originalId === goal.originalId).length}
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={() => openEditDialog(goal, sectionKey)}
-              >
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEditDialog(goal, sectionKey)}>
                 <Pencil className="h-4 w-4" />
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-destructive hover:text-destructive"
-                  >
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </AlertDialogTrigger>
@@ -674,30 +631,23 @@ export default function Plan() {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => deleteGoal(sectionKey, goal.originalId)}
-                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                    >
+                    <AlertDialogAction onClick={() => deleteGoal(sectionKey, goal.originalId)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
                       Eliminar
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-            </>
-          )}
+            </>}
         </div>
-      </div>
-    );
+      </div>;
   };
-
-  return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+  return <div className="space-y-6 animate-in fade-in duration-500">
       <div>
         <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight tracking-tight mb-3 flex items-center gap-3">
           Mi Plan
           <span>🎯</span>
         </h1>
-        <p className="text-muted-foreground text-lg">Rastrea tus metas y progreso de recuperación</p>
+        <p className="text-muted-foreground text-lg">Define y rastrea tu proceso.</p>
       </div>
 
       <div className="flex justify-between items-center">
@@ -716,16 +666,19 @@ export default function Plan() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="goal-text">Meta</Label>
-                <Input
-                  id="goal-text"
-                  placeholder="Escribe tu meta..."
-                  value={newGoal.text}
-                  onChange={(e) => setNewGoal(prev => ({ ...prev, text: e.target.value }))}
-                />
+                <Input id="goal-text" placeholder="Escribe tu meta..." value={newGoal.text} onChange={e => setNewGoal(prev => ({
+                ...prev,
+                text: e.target.value
+              }))} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="goal-type">Tipo</Label>
-                <Select value={newGoal.type} onValueChange={(value) => setNewGoal(prev => ({ ...prev, type: value as (keyof typeof sections | 'always' | 'periodic'), target_date: undefined, periodic_type: undefined }))}>
+                <Select value={newGoal.type} onValueChange={value => setNewGoal(prev => ({
+                ...prev,
+                type: value as (keyof typeof sections | 'always' | 'periodic'),
+                target_date: undefined,
+                periodic_type: undefined
+              }))}>
                   <SelectTrigger id="goal-type">
                     <SelectValue />
                   </SelectTrigger>
@@ -740,39 +693,32 @@ export default function Plan() {
                 </Select>
               </div>
 
-              {newGoal.type === 'onetime' && (
-                <div className="space-y-2">
+              {newGoal.type === 'onetime' && <div className="space-y-2">
                   <Label>Fecha objetivo</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !newGoal.target_date && "text-muted-foreground"
-                        )}
-                      >
+                      <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !newGoal.target_date && "text-muted-foreground")}>
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {newGoal.target_date ? format(newGoal.target_date, "PPP", { locale: es }) : <span>Seleccionar fecha</span>}
+                        {newGoal.target_date ? format(newGoal.target_date, "PPP", {
+                      locale: es
+                    }) : <span>Seleccionar fecha</span>}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={newGoal.target_date}
-                        onSelect={(date) => setNewGoal(prev => ({ ...prev, target_date: date }))}
-                        initialFocus
-                        className={cn("p-3 pointer-events-auto")}
-                      />
+                      <Calendar mode="single" selected={newGoal.target_date} onSelect={date => setNewGoal(prev => ({
+                    ...prev,
+                    target_date: date
+                  }))} initialFocus className={cn("p-3 pointer-events-auto")} />
                     </PopoverContent>
                   </Popover>
-                </div>
-              )}
+                </div>}
 
-              {newGoal.type === 'periodic' && (
-                <div className="space-y-2">
+              {newGoal.type === 'periodic' && <div className="space-y-2">
                   <Label htmlFor="periodic-type">Periodicidad</Label>
-                  <Select value={newGoal.periodic_type} onValueChange={(value) => setNewGoal(prev => ({ ...prev, periodic_type: value }))}>
+                  <Select value={newGoal.periodic_type} onValueChange={value => setNewGoal(prev => ({
+                ...prev,
+                periodic_type: value
+              }))}>
                     <SelectTrigger id="periodic-type">
                       <SelectValue placeholder="Seleccionar periodicidad" />
                     </SelectTrigger>
@@ -782,18 +728,14 @@ export default function Plan() {
                       <SelectItem value="final_mes">Final de Mes</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
-              )}
+                </div>}
 
               <div className="space-y-2">
                 <Label htmlFor="goal-remaining">Número de veces</Label>
-                <Input
-                  id="goal-remaining"
-                  type="number"
-                  min="1"
-                  value={newGoal.remaining}
-                  onChange={(e) => setNewGoal(prev => ({ ...prev, remaining: parseInt(e.target.value) || 1 }))}
-                />
+                <Input id="goal-remaining" type="number" min="1" value={newGoal.remaining} onChange={e => setNewGoal(prev => ({
+                ...prev,
+                remaining: parseInt(e.target.value) || 1
+              }))} />
               </div>
               <Button onClick={addGoal} className="w-full">
                 Añadir
@@ -812,21 +754,18 @@ export default function Plan() {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="edit-goal-text">Meta</Label>
-              <Input
-                id="edit-goal-text"
-                placeholder="Escribe tu meta..."
-                value={editingGoal?.text || ""}
-                onChange={(e) => setEditingGoal(prev => ({ ...prev, text: e.target.value }))}
-              />
+              <Input id="edit-goal-text" placeholder="Escribe tu meta..." value={editingGoal?.text || ""} onChange={e => setEditingGoal(prev => ({
+              ...prev,
+              text: e.target.value
+            }))} />
             </div>
             
-            {editingGoal?.goal_type === 'periodic' && (
-              <div className="space-y-2">
+            {editingGoal?.goal_type === 'periodic' && <div className="space-y-2">
                 <Label htmlFor="edit-periodic-type">Periodicidad</Label>
-                <Select 
-                  value={editingGoal?.periodic_type || ""} 
-                  onValueChange={(value) => setEditingGoal(prev => ({ ...prev, periodic_type: value }))}
-                >
+                <Select value={editingGoal?.periodic_type || ""} onValueChange={value => setEditingGoal(prev => ({
+              ...prev,
+              periodic_type: value
+            }))}>
                   <SelectTrigger id="edit-periodic-type">
                     <SelectValue placeholder="Seleccionar periodicidad" />
                   </SelectTrigger>
@@ -836,18 +775,14 @@ export default function Plan() {
                     <SelectItem value="final_mes">Final de Mes</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
-            )}
+              </div>}
 
             <div className="space-y-2">
               <Label htmlFor="edit-goal-remaining">Número de veces</Label>
-              <Input
-                id="edit-goal-remaining"
-                type="number"
-                min="1"
-                value={editingGoal?.remaining || 1}
-                onChange={(e) => setEditingGoal(prev => ({ ...prev, remaining: parseInt(e.target.value) || 1 }))}
-              />
+              <Input id="edit-goal-remaining" type="number" min="1" value={editingGoal?.remaining || 1} onChange={e => setEditingGoal(prev => ({
+              ...prev,
+              remaining: parseInt(e.target.value) || 1
+            }))} />
             </div>
             <Button onClick={updateGoal} className="w-full">
               Guardar Cambios
@@ -862,15 +797,9 @@ export default function Plan() {
           <CardHeader>
             <SectionHeader title="Hoy" sectionKey="today" />
           </CardHeader>
-          {sections.today.open && (
-            <CardContent className="space-y-3">
-              {sections.today.goals
-                .filter(goal => goal.instanceIndex === 0)
-                .map(goal => (
-                  <GoalItem key={goal.id} goal={goal} sectionKey="today" />
-                ))}
-            </CardContent>
-          )}
+          {sections.today.open && <CardContent className="space-y-3">
+              {sections.today.goals.filter(goal => goal.instanceIndex === 0).map(goal => <GoalItem key={goal.id} goal={goal} sectionKey="today" />)}
+            </CardContent>}
         </Card>
 
         {/* This Week */}
@@ -878,15 +807,9 @@ export default function Plan() {
           <CardHeader>
             <SectionHeader title="Esta Semana (L-D)" sectionKey="week" />
           </CardHeader>
-          {sections.week.open && (
-            <CardContent className="space-y-3">
-              {sections.week.goals
-                .filter(goal => goal.instanceIndex === 0)
-                .map(goal => (
-                  <GoalItem key={goal.id} goal={goal} sectionKey="week" />
-                ))}
-            </CardContent>
-          )}
+          {sections.week.open && <CardContent className="space-y-3">
+              {sections.week.goals.filter(goal => goal.instanceIndex === 0).map(goal => <GoalItem key={goal.id} goal={goal} sectionKey="week" />)}
+            </CardContent>}
         </Card>
 
         {/* This Month */}
@@ -894,15 +817,9 @@ export default function Plan() {
           <CardHeader>
             <SectionHeader title="Este Mes" sectionKey="month" />
           </CardHeader>
-          {sections.month.open && (
-            <CardContent className="space-y-3">
-              {sections.month.goals
-                .filter(goal => goal.instanceIndex === 0)
-                .map(goal => (
-                  <GoalItem key={goal.id} goal={goal} sectionKey="month" />
-                ))}
-            </CardContent>
-          )}
+          {sections.month.open && <CardContent className="space-y-3">
+              {sections.month.goals.filter(goal => goal.instanceIndex === 0).map(goal => <GoalItem key={goal.id} goal={goal} sectionKey="month" />)}
+            </CardContent>}
         </Card>
 
         {/* One-Time Goals */}
@@ -910,17 +827,10 @@ export default function Plan() {
           <CardHeader>
             <SectionHeader title="Metas Únicas" sectionKey="onetime" />
           </CardHeader>
-          {sections.onetime.open && (
-            <CardContent className="space-y-3">
-              {sections.onetime.goals
-                .filter(goal => goal.instanceIndex === 0)
-                .map(goal => (
-                  <GoalItem key={goal.id} goal={goal} sectionKey="onetime" />
-                ))}
-            </CardContent>
-          )}
+          {sections.onetime.open && <CardContent className="space-y-3">
+              {sections.onetime.goals.filter(goal => goal.instanceIndex === 0).map(goal => <GoalItem key={goal.id} goal={goal} sectionKey="onetime" />)}
+            </CardContent>}
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 }
