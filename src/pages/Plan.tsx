@@ -281,18 +281,27 @@ export default function Plan() {
 
   useEffect(() => {
     fetchGoals();
-  }, []);
 
-  // Listen for goal updates from other components and storage changes
-  useEffect(() => {
-    const handleGoalsUpdate = () => {
-      fetchGoals();
-    };
+    // Set up realtime subscription for goal completions
+    const channel = supabase
+      .channel('plan_goal_completions')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'goal_completions'
+        },
+        async (payload) => {
+          console.log('Goal completion change detected in Plan:', payload);
+          // Reload all goals when changes are detected
+          fetchGoals();
+        }
+      )
+      .subscribe();
 
-    window.addEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
-    
     return () => {
-      window.removeEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
+      supabase.removeChannel(channel);
     };
   }, []);
 

@@ -38,21 +38,33 @@ export default function ProgressPage() {
 
   useEffect(() => {
     fetchData();
+
+    // Set up realtime subscription for goal completions
+    const channel = supabase
+      .channel('progress_goal_completions')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'goal_completions'
+        },
+        async (payload) => {
+          console.log('Goal completion change detected in Progress:', payload);
+          // Reload data when changes are detected
+          fetchData();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   useEffect(() => {
     calculateProgress();
   }, [currentTab, dailyGoals, weeklyGoals, monthlyGoals, hasCheckedInToday]);
-
-  // Listen for goal updates from other components
-  useEffect(() => {
-    const handleGoalsUpdate = () => {
-      fetchData();
-    };
-
-    window.addEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
-    return () => window.removeEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
-  }, []);
 
   // Get local date string without UTC conversion
   const getLocalDateString = (date: Date = new Date()): string => {
