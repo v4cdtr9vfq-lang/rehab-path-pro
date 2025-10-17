@@ -219,7 +219,7 @@ const emotionCategories: PrimaryCategory[] = [
 ];
 
 export default function EmotionJournal() {
-  const [selectedPrimary, setSelectedPrimary] = useState<string | null>(null);
+  const [selectedPrimary, setSelectedPrimary] = useState<string[]>([]);
   const [selectedSecondary, setSelectedSecondary] = useState<string[]>([]);
   const [selectedTertiary, setSelectedTertiary] = useState<string[]>([]);
   const [isSaving, setIsSaving] = useState(false);
@@ -251,26 +251,40 @@ export default function EmotionJournal() {
   };
 
   const togglePrimary = (categoryId: string) => {
-    if (selectedPrimary === categoryId) {
-      // Deselect and clear all selections
-      setSelectedPrimary(null);
-      setSelectedSecondary([]);
-      setSelectedTertiary([]);
-    } else {
-      // Select new primary and clear secondary/tertiary
-      setSelectedPrimary(categoryId);
-      setSelectedSecondary([]);
-      setSelectedTertiary([]);
-    }
+    setSelectedPrimary(prev => {
+      if (prev.includes(categoryId)) {
+        // Remove primary and its related secondary/tertiary
+        const category = emotionCategories.find(c => c.id === categoryId);
+        const secondaryIdsToRemove = category?.secondaryEmotions.map(e => e.id) || [];
+        setSelectedSecondary(current => current.filter(id => !secondaryIdsToRemove.includes(id)));
+        
+        // Remove tertiary emotions that belong to this category
+        const tertiaryToRemove: string[] = [];
+        category?.secondaryEmotions.forEach(sec => {
+          tertiaryToRemove.push(...sec.tertiaryEmotions);
+        });
+        setSelectedTertiary(current => current.filter(t => !tertiaryToRemove.includes(t)));
+        
+        return prev.filter(id => id !== categoryId);
+      } else {
+        // Add new primary
+        return [...prev, categoryId];
+      }
+    });
   };
 
   const toggleSecondary = (emotionId: string) => {
     setSelectedSecondary(prev => {
       if (prev.includes(emotionId)) {
         // Remove secondary emotion and its tertiary emotions
-        const category = emotionCategories.find(c => c.id === selectedPrimary);
-        const emotion = category?.secondaryEmotions.find(e => e.id === emotionId);
-        const tertiaryToRemove = emotion?.tertiaryEmotions || [];
+        const allCategories = emotionCategories.filter(c => selectedPrimary.includes(c.id));
+        let tertiaryToRemove: string[] = [];
+        allCategories.forEach(cat => {
+          const emotion = cat.secondaryEmotions.find(e => e.id === emotionId);
+          if (emotion) {
+            tertiaryToRemove = emotion.tertiaryEmotions;
+          }
+        });
         setSelectedTertiary(current => 
           current.filter(t => !tertiaryToRemove.includes(t))
         );
@@ -290,19 +304,10 @@ export default function EmotionJournal() {
   };
 
   const handleSubmit = async () => {
-    if (!selectedPrimary) {
+    if (selectedPrimary.length === 0) {
       toast({
         title: "Error",
-        description: "Debes seleccionar una categoría principal.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (selectedSecondary.length === 0) {
-      toast({
-        title: "Error",
-        description: "Debes seleccionar al menos una emoción secundaria.",
+        description: "Debes seleccionar al menos una categoría principal.",
         variant: "destructive"
       });
       return;
@@ -320,11 +325,21 @@ export default function EmotionJournal() {
         return;
       }
 
-      const primaryCategory = emotionCategories.find(c => c.id === selectedPrimary);
+      // Get all primary category names
+      const primaryNames = selectedPrimary
+        .map(id => emotionCategories.find(c => c.id === id)?.name)
+        .filter(Boolean)
+        .join(", ");
+
+      // Get secondary emotion names
+      const allCategories = emotionCategories.filter(c => selectedPrimary.includes(c.id));
       const secondaryNames = selectedSecondary
         .map(id => {
-          const emotion = primaryCategory?.secondaryEmotions.find(e => e.id === id);
-          return emotion?.name;
+          for (const category of allCategories) {
+            const emotion = category.secondaryEmotions.find(e => e.id === id);
+            if (emotion) return emotion.name;
+          }
+          return null;
         })
         .filter(Boolean) as string[];
 
@@ -332,7 +347,7 @@ export default function EmotionJournal() {
         .from('emotion_journal')
         .insert({
           user_id: user.id,
-          primary_emotion: primaryCategory?.name,
+          primary_emotion: primaryNames,
           secondary_emotions: secondaryNames,
           tertiary_emotions: selectedTertiary,
           entry_date: new Date().toISOString().split('T')[0]
@@ -345,7 +360,7 @@ export default function EmotionJournal() {
         description: "Tus emociones han sido registradas exitosamente"
       });
 
-      setSelectedPrimary(null);
+      setSelectedPrimary([]);
       setSelectedSecondary([]);
       setSelectedTertiary([]);
       await loadSavedEntries();
@@ -364,22 +379,31 @@ export default function EmotionJournal() {
   const handleEdit = (entry: SavedEmotionEntry) => {
     setEditingEntry(entry.id);
     
-    // Find primary category
-    const primaryCategory = emotionCategories.find(c => c.name === entry.primary_emotion);
-    if (primaryCategory) {
-      setSelectedPrimary(primaryCategory.id);
-      
-      // Map secondary emotion names to IDs
-      const secondaryIds = entry.secondary_emotions
-        .map(name => {
-          const emotion = primaryCategory.secondaryEmotions.find(e => e.name === name);
-          return emotion?.id;
-        })
-        .filter(Boolean) as string[];
-      
-      setSelectedSecondary(secondaryIds);
-      setSelectedTertiary(entry.tertiary_emotions);
-    }
+    // Parse primary emotions (may be comma-separated)
+    const primaryNames = entry.primary_emotion.split(", ");
+    const primaryIds: string[] = [];
+    primaryNames.forEach(name => {
+      const category = emotionCategories.find(c => c.name === name.trim());
+      if (category) primaryIds.push(category.id);
+    });
+    
+    setSelectedPrimary(primaryIds);
+    
+    // Map secondary emotion names to IDs
+    const allCategories = emotionCategories.filter(c => primaryIds.includes(c.id));
+    const secondaryIds: string[] = [];
+    entry.secondary_emotions.forEach(name => {
+      for (const category of allCategories) {
+        const emotion = category.secondaryEmotions.find(e => e.name === name);
+        if (emotion) {
+          secondaryIds.push(emotion.id);
+          break;
+        }
+      }
+    });
+    
+    setSelectedSecondary(secondaryIds);
+    setSelectedTertiary(entry.tertiary_emotions);
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -387,10 +411,10 @@ export default function EmotionJournal() {
   const handleUpdate = async () => {
     if (!editingEntry) return;
 
-    if (!selectedPrimary || selectedSecondary.length === 0) {
+    if (selectedPrimary.length === 0) {
       toast({
         title: "Error",
-        description: "Debes seleccionar una categoría principal y al menos una emoción secundaria.",
+        description: "Debes seleccionar al menos una categoría principal.",
         variant: "destructive"
       });
       return;
@@ -398,18 +422,28 @@ export default function EmotionJournal() {
 
     setIsSaving(true);
     try {
-      const primaryCategory = emotionCategories.find(c => c.id === selectedPrimary);
+      // Get all primary category names
+      const primaryNames = selectedPrimary
+        .map(id => emotionCategories.find(c => c.id === id)?.name)
+        .filter(Boolean)
+        .join(", ");
+
+      // Get secondary emotion names
+      const allCategories = emotionCategories.filter(c => selectedPrimary.includes(c.id));
       const secondaryNames = selectedSecondary
         .map(id => {
-          const emotion = primaryCategory?.secondaryEmotions.find(e => e.id === id);
-          return emotion?.name;
+          for (const category of allCategories) {
+            const emotion = category.secondaryEmotions.find(e => e.id === id);
+            if (emotion) return emotion.name;
+          }
+          return null;
         })
         .filter(Boolean) as string[];
       
       const { error } = await (supabase as any)
         .from('emotion_journal')
         .update({
-          primary_emotion: primaryCategory?.name,
+          primary_emotion: primaryNames,
           secondary_emotions: secondaryNames,
           tertiary_emotions: selectedTertiary
         })
@@ -423,7 +457,7 @@ export default function EmotionJournal() {
       });
 
       setEditingEntry(null);
-      setSelectedPrimary(null);
+      setSelectedPrimary([]);
       setSelectedSecondary([]);
       setSelectedTertiary([]);
       await loadSavedEntries();
@@ -467,18 +501,21 @@ export default function EmotionJournal() {
 
   const handleCancelEdit = () => {
     setEditingEntry(null);
-    setSelectedPrimary(null);
+    setSelectedPrimary([]);
     setSelectedSecondary([]);
     setSelectedTertiary([]);
   };
 
-  // Get selected category data
-  const selectedCategory = emotionCategories.find(c => c.id === selectedPrimary);
+  // Get all selected categories
+  const selectedCategories = emotionCategories.filter(c => selectedPrimary.includes(c.id));
+  
+  // Get all secondary emotions from selected categories
+  const allSecondaryEmotions = selectedCategories.flatMap(cat => cat.secondaryEmotions);
   
   // Get selected secondary emotions data (sorted alphabetically)
-  const selectedSecondaryData = selectedCategory?.secondaryEmotions
+  const selectedSecondaryData = allSecondaryEmotions
     .filter(e => selectedSecondary.includes(e.id))
-    .sort((a, b) => a.name.localeCompare(b.name)) || [];
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -489,7 +526,7 @@ export default function EmotionJournal() {
             <h2 className="text-2xl font-semibold text-foreground mb-4">¿Cómo te sientes aquí y ahora?</h2>
             <div className="flex flex-wrap gap-3">
               {emotionCategories.map((category) => {
-                const isSelected = selectedPrimary === category.id;
+                const isSelected = selectedPrimary.includes(category.id);
                 return (
                   <Button
                     key={category.id}
@@ -497,7 +534,7 @@ export default function EmotionJournal() {
                     size="lg"
                     onClick={() => togglePrimary(category.id)}
                     className={`rounded-full px-6 h-12 text-base font-medium transition-all ${
-                      isSelected 
+                      isSelected
                         ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
                         : "hover:bg-primary/10 hover:border-primary/50"
                     }`}
@@ -517,11 +554,11 @@ export default function EmotionJournal() {
           </div>
 
           {/* Secondary Emotions */}
-          {selectedPrimary && selectedCategory && (
+          {selectedPrimary.length > 0 && (
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-4">He sentido:</h2>
               <div className="flex flex-wrap gap-3">
-                {selectedCategory.secondaryEmotions.map((emotion) => {
+                {allSecondaryEmotions.map((emotion) => {
                   const isSelected = selectedSecondary.includes(emotion.id);
                   return (
                     <Button
@@ -593,7 +630,7 @@ export default function EmotionJournal() {
         </div>
 
         {/* Save/Update Button */}
-        {selectedPrimary && selectedSecondary.length > 0 && (
+        {selectedPrimary.length > 0 && (
           <div className="flex justify-end gap-4 mt-6">
             {editingEntry && (
               <Button
