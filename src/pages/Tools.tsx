@@ -9,15 +9,15 @@ export default function Tools() {
       icon: Wind,
       title: "Ejercicio de Respiración",
       description: "Calma tu mente con técnicas de respiración guiada",
-      color: "text-primary",
-      bgColor: "bg-primary/10"
+      color: "text-sky-blue",
+      bgColor: "bg-sky-blue/10"
     },
     {
       icon: Anchor,
       title: "Ejercicio de Anclaje",
       description: "Conéctate con el momento presente usando la técnica 5-4-3-2-1",
-      color: "text-accent",
-      bgColor: "bg-accent/10"
+      color: "text-sky-blue",
+      bgColor: "bg-sky-blue/10"
     },
     {
       icon: AlertCircle,
@@ -30,8 +30,8 @@ export default function Tools() {
       icon: HeartPulse,
       title: "Menú de Autocuidado",
       description: "Actividades rápidas para apoyar tu bienestar",
-      color: "text-accent",
-      bgColor: "bg-accent/10"
+      color: "text-sky-blue",
+      bgColor: "bg-sky-blue/10"
     }
   ];
 
@@ -97,8 +97,8 @@ export default function Tools() {
           <Card className="border-primary/20 hover:shadow-medium transition-all duration-300 hover:-translate-y-1 cursor-pointer">
             <CardHeader>
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-primary/10">
-                  <Phone className="h-6 w-6 text-primary" />
+                <div className="p-3 rounded-full bg-sky-blue/10">
+                  <Phone className="h-6 w-6 text-sky-blue" />
                 </div>
                 <div className="flex-1">
                   <CardTitle className="text-xl">Mi Red de Apoyo</CardTitle>

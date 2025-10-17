@@ -449,7 +449,7 @@ export default function Home() {
           return <Link key={tool.label} to={tool.path}>
                 <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-border/50 h-full">
                   <CardContent className="p-5 text-center space-y-3">
-                    <div className={`mx-auto w-12 h-12 rounded-2xl bg-primary/30 flex items-center justify-center ${tool.color}`}>
+                    <div className={`mx-auto w-12 h-12 rounded-2xl bg-sky-blue/30 flex items-center justify-center ${tool.color}`}>
                       <span className="text-2xl">{tool.emoji}</span>
                     </div>
                     <p className="font-semibold text-foreground text-xs leading-tight">{tool.label}</p>
