@@ -445,7 +445,7 @@ export default function Chat() {
           </CardHeader>
           <div className="px-4 pb-3">
             <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="w-full">
-              <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-background p-1 text-muted-foreground w-full flex-wrap gap-1">
+              <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-background p-7 text-muted-foreground w-full flex-wrap gap-1">
                 {CHAT_ROOMS.map((room, index) => (
                   <TabsTrigger 
                     key={room.id} 
