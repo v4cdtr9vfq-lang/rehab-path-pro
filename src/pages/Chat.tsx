@@ -633,20 +633,37 @@ export default function Chat() {
         </div>
 
         <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-black shrink-0">
-          <div className="flex gap-2 items-start">
-            <Textarea
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Escribe un mensaje..."
-              className="flex-1 pl-4 resize-none min-h-[44px] max-h-[44px]"
-              disabled={isSending}
-              rows={2}
-            />
-            <Button type="submit" disabled={!newMessage.trim() || isSending} className="gap-2 h-[44px]">
-              <Send className="h-4 w-4" />
-              Enviar
-            </Button>
-          </div>
+          {isMobile ? (
+            <div className="flex flex-col gap-2">
+              <Textarea
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="Escribe un mensaje..."
+                className="w-full pl-4 resize-none min-h-[60px] text-xs"
+                disabled={isSending}
+                rows={3}
+              />
+              <Button type="submit" disabled={!newMessage.trim() || isSending} className="w-full gap-2">
+                <Send className="h-4 w-4" />
+                Enviar
+              </Button>
+            </div>
+          ) : (
+            <div className="flex gap-2 items-start">
+              <Textarea
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="Escribe un mensaje..."
+                className="flex-1 pl-4 resize-none min-h-[44px] max-h-[44px] text-sm"
+                disabled={isSending}
+                rows={2}
+              />
+              <Button type="submit" disabled={!newMessage.trim() || isSending} className="gap-2 h-[44px]">
+                <Send className="h-4 w-4" />
+                Enviar
+              </Button>
+            </div>
+          )}
           <div className="flex items-center gap-2 pl-3">
             <Switch
               id="anonymous-mode"
