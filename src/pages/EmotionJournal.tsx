@@ -48,8 +48,8 @@ const emotions: Emotion[] = [
     subEmotions: ["Aprensivo", "Temor", "Presentimiento", "Atemorizado", "Desconfiado", "En pánico", "Petrificado", "Asustado", "Sospechoso", "Aterrorizado", "Cauteloso", "Preocupado"]
   },
   {
-    id: "aversion",
-    name: "Aversión",
+    id: "rechazo",
+    name: "Rechazo",
     subEmotions: ["Animosidad", "Horrorizado", "Desprecio", "Disgustado", "Desagrado", "Odio", "Hostil", "Repulsado"]
   },
   {
@@ -63,8 +63,8 @@ const emotions: Emotion[] = [
     subEmotions: ["Absorto", "Alerta", "Curioso", "Absorto", "Encantado", "Fascinado", "Interesado", "Intrigado", "Involucrado", "Estimulado"]
   },
   {
-    id: "confuso",
-    name: "Confuso",
+    id: "confundido",
+    name: "Confundido",
     subEmotions: ["Ambivalente", "Desconcertado", "Perplejo", "Aturdido", "Vacilante", "Perdido", "Desconcertado", "Confuso", "Dividido"]
   },
   {
