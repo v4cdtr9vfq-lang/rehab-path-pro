@@ -44,10 +44,6 @@ const menuItems = [{
   label: "Herramientas",
   path: "/tools"
 }, {
-  emoji: "🔔",
-  label: "Recordatorios",
-  path: "/reminders"
-}, {
   emoji: "⚙️",
   label: "Configuración",
   path: "/settings"

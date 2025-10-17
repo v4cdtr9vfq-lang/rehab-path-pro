@@ -18,7 +18,6 @@ import Gratitude from "./pages/Gratitude";
 import Journal from "./pages/Journal";
 import EmotionJournal from "./pages/EmotionJournal";
 import Tools from "./pages/Tools";
-import Reminders from "./pages/Reminders";
 import Message from "./pages/Message";
 import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
@@ -100,13 +99,6 @@ const App = () => (
             <ProtectedRoute>
               <Layout>
                 <Tools />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          <Route path="/reminders" element={
-            <ProtectedRoute>
-              <Layout>
-                <Reminders />
               </Layout>
             </ProtectedRoute>
           } />

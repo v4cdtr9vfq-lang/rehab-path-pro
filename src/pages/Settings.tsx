@@ -3,6 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Bell, Plus, Mail, BellRing, Trash2 } from "lucide-react";
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +24,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+interface Reminder {
+  id: string;
+  title: string;
+  time: string;
+  enabled: boolean;
+  notificationType: "email" | "popup";
+}
+
 export default function Settings() {
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -33,6 +44,15 @@ export default function Settings() {
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
   const [abstinenceStartDate, setAbstinenceStartDate] = useState("");
   const [isUpdatingDate, setIsUpdatingDate] = useState(false);
+  
+  // Reminders state
+  const [reminders, setReminders] = useState<Reminder[]>([]);
+  const [isReminderDialogOpen, setIsReminderDialogOpen] = useState(false);
+  const [newReminder, setNewReminder] = useState({
+    title: "",
+    time: "",
+    notificationType: "popup" as "email" | "popup"
+  });
 
   useEffect(() => {
     loadAbstinenceDate();
@@ -241,6 +261,42 @@ export default function Settings() {
         variant: "destructive",
       });
     }
+  };
+
+  // Reminder functions
+  const addReminder = () => {
+    if (!newReminder.title.trim() || !newReminder.time) return;
+
+    const reminder: Reminder = {
+      id: Date.now().toString(),
+      title: newReminder.title,
+      time: newReminder.time,
+      enabled: true,
+      notificationType: newReminder.notificationType
+    };
+
+    setReminders(prev => [...prev, reminder]);
+    setNewReminder({ title: "", time: "", notificationType: "popup" });
+    setIsReminderDialogOpen(false);
+    
+    toast({
+      title: "Recordatorio añadido",
+      description: "Tu recordatorio ha sido configurado exitosamente",
+    });
+  };
+
+  const toggleReminder = (id: string) => {
+    setReminders(prev => prev.map(reminder =>
+      reminder.id === id ? { ...reminder, enabled: !reminder.enabled } : reminder
+    ));
+  };
+
+  const deleteReminder = (id: string) => {
+    setReminders(prev => prev.filter(reminder => reminder.id !== id));
+    toast({
+      title: "Recordatorio eliminado",
+      description: "El recordatorio ha sido eliminado",
+    });
   };
 
 
@@ -556,6 +612,121 @@ export default function Settings() {
               <p className="text-sm text-muted-foreground">Recibe recordatorios de próximas metas</p>
             </div>
             <Switch defaultChecked />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="border-primary/20">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Bell className="h-5 w-5 text-primary" />
+              Recordatorios
+            </CardTitle>
+            <Dialog open={isReminderDialogOpen} onOpenChange={setIsReminderDialogOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm" className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Añadir
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Añadir Nuevo Recordatorio</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="reminder-title">Título</Label>
+                    <Input
+                      id="reminder-title"
+                      placeholder="Ej: Meditación matutina"
+                      value={newReminder.title}
+                      onChange={(e) => setNewReminder(prev => ({ ...prev, title: e.target.value }))}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="reminder-time">Hora</Label>
+                    <Input
+                      id="reminder-time"
+                      type="time"
+                      value={newReminder.time}
+                      onChange={(e) => setNewReminder(prev => ({ ...prev, time: e.target.value }))}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Tipo de Notificación</Label>
+                    <RadioGroup 
+                      value={newReminder.notificationType} 
+                      onValueChange={(value: "email" | "popup") => setNewReminder(prev => ({ ...prev, notificationType: value }))}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="popup" id="popup" />
+                        <Label htmlFor="popup" className="flex items-center gap-2 cursor-pointer font-normal">
+                          <BellRing className="h-4 w-4" />
+                          Pop-up en la aplicación
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="email" id="email" />
+                        <Label htmlFor="email" className="flex items-center gap-2 cursor-pointer font-normal">
+                          <Mail className="h-4 w-4" />
+                          Enviar por email
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  <Button onClick={addReminder} className="w-full">
+                    Añadir
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {reminders.length === 0 ? (
+              <div className="text-center py-8">
+                <Bell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground text-sm">No tienes recordatorios configurados</p>
+              </div>
+            ) : (
+              reminders.map((reminder) => (
+                <div key={reminder.id} className="flex items-center justify-between p-3 rounded-lg border border-border bg-muted/20">
+                  <div className="flex-1">
+                    <h4 className="font-medium text-sm">{reminder.title}</h4>
+                    <p className="text-xs text-muted-foreground">{reminder.time}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      {reminder.notificationType === "email" ? (
+                        <>
+                          <Mail className="h-3 w-3 text-muted-foreground" />
+                          <span className="text-xs text-muted-foreground">Email</span>
+                        </>
+                      ) : (
+                        <>
+                          <BellRing className="h-3 w-3 text-muted-foreground" />
+                          <span className="text-xs text-muted-foreground">Pop-up</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Switch 
+                      checked={reminder.enabled} 
+                      onCheckedChange={() => toggleReminder(reminder.id)}
+                    />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => deleteReminder(reminder.id)}
+                      className="h-8 w-8 text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </CardContent>
       </Card>
