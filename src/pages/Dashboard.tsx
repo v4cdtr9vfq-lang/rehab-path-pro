@@ -634,6 +634,53 @@ export default function Home() {
       {/* Header - Abstinence Counter */}
       <AbstinenceCounter startDate={startDate} />
 
+      {/* Quick Tools */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4 text-foreground">Herramientas Rápidas</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {quickTools.map(tool => {
+          return <Link key={tool.label} to={tool.path}>
+                <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-border/50 h-full">
+                  <CardContent className="p-5 text-center space-y-3">
+                    <div className={`mx-auto w-12 h-12 rounded-2xl bg-sky-blue flex items-center justify-center ${tool.color}`}>
+                      <span className="text-2xl">{tool.emoji}</span>
+                    </div>
+                    <p className="font-semibold text-foreground text-xs leading-tight">{tool.label}</p>
+                  </CardContent>
+                </Card>
+              </Link>;
+        })}
+        </div>
+      </div>
+
+      {/* Medals Widget */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4 text-foreground">Mis Medallas</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {medalConfig.map(medal => {
+            const status = getMedalStatus(medal.type, medal.requiredDays);
+            return (
+              <Card key={medal.type} className="border-border/50 h-full">
+                <CardContent className="p-5 text-center space-y-3">
+                  <div className={`mx-auto w-12 h-12 rounded-2xl bg-sky-blue flex items-center justify-center ${status.opacity} transition-opacity duration-300`}>
+                    <span className="text-2xl">{medal.emoji}</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground text-xs leading-tight mb-1">{medal.name}</p>
+                    <p className={`text-xs ${status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
+                      {status.isUnlocked 
+                        ? '¡Conseguido!' 
+                        : `+${status.progress} / ${medal.requiredDays} días`
+                      }
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Daily Progress Panel */}
       <Card className="border-border/50">
         <CardHeader>
@@ -751,53 +798,6 @@ export default function Home() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Quick Tools */}
-      <div>
-        <h2 className="text-2xl font-bold mb-4 text-foreground">Herramientas Rápidas</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {quickTools.map(tool => {
-          return <Link key={tool.label} to={tool.path}>
-                <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-border/50 h-full">
-                  <CardContent className="p-5 text-center space-y-3">
-                    <div className={`mx-auto w-12 h-12 rounded-2xl bg-sky-blue flex items-center justify-center ${tool.color}`}>
-                      <span className="text-2xl">{tool.emoji}</span>
-                    </div>
-                    <p className="font-semibold text-foreground text-xs leading-tight">{tool.label}</p>
-                  </CardContent>
-                </Card>
-              </Link>;
-        })}
-        </div>
-      </div>
-
-      {/* Medals Widget */}
-      <div>
-        <h2 className="text-2xl font-bold mb-4 text-foreground">Mis Medallas</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {medalConfig.map(medal => {
-            const status = getMedalStatus(medal.type, medal.requiredDays);
-            return (
-              <Card key={medal.type} className="border-border/50 h-full">
-                <CardContent className="p-5 text-center space-y-3">
-                  <div className={`mx-auto w-12 h-12 rounded-2xl bg-sky-blue flex items-center justify-center ${status.opacity} transition-opacity duration-300`}>
-                    <span className="text-2xl">{medal.emoji}</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground text-xs leading-tight mb-1">{medal.name}</p>
-                    <p className={`text-xs ${status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
-                      {status.isUnlocked 
-                        ? '¡Conseguido!' 
-                        : `+${status.progress} / ${medal.requiredDays} días`
-                      }
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </div>
 
       {/* Medal Unlock Popup */}
       <AlertDialog open={showMedalPopup} onOpenChange={setShowMedalPopup}>
