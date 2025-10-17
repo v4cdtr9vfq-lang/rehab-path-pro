@@ -321,7 +321,7 @@ export default function ProgressPage() {
           <CardTitle className="flex items-center gap-2 text-2xl">
             <span className="text-2xl">📈</span>
             {currentTab === 'daily' && 'Progreso hoy'}
-            {currentTab === 'week' && 'Progreso semana'}
+            {currentTab === 'week' && 'Progreso semanal'}
             {currentTab === 'month' && 'Progreso mensual'}
           </CardTitle>
         </CardHeader>
