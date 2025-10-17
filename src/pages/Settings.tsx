@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Settings as SettingsIcon, User, Lock, Trash2, CreditCard, Check, RefreshCw } from "lucide-react";
+import { Settings as SettingsIcon, User, Lock, Trash2, CreditCard, Check } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -339,7 +339,7 @@ export default function Settings() {
         <CardContent className="space-y-6">
           {loading ? (
             <div className="flex items-center justify-center py-8">
-              <RefreshCw className="h-6 w-6 animate-spin text-primary" />
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
             </div>
           ) : (
             <>
@@ -508,14 +508,6 @@ export default function Settings() {
                 </div>
               </div>
 
-              <Button 
-                variant="ghost" 
-                onClick={() => checkSubscription()}
-                className="w-full"
-              >
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Actualizar Estado de Suscripción
-              </Button>
             </>
           )}
         </CardContent>
