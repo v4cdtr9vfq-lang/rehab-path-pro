@@ -9,30 +9,49 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-
 export default function Home() {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [loading, setLoading] = useState(true);
   const [checkInCompleted, setCheckInCompleted] = useState(false);
   const [todayReminder, setTodayReminder] = useState("");
   const [goalsCompleted, setGoalsCompleted] = useState(0);
   const [totalGoals, setTotalGoals] = useState(0);
-  const goalsProgress = totalGoals > 0 ? (goalsCompleted / totalGoals) * 100 : 0;
+  const goalsProgress = totalGoals > 0 ? goalsCompleted / totalGoals * 100 : 0;
   const [activeGoals, setActiveGoals] = useState<any[]>([]);
-
-  const allQuotes = [
-    { text: "Siempre es lo simple lo que produce lo maravilloso.", author: "Amelia Barr" },
-    { text: "La confianza se construye con consistencia.", author: "Lincoln Chafee" },
-    { text: "Un viaje de mil millas comienza con un solo paso.", author: "Lao Tzu" },
-    { text: "La valentía no es la ausencia del miedo, sino el triunfo sobre él.", author: "Nelson Mandela" },
-    { text: "El éxito es la suma de pequeños esfuerzos repetidos día tras día.", author: "Robert Collier" },
-    { text: "No cuentes los días, haz que los días cuenten.", author: "Muhammad Ali" },
-    { text: "La recuperación no es un destino, es un viaje.", author: "Anónimo" },
-    { text: "Cada día es una nueva oportunidad para comenzar de nuevo.", author: "Desconocido" },
-    { text: "La fuerza no viene de lo que puedes hacer. Viene de superar las cosas que creías que no podías hacer.", author: "Rikki Rogers" },
-    { text: "El primer paso no te lleva donde quieres ir, pero te saca de donde estás.", author: "Anónimo" }
-  ];
+  const allQuotes = [{
+    text: "Siempre es lo simple lo que produce lo maravilloso.",
+    author: "Amelia Barr"
+  }, {
+    text: "La confianza se construye con consistencia.",
+    author: "Lincoln Chafee"
+  }, {
+    text: "Un viaje de mil millas comienza con un solo paso.",
+    author: "Lao Tzu"
+  }, {
+    text: "La valentía no es la ausencia del miedo, sino el triunfo sobre él.",
+    author: "Nelson Mandela"
+  }, {
+    text: "El éxito es la suma de pequeños esfuerzos repetidos día tras día.",
+    author: "Robert Collier"
+  }, {
+    text: "No cuentes los días, haz que los días cuenten.",
+    author: "Muhammad Ali"
+  }, {
+    text: "La recuperación no es un destino, es un viaje.",
+    author: "Anónimo"
+  }, {
+    text: "Cada día es una nueva oportunidad para comenzar de nuevo.",
+    author: "Desconocido"
+  }, {
+    text: "La fuerza no viene de lo que puedes hacer. Viene de superar las cosas que creías que no podías hacer.",
+    author: "Rikki Rogers"
+  }, {
+    text: "El primer paso no te lleva donde quieres ir, pero te saca de donde estás.",
+    author: "Anónimo"
+  }];
 
   // Get quote of the day based on date
   const getQuoteOfTheDay = () => {
@@ -40,19 +59,8 @@ export default function Home() {
     const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
     return allQuotes[dayOfYear % allQuotes.length];
   };
-
   const dailyQuote = getQuoteOfTheDay();
-
-  const reflections = [
-    "¿Cómo puedes practicar la simplicidad en tu recuperación hoy? ¿Qué pequeña acción consistente puedes tomar para construir confianza contigo mismo y con los demás?",
-    "¿Qué obstáculo te está deteniendo hoy? ¿Cómo puedes transformarlo en una oportunidad de crecimiento?",
-    "¿Qué cosa pequeña puedes hacer hoy para cuidar mejor de ti mismo?",
-    "¿A quién puedes agradecer hoy por su apoyo en tu camino de recuperación?",
-    "¿Qué has aprendido sobre ti mismo en los últimos días? ¿Cómo puedes aplicar esa lección hoy?",
-    "¿Qué te hace sentir más fuerte en tu recuperación? ¿Cómo puedes incorporar más de eso en tu día?",
-    "¿Qué significa para ti el progreso hoy? ¿Cómo lo vas a medir?",
-    "¿Qué cosa puedes perdonarte hoy? ¿Qué paso puedes dar hacia adelante?"
-  ];
+  const reflections = ["¿Cómo puedes practicar la simplicidad en tu recuperación hoy? ¿Qué pequeña acción consistente puedes tomar para construir confianza contigo mismo y con los demás?", "¿Qué obstáculo te está deteniendo hoy? ¿Cómo puedes transformarlo en una oportunidad de crecimiento?", "¿Qué cosa pequeña puedes hacer hoy para cuidar mejor de ti mismo?", "¿A quién puedes agradecer hoy por su apoyo en tu camino de recuperación?", "¿Qué has aprendido sobre ti mismo en los últimos días? ¿Cómo puedes aplicar esa lección hoy?", "¿Qué te hace sentir más fuerte en tu recuperación? ¿Cómo puedes incorporar más de eso en tu día?", "¿Qué significa para ti el progreso hoy? ¿Cómo lo vas a medir?", "¿Qué cosa puedes perdonarte hoy? ¿Qué paso puedes dar hacia adelante?"];
 
   // Get reflection of the day based on date
   const getReflectionOfTheDay = () => {
@@ -72,23 +80,22 @@ export default function Home() {
   // Load completed instances from database
   const loadCompletedInstances = async (date: string): Promise<Set<string>> => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) return new Set();
-
-      const { data, error } = await supabase
-        .from('goal_completions')
-        .select('goal_id, instance_index')
-        .eq('user_id', user.id)
-        .eq('completion_date', date);
-
+      const {
+        data,
+        error
+      } = await supabase.from('goal_completions').select('goal_id, instance_index').eq('user_id', user.id).eq('completion_date', date);
       if (error) throw error;
-
       const completedSet = new Set<string>();
       data?.forEach(completion => {
         const instanceId = `${completion.goal_id}__${date}__${completion.instance_index}`;
         completedSet.add(instanceId);
       });
-
       return completedSet;
     } catch (error) {
       console.error('Error loading completions:', error);
@@ -99,28 +106,23 @@ export default function Home() {
   // Save completion to database
   const saveCompletion = async (goalId: string, instanceIndex: number, date: string, isCompleted: boolean) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) return;
-
       if (isCompleted) {
         // Add completion
-        await supabase
-          .from('goal_completions')
-          .insert({
-            user_id: user.id,
-            goal_id: goalId,
-            completion_date: date,
-            instance_index: instanceIndex
-          });
+        await supabase.from('goal_completions').insert({
+          user_id: user.id,
+          goal_id: goalId,
+          completion_date: date,
+          instance_index: instanceIndex
+        });
       } else {
         // Remove completion
-        await supabase
-          .from('goal_completions')
-          .delete()
-          .eq('user_id', user.id)
-          .eq('goal_id', goalId)
-          .eq('completion_date', date)
-          .eq('instance_index', instanceIndex);
+        await supabase.from('goal_completions').delete().eq('user_id', user.id).eq('goal_id', goalId).eq('completion_date', date).eq('instance_index', instanceIndex);
       }
       // Realtime will handle the update automatically
     } catch (error) {
@@ -128,22 +130,18 @@ export default function Home() {
       throw error;
     }
   };
-
   const toggleGoal = async (goalId: string) => {
     try {
       const goal = activeGoals.find(g => g.id === goalId);
       if (!goal) return;
-
       const todayStr = getLocalDateString();
       const wasCompleted = goal.status === 'completed';
 
       // Optimistically update UI immediately
-      const updatedGoals = activeGoals.map(g => 
-        g.id === goalId 
-          ? { ...g, status: wasCompleted ? 'pending' : 'completed' }
-          : g
-      );
-
+      const updatedGoals = activeGoals.map(g => g.id === goalId ? {
+        ...g,
+        status: wasCompleted ? 'pending' : 'completed'
+      } : g);
       setActiveGoals(updatedGoals);
 
       // Recalculate completed count
@@ -154,29 +152,28 @@ export default function Home() {
       await saveCompletion(goal.originalId, goal.instanceIndex, todayStr, !wasCompleted);
 
       // Update database: mark goal as completed only if ALL instances are done
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) return;
-
       const instancesOfThisGoal = updatedGoals.filter(g => g.originalId === goal.originalId);
       const completedInstancesOfGoal = instancesOfThisGoal.filter(g => g.status === 'completed').length;
       const allInstancesCompleted = completedInstancesOfGoal === instancesOfThisGoal.length;
-
-      await supabase
-        .from('goals')
-        .update({ completed: allInstancesCompleted })
-        .eq('id', goal.originalId)
-        .eq('user_id', user.id);
-
+      await supabase.from('goals').update({
+        completed: allInstancesCompleted
+      }).eq('id', goal.originalId).eq('user_id', user.id);
       toast({
         title: "Meta actualizada",
-        description: wasCompleted ? "Meta marcada como pendiente" : "¡Meta completada!",
+        description: wasCompleted ? "Meta marcada como pendiente" : "¡Meta completada!"
       });
     } catch (error: any) {
       console.error('Error in toggleGoal:', error);
       toast({
         title: "Error",
         description: "No se pudo actualizar la meta",
-        variant: "destructive",
+        variant: "destructive"
       });
       // Revert optimistic update on error
       const todayStr = getLocalDateString();
@@ -188,32 +185,28 @@ export default function Home() {
       setActiveGoals(revertedGoals);
     }
   };
-
   useEffect(() => {
     const fetchData = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) return;
 
       // Fetch profile
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('abstinence_start_date')
-        .eq('user_id', user.id)
-        .single();
-      
+      const {
+        data: profile
+      } = await supabase.from('profiles').select('abstinence_start_date').eq('user_id', user.id).single();
       if (profile?.abstinence_start_date) {
         setStartDate(new Date(profile.abstinence_start_date));
       }
 
       // Fetch today's check-in
       const today = new Date().toISOString().split('T')[0];
-      const { data: checkIn } = await supabase
-        .from('check_ins')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('check_in_date', today)
-        .maybeSingle();
-
+      const {
+        data: checkIn
+      } = await supabase.from('check_ins').select('*').eq('user_id', user.id).eq('check_in_date', today).maybeSingle();
       if (checkIn) {
         setCheckInCompleted(true);
         const reminder = checkIn.answers['3'];
@@ -221,24 +214,20 @@ export default function Home() {
       }
 
       // Fetch today's goals (including 'always' type)
-      const { data: goals, error: goalsError } = await supabase
-        .from('goals')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
+      const {
+        data: goals,
+        error: goalsError
+      } = await supabase.from('goals').select('*').eq('user_id', user.id).order('created_at', {
+        ascending: false
+      });
       if (goals && goals.length > 0) {
         // Filter goals that should appear today
-        const todayGoals = goals.filter(g => 
-          g.goal_type === 'today' || 
-          g.goal_type === 'week' || 
-          g.goal_type === 'always'
-        );
-        
+        const todayGoals = goals.filter(g => g.goal_type === 'today' || g.goal_type === 'week' || g.goal_type === 'always');
+
         // Load completed instances from database
         const todayStr = getLocalDateString();
         const completedInstances = await loadCompletedInstances(todayStr);
-        
+
         // Expand goals based on remaining count for TODAY's display
         const expandedGoals: any[] = [];
         todayGoals.forEach(g => {
@@ -254,13 +243,12 @@ export default function Home() {
             });
           }
         });
-        
+
         // Count completed instances
         const completedCount = expandedGoals.filter(g => g.status === 'completed').length;
-        
+
         // TODAY's total: all instances + check-in
         const totalTodayGoals = expandedGoals.length + 1;
-        
         setGoalsCompleted(completedCount + (checkIn ? 1 : 0));
         setTotalGoals(totalTodayGoals);
         setActiveGoals(expandedGoals);
@@ -272,78 +260,77 @@ export default function Home() {
       }
       setLoading(false);
     };
-
     fetchData();
 
     // Listen for abstinence date updates
     const handleDateUpdate = () => {
       const loadDate = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
+        const {
+          data: {
+            user
+          }
+        } = await supabase.auth.getUser();
         if (!user) return;
-
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('abstinence_start_date')
-          .eq('user_id', user.id)
-          .single();
-        
+        const {
+          data: profile
+        } = await supabase.from('profiles').select('abstinence_start_date').eq('user_id', user.id).single();
         if (profile?.abstinence_start_date) {
           setStartDate(new Date(profile.abstinence_start_date));
         }
       };
       loadDate();
     };
-
     window.addEventListener('abstinenceDateUpdated', handleDateUpdate);
 
     // Set up realtime subscription for goal completions
-    const channel = supabase
-      .channel('goal_completions_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'goal_completions'
-        },
-        async (payload) => {
-          // Only update if the change is from another device/session
-          const todayStr = getLocalDateString();
-          const completedInstances = await loadCompletedInstances(todayStr);
-          
-          // Update only the completion status without refetching everything
-          setActiveGoals(prev => prev.map(g => ({
-            ...g,
-            status: completedInstances.has(g.id) ? 'completed' : 'pending'
-          })));
-          
-          setGoalsCompleted(prev => {
-            const newCompleted = Array.from(completedInstances).filter(id => 
-              activeGoals.some(g => g.id === id)
-            ).length;
-            return newCompleted + (checkInCompleted ? 1 : 0);
-          });
-        }
-      )
-      .subscribe();
+    const channel = supabase.channel('goal_completions_changes').on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'goal_completions'
+    }, async payload => {
+      // Only update if the change is from another device/session
+      const todayStr = getLocalDateString();
+      const completedInstances = await loadCompletedInstances(todayStr);
 
+      // Update only the completion status without refetching everything
+      setActiveGoals(prev => prev.map(g => ({
+        ...g,
+        status: completedInstances.has(g.id) ? 'completed' : 'pending'
+      })));
+      setGoalsCompleted(prev => {
+        const newCompleted = Array.from(completedInstances).filter(id => activeGoals.some(g => g.id === id)).length;
+        return newCompleted + (checkInCompleted ? 1 : 0);
+      });
+    }).subscribe();
     return () => {
       window.removeEventListener('abstinenceDateUpdated', handleDateUpdate);
       supabase.removeChannel(channel);
     };
   }, []);
 
-
   // Quick tools - configurable
-  const quickTools = [
-    { emoji: "🌬️", label: "Respiración guiada", path: "/tools", color: "text-primary" },
-    { emoji: "📞", label: "Contacto de apoyo", path: "/message", color: "text-accent" },
-    { emoji: "📔", label: "Diario", path: "/journal", color: "text-primary" },
-    { emoji: "🚨", label: "Plan de emergencia", path: "/tools", color: "text-destructive" },
-  ];
-
-  return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+  const quickTools = [{
+    emoji: "🌬️",
+    label: "Respiración guiada",
+    path: "/tools",
+    color: "text-primary"
+  }, {
+    emoji: "📞",
+    label: "Contacto de apoyo",
+    path: "/message",
+    color: "text-accent"
+  }, {
+    emoji: "📔",
+    label: "Diario",
+    path: "/journal",
+    color: "text-primary"
+  }, {
+    emoji: "🚨",
+    label: "Plan de emergencia",
+    path: "/tools",
+    color: "text-destructive"
+  }];
+  return <div className="space-y-6 animate-in fade-in duration-500">
       {/* Header - Abstinence Counter */}
       <AbstinenceCounter startDate={startDate} />
 
@@ -356,7 +343,7 @@ export default function Home() {
           {/* Goals Progress Bar */}
           <div className="space-y-2">
             <div className="flex justify-between items-center mb-2">
-              <p className="text-sm font-medium text-muted-foreground">Metas completadas hoy</p>
+              <p className="text-sm font-medium text-muted-foreground">Metas completadas hoy:</p>
               <p className="text-sm font-bold text-green-500">{goalsCompleted} de {totalGoals}</p>
             </div>
             <Progress value={goalsProgress} className="h-3 [&>div]:bg-green-500" />
@@ -366,11 +353,7 @@ export default function Home() {
           <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
             <div className="flex items-center gap-3">
               <button className="flex-shrink-0 cursor-default">
-                {checkInCompleted ? (
-                  <CheckCircle2 className="h-6 w-6 text-green-500" />
-                ) : (
-                  <Circle className="h-6 w-6 text-muted-foreground" />
-                )}
+                {checkInCompleted ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
               </button>
               <div>
                 <p className="font-semibold text-foreground">Check-In Diario</p>
@@ -379,26 +362,20 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            {checkInCompleted ? (
-              <Link to="/checkin">
+            {checkInCompleted ? <Link to="/checkin">
                 <Button size="sm" variant="outline" className="rounded-xl">Editar</Button>
-              </Link>
-            ) : (
-              <Link to="/checkin">
+              </Link> : <Link to="/checkin">
                 <Button size="sm" className="rounded-xl">Registrar</Button>
-              </Link>
-            )}
+              </Link>}
           </div>
 
           {/* Today's Reminder */}
-          {checkInCompleted && todayReminder && (
-            <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
+          {checkInCompleted && todayReminder && <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Hoy elijo recordarme que:</p>
                 <p className="text-lg font-semibold text-green-500">{todayReminder}</p>
               </div>
-            </div>
-          )}
+            </div>}
         </CardContent>
       </Card>
 
@@ -411,8 +388,7 @@ export default function Home() {
           </Link>
         </CardHeader>
         <CardContent>
-          {activeGoals.length === 0 ? (
-            <div className="text-center py-8">
+          {activeGoals.length === 0 ? <div className="text-center py-8">
               <p className="text-muted-foreground mb-4">No tienes metas activas aún</p>
               <Link to="/plan">
                 <Button className="rounded-xl">
@@ -420,24 +396,11 @@ export default function Home() {
                   Añadir meta
                 </Button>
               </Link>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {activeGoals.map((goal) => (
-                <div
-                  key={goal.id}
-                  className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50"
-                >
+            </div> : <div className="space-y-3">
+              {activeGoals.map(goal => <div key={goal.id} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
                   <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => toggleGoal(goal.id)}
-                      className="flex-shrink-0"
-                    >
-                      {goal.status === "completed" ? (
-                        <CheckCircle2 className="h-6 w-6 text-green-500" />
-                      ) : (
-                        <Circle className="h-6 w-6 text-muted-foreground" />
-                      )}
+                    <button onClick={() => toggleGoal(goal.id)} className="flex-shrink-0">
+                      {goal.status === "completed" ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
                     </button>
                     <div>
                       <p className="font-semibold text-foreground">
@@ -448,10 +411,8 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
+                </div>)}
+            </div>}
         </CardContent>
       </Card>
 
@@ -484,9 +445,8 @@ export default function Home() {
       <div>
         <h2 className="text-2xl font-bold mb-4 text-foreground">Herramientas Rápidas</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {quickTools.map((tool) => {
-            return (
-              <Link key={tool.label} to={tool.path}>
+          {quickTools.map(tool => {
+          return <Link key={tool.label} to={tool.path}>
                 <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-border/50 h-full">
                   <CardContent className="p-5 text-center space-y-3">
                     <div className={`mx-auto w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center ${tool.color}`}>
@@ -495,11 +455,9 @@ export default function Home() {
                     <p className="font-semibold text-foreground text-xs leading-tight">{tool.label}</p>
                   </CardContent>
                 </Card>
-              </Link>
-            );
-          })}
+              </Link>;
+        })}
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
