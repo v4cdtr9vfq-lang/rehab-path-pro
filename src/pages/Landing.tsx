@@ -51,7 +51,7 @@ export default function Landing() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              <span className="inline-flex items-center gap-2 relative -left-1 top-0.5">
+              <span className="inline-flex items-center gap-1 relative -left-1 top-0.5">
                 <Heart className="h-5 w-5 md:h-6 md:w-6 text-primary flex-shrink-0" />
                 <span className="font-bold">rehabp.org</span>
               </span> te acompaña en cada paso de tu proceso de crecimiento con herramientas diseñadas para mantenerte motivado y enfocado.
@@ -77,7 +77,7 @@ export default function Landing() {
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 inline-flex items-center justify-center flex-wrap">
               <span className="mr-3">¿Por qué</span>
-              <span className="inline-flex items-center gap-2">
+              <span className="inline-flex items-center gap-1">
                 <Heart className="h-10 w-10 text-primary" />
                 <span>rehabp.org?</span>
               </span>
