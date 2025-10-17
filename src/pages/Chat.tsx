@@ -515,15 +515,15 @@ export default function Chat() {
           <ScrollArea className="h-full">
             <div className="space-y-4 p-4">
               {messages.map((msg) => {
-                const isAnonymousMessage = msg.user_name.startsWith('Anónimo');
                 const isOwnMessage = msg.user_id === userId;
+                const isAnonymousOwnMessage = isOwnMessage && msg.user_name.startsWith('Anónimo');
                 const isEditing = editingMessageId === msg.id;
                 const isReported = reportedMessages.has(msg.id);
                 
                 return (
                   <div
                     key={msg.id}
-                    className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-6 group`}
+                    className={`flex ${(isOwnMessage && !isAnonymousOwnMessage) ? 'justify-end' : 'justify-start'} mb-6 group`}
                   >
                     {isEditing ? (
                       <div className="w-full max-w-[70%] space-y-2">
@@ -543,8 +543,8 @@ export default function Chat() {
                       </div>
                     ) : (
                       <>
-                        {isOwnMessage ? (
-                          // Own messages: message full width - avatar (top) - options (below avatar) on the right
+                        {(isOwnMessage && !isAnonymousOwnMessage) ? (
+                          // Own non-anonymous messages: message full width - avatar (top) - options (below avatar) on the right
                           <div className="flex items-start gap-3 w-full pr-[15px]">
                             <div className="flex flex-col items-end gap-1 flex-1">
                               <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white max-w-full">
@@ -589,7 +589,7 @@ export default function Chat() {
                             </div>
                           </div>
                         ) : (
-                          // Other messages: avatar (top) - flag (below avatar) - message full width
+                          // Other messages or anonymous own messages: avatar (top) - action button (below avatar) - message full width
                           <div className="flex items-start gap-3 w-full pl-[15px]">
                             <div className="flex flex-col items-center gap-2 flex-shrink-0">
                               <Avatar className="h-11 w-11">
@@ -598,15 +598,39 @@ export default function Chat() {
                                 </AvatarFallback>
                               </Avatar>
                               
-                              <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                onClick={() => toggleReport(msg.id)}
-                                className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity"
-                                title={myReports.has(msg.id) ? "Quitar denuncia" : "Denunciar"}
-                              >
-                                <Flag className={`h-4 w-4 ${myReports.has(msg.id) ? 'fill-red-500' : ''} text-red-500`} />
-                              </Button>
+                              {isAnonymousOwnMessage ? (
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button 
+                                      variant="ghost" 
+                                      size="icon" 
+                                      className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                      <MoreVertical className="h-4 w-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="start" className="bg-popover z-[100]">
+                                    <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
+                                      <Edit2 className="h-4 w-4 mr-2" />
+                                      Editar
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => deleteMessage(msg.id)} className="text-destructive">
+                                      <Trash2 className="h-4 w-4 mr-2" />
+                                      Eliminar
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              ) : (
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  onClick={() => toggleReport(msg.id)}
+                                  className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity"
+                                  title={myReports.has(msg.id) ? "Quitar denuncia" : "Denunciar"}
+                                >
+                                  <Flag className={`h-4 w-4 ${myReports.has(msg.id) ? 'fill-red-500' : ''} text-red-500`} />
+                                </Button>
+                              )}
                             </div>
 
                             <div className="flex flex-col gap-1 flex-1">
