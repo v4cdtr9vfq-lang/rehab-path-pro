@@ -584,7 +584,11 @@ export default function ProgressPage() {
                   <BarChart data={weeklyChartData}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                     <XAxis dataKey="name" className="text-xs" />
-                    <YAxis className="text-xs" domain={[0, 100]} />
+                    <YAxis 
+                      className="text-xs" 
+                      domain={[0, 100]} 
+                      tickFormatter={(value) => `${value}%`}
+                    />
                     <Tooltip 
                       contentStyle={{ 
                         backgroundColor: 'hsl(var(--background))', 
@@ -613,7 +617,11 @@ export default function ProgressPage() {
                   <BarChart data={monthlyChartData}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                     <XAxis dataKey="name" className="text-xs" />
-                    <YAxis className="text-xs" domain={[0, 100]} />
+                    <YAxis 
+                      className="text-xs" 
+                      domain={[0, 100]} 
+                      tickFormatter={(value) => `${value}%`}
+                    />
                     <Tooltip 
                       contentStyle={{ 
                         backgroundColor: 'hsl(var(--background))', 
@@ -642,7 +650,11 @@ export default function ProgressPage() {
                   <BarChart data={yearlyChartData}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                     <XAxis dataKey="name" className="text-xs" />
-                    <YAxis className="text-xs" domain={[0, 100]} />
+                    <YAxis 
+                      className="text-xs" 
+                      domain={[0, 100]} 
+                      tickFormatter={(value) => `${value}%`}
+                    />
                     <Tooltip 
                       contentStyle={{ 
                         backgroundColor: 'hsl(var(--background))', 
