@@ -384,7 +384,7 @@ export default function CheckIn() {
                   {question.id === 8 && answers[8] === "yes" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                       <Label htmlFor="limiting-description" className="text-sm font-medium text-foreground">
-                        Qué te gustaría cambiar y por qué crees que te cuenta:
+                        Qué te gustaría cambiar y por qué crees que te cuesta:
                       </Label>
                       <Textarea
                         id="limiting-description"
