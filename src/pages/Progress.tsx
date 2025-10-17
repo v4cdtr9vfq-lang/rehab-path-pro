@@ -412,9 +412,9 @@ export default function ProgressPage() {
     <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
       <div className="flex justify-between items-center mb-2">
         <span className="text-sm font-semibold text-foreground">{goal.text}</span>
-        <span className={`text-sm font-bold ${goal.percentage === 100 ? 'text-green-500' : 'text-primary'}`}>{goal.percentage}%</span>
+        <span className={`text-sm font-bold ${goal.percentage === 100 ? 'text-green-500' : 'text-sky-blue'}`}>{goal.percentage}%</span>
       </div>
-      <Progress value={goal.percentage} className={`h-2.5 ${goal.percentage === 100 ? '[&>div]:bg-green-500' : '[&>div]:bg-primary'}`} />
+      <Progress value={goal.percentage} className={`h-2.5 ${goal.percentage === 100 ? '[&>div]:bg-green-500' : '[&>div]:bg-sky-blue'}`} />
       <div className="flex justify-between items-center mt-1">
         <span className="text-xs text-muted-foreground">
           {goal.completed} de {goal.total} completadas
@@ -428,7 +428,7 @@ export default function ProgressPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+      <Card className="border-sky-blue/40 bg-gradient-to-br from-sky-blue/15 to-sky-blue/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             <span className="text-2xl">📈</span>
@@ -439,8 +439,8 @@ export default function ProgressPage() {
         </CardHeader>
         <CardContent>
           <div className="text-center mb-6">
-            <div className={`inline-flex items-center justify-center w-40 h-40 rounded-full border-8 ${overallProgress === 100 ? 'border-green-500/30 bg-green-500/5' : 'border-primary/20 bg-card'} transition-colors duration-500`}>
-              <span className={`text-4xl font-bold ${overallProgress === 100 ? 'text-green-500' : 'text-primary'} transition-colors duration-500`}>{overallProgress}%</span>
+            <div className={`inline-flex items-center justify-center w-40 h-40 rounded-full border-8 ${overallProgress === 100 ? 'border-green-500/30 bg-green-500/5' : 'border-sky-blue/30 bg-sky-blue/10'} transition-colors duration-500`}>
+              <span className={`text-4xl font-bold ${overallProgress === 100 ? 'text-green-500' : 'text-sky-blue'} transition-colors duration-500`}>{overallProgress}%</span>
             </div>
             <p className="text-sm text-muted-foreground mt-4">Completitud Total de Metas</p>
           </div>
