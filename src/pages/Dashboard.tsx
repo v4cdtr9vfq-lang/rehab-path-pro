@@ -697,7 +697,10 @@ export default function Home() {
               Escribir
             </Button>
           </Link>
-          <h3 className="font-semibold text-foreground mb-3">💡 Reflexión del día</h3>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-2xl">💡</span>
+            <h3 className="font-semibold text-foreground">Reflexión del día</h3>
+          </div>
           <p className="text-foreground/80 pr-20">
             {getReflectionOfTheDay()}
           </p>
