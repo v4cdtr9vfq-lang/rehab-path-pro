@@ -125,9 +125,14 @@ export function Footer() {
             </div>
           </div>
           
-          <p className="text-sm text-muted-foreground text-center md:text-right">
+          <a 
+            href="https://neurotropy.com/" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white font-bold hover:text-white/80 transition-colors text-center md:text-right block"
+          >
             {new Date().getFullYear()} © Neurotropy™.
-          </p>
+          </a>
         </div>
       </div>
     </footer>
