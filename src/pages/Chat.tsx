@@ -457,24 +457,26 @@ export default function Chat() {
               }}>
                 <SelectTrigger className="w-full bg-black text-white">
                   <SelectValue>
-                    {CHAT_ROOMS.find(room => room.id === currentRoom)?.label}
-                    <Badge 
-                      variant="secondary" 
-                      className="ml-2 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5"
-                    >
-                      <Users className="h-3 w-3" />
-                      {onlineCountByRoom[currentRoom] || 0}
-                    </Badge>
+                    <span className="flex items-center justify-between w-full">
+                      {CHAT_ROOMS.find(room => room.id === currentRoom)?.label}
+                      <Badge 
+                        variant="secondary" 
+                        className="ml-auto inline-flex gap-1 text-xs px-1.5 py-0.5 h-5"
+                      >
+                        <Users className="h-3 w-3" />
+                        {onlineCountByRoom[currentRoom] || 0}
+                      </Badge>
+                    </span>
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="bg-popover z-[100]">
                   {CHAT_ROOMS.map((room) => (
                     <SelectItem key={room.id} value={room.id}>
-                      <span className="flex items-center gap-2">
+                      <span className="flex items-center justify-between w-full gap-4">
                         {room.label}
                         <Badge 
                           variant="secondary" 
-                          className="inline-flex gap-1 text-xs px-1.5 py-0.5 h-5"
+                          className="ml-auto inline-flex gap-1 text-xs px-1.5 py-0.5 h-5"
                         >
                           <Users className="h-3 w-3" />
                           {onlineCountByRoom[room.id] || 0}
@@ -493,7 +495,7 @@ export default function Chat() {
                       value={room.id} 
                       className="text-xs sm:text-sm whitespace-nowrap data-[state=active]:text-[#FF7A5C] px-2 relative"
                     >
-                      <span className="flex items-center gap-1.5">
+                      <span className="flex items-center justify-between gap-2 w-full">
                         {room.label}
                         <Badge 
                           variant="secondary" 
