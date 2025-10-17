@@ -233,28 +233,43 @@ export default function Home() {
   };
 
     fetchData();
+
+    // Set up realtime subscription for goal completions
+    const channel = supabase
+      .channel('goal_completions_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'goal_completions'
+        },
+        async (payload) => {
+          console.log('Goal completion change detected:', payload);
+          // Reload goals when changes are detected
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            const todayStr = getLocalDateString();
+            const completedInstances = await loadCompletedInstances(todayStr);
+            
+            const updatedGoals = activeGoals.map(g => ({
+              ...g,
+              status: completedInstances.has(g.id) ? 'completed' : 'pending'
+            }));
+            
+            setActiveGoals(updatedGoals);
+            const completedCount = updatedGoals.filter(g => g.status === 'completed').length;
+            setGoalsCompleted(completedCount + (checkInCompleted ? 1 : 0));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
-  // Listen for goal updates from other components and force refresh
-  useEffect(() => {
-    const handleGoalsUpdate = async () => {
-      // Force reload of activeGoals from database
-      const todayStr = getLocalDateString();
-      const completedInstances = await loadCompletedInstances(todayStr);
-      
-      const updatedGoals = activeGoals.map(g => ({
-        ...g,
-        status: completedInstances.has(g.id) ? 'completed' : 'pending'
-      }));
-      setActiveGoals(updatedGoals);
-      
-      const completedCount = updatedGoals.filter(g => g.status === 'completed').length;
-      setGoalsCompleted(completedCount + (checkInCompleted ? 1 : 0));
-    };
-
-    window.addEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
-    return () => window.removeEventListener('goalsUpdated', handleGoalsUpdate as EventListener);
-  }, [activeGoals, checkInCompleted]);
 
   // Quick tools - configurable
   const quickTools = [
