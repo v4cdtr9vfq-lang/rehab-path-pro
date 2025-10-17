@@ -28,9 +28,9 @@ export default function TrialEnded() {
         </div>
 
         {/* Plans */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-6 items-stretch">
           {/* Monthly Plan */}
-          <Card className="border-primary/20 hover:border-primary/40 transition-all">
+          <Card className="border-primary/20 hover:border-primary/40 transition-all flex flex-col">
             <CardHeader>
               <CardTitle className="text-2xl">Plan Mensual</CardTitle>
               <div className="mt-4">
@@ -38,8 +38,8 @@ export default function TrialEnded() {
                 <span className="text-muted-foreground">/mes</span>
               </div>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <ul className="space-y-3">
+            <CardContent className="space-y-6 flex-1 flex flex-col">
+              <ul className="space-y-3 flex-1">
                 <li className="flex items-center gap-2">
                   <Check className="h-5 w-5 text-primary flex-shrink-0" />
                   <span>Acceso completo a todas las funciones.</span>
@@ -64,7 +64,7 @@ export default function TrialEnded() {
           </Card>
 
           {/* Annual Plan */}
-          <Card className="border-primary bg-primary/5 hover:border-primary/60 transition-all relative">
+          <Card className="border-primary bg-primary/5 hover:border-primary/60 transition-all relative flex flex-col">
             <div className="absolute -top-3 right-4 bg-primary text-primary-foreground text-sm px-3 py-1 rounded-full font-semibold">
               Ahorra 50%
             </div>
@@ -76,8 +76,8 @@ export default function TrialEnded() {
               </div>
               <p className="text-sm text-muted-foreground">Solo 2.5€/mes</p>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <ul className="space-y-3">
+            <CardContent className="space-y-6 flex-1 flex flex-col">
+              <ul className="space-y-3 flex-1">
                 <li className="flex items-center gap-2">
                   <Check className="h-5 w-5 text-primary flex-shrink-0" />
                   <span>Todo lo del plan mensual.</span>
