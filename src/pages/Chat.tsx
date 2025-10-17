@@ -550,7 +550,7 @@ export default function Chat() {
                           // Own non-anonymous messages: message full width - avatar (top) - options (below avatar) on the right
                           <div className="flex items-start gap-3 w-full pr-[15px]">
                             <div className="flex flex-col items-end gap-1 flex-1">
-                              <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white max-w-full">
+                              <div className="rounded-[18px] px-6 py-3 bg-[#FF7A5C] text-white max-w-full">
                                 <p className="text-xs">{msg.message}</p>
                               </div>
                               <span className="text-[10px] text-muted-foreground pr-6">
@@ -640,7 +640,7 @@ export default function Chat() {
                               <span className="text-xs text-muted-foreground pl-6">
                                 {getFirstName(msg.user_name)}
                               </span>
-                              <div className={`rounded-[28px] px-6 py-3 max-w-full ${
+                              <div className={`rounded-[18px] px-6 py-3 max-w-full ${
                                 isReported 
                                   ? 'bg-background border-2 border-red-500' 
                                   : 'bg-muted/70 text-foreground'
