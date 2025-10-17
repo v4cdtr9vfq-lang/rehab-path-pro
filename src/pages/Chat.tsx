@@ -455,13 +455,13 @@ export default function Chat() {
                 setCurrentRoom(value);
                 localStorage.setItem('chat_last_room_mobile', value);
               }}>
-                <SelectTrigger className="w-full bg-black text-white flex items-center justify-between">
-                  <span className="flex-1 text-left">
+                <SelectTrigger className="w-full bg-black text-white flex items-center justify-between pr-12">
+                  <span className="flex-1 text-left pl-2">
                     {CHAT_ROOMS.find(room => room.id === currentRoom)?.label}
                   </span>
                   <Badge 
                     variant="secondary" 
-                    className="ml-2 flex-shrink-0 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5"
+                    className="mr-2 flex-shrink-0 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 absolute right-8"
                   >
                     <Users className="h-3 w-3" />
                     {onlineCountByRoom[currentRoom] || 0}
@@ -469,12 +469,12 @@ export default function Chat() {
                 </SelectTrigger>
                 <SelectContent className="bg-popover z-[100]">
                   {CHAT_ROOMS.map((room) => (
-                    <SelectItem key={room.id} value={room.id} className="cursor-pointer pr-4">
+                    <SelectItem key={room.id} value={room.id} className="cursor-pointer pr-14">
                       <span className="flex items-center justify-between w-full">
-                        <span>{room.label}</span>
+                        <span className="pl-2">{room.label}</span>
                         <Badge 
                           variant="secondary" 
-                          className="ml-auto inline-flex gap-1 text-xs px-1.5 py-0.5 h-5"
+                          className="absolute right-8 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5"
                         >
                           <Users className="h-3 w-3" />
                           {onlineCountByRoom[room.id] || 0}
