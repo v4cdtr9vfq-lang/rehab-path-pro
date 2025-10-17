@@ -458,8 +458,8 @@ export default function Chat() {
                 setCurrentRoom(value);
                 localStorage.setItem('chat_last_room_mobile', value);
               }}>
-                <SelectTrigger className="w-full bg-muted/50 border-border flex items-center pr-[15px] pl-3 relative [&>svg]:ml-[15px]">
-                  <span className="flex-1 text-left">
+                <SelectTrigger className="w-full bg-muted text-foreground border-border flex items-center pr-[15px] pl-3 relative [&>svg]:ml-[15px]">
+                  <span className="flex-1 text-left text-black dark:text-white font-medium">
                     {CHAT_ROOMS.find(room => room.id === currentRoom)?.label}
                   </span>
                   <Badge 
@@ -489,12 +489,12 @@ export default function Chat() {
               </Select>
             ) : (
               <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="w-full">
-                <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-muted/50 border border-border p-[15px] text-muted-foreground w-full flex-wrap gap-1">
+                <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-muted border border-border p-[15px] w-full flex-wrap gap-1">
                   {CHAT_ROOMS.map((room, index) => (
                     <TabsTrigger 
                       key={room.id} 
                       value={room.id} 
-                      className="text-xs sm:text-sm whitespace-nowrap data-[state=active]:text-[#FF7A5C] px-2 relative"
+                      className="text-xs sm:text-sm whitespace-nowrap text-black dark:text-white data-[state=active]:text-[#FF7A5C] px-2 relative"
                     >
                       <span className="flex items-center justify-between gap-2 w-full">
                         {room.label}
@@ -667,7 +667,7 @@ export default function Chat() {
           </ScrollArea>
         </div>
 
-        <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-muted/30 shrink-0">
+        <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-black shrink-0">
           {isMobile ? (
             <div className="flex flex-col gap-2.5">
               <Textarea
