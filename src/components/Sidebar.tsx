@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Home, Target, Bell, TrendingUp, Heart, ListChecks, MessageSquare, BookOpen, Smile, Wrench, Settings, Menu, LogOut, MessageCircle, ClipboardCheck } from "lucide-react";
+import { Home, Target, Bell, TrendingUp, Heart, ListChecks, MessageSquare, BookOpen, Smile, Wrench, Settings, Menu, LogOut, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
@@ -10,10 +10,6 @@ const menuItems = [{
   icon: Home,
   label: "Mi centro",
   path: "/dashboard"
-}, {
-  icon: ClipboardCheck,
-  label: "Check in Diario",
-  path: "/checkin"
 }, {
   icon: Target,
   label: "Mi Plan",
@@ -91,7 +87,9 @@ export function Sidebar() {
       <nav className="flex flex-col gap-1.5 px-5 flex-1 overflow-y-auto">
         {menuItems.map(item => {
         const Icon = item.icon;
-        const isActive = location.pathname === item.path;
+        // "Mi centro" también incluye /checkin
+        const isActive = location.pathname === item.path || 
+                        (item.path === '/dashboard' && location.pathname === '/checkin');
         const isChat = item.path === '/chat';
         return <Link key={item.path} to={item.path} onClick={() => setOpen(false)} className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all ${isActive ? "bg-primary text-primary-foreground font-semibold shadow-lg" : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"}`}>
               <Icon className="h-4 w-4 flex-shrink-0" />
