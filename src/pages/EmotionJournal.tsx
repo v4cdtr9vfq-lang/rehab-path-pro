@@ -126,11 +126,6 @@ const emotionCategories: PrimaryCategory[] = [
     name: "Desconectado",
     secondaryEmotions: [
       {
-        id: "descansado",
-        name: "Descansado",
-        tertiaryEmotions: ["Descansado", "Renovado", "Restaurado", "Revitalizado", "Revivido"]
-      },
-      {
         id: "desconectado",
         name: "Desconectado",
         tertiaryEmotions: ["Aburrido", "Adormecido", "Alejado", "Alienado", "Apático", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído"]
@@ -145,6 +140,11 @@ const emotionCategories: PrimaryCategory[] = [
         id: "alegre",
         name: "Alegre",
         tertiaryEmotions: ["Alegre", "Complacido", "Contento", "Divertido", "Encantado", "Feliz", "Jubiloso"]
+      },
+      {
+        id: "descansado",
+        name: "Descansado",
+        tertiaryEmotions: ["Descansado", "Renovado", "Restaurado", "Revitalizado", "Revivido"]
       },
       {
         id: "entusiasmado",
