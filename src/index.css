@@ -58,6 +58,59 @@ All colors MUST be HSL.
     --sidebar-border: 0 0% 18%;
     --sidebar-ring: 12 100% 65%;
   }
+
+  /* Light theme - Apple inspired minimalist design */
+  .light {
+    --background: 0 0% 98%;
+    --foreground: 0 0% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+
+    --primary: 12 100% 65%;
+    --primary-foreground: 0 0% 100%;
+    
+    --primary-glow: 12 100% 70%;
+
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 10%;
+
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 12 100% 65%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 12 100% 65%;
+
+    --radius: 1.25rem;
+    
+    --gradient-primary: linear-gradient(135deg, hsl(12 100% 65%), hsl(25 100% 60%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%));
+    --gradient-card: linear-gradient(135deg, hsl(12 95% 60%), hsl(25 95% 55%));
+    
+    --shadow-soft: 0 2px 8px hsl(0 0% 0% / 0.08);
+    --shadow-medium: 0 4px 16px hsl(0 0% 0% / 0.12);
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 12 100% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 95%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 12 100% 65%;
+  }
 }
 
 @layer base {
