@@ -78,7 +78,7 @@ export function Sidebar() {
           <Heart className="h-6 w-6 text-primary" />
           <h1 className="text-2xl font-bold text-sidebar-foreground tracking-tight">rehabp.org</h1>
         </div>
-        <p className="text-xs text-sidebar-foreground/60 mt-1">Asistencia en tu rehabilitación.</p>
+        <p className="text-xs text-sidebar-foreground/60 mt-1">Asistente en procesos de rehabilitación.</p>
       </Link>
       
       <nav className="flex flex-col gap-1.5 px-5 flex-1 overflow-y-auto">
