@@ -451,7 +451,7 @@ export default function Chat() {
           </CardHeader>
           <div className="px-4 pb-3">
             <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="w-full">
-              <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-background p-[15px] text-muted-foreground w-full flex-wrap gap-1">
+              <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-black p-[15px] text-muted-foreground w-full flex-wrap gap-1">
                 {CHAT_ROOMS.map((room, index) => (
                   <TabsTrigger 
                     key={room.id} 
@@ -602,7 +602,7 @@ export default function Chat() {
           </ScrollArea>
         </div>
 
-        <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-card shrink-0">
+        <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-black shrink-0">
           <div className="flex gap-2 items-start">
             <Textarea
               value={newMessage}
