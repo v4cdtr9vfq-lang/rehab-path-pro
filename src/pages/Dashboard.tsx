@@ -748,6 +748,29 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Daily Motivational Message */}
+      <Card className="border-sky-blue/30 bg-gradient-to-br from-sky-blue/10 to-transparent relative">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleSaveQuote}
+          className="absolute top-4 right-4 h-10 w-10 z-10"
+        >
+          <Star className={`h-5 w-5 ${isQuoteSaved ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`} />
+        </Button>
+        <CardContent className="p-6 pt-12">
+          <p className="text-center text-foreground text-xl font-medium leading-relaxed mb-2">
+            "{dailyQuote.text}"
+          </p>
+          <p className="text-center text-muted-foreground text-sm">— {dailyQuote.author}</p>
+          <div className="flex justify-center mt-4">
+            <Link to="/message">
+              <Button variant="ghost" size="sm" className="text-primary text-xs">Ver mensajes guardados.</Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Medals Widget */}
       <div>
         <h2 className="text-2xl font-bold mb-4 text-foreground">Mis medallas</h2>
@@ -775,29 +798,6 @@ export default function Home() {
           })}
         </div>
       </div>
-
-      {/* Daily Motivational Message */}
-      <Card className="border-sky-blue/30 bg-gradient-to-br from-sky-blue/10 to-transparent relative">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleSaveQuote}
-          className="absolute top-4 right-4 h-10 w-10 z-10"
-        >
-          <Star className={`h-5 w-5 ${isQuoteSaved ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`} />
-        </Button>
-        <CardContent className="p-6 pt-12">
-          <p className="text-center text-foreground text-xl font-medium leading-relaxed mb-2">
-            "{dailyQuote.text}"
-          </p>
-          <p className="text-center text-muted-foreground text-sm">— {dailyQuote.author}</p>
-          <div className="flex justify-center mt-4">
-            <Link to="/message">
-              <Button variant="ghost" size="sm" className="text-primary text-xs">Ver mensajes guardados.</Button>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Medal Unlock Popup */}
       <AlertDialog open={showMedalPopup} onOpenChange={setShowMedalPopup}>
