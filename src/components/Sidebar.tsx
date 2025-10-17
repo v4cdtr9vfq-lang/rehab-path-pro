@@ -78,7 +78,7 @@ export function Sidebar() {
   };
   const SidebarContent = () => <div className="flex flex-col h-full">
       <Link to="/dashboard" className="mb-5 px-6 pt-5 block hover:opacity-80 transition-opacity" onClick={() => setOpen(false)}>
-        <h1 className="text-2xl font-bold text-sidebar-foreground tracking-tight">Rehapp</h1>
+        <h1 className="text-2xl font-bold text-sidebar-foreground tracking-tight">rehabp.org</h1>
         <p className="text-xs text-sidebar-foreground/60 mt-1">Tu Asistene en la recuperación.</p>
       </Link>
       
@@ -113,7 +113,7 @@ export function Sidebar() {
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-card backdrop-blur-sm border-b border-border">
         <div className="flex items-center justify-between p-4">
           <Link to="/dashboard" onClick={() => setOpen(false)}>
-            <h1 className="text-xl font-bold text-primary">Rehapp</h1>
+            <h1 className="text-xl font-bold text-primary">rehabp.org</h1>
           </Link>
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>

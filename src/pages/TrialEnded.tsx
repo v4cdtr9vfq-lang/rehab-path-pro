@@ -22,7 +22,7 @@ export default function TrialEnded() {
           </div>
           <h1 className="text-4xl font-bold">Tu periodo de prueba ha terminado</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Gracias por usar Rehapp durante estos 30 días. Para continuar disfrutando de todas las funciones, 
+            Gracias por usar rehabp.org durante estos 30 días. Para continuar disfrutando de todas las funciones, 
             actualiza tu plan ahora.
           </p>
         </div>

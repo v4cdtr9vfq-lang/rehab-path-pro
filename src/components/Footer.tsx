@@ -10,7 +10,7 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <Heart className="h-6 w-6 text-primary" />
-              <h3 className="text-lg font-bold text-foreground">Rehapp</h3>
+              <h3 className="text-lg font-bold text-foreground">rehabp.org</h3>
             </div>
             <p className="text-sm text-muted-foreground">
               Tu compañero en el camino hacia la recuperación y el bienestar.
@@ -91,7 +91,7 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="mailto:info@rehapp.com" className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">
+                <a href="mailto:info@rehabp.org" className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">
                   <Mail className="h-3 w-3" />
                   Contacto
                 </a>
@@ -103,7 +103,7 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground text-center md:text-left">
-            © {new Date().getFullYear()} Rehapp. Todos los derechos reservados.
+            © {new Date().getFullYear()} rehabp.org. Todos los derechos reservados.
           </p>
           
           {/* Contact Email */}
