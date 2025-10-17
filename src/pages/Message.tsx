@@ -282,7 +282,7 @@ export default function Message() {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Send className="h-6 w-6 text-primary" />
-            <CardTitle className="text-xl">Propón una Frase a la Comunidad</CardTitle>
+            <CardTitle className="text-xl">Propón una frase a la Comunidad</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
