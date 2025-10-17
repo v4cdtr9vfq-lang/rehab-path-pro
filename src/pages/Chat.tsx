@@ -603,15 +603,16 @@ export default function Chat() {
         </div>
 
         <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-card shrink-0">
-          <div className="flex gap-2">
-            <Input
+          <div className="flex gap-2 items-start">
+            <Textarea
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Escribe un mensaje..."
-              className="flex-1 pl-4"
+              className="flex-1 pl-4 resize-none min-h-[44px] max-h-[44px]"
               disabled={isSending}
+              rows={2}
             />
-            <Button type="submit" disabled={!newMessage.trim() || isSending} className="gap-2">
+            <Button type="submit" disabled={!newMessage.trim() || isSending} className="gap-2 h-[44px]">
               <Send className="h-4 w-4" />
               Enviar
             </Button>
