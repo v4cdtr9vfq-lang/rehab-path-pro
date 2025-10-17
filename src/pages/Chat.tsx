@@ -443,14 +443,14 @@ export default function Chat() {
               <CardTitle>Chat en vivo</CardTitle>
             </div>
           </CardHeader>
-          <div className="px-3 pb-3">
+          <div className="px-6 pb-3">
             <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="w-full">
-              <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-background p-1 text-muted-foreground w-full flex-wrap gap-0.5">
+              <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-background p-1 text-muted-foreground w-full flex-wrap gap-2">
                 {CHAT_ROOMS.map((room, index) => (
                   <TabsTrigger 
                     key={room.id} 
                     value={room.id} 
-                    className="text-xs sm:text-sm whitespace-nowrap data-[state=active]:text-[#FF7A5C] px-1.5 relative"
+                    className="text-xs sm:text-sm whitespace-nowrap data-[state=active]:text-[#FF7A5C] px-3 relative"
                   >
                     <span className="flex items-center gap-1.5">
                       {room.label}
