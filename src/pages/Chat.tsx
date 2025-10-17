@@ -500,7 +500,7 @@ export default function Chat() {
                         {room.label}
                         <Badge 
                           variant="secondary" 
-                          className="inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-black text-white dark:bg-secondary dark:text-secondary-foreground"
+                          className="inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-black text-black/60 dark:bg-secondary dark:text-secondary-foreground"
                         >
                           <Users className="h-3 w-3" />
                           {onlineCountByRoom[room.id] || 0}
