@@ -619,8 +619,8 @@ export default function Plan() {
               <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 font-medium flex-shrink-0 ${displayCompleted ? 'border-green-500 text-green-500' : 'border-primary/30 text-primary'}`}>
                 {sections[sectionKey].goals.filter(g => g.originalId === goal.originalId).length}
               </div>
-              <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
-                <Pencil className="h-4 w-4" onClick={() => openEditDialog(goal, sectionKey)} />
+              <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={() => openEditDialog(goal, sectionKey)}>
+                <Pencil className="h-4 w-4" />
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
