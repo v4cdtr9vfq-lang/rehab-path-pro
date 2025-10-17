@@ -467,7 +467,7 @@ export default function Chat() {
                     {onlineCountByRoom[currentRoom] || 0}
                   </Badge>
                 </SelectTrigger>
-                <SelectContent className="bg-popover z-[100] mt-1">
+                <SelectContent className="bg-popover z-[100] mt-1 pb-5">
                   {CHAT_ROOMS.map((room) => (
                     <SelectItem key={room.id} value={room.id} className="cursor-pointer pr-[15px] pl-3 [&>span:first-child]:hidden">
                       <span className="flex items-center justify-between w-full pr-[40px]">
