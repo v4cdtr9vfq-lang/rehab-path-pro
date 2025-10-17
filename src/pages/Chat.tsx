@@ -645,13 +645,25 @@ export default function Chat() {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Escribe un mensaje..."
-                className="w-full p-[10px] resize-none min-h-[60px] text-sm placeholder:text-sm"
+                className="w-full pl-[20px] pr-[10px] py-[10px] resize-none min-h-[60px] text-sm placeholder:text-sm"
                 disabled={isSending}
                 rows={3}
               />
-              <Button type="submit" disabled={!newMessage.trim() || isSending} className="w-full bg-white text-black hover:bg-white/90">
-                Enviar
-              </Button>
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Switch
+                    id="anonymous-mode"
+                    checked={isAnonymous}
+                    onCheckedChange={setIsAnonymous}
+                  />
+                  <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
+                    Escribir en modo anónimo.
+                  </Label>
+                </div>
+                <Button type="submit" disabled={!newMessage.trim() || isSending} className="bg-white text-black hover:bg-green-500 hover:text-white">
+                  Enviar
+                </Button>
+              </div>
             </div>
           ) : (
             <div className="flex gap-2 items-start">
@@ -659,25 +671,27 @@ export default function Chat() {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Escribe un mensaje..."
-                className="flex-1 p-[10px] resize-none min-h-[44px] max-h-[44px] text-sm placeholder:text-sm"
+                className="flex-1 pl-[20px] pr-[10px] py-[10px] resize-none min-h-[44px] max-h-[44px] text-sm placeholder:text-sm"
                 disabled={isSending}
                 rows={2}
               />
-              <Button type="submit" disabled={!newMessage.trim() || isSending} className="h-[44px] bg-white text-black hover:bg-white/90">
+              <Button type="submit" disabled={!newMessage.trim() || isSending} className="h-[44px] bg-white text-black hover:bg-green-500 hover:text-white">
                 Enviar
               </Button>
             </div>
           )}
-          <div className="flex items-center gap-2 pl-3">
-            <Switch
-              id="anonymous-mode"
-              checked={isAnonymous}
-              onCheckedChange={setIsAnonymous}
-            />
-            <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
-              Escribir en modo anónimo.
-            </Label>
-          </div>
+          {!isMobile && (
+            <div className="flex items-center gap-2 pl-3">
+              <Switch
+                id="anonymous-mode"
+                checked={isAnonymous}
+                onCheckedChange={setIsAnonymous}
+              />
+              <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
+                Escribir en modo anónimo.
+              </Label>
+            </div>
+          )}
         </form>
       </Card>
     </div>
