@@ -331,6 +331,8 @@ export default function Values() {
       );
     }
 
+    const total = data.reduce((sum, item) => sum + item.count, 0);
+
     return (
       <div className="w-full px-4">
         <ResponsiveContainer width="100%" height={320}>
@@ -343,13 +345,17 @@ export default function Values() {
               outerRadius={70}
               paddingAngle={2}
               dataKey="count"
+              label={(entry) => `${((entry.count / total) * 100).toFixed(1)}%`}
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
             <Tooltip 
-              formatter={(value: number, name: string) => [`${value} veces`, name]}
+              formatter={(value: number, name: string) => {
+                const percentage = ((value / total) * 100).toFixed(1);
+                return [`${percentage}% (${value} veces)`, name];
+              }}
             />
             <Legend 
               verticalAlign="bottom" 
