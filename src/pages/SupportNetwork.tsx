@@ -156,11 +156,6 @@ export default function SupportNetwork() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Mi Red de Apoyo</h1>
-        <p className="text-muted-foreground text-lg">Gestiona tus contactos de confianza</p>
-      </div>
-
       <Card className="border-primary/20">
         <CardContent className="p-6">
           {contacts.length === 0 ? (
