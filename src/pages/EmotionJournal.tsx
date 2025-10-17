@@ -519,7 +519,7 @@ export default function EmotionJournal() {
           {/* Secondary Emotions */}
           {selectedPrimary && selectedCategory && (
             <div>
-              <h2 className="text-xl font-semibold text-foreground mb-4">Me he sentido:</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">He sentido:</h2>
               <div className="flex flex-wrap gap-3">
                 {selectedCategory.secondaryEmotions.map((emotion) => {
                   const isSelected = selectedSecondary.includes(emotion.id);
@@ -654,7 +654,7 @@ export default function EmotionJournal() {
                 <div className="space-y-3">
                   {entry.primary_emotion && (
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Hoy me he sentido:</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Hoy he sentido:</h3>
                       <span className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm font-medium">
                         {entry.primary_emotion}
                       </span>
