@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 interface Question {
   id: number;
   text: string;
-  type: "yesno" | "text";
+  type: "yesno" | "text" | "scale";
 }
 
 const questions: Question[] = [
@@ -23,6 +23,8 @@ const questions: Question[] = [
   { id: 5, text: "¿Fui honesto con mis sentimientos hoy?", type: "yesno" },
   { id: 6, text: "¿Me aislé hoy?", type: "yesno" },
   { id: 7, text: "¿Seguí mis valores diarios?", type: "yesno" },
+  { id: 8, text: "¿Has hecho algo que crees que te limitan en lugar de expandirte?", type: "yesno" },
+  { id: 9, text: "¿Cómo y cuánto dormiste ayer?", type: "scale" },
 ];
 
 export default function CheckIn() {
@@ -31,6 +33,7 @@ export default function CheckIn() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [triggerDescription, setTriggerDescription] = useState("");
   const [valuesDescription, setValuesDescription] = useState("");
+  const [limitingDescription, setLimitingDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userValues, setUserValues] = useState<string[]>([]);
 
@@ -56,6 +59,10 @@ export default function CheckIn() {
         // Load values description if exists
         if ((checkIn.answers as any).values_description) {
           setValuesDescription((checkIn.answers as any).values_description);
+        }
+        // Load limiting description if exists
+        if ((checkIn.answers as any).limiting_description) {
+          setLimitingDescription((checkIn.answers as any).limiting_description);
         }
       }
 
@@ -91,11 +98,12 @@ export default function CheckIn() {
         return;
       }
 
-      // Save check-in with trigger and values descriptions
+      // Save check-in with trigger, values, and limiting descriptions
       const answersWithDescriptions = {
         ...answers,
         trigger_description: triggerDescription,
-        values_description: valuesDescription
+        values_description: valuesDescription,
+        limiting_description: limitingDescription
       };
 
       const { error: checkInError } = await supabase
@@ -249,7 +257,7 @@ export default function CheckIn() {
                     </Button>
                     <Button
                       variant={answers[question.id] === "no" ? "default" : "outline"}
-                      className={`flex-1 ${answers[question.id] === "no" && [2, 4, 6].includes(question.id) ? "bg-green-600 hover:bg-green-700 text-white" : ""}`}
+                      className={`flex-1 ${answers[question.id] === "no" && [2, 4, 6, 8].includes(question.id) ? "bg-green-600 hover:bg-green-700 text-white" : ""}`}
                       onClick={() => handleAnswer(question.id, "no")}
                     >
                       NO
@@ -302,7 +310,36 @@ export default function CheckIn() {
                       )}
                     </div>
                   )}
+
+                  {/* Show limiting description field if question 8 answered "yes" */}
+                  {question.id === 8 && answers[8] === "yes" && (
+                    <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <Label htmlFor="limiting-description" className="text-sm font-medium text-foreground">
+                        Qué te gustaría cambiar y por qué crees que te cuenta:
+                      </Label>
+                      <Textarea
+                        id="limiting-description"
+                        placeholder="Describe qué te gustaría cambiar y por qué crees que te cuesta..."
+                        value={limitingDescription}
+                        onChange={(e) => setLimitingDescription(e.target.value)}
+                        className="min-h-[100px]"
+                      />
+                    </div>
+                  )}
                 </>
+              ) : question.type === "scale" ? (
+                <div className="flex gap-2 justify-between">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                    <Button
+                      key={num}
+                      variant={answers[question.id] === String(num) ? "default" : "outline"}
+                      className="w-10 h-10 p-0"
+                      onClick={() => handleAnswer(question.id, String(num))}
+                    >
+                      {num}
+                    </Button>
+                  ))}
+                </div>
               ) : (
                 <Input
                   placeholder="Escribe..."
