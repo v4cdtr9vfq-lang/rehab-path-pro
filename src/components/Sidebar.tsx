@@ -79,7 +79,7 @@ export function Sidebar() {
   const SidebarContent = () => <div className="flex flex-col h-full">
       <Link to="/dashboard" className="mb-5 px-6 pt-5 block hover:opacity-80 transition-opacity" onClick={() => setOpen(false)}>
         <h1 className="text-2xl font-bold text-sidebar-foreground tracking-tight">rehabp.org</h1>
-        <p className="text-xs text-sidebar-foreground/60 mt-1">Tu Asistene en la recuperación.</p>
+        <p className="text-xs text-sidebar-foreground/60 mt-1">Asistencia en tu rehabilitación.</p>
       </Link>
       
       <nav className="flex flex-col gap-1.5 px-5 flex-1 overflow-y-auto">
