@@ -643,8 +643,7 @@ export default function Plan() {
   };
   return <div className="space-y-6 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight tracking-tight mb-3 flex items-center gap-3">
-          <span>🎯</span>
+        <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight tracking-tight mb-3">
           Mi 🎯
         </h1>
         <p className="text-muted-foreground text-lg">Define y rastrea tu proceso.</p>
