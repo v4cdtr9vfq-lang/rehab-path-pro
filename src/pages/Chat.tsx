@@ -570,9 +570,9 @@ export default function Chat() {
                             
                             <div className="flex flex-col items-end gap-1">
                               <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white">
-                                <p className="text-sm">{msg.message}</p>
+                                <p className="text-xs">{msg.message}</p>
                               </div>
-                              <span className="text-xs text-muted-foreground pr-6">
+                              <span className="text-[10px] text-muted-foreground pr-6">
                                 {new Date(msg.created_at).toLocaleTimeString('es-ES', {
                                   hour: '2-digit',
                                   minute: '2-digit'
@@ -596,7 +596,7 @@ export default function Chat() {
                             </Avatar>
 
                             <div className="flex flex-col gap-1 flex-1">
-                              <span className="text-sm text-muted-foreground pl-6">
+                              <span className="text-xs text-muted-foreground pl-6">
                                 {getFirstName(msg.user_name)}
                               </span>
                               <div className="flex items-start gap-2">
@@ -605,7 +605,7 @@ export default function Chat() {
                                     ? 'bg-black border-2 border-red-500' 
                                     : 'bg-[#2A2A2A] text-white'
                                 }`}>
-                                  <p className={`text-sm ${isReported ? 'invisible' : ''}`}>
+                                  <p className={`text-xs ${isReported ? 'invisible' : ''}`}>
                                     {msg.message}
                                   </p>
                                 </div>
@@ -620,7 +620,7 @@ export default function Chat() {
                                   <Flag className={`h-4 w-4 ${myReports.has(msg.id) ? 'fill-red-500' : ''} text-red-500`} />
                                 </Button>
                               </div>
-                              <span className="text-xs text-muted-foreground pl-6">
+                              <span className="text-[10px] text-muted-foreground pl-6">
                                 {new Date(msg.created_at).toLocaleTimeString('es-ES', {
                                   hour: '2-digit',
                                   minute: '2-digit'
@@ -645,7 +645,7 @@ export default function Chat() {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Escribe un mensaje..."
-                className="w-full p-[10px] resize-none min-h-[60px] text-[11px]"
+                className="w-full p-[10px] resize-none min-h-[60px] text-sm placeholder:text-sm"
                 disabled={isSending}
                 rows={3}
               />
@@ -659,7 +659,7 @@ export default function Chat() {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Escribe un mensaje..."
-                className="flex-1 p-[10px] resize-none min-h-[44px] max-h-[44px] text-sm"
+                className="flex-1 p-[10px] resize-none min-h-[44px] max-h-[44px] text-sm placeholder:text-sm"
                 disabled={isSending}
                 rows={2}
               />
