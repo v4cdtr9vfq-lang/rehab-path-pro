@@ -469,7 +469,7 @@ export default function Chat() {
                 </SelectTrigger>
                 <SelectContent className="bg-popover z-[100] mt-1">
                   {CHAT_ROOMS.map((room) => (
-                    <SelectItem key={room.id} value={room.id} className="cursor-pointer pr-[15px] pl-3">
+                    <SelectItem key={room.id} value={room.id} className="cursor-pointer pr-[15px] pl-3 [&>span:first-child]:hidden">
                       <span className="flex items-center justify-between w-full pr-[40px]">
                         <span>{room.label}</span>
                         <Badge 
