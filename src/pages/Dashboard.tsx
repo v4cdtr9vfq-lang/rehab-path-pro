@@ -392,15 +392,15 @@ export default function Home() {
     path: "/tools",
     color: "text-primary"
   }, {
-    emoji: "📞",
-    label: "Mi red de apoyo",
-    path: "/support-network",
-    color: "text-accent"
-  }, {
     emoji: "📔",
     label: "Diario",
     path: "/journal",
     color: "text-primary"
+  }, {
+    emoji: "📞",
+    label: "Mi red de apoyo",
+    path: "/support-network",
+    color: "text-accent"
   }, {
     emoji: "🚨",
     label: "Plan de emergencia",
