@@ -212,7 +212,7 @@ export default function Help() {
             placeholder="Escribe tu pregunta aquí..."
             value={userQuestion}
             onChange={(e) => setUserQuestion(e.target.value)}
-            className="min-h-[120px] resize-none text-[16px]"
+            className="min-h-[120px] resize-none text-sm"
             maxLength={500}
           />
           <Button
