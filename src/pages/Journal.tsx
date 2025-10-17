@@ -30,6 +30,7 @@ export default function Journal() {
   const [isProcessingQuick, setIsProcessingQuick] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
 
@@ -292,6 +293,17 @@ export default function Journal() {
     setShowNewEntry(true);
   };
 
+  const filteredEntries = entries.filter(entry => {
+    if (!searchTerm.trim()) return true;
+    
+    const search = searchTerm.toLowerCase();
+    return (
+      entry.title.toLowerCase().includes(search) ||
+      entry.content.toLowerCase().includes(search) ||
+      entry.tags.some(tag => tag.toLowerCase().includes(search))
+    );
+  });
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div>
@@ -306,6 +318,8 @@ export default function Journal() {
             <Input
               placeholder="Buscar en tu diario..."
               className="pl-10"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -416,8 +430,15 @@ export default function Journal() {
               </Button>
             </CardContent>
           </Card>
+        ) : filteredEntries.length === 0 ? (
+          <Card className="border-primary/20">
+            <CardContent className="p-12 text-center">
+              <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground">No se encontraron entradas que coincidan con "{searchTerm}"</p>
+            </CardContent>
+          </Card>
         ) : (
-          entries.map((entry) => (
+          filteredEntries.map((entry) => (
             <Card key={entry.id} className="border-primary/20 hover:shadow-medium transition-all">
               <CardHeader>
                 <div className="flex items-start justify-between">
