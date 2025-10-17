@@ -14,10 +14,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ChatMessage {
   id: string;
@@ -41,6 +49,7 @@ const CHAT_ROOMS = [
 
 export default function Chat() {
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [userName, setUserName] = useState("");
@@ -438,28 +447,61 @@ export default function Chat() {
       <Card className="flex-1 flex flex-col border-primary/20 overflow-hidden min-h-0">
         <div className="bg-muted/30 border-b shrink-0">
           <div className="px-4 pb-3 pt-3">
-            <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="w-full">
-              <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-black p-[15px] text-muted-foreground w-full flex-wrap gap-1">
-                {CHAT_ROOMS.map((room, index) => (
-                  <TabsTrigger 
-                    key={room.id} 
-                    value={room.id} 
-                    className="text-xs sm:text-sm whitespace-nowrap data-[state=active]:text-[#FF7A5C] px-2 relative"
-                  >
-                    <span className="flex items-center gap-1.5">
-                      {room.label}
-                      <Badge 
-                        variant="secondary" 
-                        className="inline-flex gap-1 text-xs px-1.5 py-0.5 h-5"
-                      >
-                        <Users className="h-3 w-3" />
-                        {onlineCountByRoom[room.id] || 0}
-                      </Badge>
-                    </span>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
+            {isMobile ? (
+              <Select value={currentRoom} onValueChange={setCurrentRoom}>
+                <SelectTrigger className="w-full bg-black text-white">
+                  <SelectValue>
+                    {CHAT_ROOMS.find(room => room.id === currentRoom)?.label}
+                    <Badge 
+                      variant="secondary" 
+                      className="ml-2 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5"
+                    >
+                      <Users className="h-3 w-3" />
+                      {onlineCountByRoom[currentRoom] || 0}
+                    </Badge>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent className="bg-popover z-[100]">
+                  {CHAT_ROOMS.map((room) => (
+                    <SelectItem key={room.id} value={room.id}>
+                      <span className="flex items-center gap-2">
+                        {room.label}
+                        <Badge 
+                          variant="secondary" 
+                          className="inline-flex gap-1 text-xs px-1.5 py-0.5 h-5"
+                        >
+                          <Users className="h-3 w-3" />
+                          {onlineCountByRoom[room.id] || 0}
+                        </Badge>
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="w-full">
+                <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-black p-[15px] text-muted-foreground w-full flex-wrap gap-1">
+                  {CHAT_ROOMS.map((room, index) => (
+                    <TabsTrigger 
+                      key={room.id} 
+                      value={room.id} 
+                      className="text-xs sm:text-sm whitespace-nowrap data-[state=active]:text-[#FF7A5C] px-2 relative"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        {room.label}
+                        <Badge 
+                          variant="secondary" 
+                          className="inline-flex gap-1 text-xs px-1.5 py-0.5 h-5"
+                        >
+                          <Users className="h-3 w-3" />
+                          {onlineCountByRoom[room.id] || 0}
+                        </Badge>
+                      </span>
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+            )}
           </div>
         </div>
 
