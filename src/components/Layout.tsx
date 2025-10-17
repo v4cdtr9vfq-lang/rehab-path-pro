@@ -1,12 +1,16 @@
 import { ReactNode } from "react";
 import { Sidebar } from "./Sidebar";
 import { Footer } from "./Footer";
+import { useInactivityTimeout } from "@/hooks/useInactivityTimeout";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 export function Layout({ children }: LayoutProps) {
+  // Auto logout after 3 minutes of inactivity
+  useInactivityTimeout(3);
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Sidebar />
