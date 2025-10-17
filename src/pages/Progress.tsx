@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CheckCircle2, Circle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 interface ProgressArea {
   name: string;
@@ -257,23 +257,40 @@ export default function ProgressPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Calcular datos semanales (últimos 7 días)
+      // Calcular datos semanales (últimos 7 días de lunes a domingo)
       const weekData = [];
-      for (let i = 6; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
+      const today = new Date();
+      const dayOfWeek = today.getDay(); // 0 = domingo, 1 = lunes, etc.
+      const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Días desde el lunes más reciente
+      
+      for (let i = 0; i < 7; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - daysToMonday + i);
         const dateStr = getLocalDateString(date);
         
+        // Obtener todas las metas del día
+        const { data: goals } = await supabase
+          .from('goals')
+          .select('*')
+          .eq('user_id', user.id)
+          .or('goal_type.eq.today,goal_type.eq.always');
+
+        // Obtener completadas
         const { data: completions } = await supabase
           .from('goal_completions')
           .select('*')
           .eq('user_id', user.id)
           .eq('completion_date', dateStr);
 
+        const totalGoals = goals?.length || 0;
+        const completedGoals = completions?.length || 0;
+        const percentage = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
+
         const dayName = date.toLocaleDateString('es-ES', { weekday: 'short' });
         weekData.push({
-          name: dayName,
-          progreso: completions?.length || 0
+          name: dayName.charAt(0).toUpperCase() + dayName.slice(1),
+          progreso: percentage,
+          isComplete: percentage === 100
         });
       }
       setWeeklyChartData(weekData);
@@ -293,9 +310,19 @@ export default function ProgressPage() {
           .gte('completion_date', getLocalDateString(startDate))
           .lte('completion_date', getLocalDateString(endDate));
 
+        const { data: goals } = await supabase
+          .from('goals')
+          .select('*')
+          .eq('user_id', user.id);
+
+        const totalGoals = (goals?.length || 0) * 7;
+        const completedGoals = completions?.length || 0;
+        const percentage = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
+
         monthData.push({
           name: `Sem ${4 - i}`,
-          progreso: completions?.length || 0
+          progreso: percentage,
+          isComplete: percentage === 100
         });
       }
       setMonthlyChartData(monthData);
@@ -315,10 +342,21 @@ export default function ProgressPage() {
           .gte('completion_date', `${year}-${month.toString().padStart(2, '0')}-01`)
           .lt('completion_date', `${year}-${(month + 1).toString().padStart(2, '0')}-01`);
 
+        const { data: goals } = await supabase
+          .from('goals')
+          .select('*')
+          .eq('user_id', user.id);
+
+        const daysInMonth = new Date(year, month, 0).getDate();
+        const totalGoals = (goals?.length || 0) * daysInMonth;
+        const completedGoals = completions?.length || 0;
+        const percentage = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
+
         const monthName = date.toLocaleDateString('es-ES', { month: 'short' });
         yearData.push({
-          name: monthName,
-          progreso: completions?.length || 0
+          name: monthName.charAt(0).toUpperCase() + monthName.slice(1),
+          progreso: percentage,
+          isComplete: percentage === 100
         });
       }
       setYearlyChartData(yearData);
@@ -499,7 +537,7 @@ export default function ProgressPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <span className="text-lg">📊</span>
-            Gráficos de Progreso
+            Gráficos del progreso
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -510,41 +548,88 @@ export default function ProgressPage() {
               <TabsTrigger value="year">Año</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="week" className="mt-6">
+            <TabsContent value="week" className="mt-18">
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={weeklyChartData}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                     <XAxis dataKey="name" className="text-xs" />
-                    <YAxis className="text-xs" />
+                    <YAxis className="text-xs" domain={[0, 100]} />
                     <Tooltip 
                       contentStyle={{ 
                         backgroundColor: 'hsl(var(--background))', 
                         border: '1px solid hsl(var(--border))',
                         borderRadius: '8px'
                       }}
+                      formatter={(value: any) => `${value}%`}
                     />
-                    <Bar dataKey="progreso" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
+                    <Bar 
+                      dataKey="progreso" 
+                      radius={[8, 8, 0, 0]}
+                      fill="hsl(var(--primary))"
+                    >
+                      {weeklyChartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.isComplete ? '#22c55e' : 'hsl(var(--primary))'} />
+                      ))}
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </div>
             </TabsContent>
 
-            <TabsContent value="month" className="mt-6">
+            <TabsContent value="month" className="mt-18">
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={monthlyChartData}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                     <XAxis dataKey="name" className="text-xs" />
-                    <YAxis className="text-xs" />
+                    <YAxis className="text-xs" domain={[0, 100]} />
                     <Tooltip 
                       contentStyle={{ 
                         backgroundColor: 'hsl(var(--background))', 
                         border: '1px solid hsl(var(--border))',
                         borderRadius: '8px'
                       }}
+                      formatter={(value: any) => `${value}%`}
                     />
-                    <Bar dataKey="progreso" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
+                    <Bar 
+                      dataKey="progreso" 
+                      radius={[8, 8, 0, 0]}
+                      fill="hsl(var(--primary))"
+                    >
+                      {monthlyChartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.isComplete ? '#22c55e' : 'hsl(var(--primary))'} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="year" className="mt-18">
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={yearlyChartData}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                    <XAxis dataKey="name" className="text-xs" />
+                    <YAxis className="text-xs" domain={[0, 100]} />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--background))', 
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px'
+                      }}
+                      formatter={(value: any) => `${value}%`}
+                    />
+                    <Bar 
+                      dataKey="progreso" 
+                      radius={[8, 8, 0, 0]}
+                      fill="hsl(var(--primary))"
+                    >
+                      {yearlyChartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.isComplete ? '#22c55e' : 'hsl(var(--primary))'} />
+                      ))}
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </div>
