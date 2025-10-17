@@ -44,7 +44,7 @@ const menuItems = [{
   label: "Herramientas",
   path: "/tools"
 }, {
-  emoji: "❓",
+  emoji: "🆘",
   label: "Ayuda",
   path: "/help"
 }, {
