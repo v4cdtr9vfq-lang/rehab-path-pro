@@ -105,10 +105,12 @@ export function Footer() {
           <div className="flex items-center gap-6">
             {/* About Us Button */}
             <a 
-              href="#" 
+              href="https://somosfelices.substack.com/" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-white hover:text-white/80 transition-colors underline"
             >
-              Sobre nosotros
+              Nosotr♡s
             </a>
             
             {/* Contact Email */}
