@@ -644,7 +644,7 @@ export default function Plan() {
         <div className="flex items-center gap-2">
           {goal.instanceIndex === 0 && (
             <>
-              <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-primary/30 text-primary font-medium">
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 font-medium ${goal.completed ? 'border-green-500 text-green-500' : 'border-primary/30 text-primary'}`}>
                 {sections[sectionKey].goals.filter(g => g.originalId === goal.originalId).length}
               </div>
               <Button
