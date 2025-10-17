@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CheckCircle2, Clock, Circle } from "lucide-react";
+import { CheckCircle2, Clock, Circle, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +21,8 @@ export default function Home() {
   const [totalGoals, setTotalGoals] = useState(0);
   const goalsProgress = totalGoals > 0 ? goalsCompleted / totalGoals * 100 : 0;
   const [activeGoals, setActiveGoals] = useState<any[]>([]);
+  const [isQuoteSaved, setIsQuoteSaved] = useState(false);
+  const [savedQuotes, setSavedQuotes] = useState<any[]>([]);
   const allQuotes = [{
     text: "Siempre es lo simple lo que produce lo maravilloso.",
     author: "Amelia Barr"
@@ -202,6 +204,19 @@ export default function Home() {
         setStartDate(new Date(profile.abstinence_start_date));
       }
 
+      // Fetch saved quotes
+      const { data: quotes } = await supabase
+        .from('saved_quotes')
+        .select('*')
+        .eq('user_id', user.id);
+      if (quotes) {
+        setSavedQuotes(quotes);
+        const saved = quotes.some(
+          (sq: any) => sq.quote_text === dailyQuote.text && sq.quote_author === dailyQuote.author
+        );
+        setIsQuoteSaved(saved);
+      }
+
       // Fetch today's check-in
       const today = new Date().toISOString().split('T')[0];
       const {
@@ -307,6 +322,68 @@ export default function Home() {
       supabase.removeChannel(channel);
     };
   }, []);
+
+  const toggleSaveQuote = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "Debes iniciar sesión para guardar frases",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (isQuoteSaved) {
+        // Remove from saved
+        const quoteToRemove = savedQuotes.find(
+          (sq: any) => sq.quote_text === dailyQuote.text && sq.quote_author === dailyQuote.author
+        );
+        
+        if (quoteToRemove) {
+          const { error } = await supabase
+            .from('saved_quotes')
+            .delete()
+            .eq('id', quoteToRemove.id);
+
+          if (error) throw error;
+
+          toast({
+            title: "Frase eliminada",
+            description: "La frase ha sido eliminada de tus guardados",
+          });
+          
+          setSavedQuotes(savedQuotes.filter((sq: any) => sq.id !== quoteToRemove.id));
+          setIsQuoteSaved(false);
+        }
+      } else {
+        // Add to saved
+        const { error } = await supabase
+          .from('saved_quotes')
+          .insert({
+            user_id: user.id,
+            quote_text: dailyQuote.text,
+            quote_author: dailyQuote.author
+          });
+
+        if (error) throw error;
+
+        toast({
+          title: "Frase guardada",
+          description: "La frase ha sido guardada exitosamente",
+        });
+        
+        setIsQuoteSaved(true);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "No se pudo guardar la frase",
+        variant: "destructive",
+      });
+    }
+  };
 
   // Quick tools - configurable
   const quickTools = [{
@@ -427,15 +504,23 @@ export default function Home() {
       </Card>
 
       {/* Daily Motivational Message */}
-      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
-        <CardContent className="p-6">
+      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent relative">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleSaveQuote}
+          className="absolute top-4 right-4 h-10 w-10 z-10"
+        >
+          <Star className={`h-5 w-5 ${isQuoteSaved ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`} />
+        </Button>
+        <CardContent className="p-6 pt-12">
           <p className="text-center text-foreground text-xl font-medium leading-relaxed mb-2">
             "{dailyQuote.text}"
           </p>
-          <p className="text-center text-muted-foreground text-sm">- {dailyQuote.author}</p>
+          <p className="text-center text-muted-foreground text-sm">— {dailyQuote.author}</p>
           <div className="flex justify-center mt-4">
             <Link to="/message">
-              <Button variant="ghost" size="sm" className="text-primary text-xs">Ver más mensajes</Button>
+              <Button variant="ghost" size="sm" className="text-primary text-xs">Ver mensajes guardados</Button>
             </Link>
           </div>
         </CardContent>
