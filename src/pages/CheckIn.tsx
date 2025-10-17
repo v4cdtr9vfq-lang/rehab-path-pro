@@ -315,7 +315,7 @@ export default function CheckIn() {
           ))}
 
           <Button 
-            className="w-full gap-2 text-lg py-6 mt-8"
+            className="w-full gap-2 text-lg py-6 mt-8 bg-green-600 hover:bg-green-700 text-white"
             size="lg"
             onClick={handleSubmit}
             disabled={isSubmitting}
