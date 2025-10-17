@@ -327,31 +327,29 @@ export default function ProgressPage() {
       }
       setMonthlyChartData(monthData);
 
-      // Calcular datos anuales (últimos 12 meses)
+      // Calcular datos anuales (enero a diciembre del año actual)
       const yearData = [];
-      for (let i = 11; i >= 0; i--) {
-        const date = new Date();
-        date.setMonth(date.getMonth() - i);
-        const month = date.getMonth() + 1;
-        const year = date.getFullYear();
-        
+      const currentYear = new Date().getFullYear();
+      
+      for (let month = 1; month <= 12; month++) {
         const { data: completions } = await supabase
           .from('goal_completions')
           .select('*')
           .eq('user_id', user.id)
-          .gte('completion_date', `${year}-${month.toString().padStart(2, '0')}-01`)
-          .lt('completion_date', `${year}-${(month + 1).toString().padStart(2, '0')}-01`);
+          .gte('completion_date', `${currentYear}-${month.toString().padStart(2, '0')}-01`)
+          .lt('completion_date', `${currentYear}-${(month + 1).toString().padStart(2, '0')}-01`);
 
         const { data: goals } = await supabase
           .from('goals')
           .select('*')
           .eq('user_id', user.id);
 
-        const daysInMonth = new Date(year, month, 0).getDate();
+        const daysInMonth = new Date(currentYear, month, 0).getDate();
         const totalGoals = (goals?.length || 0) * daysInMonth;
         const completedGoals = completions?.length || 0;
         const percentage = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
 
+        const date = new Date(currentYear, month - 1);
         const monthName = date.toLocaleDateString('es-ES', { month: 'short' });
         yearData.push({
           name: monthName.charAt(0).toUpperCase() + monthName.slice(1),
@@ -542,7 +540,7 @@ export default function ProgressPage() {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="week" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-6">
+            <TabsList className="grid w-full grid-cols-3 mb-6 [&>button]:hover:bg-muted/30 [&>button]:transition-colors">
               <TabsTrigger value="week">Semana</TabsTrigger>
               <TabsTrigger value="month">Mes</TabsTrigger>
               <TabsTrigger value="year">Año</TabsTrigger>
@@ -630,26 +628,6 @@ export default function ProgressPage() {
                         <Cell key={`cell-${index}`} fill={entry.isComplete ? '#22c55e' : 'hsl(var(--primary))'} />
                       ))}
                     </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="year" className="mt-6">
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={yearlyChartData}>
-                    <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                    <XAxis dataKey="name" className="text-xs" />
-                    <YAxis className="text-xs" />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'hsl(var(--background))', 
-                        border: '1px solid hsl(var(--border))',
-                        borderRadius: '8px'
-                      }}
-                    />
-                    <Bar dataKey="progreso" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
