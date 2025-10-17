@@ -494,13 +494,13 @@ export default function Chat() {
                     <TabsTrigger 
                       key={room.id} 
                       value={room.id} 
-                      className="text-xs sm:text-sm whitespace-nowrap bg-white text-black data-[state=active]:bg-[#FF7A5C] data-[state=active]:text-white hover:bg-[#FF7A5C] hover:text-white dark:bg-black dark:text-white dark:data-[state=active]:bg-[#FF7A5C] dark:data-[state=active]:text-black dark:hover:bg-[#FF7A5C] dark:hover:text-black px-2 pl-[15px] relative"
+                      className="group text-xs sm:text-sm whitespace-nowrap bg-white text-black data-[state=active]:bg-[#FF7A5C] data-[state=active]:text-white hover:bg-[#FF7A5C] hover:text-white dark:bg-black dark:text-white dark:data-[state=active]:bg-[#FF7A5C] dark:data-[state=active]:text-black dark:hover:bg-[#FF7A5C] dark:hover:text-black px-2 pl-[15px] relative"
                     >
                       <span className="flex items-center justify-between gap-2 w-full">
                         {room.label}
                         <Badge 
                           variant="secondary" 
-                          className="inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-muted text-black/60"
+                          className="inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-muted text-black/60 dark:bg-muted dark:text-black/60 dark:group-hover:bg-muted dark:group-hover:text-black/60 dark:group-data-[state=active]:bg-muted dark:group-data-[state=active]:text-black/60"
                         >
                           <Users className="h-3 w-3" />
                           {onlineCountByRoom[room.id] || 0}
