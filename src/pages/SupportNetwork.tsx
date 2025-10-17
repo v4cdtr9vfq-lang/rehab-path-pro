@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 interface SupportContact {
   id: string;
@@ -30,6 +31,7 @@ export default function SupportNetwork() {
     relationship: "",
     notes: ""
   });
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchContacts();
@@ -131,6 +133,7 @@ export default function SupportNetwork() {
   };
 
   const handleDelete = async (id: string) => {
+    setDeleteConfirmId(null);
     const { error } = await supabase
       .from("support_contacts")
       .delete()
@@ -348,7 +351,7 @@ export default function SupportNetwork() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => handleDelete(contact.id)}
+                            onClick={() => setDeleteConfirmId(contact.id)}
                             className="text-destructive hover:text-destructive hover:bg-destructive/10"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -388,6 +391,26 @@ export default function SupportNetwork() {
           )}
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que quieres eliminar este contacto? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>
+              Cancelar
+            </Button>
+            <Button variant="destructive" onClick={() => deleteConfirmId && handleDelete(deleteConfirmId)}>
+              Sí
+            </Button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { MessageSquare, Star, Trash2, Send } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 interface Quote {
   text: string;
@@ -28,6 +29,7 @@ export default function Message() {
   const [proposedQuote, setProposedQuote] = useState("");
   const [proposedAuthor, setProposedAuthor] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   const allQuotes: Quote[] = [
     { text: "Siempre es lo simple lo que produce lo maravilloso.", author: "Amelia Barr" },
@@ -166,6 +168,7 @@ export default function Message() {
   };
 
   const deleteSavedQuote = async (id: string) => {
+    setDeleteConfirmId(null);
     try {
       const { error } = await supabase
         .from('saved_quotes')
@@ -336,7 +339,7 @@ export default function Message() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => deleteSavedQuote(quote.id)}
+                  onClick={() => setDeleteConfirmId(quote.id)}
                   className="h-8 w-8 text-destructive hover:text-destructive"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -346,6 +349,26 @@ export default function Message() {
           </CardContent>
         </Card>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que quieres eliminar esta frase guardada? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>
+              Cancelar
+            </Button>
+            <Button variant="destructive" onClick={() => deleteConfirmId && deleteSavedQuote(deleteConfirmId)}>
+              Sí
+            </Button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

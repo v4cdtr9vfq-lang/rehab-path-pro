@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 interface Value {
   id: string;
@@ -31,6 +32,7 @@ export default function Values() {
   const [todayStats, setTodayStats] = useState<ValueStats[]>([]);
   const [weekStats, setWeekStats] = useState<ValueStats[]>([]);
   const [monthStats, setMonthStats] = useState<ValueStats[]>([]);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     initializeValues();
@@ -296,6 +298,7 @@ export default function Values() {
   };
 
   const deleteValue = async (id: string) => {
+    setDeleteConfirmId(null);
     try {
       const { error } = await supabase
         .from('values')
@@ -459,7 +462,7 @@ export default function Values() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => deleteValue(value.id)}
+                    onClick={() => setDeleteConfirmId(value.id)}
                     className="h-8 w-8 text-muted-foreground hover:text-destructive"
                   >
                     <X className="h-4 w-4" />
@@ -508,6 +511,26 @@ export default function Values() {
           </Tabs>
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que quieres eliminar este valor? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>
+              Cancelar
+            </Button>
+            <Button variant="destructive" onClick={() => deleteConfirmId && deleteValue(deleteConfirmId)}>
+              Sí
+            </Button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

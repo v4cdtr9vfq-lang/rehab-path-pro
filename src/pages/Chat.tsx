@@ -23,6 +23,9 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -73,6 +76,7 @@ export default function Chat() {
   const [editedMessage, setEditedMessage] = useState("");
   const [reportedMessages, setReportedMessages] = useState<Set<string>>(new Set());
   const [myReports, setMyReports] = useState<Set<string>>(new Set());
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [anonymousNumber, setAnonymousNumber] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -420,6 +424,7 @@ export default function Chat() {
   };
 
   const deleteMessage = async (messageId: string) => {
+    setDeleteConfirmId(null);
     try {
       const { error } = await supabase
         .from('chat_messages')
@@ -580,7 +585,7 @@ export default function Chat() {
                                     <Edit2 className="h-4 w-4 mr-2" />
                                     Editar
                                   </DropdownMenuItem>
-                                  <DropdownMenuItem onClick={() => deleteMessage(msg.id)} className="text-destructive">
+                                  <DropdownMenuItem onClick={() => setDeleteConfirmId(msg.id)} className="text-destructive">
                                     <Trash2 className="h-4 w-4 mr-2" />
                                     Eliminar
                                   </DropdownMenuItem>
@@ -614,7 +619,7 @@ export default function Chat() {
                                       <Edit2 className="h-4 w-4 mr-2" />
                                       Editar
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => deleteMessage(msg.id)} className="text-destructive">
+                                    <DropdownMenuItem onClick={() => setDeleteConfirmId(msg.id)} className="text-destructive">
                                       <Trash2 className="h-4 w-4 mr-2" />
                                       Eliminar
                                     </DropdownMenuItem>
@@ -718,6 +723,26 @@ export default function Chat() {
           )}
         </form>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que quieres eliminar este mensaje? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>
+              Cancelar
+            </Button>
+            <Button variant="destructive" onClick={() => deleteConfirmId && deleteMessage(deleteConfirmId)}>
+              Sí
+            </Button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

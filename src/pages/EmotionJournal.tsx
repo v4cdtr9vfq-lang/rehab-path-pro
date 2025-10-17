@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 interface TertiaryEmotion {
   name: string;
@@ -224,6 +225,7 @@ export default function EmotionJournal() {
   const [isSaving, setIsSaving] = useState(false);
   const [savedEntries, setSavedEntries] = useState<SavedEmotionEntry[]>([]);
   const [editingEntry, setEditingEntry] = useState<string | null>(null);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -438,6 +440,7 @@ export default function EmotionJournal() {
   };
 
   const handleDelete = async (entryId: string) => {
+    setDeleteConfirmId(null);
     try {
       const { error } = await (supabase as any)
         .from('emotion_journal')
@@ -640,7 +643,7 @@ export default function EmotionJournal() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => handleDelete(entry.id)}
+                      onClick={() => setDeleteConfirmId(entry.id)}
                       className="h-8 w-8 p-0 text-destructive hover:text-destructive"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -695,6 +698,26 @@ export default function EmotionJournal() {
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que quieres eliminar esta entrada? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>
+              Cancelar
+            </Button>
+            <Button variant="destructive" onClick={() => deleteConfirmId && handleDelete(deleteConfirmId)}>
+              Sí
+            </Button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
