@@ -126,7 +126,7 @@ export function Footer() {
           </div>
           
           <p className="text-sm text-muted-foreground text-center md:text-right">
-            © {new Date().getFullYear()} Neurotropy™. Todos los derechos reservados.
+            {new Date().getFullYear()} © Neurotropy™.
           </p>
         </div>
       </div>
