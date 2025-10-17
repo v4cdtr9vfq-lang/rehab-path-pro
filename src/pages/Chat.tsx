@@ -544,32 +544,40 @@ export default function Chat() {
                     ) : (
                       <>
                         {isOwnMessage ? (
-                          // Own messages: three dots - message - avatar (aligned to right)
-                          <div className="flex items-start gap-3 max-w-[80%]">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button 
-                                  variant="ghost" 
-                                  size="icon" 
-                                  className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                                >
-                                  <MoreVertical className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end" className="bg-popover z-[100]">
-                                <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
-                                  <Edit2 className="h-4 w-4 mr-2" />
-                                  Editar
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => deleteMessage(msg.id)} className="text-destructive">
-                                  <Trash2 className="h-4 w-4 mr-2" />
-                                  Eliminar
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
+                          // Own messages: avatar (top) - options (below avatar) - message full width
+                          <div className="flex items-start gap-3 w-full pl-[15px]">
+                            <div className="flex flex-col items-center gap-2 flex-shrink-0">
+                              <Avatar className="h-11 w-11">
+                                <AvatarFallback className="bg-[#FF7A5C] text-white text-sm font-semibold">
+                                  {getInitials(msg.user_name)}
+                                </AvatarFallback>
+                              </Avatar>
+                              
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button 
+                                    variant="ghost" 
+                                    size="icon" 
+                                    className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity"
+                                  >
+                                    <MoreVertical className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="bg-popover z-[100]">
+                                  <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
+                                    <Edit2 className="h-4 w-4 mr-2" />
+                                    Editar
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => deleteMessage(msg.id)} className="text-destructive">
+                                    <Trash2 className="h-4 w-4 mr-2" />
+                                    Eliminar
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
                             
-                            <div className="flex flex-col items-end gap-1">
-                              <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white">
+                            <div className="flex flex-col items-end gap-1 flex-1">
+                              <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white max-w-full">
                                 <p className="text-xs">{msg.message}</p>
                               </div>
                               <span className="text-[10px] text-muted-foreground pr-6">
@@ -579,46 +587,40 @@ export default function Chat() {
                                 })}
                               </span>
                             </div>
-
-                            <Avatar className="h-11 w-11 flex-shrink-0 mt-0">
-                              <AvatarFallback className="bg-[#FF7A5C] text-white text-sm font-semibold">
-                                {getInitials(msg.user_name)}
-                              </AvatarFallback>
-                            </Avatar>
                           </div>
                         ) : (
-                          // Other messages: avatar - name (above) + message + time (below)
-                          <div className="flex items-start gap-3 max-w-[80%]">
-                            <Avatar className="h-11 w-11 flex-shrink-0 mt-0">
-                              <AvatarFallback className="bg-white text-black text-sm font-semibold">
-                                {getInitials(msg.user_name)}
-                              </AvatarFallback>
-                            </Avatar>
+                          // Other messages: avatar (top) - flag (below avatar) - message full width
+                          <div className="flex items-start gap-3 w-full pl-[15px]">
+                            <div className="flex flex-col items-center gap-2 flex-shrink-0">
+                              <Avatar className="h-11 w-11">
+                                <AvatarFallback className="bg-white text-black text-sm font-semibold">
+                                  {getInitials(msg.user_name)}
+                                </AvatarFallback>
+                              </Avatar>
+                              
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                onClick={() => toggleReport(msg.id)}
+                                className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity"
+                                title={myReports.has(msg.id) ? "Quitar denuncia" : "Denunciar"}
+                              >
+                                <Flag className={`h-4 w-4 ${myReports.has(msg.id) ? 'fill-red-500' : ''} text-red-500`} />
+                              </Button>
+                            </div>
 
                             <div className="flex flex-col gap-1 flex-1">
                               <span className="text-xs text-muted-foreground pl-6">
                                 {getFirstName(msg.user_name)}
                               </span>
-                              <div className="flex items-start gap-2">
-                                <div className={`rounded-[28px] px-6 py-3 ${
-                                  isReported 
-                                    ? 'bg-black border-2 border-red-500' 
-                                    : 'bg-[#2A2A2A] text-white'
-                                }`}>
-                                  <p className={`text-xs ${isReported ? 'invisible' : ''}`}>
-                                    {msg.message}
-                                  </p>
-                                </div>
-                                
-                                <Button 
-                                  variant="ghost" 
-                                  size="icon" 
-                                  onClick={() => toggleReport(msg.id)}
-                                  className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                                  title={myReports.has(msg.id) ? "Quitar denuncia" : "Denunciar"}
-                                >
-                                  <Flag className={`h-4 w-4 ${myReports.has(msg.id) ? 'fill-red-500' : ''} text-red-500`} />
-                                </Button>
+                              <div className={`rounded-[28px] px-6 py-3 max-w-full ${
+                                isReported 
+                                  ? 'bg-black border-2 border-red-500' 
+                                  : 'bg-[#2A2A2A] text-white'
+                              }`}>
+                                <p className={`text-xs ${isReported ? 'invisible' : ''}`}>
+                                  {msg.message}
+                                </p>
                               </div>
                               <span className="text-[10px] text-muted-foreground pl-6">
                                 {new Date(msg.created_at).toLocaleTimeString('es-ES', {
