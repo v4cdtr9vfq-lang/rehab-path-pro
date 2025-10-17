@@ -54,7 +54,10 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState("");
   const [userName, setUserName] = useState("");
   const [userId, setUserId] = useState("");
-  const [currentRoom, setCurrentRoom] = useState<string>('narcoticos');
+  const [currentRoom, setCurrentRoom] = useState<string>(() => {
+    const savedRoom = localStorage.getItem('chat_last_room_mobile');
+    return savedRoom || 'narcoticos';
+  });
   const [onlineCountByRoom, setOnlineCountByRoom] = useState<Record<string, number>>({
     narcoticos: 0,
     dependencia_emocional: 0,
@@ -448,7 +451,10 @@ export default function Chat() {
         <div className="bg-muted/30 border-b shrink-0">
           <div className="px-4 pb-3 pt-3">
             {isMobile ? (
-              <Select value={currentRoom} onValueChange={setCurrentRoom}>
+              <Select value={currentRoom} onValueChange={(value) => {
+                setCurrentRoom(value);
+                localStorage.setItem('chat_last_room_mobile', value);
+              }}>
                 <SelectTrigger className="w-full bg-black text-white">
                   <SelectValue>
                     {CHAT_ROOMS.find(room => room.id === currentRoom)?.label}
