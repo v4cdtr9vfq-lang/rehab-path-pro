@@ -371,11 +371,11 @@ export default function Values() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <Card className="border-primary/20 bg-gradient-to-br from-accent/5 to-transparent">
+      <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            <Heart className="h-6 w-6 text-accent" />
-            Lo Que Más Importa
+            <Heart className="h-6 w-6 text-sky-blue" />
+            Lo que más Importa
           </CardTitle>
         </CardHeader>
         <CardContent>
