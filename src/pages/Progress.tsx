@@ -408,23 +408,37 @@ export default function ProgressPage() {
     { name: "Espiritual", percentage: 0, color: "bg-accent" },
   ];
 
-  const GoalProgressBar = ({ goal }: { goal: { id: string; text: string; total: number; completed: number; percentage: number } }) => (
-    <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-sm font-semibold text-foreground">{goal.text}</span>
-        <span className={`text-sm font-bold ${goal.percentage === 100 ? 'text-green-500' : 'text-sky-blue'}`}>{goal.percentage}%</span>
+  const GoalProgressBar = ({ goal }: { goal: { id: string; text: string; total: number; completed: number; percentage: number } }) => {
+    const getProgressColor = () => {
+      if (goal.percentage === 100) return 'text-green-500';
+      if (goal.percentage >= 50) return 'text-[#e6c25c]';
+      return 'text-sky-blue';
+    };
+
+    const getProgressBgColor = () => {
+      if (goal.percentage === 100) return '[&>div]:bg-green-500';
+      if (goal.percentage >= 50) return '[&>div]:bg-[#e6c25c]';
+      return '[&>div]:bg-sky-blue';
+    };
+
+    return (
+      <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-sm font-semibold text-foreground">{goal.text}</span>
+          <span className={`text-sm font-bold ${getProgressColor()}`}>{goal.percentage}%</span>
+        </div>
+        <Progress value={goal.percentage} className={`h-2.5 ${getProgressBgColor()}`} />
+        <div className="flex justify-between items-center mt-1">
+          <span className="text-xs text-muted-foreground">
+            {goal.completed} de {goal.total} completadas
+          </span>
+          <span className={`text-xs font-medium ${goal.percentage === 100 ? 'text-green-500' : 'text-muted-foreground'}`}>
+            {goal.percentage === 100 ? '✓ Completada' : `${goal.total - goal.completed} restantes`}
+          </span>
+        </div>
       </div>
-      <Progress value={goal.percentage} className={`h-2.5 ${goal.percentage === 100 ? '[&>div]:bg-green-500' : '[&>div]:bg-sky-blue'}`} />
-      <div className="flex justify-between items-center mt-1">
-        <span className="text-xs text-muted-foreground">
-          {goal.completed} de {goal.total} completadas
-        </span>
-        <span className={`text-xs font-medium ${goal.percentage === 100 ? 'text-green-500' : 'text-muted-foreground'}`}>
-          {goal.percentage === 100 ? '✓ Completada' : `${goal.total - goal.completed} restantes`}
-        </span>
-      </div>
-    </div>
-  );
+    );
+  };
 
   const getBarColor = (percentage: number): string => {
     if (percentage === 100) return '#22c55e'; // Verde
@@ -484,9 +498,9 @@ export default function ProgressPage() {
               <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-semibold text-foreground">Check-in Diario</span>
-                  <span className={`text-sm font-bold ${hasCheckedInToday ? 'text-green-500' : 'text-primary'}`}>{hasCheckedInToday ? '100' : '0'}%</span>
+                  <span className={`text-sm font-bold ${hasCheckedInToday ? 'text-green-500' : 'text-sky-blue'}`}>{hasCheckedInToday ? '100' : '0'}%</span>
                 </div>
-                <Progress value={hasCheckedInToday ? 100 : 0} className={`h-2.5 ${hasCheckedInToday ? '[&>div]:bg-green-500' : '[&>div]:bg-primary'}`} />
+                <Progress value={hasCheckedInToday ? 100 : 0} className={`h-2.5 ${hasCheckedInToday ? '[&>div]:bg-green-500' : '[&>div]:bg-sky-blue'}`} />
                 <div className="flex justify-between items-center mt-1">
                   <span className="text-xs text-muted-foreground">Check-in de recuperación</span>
                   <span className={`text-xs font-medium ${hasCheckedInToday ? 'text-green-500' : 'text-muted-foreground'}`}>
