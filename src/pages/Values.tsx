@@ -371,11 +371,6 @@ export default function Values() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Mis Valores</h1>
-        <p className="text-muted-foreground text-lg">Define y vive según tus valores fundamentales cada día</p>
-      </div>
-
       <Card className="border-primary/20 bg-gradient-to-br from-accent/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
