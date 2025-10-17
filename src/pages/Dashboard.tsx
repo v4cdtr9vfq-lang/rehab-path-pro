@@ -729,6 +729,25 @@ export default function Home() {
         </CardContent>
       </Card>
 
+      {/* Quick Tools */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4 text-foreground">Herramientas rápidas</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {quickTools.map(tool => {
+          return <Link key={tool.label} to={tool.path}>
+                <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-border/50 h-full">
+                  <CardContent className="p-5 text-center space-y-3">
+                    <div className={`mx-auto w-12 h-12 rounded-2xl bg-sky-blue flex items-center justify-center ${tool.color}`}>
+                      <span className="text-2xl">{tool.emoji}</span>
+                    </div>
+                    <p className="font-semibold text-foreground text-xs leading-tight">{tool.label}</p>
+                  </CardContent>
+                </Card>
+              </Link>;
+        })}
+        </div>
+      </div>
+
       {/* Medals Widget */}
       <div>
         <h2 className="text-2xl font-bold mb-4 text-foreground">Mis medallas</h2>
@@ -754,25 +773,6 @@ export default function Home() {
               </Card>
             );
           })}
-        </div>
-      </div>
-
-      {/* Quick Tools */}
-      <div>
-        <h2 className="text-2xl font-bold mb-4 text-foreground">Herramientas rápidas</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {quickTools.map(tool => {
-          return <Link key={tool.label} to={tool.path}>
-                <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-border/50 h-full">
-                  <CardContent className="p-5 text-center space-y-3">
-                    <div className={`mx-auto w-12 h-12 rounded-2xl bg-sky-blue flex items-center justify-center ${tool.color}`}>
-                      <span className="text-2xl">{tool.emoji}</span>
-                    </div>
-                    <p className="font-semibold text-foreground text-xs leading-tight">{tool.label}</p>
-                  </CardContent>
-                </Card>
-              </Link>;
-        })}
         </div>
       </div>
 
