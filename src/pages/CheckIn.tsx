@@ -156,8 +156,14 @@ export default function CheckIn() {
       }
 
       // Save check-in with trigger, values, and limiting descriptions
+      // Use default text for question 3 if empty
+      const finalAnswers = { ...answers };
+      if (!finalAnswers[3] || finalAnswers[3].trim() === "") {
+        finalAnswers[3] = "Lo mejor está por llegar";
+      }
+      
       const answersWithDescriptions = {
-        ...answers,
+        ...finalAnswers,
         trigger_description: triggerDescription,
         values_description: valuesDescription,
         limiting_description: limitingDescription
@@ -405,8 +411,8 @@ export default function CheckIn() {
                 </div>
               ) : (
                 <Input
-                  placeholder="Escribe..."
-                  value={answers[question.id] || (question.id === 3 ? "Lo mejor está por llegar" : "")}
+                  placeholder={question.id === 3 ? "Lo mejor está por llegar" : "Escribe..."}
+                  value={answers[question.id] || ""}
                   onChange={(e) => handleAnswer(question.id, e.target.value)}
                   className="text-base"
                 />
