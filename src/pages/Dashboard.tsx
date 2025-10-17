@@ -200,7 +200,12 @@ export default function Home() {
     } catch (error: any) {
       console.error('Error in toggleGoal:', error);
       toast({
-        title: "Error",
+        title: (
+          <span className="flex items-start justify-between w-full">
+            <span>Error</span>
+            <span className="text-lg ml-2">⚠️</span>
+          </span>
+        ) as any,
         description: "No se pudo actualizar la meta.",
         variant: "destructive"
       });
@@ -416,7 +421,12 @@ export default function Home() {
     } catch (error) {
       console.error('Error updating goal order:', error);
       toast({
-        title: "Error",
+        title: (
+          <span className="flex items-start justify-between w-full">
+            <span>Error</span>
+            <span className="text-lg ml-2">⚠️</span>
+          </span>
+        ) as any,
         description: "No se pudo guardar el orden de las metas.",
         variant: "destructive",
       });
@@ -431,7 +441,12 @@ export default function Home() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
-          title: "Error",
+          title: (
+            <span className="flex items-start justify-between w-full">
+              <span>Error</span>
+              <span className="text-lg ml-2">⚠️</span>
+            </span>
+          ) as any,
           description: "Debes iniciar sesión para guardar frases.",
           variant: "destructive",
         });
@@ -452,10 +467,15 @@ export default function Home() {
 
           if (error) throw error;
 
-          toast({
-            title: "Frase eliminada",
-            description: "La frase ha sido eliminada de tus guardados.",
-          });
+        toast({
+          title: (
+            <span className="flex items-start justify-between w-full">
+              <span>Frase eliminada</span>
+              <span className="text-lg ml-2">🗑️</span>
+            </span>
+          ) as any,
+          description: "La frase ha sido eliminada de tus guardados.",
+        });
           
           setSavedQuotes(savedQuotes.filter((sq: any) => sq.id !== quoteToRemove.id));
           setIsQuoteSaved(false);
@@ -473,7 +493,12 @@ export default function Home() {
         if (error) throw error;
 
         toast({
-          title: "Frase guardada",
+          title: (
+            <span className="flex items-start justify-between w-full">
+              <span>Frase guardada</span>
+              <span className="text-lg ml-2">⭐</span>
+            </span>
+          ) as any,
           description: "La frase ha sido guardada exitosamente.",
         });
         
@@ -481,7 +506,12 @@ export default function Home() {
       }
     } catch (error: any) {
       toast({
-        title: "Error",
+        title: (
+          <span className="flex items-start justify-between w-full">
+            <span>Error</span>
+            <span className="text-lg ml-2">⚠️</span>
+          </span>
+        ) as any,
         description: "No se pudo guardar la frase.",
         variant: "destructive",
       });
