@@ -5,6 +5,14 @@ export function useSolarTheme() {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
+    // Solo aplicar tema solar si NO hay preferencia guardada
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      // Si ya hay un tema guardado, usar ese
+      setTheme(savedTheme as "light" | "dark");
+      return;
+    }
+
     const determineTheme = (latitude: number, longitude: number) => {
       const now = new Date();
       const times = SunCalc.getTimes(now, latitude, longitude);
