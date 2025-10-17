@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { HelpCircle } from "lucide-react";
 
 interface FAQ {
   id: string;
@@ -144,8 +145,9 @@ export default function Help() {
     <div className="container mx-auto px-4 py-8 max-w-4xl space-y-6 animate-in fade-in duration-500">
       {/* FAQs Section */}
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0">
           <CardTitle className="text-2xl">Preguntas Frecuentes</CardTitle>
+          <HelpCircle className="h-6 w-6 text-red-500" />
         </CardHeader>
         <CardContent className="space-y-4">
           <Tabs value={filter} onValueChange={(v) => setFilter(v as "recent" | "popular")}>
