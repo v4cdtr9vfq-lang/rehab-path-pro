@@ -563,14 +563,14 @@ export default function Plan() {
     sectionKey: keyof typeof sections;
   }) => {
     const count = sections[sectionKey].goals.filter(g => g.instanceIndex === 0).length;
-    return <button onClick={() => toggleSection(sectionKey)} className="flex items-center justify-between w-full text-left">
-        <div className="flex items-center gap-2">
-          <span className="text-primary">✓</span>
+    return <button onClick={() => toggleSection(sectionKey)} className="flex items-center justify-between w-full text-left gap-4">
+        <div className="flex items-center gap-2 flex-1 min-w-0">
+          <span className="text-primary flex-shrink-0">✓</span>
           <h3 className="text-xl font-semibold text-foreground">
             {title} {count > 0 && <span className="text-muted-foreground">({count})</span>}
           </h3>
         </div>
-        {sections[sectionKey].open ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+        {sections[sectionKey].open ? <ChevronUp className="h-5 w-5 flex-shrink-0" /> : <ChevronDown className="h-5 w-5 flex-shrink-0" />}
       </button>;
   };
 
