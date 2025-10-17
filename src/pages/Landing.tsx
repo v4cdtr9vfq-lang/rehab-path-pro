@@ -2,7 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, Target, TrendingUp, Users, Heart, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useSolarTheme } from "@/hooks/useSolarTheme";
+
 export default function Landing() {
+  useSolarTheme();
   const benefits = [{
     icon: Target,
     title: "Seguimiento de progreso",
