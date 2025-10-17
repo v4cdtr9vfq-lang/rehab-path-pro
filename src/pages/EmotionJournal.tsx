@@ -219,10 +219,10 @@ export default function EmotionJournal() {
   };
 
   const handleSubmit = async () => {
-    if (selectedMainEmotions.length === 0 || selectedSubEmotions.length === 0) {
+    if (selectedMainEmotions.length === 0) {
       toast({
         title: "Error",
-        description: "Debes seleccionar al menos una emoción principal y una sub-emoción",
+        description: "Debes seleccionar al menos una emoción principal",
         variant: "destructive"
       });
       return;
@@ -299,10 +299,10 @@ export default function EmotionJournal() {
   const handleUpdate = async () => {
     if (!editingEntry) return;
 
-    if (selectedMainEmotions.length === 0 || selectedSubEmotions.length === 0) {
+    if (selectedMainEmotions.length === 0) {
       toast({
         title: "Error",
-        description: "Debes seleccionar al menos una emoción principal y una sub-emoción",
+        description: "Debes seleccionar al menos una emoción principal",
         variant: "destructive"
       });
       return;
@@ -458,7 +458,7 @@ export default function EmotionJournal() {
       </Card>
 
       {/* Save/Update Button - Outside the card */}
-      {selectedSubEmotions.length > 0 && (
+      {selectedMainEmotions.length > 0 && (
         <div className="flex justify-center gap-4">
           {editingEntry && (
             <Button
@@ -517,7 +517,6 @@ export default function EmotionJournal() {
 
                 <div className="space-y-3">
                   <div>
-                    <h3 className="text-sm font-semibold text-foreground/70 mb-2">Emociones Principales</h3>
                     <div className="flex flex-wrap gap-2">
                       {entry.main_emotion.split(', ').map((emotion, idx) => (
                         <span
@@ -530,19 +529,20 @@ export default function EmotionJournal() {
                     </div>
                   </div>
 
-                  <div>
-                    <h3 className="text-sm font-semibold text-foreground/70 mb-2">Emociones Específicas</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {entry.sub_emotions.map((emotion, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1 rounded-full bg-primary/20 text-primary text-sm"
-                        >
-                          {emotion}
-                        </span>
-                      ))}
+                  {entry.sub_emotions && entry.sub_emotions.length > 0 && (
+                    <div>
+                      <div className="flex flex-wrap gap-2">
+                        {entry.sub_emotions.map((emotion, idx) => (
+                          <span
+                            key={idx}
+                            className="px-3 py-1 rounded-full bg-primary/20 text-primary text-sm"
+                          >
+                            {emotion}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </Card>
             ))}
