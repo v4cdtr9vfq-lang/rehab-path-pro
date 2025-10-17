@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp, CheckCircle2, Circle } from "lucide-react";
+import { CheckCircle2, Circle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -319,8 +319,8 @@ export default function ProgressPage() {
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            <TrendingUp className="h-6 w-6 text-primary" />
-            Progreso
+            <span className="text-2xl">📈</span>
+            Progreso General
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -343,7 +343,10 @@ export default function ProgressPage() {
         <TabsContent value="daily" className="space-y-6 mt-6">
           <Card className="border-primary/20">
             <CardHeader>
-              <CardTitle>Progreso Diario</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-lg">📈</span>
+                Progreso hoy
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
@@ -374,7 +377,10 @@ export default function ProgressPage() {
         <TabsContent value="week" className="space-y-6 mt-6">
           <Card className="border-primary/20">
             <CardHeader>
-              <CardTitle>Progreso Semanal</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-lg">📈</span>
+                Progreso semanal
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {groupGoalsByOriginal(weeklyGoals).map((goal) => (
@@ -391,7 +397,10 @@ export default function ProgressPage() {
         <TabsContent value="month" className="space-y-6 mt-6">
           <Card className="border-primary/20">
             <CardHeader>
-              <CardTitle>Progreso Mensual</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-lg">📈</span>
+                Progreso mensual
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {groupGoalsByOriginal(monthlyGoals).map((goal) => (
