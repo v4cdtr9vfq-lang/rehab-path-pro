@@ -52,8 +52,11 @@ export default function Landing() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed flex items-center justify-center gap-2">
-              <Heart className="h-6 w-6 text-primary flex-shrink-0" />
-              <span>rehabp.org te acompaña en cada paso de tu proceso de crecimiento con herramientas diseñadas para mantenerte motivado y enfocado.</span>
+              <span className="flex items-center gap-2">
+                <Heart className="h-6 w-6 text-primary flex-shrink-0" />
+                <span className="font-semibold">rehabp.org</span>
+              </span>
+              <span>te acompaña en cada paso de tu proceso de crecimiento con herramientas diseñadas para mantenerte motivado y enfocado.</span>
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
