@@ -75,10 +75,12 @@ export default function Landing() {
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 inline-flex items-center gap-3 justify-center flex-wrap">
-              ¿Por qué
-              <Heart className="h-10 w-10 text-primary" />
-              rehabp.org?
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 inline-flex items-center justify-center flex-wrap">
+              <span className="mr-3">¿Por qué</span>
+              <span className="inline-flex items-center gap-2">
+                <Heart className="h-10 w-10 text-primary" />
+                <span>rehabp.org?</span>
+              </span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Herramientas diseñadas específicamente para tu proceso de recuperación de las dependecias.</p>
           </div>
