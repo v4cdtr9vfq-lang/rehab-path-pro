@@ -138,8 +138,8 @@ const emotions: Emotion[] = [
     subEmotions: ["Calmado", "Despejado", "Cómodo", "Centrado", "Contento", "Ecuánime", "Realizado", "Tranquilo", "Quieto", "Relajado", "Aliviado", "Satisfecho", "Sereno", "Confiado"]
   },
   {
-    id: "renovado",
-    name: "Renovado",
+    id: "descansado",
+    name: "Descansado",
     subEmotions: ["Revitalizado", "Renovado", "Descansado", "Restaurado", "Revivido"]
   },
   {
