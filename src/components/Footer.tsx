@@ -131,7 +131,7 @@ export function Footer() {
             rel="noopener noreferrer"
             className="text-white font-bold hover:text-white/80 transition-colors text-center md:text-right block"
           >
-            {new Date().getFullYear()} © Neurotropy™.
+            {new Date().getFullYear()} © Neurotropy™
           </a>
         </div>
       </div>
