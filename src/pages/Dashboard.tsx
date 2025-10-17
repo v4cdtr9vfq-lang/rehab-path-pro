@@ -742,7 +742,7 @@ export default function Home() {
       {/* Quick Tools */}
       <div>
         <h2 className="text-2xl font-bold mb-4 text-foreground">Herramientas rápidas</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
           {quickTools.map(tool => {
           return <Link key={tool.label} to={tool.path}>
                 <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-border/50 h-full">
