@@ -34,48 +34,90 @@ interface SavedEmotionEntry {
 
 const emotionCategories: PrimaryCategory[] = [
   {
+    id: "cerrado",
+    name: "Cerrado",
+    secondaryEmotions: [
+      {
+        id: "rechazo",
+        name: "Rechazo",
+        tertiaryEmotions: ["Animosidad", "Desprecio", "Desagrado", "Disgustado", "Horrorizado", "Hostil", "Odio", "Repulsado"]
+      },
+      {
+        id: "triste",
+        name: "Triste",
+        tertiaryEmotions: ["Abatido", "Decepcionado", "Deprimido", "Desalentado", "Desanimado", "Descorazonado", "Desdichado", "Desesperado", "Desolado", "Infeliz", "Melancólico", "Sin esperanza", "Sombrío"]
+      }
+    ]
+  },
+  {
+    id: "confundido",
+    name: "Confundido",
+    secondaryEmotions: [
+      {
+        id: "asustado",
+        name: "Asustado",
+        tertiaryEmotions: ["Aprensivo", "Asustado", "Atemorizado", "Aterrorizado", "Cauteloso", "Desconfiado", "En pánico", "Petrificado", "Preocupado", "Presentimiento", "Sospechoso", "Temor"]
+      },
+      {
+        id: "confundido",
+        name: "Confundido",
+        tertiaryEmotions: ["Ambivalente", "Aturdido", "Confuso", "Desconcertado", "Dividido", "Perdido", "Perplejo", "Vacilante"]
+      },
+      {
+        id: "fatigado",
+        name: "Fatigado",
+        tertiaryEmotions: ["Agotado", "Apático", "Cansado", "Exhausto", "Fatigado", "Letárgico", "Quemado", "Somnoliento"]
+      },
+      {
+        id: "incomodo",
+        name: "Incómodo",
+        tertiaryEmotions: ["Incómodo", "Inquieto", "Intranquilo", "Molesto", "Nervioso"]
+      }
+    ]
+  },
+  {
     id: "conectado",
     name: "Conectado",
     secondaryEmotions: [
       {
+        id: "abierto",
+        name: "Abierto",
+        tertiaryEmotions: ["Accesible", "Disponible", "Receptivo", "Sincero", "Transparente"]
+      },
+      {
         id: "afectuoso",
         name: "Afectuoso",
-        tertiaryEmotions: ["Compasivo", "Amigable", "Amoroso", "De corazón abierto", "Simpático", "Tierno", "Cálido"]
+        tertiaryEmotions: ["Amigable", "Amoroso", "Cálido", "Compasivo", "De corazón abierto", "Simpático", "Tierno"]
       },
       {
         id: "agradecido",
         name: "Agradecido",
-        tertiaryEmotions: ["Humildad", "Asombro", "Alegría suave", "Calidez", "Generosidad", "Reconocimiento"]
+        tertiaryEmotions: ["Alegría suave", "Asombro", "Calidez", "Generosidad", "Humildad", "Reconocimiento"]
       },
       {
         id: "comprometido",
         name: "Comprometido",
-        tertiaryEmotions: ["Absorto", "Alerta", "Curioso", "Absorto", "Encantado", "Fascinado", "Interesado", "Intrigado", "Involucrado", "Estimulado"]
+        tertiaryEmotions: ["Absorto", "Alerta", "Curioso", "Encantado", "Estimulado", "Fascinado", "Interesado", "Intrigado", "Involucrado"]
       },
       {
         id: "conectado",
         name: "Conectado",
-        tertiaryEmotions: ["Empatía", "Complicidad", "Afiliación", "Sintonía", "Cuidado"]
+        tertiaryEmotions: ["Afiliación", "Complicidad", "Cuidado", "Empatía", "Sintonía"]
       },
       {
         id: "confiado",
         name: "Confiado",
-        tertiaryEmotions: ["Empoderado", "Abierto", "Orgulloso", "Seguro", "Protegido"]
-      },
-      {
-        id: "abierto",
-        name: "Abierto",
-        tertiaryEmotions: ["Receptivo", "Disponible", "Accesible", "Transparente", "Sincero"]
-      },
-      {
-        id: "seguro",
-        name: "Seguro",
-        tertiaryEmotions: ["Tranquilidad", "Confianza", "Calma", "Aceptación", "Pertenencia", "Previsibilidad", "Intimidad"]
+        tertiaryEmotions: ["Abierto", "Empoderado", "Orgulloso", "Protegido", "Seguro"]
       },
       {
         id: "pacifico",
         name: "Pacífico",
-        tertiaryEmotions: ["Calmado", "Despejado", "Cómodo", "Centrado", "Contento", "Ecuánime", "Realizado", "Tranquilo", "Quieto", "Relajado", "Aliviado", "Satisfecho", "Sereno", "Confiado"]
+        tertiaryEmotions: ["Aliviado", "Calmado", "Centrado", "Cómodo", "Confiado", "Contento", "Despejado", "Ecuánime", "Quieto", "Realizado", "Relajado", "Satisfecho", "Sereno", "Tranquilo"]
+      },
+      {
+        id: "seguro",
+        name: "Seguro",
+        tertiaryEmotions: ["Aceptación", "Calma", "Confianza", "Intimidad", "Pertenencia", "Previsibilidad", "Tranquilidad"]
       }
     ]
   },
@@ -84,14 +126,14 @@ const emotionCategories: PrimaryCategory[] = [
     name: "Desconectado",
     secondaryEmotions: [
       {
-        id: "desconectado",
-        name: "Desconectado",
-        tertiaryEmotions: ["Alienado", "Distante", "Apático", "Aburrido", "Frío", "Desapegado", "Distraído", "Indiferente", "Adormecido", "Alejado", "Desinteresado", "Retraído"]
-      },
-      {
         id: "descansado",
         name: "Descansado",
-        tertiaryEmotions: ["Revitalizado", "Renovado", "Descansado", "Restaurado", "Revivido"]
+        tertiaryEmotions: ["Descansado", "Renovado", "Restaurado", "Revitalizado", "Revivido"]
+      },
+      {
+        id: "desconectado",
+        name: "Desconectado",
+        tertiaryEmotions: ["Aburrido", "Adormecido", "Alejado", "Alienado", "Apático", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído"]
       }
     ]
   },
@@ -102,64 +144,27 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "alegre",
         name: "Alegre",
-        tertiaryEmotions: ["Divertido", "Encantado", "Contento", "Feliz", "Jubiloso", "Complacido", "Alegre"]
+        tertiaryEmotions: ["Alegre", "Complacido", "Contento", "Divertido", "Encantado", "Feliz", "Jubiloso"]
       },
       {
         id: "entusiasmado",
         name: "Entusiasmado",
-        tertiaryEmotions: ["Animado", "Ardiente", "Emocionado", "Asombrado", "Deslumbrado", "Ansioso", "Enérgico", "Entusiasta", "Vigorizado", "Animado", "Apasionado", "Sorprendido", "Vibrante"]
+        tertiaryEmotions: ["Animado", "Ansioso", "Apasionado", "Ardiente", "Asombrado", "Deslumbrado", "Emocionado", "Enérgico", "Entusiasta", "Sorprendido", "Vibrante", "Vigorizado"]
       },
       {
         id: "esperanzado",
         name: "Esperanzado",
-        tertiaryEmotions: ["Expectante", "Alentado", "Optimista"]
-      },
-      {
-        id: "inspirado",
-        name: "Inspirado",
-        tertiaryEmotions: ["Asombrado", "Maravillado", "Admirado"]
+        tertiaryEmotions: ["Alentado", "Expectante", "Optimista"]
       },
       {
         id: "euforico",
         name: "Eufórico",
-        tertiaryEmotions: ["Dichoso", "Extático", "Exaltado", "Embelesado", "Exuberante", "Radiante", "Arrebatado", "Emocionado", "Hechizado"]
-      }
-    ]
-  },
-  {
-    id: "cerrado",
-    name: "Cerrado",
-    secondaryEmotions: [
-      {
-        id: "rechazo",
-        name: "Rechazo",
-        tertiaryEmotions: ["Animosidad", "Horrorizado", "Desprecio", "Disgustado", "Desagrado", "Odio", "Hostil", "Repulsado"]
+        tertiaryEmotions: ["Arrebatado", "Dichoso", "Embelesado", "Emocionado", "Exaltado", "Extático", "Exuberante", "Hechizado", "Radiante"]
       },
       {
-        id: "triste",
-        name: "Triste",
-        tertiaryEmotions: ["Deprimido", "Abatido", "Desesperado", "Desalentado", "Decepcionado", "Desanimado", "Descorazonado", "Desolado", "Sombrío", "Sin esperanza", "Melancólico", "Infeliz", "Desdichado"]
-      }
-    ]
-  },
-  {
-    id: "vulnerable",
-    name: "Vulnerable",
-    secondaryEmotions: [
-      {
-        id: "dolor",
-        name: "Dolor",
-        tertiaryEmotions: ["Agonía", "Angustiado", "Afligido", "Devastado", "Duelo", "Desconsolado", "Herido", "Solo", "Miserable", "Arrepentido", "Remordido"]
-      },
-      {
-        id: "vulnerable",
-        name: "Vulnerable",
-        tertiaryEmotions: ["Frágil", "Indefenso", "Inseguro", "Cauteloso", "Reservado", "Sensible", "Tembloroso"]
-      },
-      {
-        id: "avergonzado",
-        name: "Avergonzado",
-        tertiaryEmotions: ["Avergonzado", "Mortificado", "Turbado", "Culpable", "Cohibido"]
+        id: "inspirado",
+        name: "Inspirado",
+        tertiaryEmotions: ["Admirado", "Asombrado", "Maravillado"]
       }
     ]
   },
@@ -170,48 +175,43 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "enojado",
         name: "Enojado",
-        tertiaryEmotions: ["Enfurecido", "Furioso", "Indignado", "Airado", "Iracundo", "Lívido", "Ultrajado", "Resentido"]
-      },
-      {
-        id: "molesto",
-        name: "Molesto",
-        tertiaryEmotions: ["Agravado", "Consternado", "Disgustado", "Descontento", "Exasperado", "Frustrado", "Impaciente", "Irritado", "Molesto"]
+        tertiaryEmotions: ["Airado", "Enfurecido", "Furioso", "Indignado", "Iracundo", "Lívido", "Resentido", "Ultrajado"]
       },
       {
         id: "inquieto",
         name: "Inquieto",
-        tertiaryEmotions: ["Agitado", "Alarmado", "Desconcertado", "Perturbado", "Alterado", "Inquieto", "Conmocionado", "Sobresaltado", "Sorprendido", "Preocupado", "Turbulento", "Agitación"]
+        tertiaryEmotions: ["Agitación", "Agitado", "Alarmado", "Alterado", "Conmocionado", "Desconcertado", "Inquieto", "Perturbado", "Preocupado", "Sobresaltado", "Sorprendido", "Turbulento"]
+      },
+      {
+        id: "molesto",
+        name: "Molesto",
+        tertiaryEmotions: ["Agravado", "Consternado", "Descontento", "Disgustado", "Exasperado", "Frustrado", "Impaciente", "Irritado", "Molesto"]
       },
       {
         id: "tenso",
         name: "Tenso",
-        tertiaryEmotions: ["Ansioso", "Angustiado", "Consternado", "Nervioso", "Inquieto", "Estresado", "Irritable", "Abrumado", "Estresado"]
+        tertiaryEmotions: ["Abrumado", "Angustiado", "Ansioso", "Consternado", "Estresado", "Inquieto", "Irritable", "Nervioso"]
       }
     ]
   },
   {
-    id: "confundido",
-    name: "Confundido",
+    id: "vulnerable",
+    name: "Vulnerable",
     secondaryEmotions: [
       {
-        id: "confundido",
-        name: "Confundido",
-        tertiaryEmotions: ["Ambivalente", "Desconcertado", "Perplejo", "Aturdido", "Vacilante", "Perdido", "Desconcertado", "Confuso", "Dividido"]
+        id: "avergonzado",
+        name: "Avergonzado",
+        tertiaryEmotions: ["Avergonzado", "Cohibido", "Culpable", "Mortificado", "Turbado"]
       },
       {
-        id: "asustado",
-        name: "Asustado",
-        tertiaryEmotions: ["Aprensivo", "Temor", "Presentimiento", "Atemorizado", "Desconfiado", "En pánico", "Petrificado", "Asustado", "Sospechoso", "Aterrorizado", "Cauteloso", "Preocupado"]
+        id: "dolor",
+        name: "Dolor",
+        tertiaryEmotions: ["Afligido", "Agonía", "Angustiado", "Arrepentido", "Desconsolado", "Devastado", "Duelo", "Herido", "Miserable", "Remordido", "Solo"]
       },
       {
-        id: "incomodo",
-        name: "Incómodo",
-        tertiaryEmotions: ["Incómodo", "Intranquilo", "Nervioso", "Inquieto", "Molesto"]
-      },
-      {
-        id: "fatigado",
-        name: "Fatigado",
-        tertiaryEmotions: ["Agotado", "Quemado", "Agotado", "Exhausto", "Letárgico", "Apático", "Somnoliento", "Cansado", "Fatigado"]
+        id: "vulnerable",
+        name: "Vulnerable",
+        tertiaryEmotions: ["Cauteloso", "Frágil", "Indefenso", "Inseguro", "Reservado", "Sensible", "Tembloroso"]
       }
     ]
   }
@@ -472,14 +472,10 @@ export default function EmotionJournal() {
   // Get selected category data
   const selectedCategory = emotionCategories.find(c => c.id === selectedPrimary);
   
-  // Get selected secondary emotions data (reversed for last-selected-first display)
+  // Get selected secondary emotions data (sorted alphabetically)
   const selectedSecondaryData = selectedCategory?.secondaryEmotions
     .filter(e => selectedSecondary.includes(e.id))
-    .sort((a, b) => {
-      const indexA = selectedSecondary.indexOf(a.id);
-      const indexB = selectedSecondary.indexOf(b.id);
-      return indexB - indexA;
-    }) || [];
+    .sort((a, b) => a.name.localeCompare(b.name)) || [];
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -666,7 +662,7 @@ export default function EmotionJournal() {
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground mb-2">Primarias:</h3>
                       <div className="flex flex-wrap gap-2">
-                        {entry.secondary_emotions.map((emotion, idx) => (
+                        {[...entry.secondary_emotions].sort().map((emotion, idx) => (
                           <span
                             key={idx}
                             className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm font-medium"
@@ -682,7 +678,7 @@ export default function EmotionJournal() {
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground mb-2">Secundarias:</h3>
                       <div className="flex flex-wrap gap-2">
-                        {[...entry.tertiary_emotions].reverse().map((emotion, idx) => (
+                        {[...entry.tertiary_emotions].sort().map((emotion, idx) => (
                           <span
                             key={idx}
                             className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm"
