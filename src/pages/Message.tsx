@@ -250,8 +250,7 @@ export default function Message() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-2xl">💭</span>
-              <MessageSquare className="h-6 w-6 text-primary" />
+              <span className="text-2xl">✈️</span>
               <CardTitle className="text-2xl">Frase del Día</CardTitle>
               <span className="text-2xl">✨</span>
             </div>
@@ -282,10 +281,7 @@ export default function Message() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <div className="flex items-center gap-2">
-            <Send className="h-6 w-6 text-primary" />
-            <CardTitle className="text-xl">Propón una frase a la Comunidad</CardTitle>
-          </div>
+          <CardTitle className="text-xl">Propón una frase a la Comunidad</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={submitProposedQuote} className="space-y-4">
