@@ -61,7 +61,7 @@ All colors MUST be HSL.
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 18%;
     --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 217 91% 60%;
+    --sidebar-border: 0 0% 20%;
     --sidebar-ring: 12 100% 65%;
   }
 
@@ -120,7 +120,7 @@ All colors MUST be HSL.
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 95%;
     --sidebar-accent-foreground: 0 0% 10%;
-    --sidebar-border: 217 91% 70%;
+    --sidebar-border: 0 0% 90%;
     --sidebar-ring: 12 100% 65%;
   }
 }
