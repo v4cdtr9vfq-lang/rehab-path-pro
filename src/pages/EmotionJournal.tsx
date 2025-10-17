@@ -376,7 +376,14 @@ export default function EmotionJournal() {
     setSelectedSubEmotions([]);
   };
 
-  const selectedEmotionsData = emotions.filter(e => selectedMainEmotions.includes(e.id));
+  // Filter and reverse so the last selected emotion appears first
+  const selectedEmotionsData = emotions
+    .filter(e => selectedMainEmotions.includes(e.id))
+    .sort((a, b) => {
+      const indexA = selectedMainEmotions.indexOf(a.id);
+      const indexB = selectedMainEmotions.indexOf(b.id);
+      return indexB - indexA; // Reverse order - last selected first
+    });
 
   return (
     <div className="space-y-6 animate-fade-in">
