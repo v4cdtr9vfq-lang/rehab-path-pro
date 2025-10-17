@@ -69,7 +69,7 @@ export default function Journal() {
       console.error('Error loading entries:', error);
       toast({
         title: "Error",
-        description: "No se pudieron cargar las entradas",
+        description: "No se pudieron cargar las entradas.",
         variant: "destructive",
       });
     } finally {
@@ -107,13 +107,13 @@ export default function Journal() {
       
       toast({
         title: "Grabando",
-        description: "Habla ahora para crear una entrada automática...",
+        description: "Habla ahora para crear una entrada automática.",
       });
     } catch (error) {
       console.error('Error starting recording:', error);
       toast({
         title: "Error",
-        description: "No se pudo acceder al micrófono",
+        description: "No se pudo acceder al micrófono.",
         variant: "destructive",
       });
     }
@@ -147,7 +147,7 @@ export default function Journal() {
           if (!user) {
             toast({
               title: "Error",
-              description: "Debes iniciar sesión para guardar entradas",
+              description: "Debes iniciar sesión para guardar entradas.",
               variant: "destructive",
             });
             setIsProcessingQuick(false);
@@ -173,7 +173,7 @@ export default function Journal() {
             
             toast({
               title: "Entrada creada",
-              description: "Tu audio ha sido transcrito y guardado como nueva entrada",
+              description: "Tu audio ha sido transcrito y guardado como nueva entrada.",
             });
           }
         }
@@ -184,7 +184,7 @@ export default function Journal() {
       console.error('Error transcribing audio:', error);
       toast({
         title: "Error",
-        description: "No se pudo transcribir el audio",
+        description: "No se pudo transcribir el audio.",
         variant: "destructive",
       });
       setIsProcessingQuick(false);
@@ -195,7 +195,7 @@ export default function Journal() {
     if (!entryTitle.trim() || !entryContent.trim()) {
       toast({
         title: "Error",
-        description: "Por favor completa el título y contenido",
+        description: "Por favor completa el título y contenido.",
         variant: "destructive",
       });
       return;
@@ -207,7 +207,7 @@ export default function Journal() {
       if (!user) {
         toast({
           title: "Error",
-          description: "Debes iniciar sesión para guardar entradas",
+          description: "Debes iniciar sesión para guardar entradas.",
           variant: "destructive",
         });
         return;
@@ -236,7 +236,7 @@ export default function Journal() {
 
         toast({
           title: "Entrada actualizada",
-          description: "Tu entrada ha sido actualizada exitosamente",
+          description: "Tu entrada ha sido actualizada exitosamente.",
         });
       } else {
         // Create new entry
@@ -258,7 +258,7 @@ export default function Journal() {
           
           toast({
             title: "Entrada guardada",
-            description: "Tu entrada ha sido guardada exitosamente",
+            description: "Tu entrada ha sido guardada exitosamente.",
           });
         }
       }
@@ -277,7 +277,7 @@ export default function Journal() {
       console.error('Error saving entry:', error);
       toast({
         title: "Error",
-        description: "No se pudo guardar la entrada",
+        description: "No se pudo guardar la entrada.",
         variant: "destructive",
       });
     }
@@ -296,13 +296,13 @@ export default function Journal() {
       
       toast({
         title: "Entrada eliminada",
-        description: "La entrada ha sido eliminada exitosamente",
+        description: "La entrada ha sido eliminada exitosamente.",
       });
     } catch (error) {
       console.error('Error deleting entry:', error);
       toast({
         title: "Error",
-        description: "No se pudo eliminar la entrada",
+        description: "No se pudo eliminar la entrada.",
         variant: "destructive",
       });
     }

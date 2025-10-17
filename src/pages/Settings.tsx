@@ -96,7 +96,7 @@ export default function Settings() {
     if (!abstinenceStartDate) {
       toast({
         title: "Error",
-        description: "Por favor selecciona una fecha válida",
+        description: "Por favor selecciona una fecha válida.",
         variant: "destructive",
       });
       return;
@@ -119,7 +119,7 @@ export default function Settings() {
 
       toast({
         title: "Fecha actualizada",
-        description: "Tu fecha de inicio de abstinencia ha sido actualizada exitosamente",
+        description: "Tu fecha de inicio de abstinencia ha sido actualizada exitosamente.",
       });
 
       // Notify Dashboard to update
@@ -127,7 +127,7 @@ export default function Settings() {
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "No se pudo actualizar la fecha",
+        description: error.message || "No se pudo actualizar la fecha.",
         variant: "destructive",
       });
     } finally {
@@ -139,7 +139,7 @@ export default function Settings() {
     if (!newEmail.trim()) {
       toast({
         title: "Error",
-        description: "Por favor ingresa un email válido",
+        description: "Por favor ingresa un email válido.",
         variant: "destructive",
       });
       return;
@@ -153,13 +153,13 @@ export default function Settings() {
 
       toast({
         title: "Email actualizado",
-        description: "Se ha enviado un correo de confirmación a tu nueva dirección",
+        description: "Se ha enviado un correo de confirmación a tu nueva dirección.",
       });
       setNewEmail("");
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message,
+        description: error.message + ".",
         variant: "destructive",
       });
     } finally {
@@ -171,7 +171,7 @@ export default function Settings() {
     if (!currentPassword) {
       toast({
         title: "Error",
-        description: "Por favor ingresa tu contraseña actual",
+        description: "Por favor ingresa tu contraseña actual.",
         variant: "destructive",
       });
       return;
@@ -180,7 +180,7 @@ export default function Settings() {
     if (!newPassword || newPassword.length < 6) {
       toast({
         title: "Error",
-        description: "La nueva contraseña debe tener al menos 6 caracteres",
+        description: "La nueva contraseña debe tener al menos 6 caracteres.",
         variant: "destructive",
       });
       return;
@@ -189,7 +189,7 @@ export default function Settings() {
     if (newPassword !== confirmPassword) {
       toast({
         title: "Error",
-        description: "Las contraseñas no coinciden",
+        description: "Las contraseñas no coinciden.",
         variant: "destructive",
       });
       return;
@@ -209,7 +209,7 @@ export default function Settings() {
       if (signInError) {
         toast({
           title: "Error",
-          description: "La contraseña actual es incorrecta",
+          description: "La contraseña actual es incorrecta.",
           variant: "destructive",
         });
         return;
@@ -222,7 +222,7 @@ export default function Settings() {
 
       toast({
         title: "Contraseña actualizada",
-        description: "Tu contraseña ha sido actualizada exitosamente",
+        description: "Tu contraseña ha sido actualizada exitosamente.",
       });
       setCurrentPassword("");
       setNewPassword("");
@@ -230,7 +230,7 @@ export default function Settings() {
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message,
+        description: error.message + ".",
         variant: "destructive",
       });
     } finally {
@@ -281,7 +281,7 @@ export default function Settings() {
     
     toast({
       title: "Recordatorio añadido",
-      description: "Tu recordatorio ha sido configurado exitosamente",
+      description: "Tu recordatorio ha sido configurado exitosamente.",
     });
   };
 

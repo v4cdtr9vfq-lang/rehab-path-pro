@@ -336,7 +336,7 @@ export default function Plan() {
     } catch (error: any) {
       toast({
         title: "Error",
-        description: "No se pudieron cargar las metas",
+        description: "No se pudieron cargar las metas.",
         variant: "destructive"
       });
     }
@@ -406,13 +406,13 @@ export default function Plan() {
       }).eq('id', goal.originalId);
       toast({
         title: "Meta actualizada",
-        description: "El estado de la meta ha sido actualizado"
+        description: "El estado de la meta ha sido actualizado."
       });
     } catch (error: any) {
       console.error('Error in toggleGoal:', error);
       toast({
         title: "Error",
-        description: "No se pudo actualizar la meta",
+        description: "No se pudo actualizar la meta.",
         variant: "destructive"
       });
       // Revert on error
@@ -430,7 +430,7 @@ export default function Plan() {
       if (!user) {
         toast({
           title: "Error",
-          description: "Debes iniciar sesión para añadir metas",
+          description: "Debes iniciar sesión para añadir metas.",
           variant: "destructive"
         });
         return;
@@ -453,7 +453,7 @@ export default function Plan() {
         await fetchGoals();
         toast({
           title: "¡Meta añadida!",
-          description: "Tu meta ha sido guardada exitosamente"
+          description: "Tu meta ha sido guardada exitosamente."
         });
       }
       setNewGoal({
@@ -467,7 +467,7 @@ export default function Plan() {
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "No se pudo guardar la meta",
+        description: error.message || "No se pudo guardar la meta.",
         variant: "destructive"
       });
     }
@@ -500,12 +500,12 @@ export default function Plan() {
       }));
       toast({
         title: "Meta eliminada",
-        description: "La meta ha sido eliminada exitosamente"
+        description: "La meta ha sido eliminada exitosamente."
       });
     } catch (error: any) {
       toast({
         title: "Error",
-        description: "No se pudo eliminar la meta",
+        description: "No se pudo eliminar la meta.",
         variant: "destructive"
       });
     }
@@ -543,14 +543,14 @@ export default function Plan() {
       await fetchGoals();
       toast({
         title: "Meta actualizada",
-        description: "La meta ha sido actualizada exitosamente"
+        description: "La meta ha sido actualizada exitosamente."
       });
       setIsEditDialogOpen(false);
       setEditingGoal(null);
     } catch (error: any) {
       toast({
         title: "Error",
-        description: "No se pudo actualizar la meta",
+        description: "No se pudo actualizar la meta.",
         variant: "destructive"
       });
     }

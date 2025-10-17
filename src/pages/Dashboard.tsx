@@ -190,13 +190,13 @@ export default function Home() {
       }).eq('id', goal.originalId).eq('user_id', user.id);
       toast({
         title: "Meta actualizada",
-        description: wasCompleted ? "Meta marcada como pendiente" : "¡Meta completada!"
+        description: wasCompleted ? "Meta marcada como pendiente." : "¡Meta completada!."
       });
     } catch (error: any) {
       console.error('Error in toggleGoal:', error);
       toast({
         title: "Error",
-        description: "No se pudo actualizar la meta",
+        description: "No se pudo actualizar la meta.",
         variant: "destructive"
       });
       // Revert optimistic update on error
@@ -412,7 +412,7 @@ export default function Home() {
       console.error('Error updating goal order:', error);
       toast({
         title: "Error",
-        description: "No se pudo guardar el orden de las metas",
+        description: "No se pudo guardar el orden de las metas.",
         variant: "destructive",
       });
       // Revert on error
@@ -427,7 +427,7 @@ export default function Home() {
       if (!user) {
         toast({
           title: "Error",
-          description: "Debes iniciar sesión para guardar frases",
+          description: "Debes iniciar sesión para guardar frases.",
           variant: "destructive",
         });
         return;
@@ -449,7 +449,7 @@ export default function Home() {
 
           toast({
             title: "Frase eliminada",
-            description: "La frase ha sido eliminada de tus guardados",
+            description: "La frase ha sido eliminada de tus guardados.",
           });
           
           setSavedQuotes(savedQuotes.filter((sq: any) => sq.id !== quoteToRemove.id));
@@ -469,7 +469,7 @@ export default function Home() {
 
         toast({
           title: "Frase guardada",
-          description: "La frase ha sido guardada exitosamente",
+          description: "La frase ha sido guardada exitosamente.",
         });
         
         setIsQuoteSaved(true);
@@ -477,7 +477,7 @@ export default function Home() {
     } catch (error: any) {
       toast({
         title: "Error",
-        description: "No se pudo guardar la frase",
+        description: "No se pudo guardar la frase.",
         variant: "destructive",
       });
     }

@@ -291,7 +291,7 @@ export default function EmotionJournal() {
     if (!selectedPrimary) {
       toast({
         title: "Error",
-        description: "Debes seleccionar una categoría principal",
+        description: "Debes seleccionar una categoría principal.",
         variant: "destructive"
       });
       return;
@@ -300,7 +300,7 @@ export default function EmotionJournal() {
     if (selectedSecondary.length === 0) {
       toast({
         title: "Error",
-        description: "Debes seleccionar al menos una emoción secundaria",
+        description: "Debes seleccionar al menos una emoción secundaria.",
         variant: "destructive"
       });
       return;
@@ -312,7 +312,7 @@ export default function EmotionJournal() {
       if (!user) {
         toast({
           title: "Error",
-          description: "Debes iniciar sesión para guardar tus emociones",
+          description: "Debes iniciar sesión para guardar tus emociones.",
           variant: "destructive"
         });
         return;
@@ -351,7 +351,7 @@ export default function EmotionJournal() {
       console.error('Error saving emotions:', error);
       toast({
         title: "Error",
-        description: "No se pudo guardar tu entrada",
+        description: "No se pudo guardar tu entrada.",
         variant: "destructive"
       });
     } finally {
@@ -388,7 +388,7 @@ export default function EmotionJournal() {
     if (!selectedPrimary || selectedSecondary.length === 0) {
       toast({
         title: "Error",
-        description: "Debes seleccionar una categoría principal y al menos una emoción secundaria",
+        description: "Debes seleccionar una categoría principal y al menos una emoción secundaria.",
         variant: "destructive"
       });
       return;
@@ -417,7 +417,7 @@ export default function EmotionJournal() {
 
       toast({
         title: "¡Actualizado!",
-        description: "Tu entrada ha sido actualizada exitosamente"
+        description: "Tu entrada ha sido actualizada exitosamente."
       });
 
       setEditingEntry(null);
@@ -429,7 +429,7 @@ export default function EmotionJournal() {
       console.error('Error updating entry:', error);
       toast({
         title: "Error",
-        description: "No se pudo actualizar tu entrada",
+        description: "No se pudo actualizar tu entrada.",
         variant: "destructive"
       });
     } finally {
@@ -448,7 +448,7 @@ export default function EmotionJournal() {
 
       toast({
         title: "Eliminado",
-        description: "La entrada ha sido eliminada"
+        description: "La entrada ha sido eliminada."
       });
 
       await loadSavedEntries();
@@ -456,7 +456,7 @@ export default function EmotionJournal() {
       console.error('Error deleting entry:', error);
       toast({
         title: "Error",
-        description: "No se pudo eliminar la entrada",
+        description: "No se pudo eliminar la entrada.",
         variant: "destructive"
       });
     }
