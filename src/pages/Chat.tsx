@@ -54,11 +54,19 @@ export default function Chat() {
   const [reportedMessages, setReportedMessages] = useState<Set<string>>(new Set());
   const [myReports, setMyReports] = useState<Set<string>>(new Set());
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const [anonymousNumber, setAnonymousNumber] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const channelRef = useRef<any>(null);
 
   useEffect(() => {
     initializeChat();
+    // Load anonymous number from sessionStorage for this room
+    const storedNumber = sessionStorage.getItem(`anonymous_number_${currentRoom}`);
+    if (storedNumber) {
+      setAnonymousNumber(parseInt(storedNumber));
+    } else {
+      setAnonymousNumber(null);
+    }
     return () => {
       if (channelRef.current) {
         supabase.removeChannel(channelRef.current);
@@ -202,27 +210,35 @@ export default function Chat() {
       let displayName = userName;
       
       if (isAnonymous) {
-        // Get all anonymous messages in current room to find the highest number
-        const { data: anonymousMessages } = await supabase
-          .from('chat_messages')
-          .select('user_name')
-          .eq('room', currentRoom)
-          .ilike('user_name', 'Anónimo%');
+        // Check if user already has an anonymous number for this room
+        if (anonymousNumber !== null) {
+          displayName = `Anónimo ${anonymousNumber}`;
+        } else {
+          // Get all anonymous messages in current room to find the highest number
+          const { data: anonymousMessages } = await supabase
+            .from('chat_messages')
+            .select('user_name')
+            .eq('room', currentRoom)
+            .ilike('user_name', 'Anónimo%');
 
-        // Extract all numbers and find the highest
-        let maxNumber = 0;
-        anonymousMessages?.forEach(msg => {
-          const match = msg.user_name.match(/Anónimo (\d+)/);
-          if (match) {
-            const num = parseInt(match[1]);
-            if (num > maxNumber) {
-              maxNumber = num;
+          // Extract all numbers and find the highest
+          let maxNumber = 0;
+          anonymousMessages?.forEach(msg => {
+            const match = msg.user_name.match(/Anónimo (\d+)/);
+            if (match) {
+              const num = parseInt(match[1]);
+              if (num > maxNumber) {
+                maxNumber = num;
+              }
             }
-          }
-        });
+          });
 
-        // Assign next number
-        displayName = `Anónimo ${maxNumber + 1}`;
+          // Assign next number and store it
+          const newNumber = maxNumber + 1;
+          displayName = `Anónimo ${newNumber}`;
+          setAnonymousNumber(newNumber);
+          sessionStorage.setItem(`anonymous_number_${currentRoom}`, newNumber.toString());
+        }
       }
 
       const { error } = await supabase
