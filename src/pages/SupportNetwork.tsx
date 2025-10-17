@@ -158,7 +158,7 @@ export default function SupportNetwork() {
     <div className="relative space-y-6 animate-in fade-in duration-500">
       {/* Emoji Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-sky-blue/10 rounded-3xl">
+        <div className="absolute inset-0 bg-sky-blue/20 rounded-3xl">
           <div className="absolute inset-0 flex flex-wrap justify-around items-center gap-8 text-sky-blue text-6xl select-none opacity-30">
             {['🤝', '💚', '👥', '🫂', '💪', '❤️', '🌟', '🤲', '👨‍👩‍👧‍👦', '🙏', '💙', '✨', '🌈', '🤗', '💖'].map((emoji, index) => (
               <span key={index} className="animate-pulse" style={{ animationDelay: `${index * 0.2}s` }}>
