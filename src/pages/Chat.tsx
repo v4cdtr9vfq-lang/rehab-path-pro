@@ -237,7 +237,6 @@ export default function Chat() {
       if (error) throw error;
 
       setNewMessage("");
-      setIsAnonymous(false);
     } catch (error: any) {
       console.error('Error sending message:', error);
       toast({
