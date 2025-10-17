@@ -30,7 +30,7 @@ const emotions: Emotion[] = [
   {
     id: "agradecido",
     name: "Agradecido",
-    subEmotions: ["Apreciativo", "Conmovido", "Agradecido", "Tocado"]
+    subEmotions: ["Humildad", "Asombro", "Alegría suave", "Calidez", "Generosidad", "Reconocimiento"]
   },
   {
     id: "alegre",
@@ -73,9 +73,9 @@ const emotions: Emotion[] = [
     subEmotions: ["Empoderado", "Abierto", "Orgulloso", "Seguro", "Protegido"]
   },
   {
-    id: "conexion",
-    name: "Conexión",
-    subEmotions: ["Conectado", "Vinculado", "Cercano", "Unido", "Acompañado", "Integrado", "Perteneciente"]
+    id: "conectado",
+    name: "Conectado",
+    subEmotions: ["Empatía", "Complicidad", "Afiliación", "Sintonía", "Cuidado"]
   },
   {
     id: "desconectado",
@@ -143,18 +143,8 @@ const emotions: Emotion[] = [
     subEmotions: ["Revitalizado", "Renovado", "Descansado", "Restaurado", "Revivido"]
   },
   {
-    id: "sentirse_agradecido",
-    name: "Sentirse agradecido",
-    subEmotions: ["Humildad", "Asombro", "Alegría suave", "Calidez", "Generosidad", "Reconocimiento"]
-  },
-  {
-    id: "sentirse_conectado",
-    name: "Sentirse conectado",
-    subEmotions: ["Empatía", "Complicidad", "Afiliación", "Sintonía", "Cuidado"]
-  },
-  {
-    id: "sentirse_seguro",
-    name: "Sentirse seguro",
+    id: "seguro",
+    name: "Seguro",
     subEmotions: ["Tranquilidad", "Confianza", "Calma", "Aceptación", "Pertenencia", "Previsibilidad", "Intimidad"]
   },
   {
