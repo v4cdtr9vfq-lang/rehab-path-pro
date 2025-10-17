@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Heart, Mail } from "lucide-react";
+import { Heart, Mail, Info } from "lucide-react";
 
 export function Footer() {
   return (
@@ -102,20 +102,31 @@ export function Footer() {
 
         {/* Bottom Section */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground text-center md:text-left">
+          <div className="flex items-center gap-6">
+            {/* About Us Button */}
+            <a 
+              href="#" 
+              className="flex items-center gap-2 text-destructive hover:text-destructive/80 transition-colors"
+            >
+              <Info className="h-5 w-5" />
+              <span>Sobre nosotros</span>
+            </a>
+            
+            {/* Contact Email */}
+            <div className="flex items-center gap-2">
+              <Mail className="h-5 w-5 text-destructive" />
+              <a 
+                href="mailto:info@neurotropy.com" 
+                className="text-destructive hover:text-destructive/80 transition-colors"
+              >
+                info@neurotropy.com
+              </a>
+            </div>
+          </div>
+          
+          <p className="text-sm text-muted-foreground text-center md:text-right">
             © {new Date().getFullYear()} Neurotropy™. Todos los derechos reservados.
           </p>
-          
-          {/* Contact Email */}
-          <div className="flex items-center gap-2">
-            <Mail className="h-5 w-5 text-primary" />
-            <a 
-              href="mailto:info@neurotropy.com" 
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              info@neurotropy.com
-            </a>
-          </div>
         </div>
       </div>
     </footer>
