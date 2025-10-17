@@ -1,10 +1,14 @@
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Wind, Anchor, Phone, AlertCircle, HeartPulse, Trash2 } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { AddContactDialog } from "@/components/AddContactDialog";
 
 interface SupportContact {
   id: string;
@@ -16,82 +20,88 @@ interface SupportContact {
 
 export default function Tools() {
   const [contacts, setContacts] = useState<SupportContact[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    relationship: "",
+    notes: ""
+  });
 
   useEffect(() => {
     fetchContacts();
   }, []);
 
   const fetchContacts = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
 
-      const { data, error } = await supabase
-        .from("support_contacts")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+    const { data, error } = await supabase
+      .from("support_contacts")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      setContacts(data || []);
-    } catch (error) {
+    if (error) {
       console.error("Error fetching contacts:", error);
-      toast.error("Error al cargar contactos");
-    } finally {
-      setLoading(false);
+      return;
     }
+
+    setContacts(data || []);
   };
 
-  const handleAddContact = async (contact: {
-    name: string;
-    phone: string;
-    relationship: string;
-    notes?: string;
-  }) => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-      const { error } = await supabase
-        .from("support_contacts")
-        .insert({
-          ...contact,
-          user_id: user.id,
-        });
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Debes iniciar sesión para añadir contactos");
+      return;
+    }
 
-      if (error) throw error;
-      
-      toast.success("Contacto añadido correctamente");
-      fetchContacts();
-    } catch (error) {
+    if (!formData.name.trim() || !formData.phone.trim() || !formData.relationship) {
+      toast.error("Por favor completa todos los campos obligatorios");
+      return;
+    }
+
+    const { error } = await supabase
+      .from("support_contacts")
+      .insert({
+        user_id: user.id,
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        relationship: formData.relationship,
+        notes: formData.notes.trim() || null
+      });
+
+    if (error) {
       console.error("Error adding contact:", error);
       toast.error("Error al añadir contacto");
+      return;
     }
+
+    toast.success("Contacto añadido exitosamente");
+    setFormData({ name: "", phone: "", relationship: "", notes: "" });
+    setIsDialogOpen(false);
+    fetchContacts();
   };
 
-  const handleDeleteContact = async (id: string) => {
-    try {
-      const { error } = await supabase
-        .from("support_contacts")
-        .delete()
-        .eq("id", id);
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase
+      .from("support_contacts")
+      .delete()
+      .eq("id", id);
 
-      if (error) throw error;
-      
-      toast.success("Contacto eliminado");
-      fetchContacts();
-    } catch (error) {
+    if (error) {
       console.error("Error deleting contact:", error);
       toast.error("Error al eliminar contacto");
+      return;
     }
+
+    toast.success("Contacto eliminado");
+    fetchContacts();
   };
 
-  const handleCallContact = (phone: string, name: string) => {
-    window.location.href = `tel:${phone}`;
-    toast.success(`Llamando a ${name}...`);
-  };
   const tools = [
     {
       icon: Wind,
@@ -194,66 +204,184 @@ export default function Tools() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          {loading ? (
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">Cargando contactos...</p>
-            </div>
-          ) : contacts.length === 0 ? (
+          {contacts.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground mb-4">No tienes contactos guardados aún</p>
-              <Button className="gap-2" onClick={() => setDialogOpen(true)}>
-                <Phone className="h-4 w-4" />
-                Añadir Contacto
-              </Button>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="gap-2">
+                    <Phone className="h-4 w-4" />
+                    Añadir Contacto
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Añadir Contacto de Apoyo</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <Label htmlFor="name">Nombre *</Label>
+                      <Input
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="Nombre del contacto"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="phone">Teléfono *</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        placeholder="+34 600 000 000"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="relationship">Relación *</Label>
+                      <Select
+                        value={formData.relationship}
+                        onValueChange={(value) => setFormData({ ...formData, relationship: value })}
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona una relación" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="padrino">Padrino/Madrina</SelectItem>
+                          <SelectItem value="familiar">Familiar</SelectItem>
+                          <SelectItem value="amigo">Amigo/a</SelectItem>
+                          <SelectItem value="terapeuta">Terapeuta</SelectItem>
+                          <SelectItem value="otro">Otro</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="notes">Notas (opcional)</Label>
+                      <Textarea
+                        id="notes"
+                        value={formData.notes}
+                        onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                        placeholder="Notas adicionales sobre este contacto"
+                        rows={3}
+                      />
+                    </div>
+                    <Button type="submit" className="w-full">
+                      Guardar Contacto
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </div>
           ) : (
             <>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {contacts.map((contact) => (
-                  <div
-                    key={contact.id}
-                    className="flex items-center justify-between p-3 rounded-lg bg-accent/5 hover:bg-accent/10 transition-colors"
-                  >
-                    <div className="flex-1">
-                      <p className="font-medium text-foreground">{contact.name}</p>
-                      <p className="text-sm text-muted-foreground capitalize">{contact.relationship}</p>
-                      {contact.notes && (
-                        <p className="text-xs text-muted-foreground mt-1">{contact.notes}</p>
-                      )}
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleCallContact(contact.phone, contact.name)}
-                      >
-                        <Phone className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleDeleteContact(contact.id)}
-                      >
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
-                    </div>
-                  </div>
+                  <Card key={contact.id} className="border-primary/10">
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-foreground">{contact.name}</h4>
+                          <p className="text-sm text-muted-foreground capitalize">{contact.relationship}</p>
+                          <a
+                            href={`tel:${contact.phone}`}
+                            className="text-sm text-primary hover:underline flex items-center gap-1 mt-1"
+                          >
+                            <Phone className="h-3 w-3" />
+                            {contact.phone}
+                          </a>
+                          {contact.notes && (
+                            <p className="text-sm text-muted-foreground mt-2">{contact.notes}</p>
+                          )}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDelete(contact.id)}
+                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
-              <Button className="w-full gap-2" onClick={() => setDialogOpen(true)}>
-                <Phone className="h-4 w-4" />
-                Añadir Contacto
-              </Button>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="w-full gap-2">
+                    <Phone className="h-4 w-4" />
+                    Añadir Otro Contacto
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Añadir Contacto de Apoyo</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <Label htmlFor="name">Nombre *</Label>
+                      <Input
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="Nombre del contacto"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="phone">Teléfono *</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        placeholder="+34 600 000 000"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="relationship">Relación *</Label>
+                      <Select
+                        value={formData.relationship}
+                        onValueChange={(value) => setFormData({ ...formData, relationship: value })}
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona una relación" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="padrino">Padrino/Madrina</SelectItem>
+                          <SelectItem value="familiar">Familiar</SelectItem>
+                          <SelectItem value="amigo">Amigo/a</SelectItem>
+                          <SelectItem value="terapeuta">Terapeuta</SelectItem>
+                          <SelectItem value="otro">Otro</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="notes">Notas (opcional)</Label>
+                      <Textarea
+                        id="notes"
+                        value={formData.notes}
+                        onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                        placeholder="Notas adicionales sobre este contacto"
+                        rows={3}
+                      />
+                    </div>
+                    <Button type="submit" className="w-full">
+                      Guardar Contacto
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </>
           )}
         </CardContent>
       </Card>
-
-      <AddContactDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        onSave={handleAddContact}
-      />
     </div>
   );
 }
