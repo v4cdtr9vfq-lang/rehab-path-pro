@@ -13,7 +13,7 @@ const menuItems = [{
   path: "/dashboard"
 }, {
   emoji: "🎯",
-  label: "Mi Plan",
+  label: "Mi 🎯",
   path: "/plan"
 }, {
   emoji: "📈",

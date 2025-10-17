@@ -645,7 +645,7 @@ export default function Plan() {
       <div>
         <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight tracking-tight mb-3 flex items-center gap-3">
           <span>🎯</span>
-          Mi Plan
+          Mi 🎯
         </h1>
         <p className="text-muted-foreground text-lg">Define y rastrea tu proceso.</p>
       </div>
