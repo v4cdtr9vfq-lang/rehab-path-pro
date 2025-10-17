@@ -44,6 +44,10 @@ const menuItems = [{
   label: "Herramientas",
   path: "/tools"
 }, {
+  emoji: "❓",
+  label: "Ayuda",
+  path: "/help"
+}, {
   emoji: "⚙️",
   label: "Configuración",
   path: "/settings"

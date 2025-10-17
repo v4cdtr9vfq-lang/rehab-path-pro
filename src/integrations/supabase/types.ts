@@ -110,6 +110,36 @@ export type Database = {
         }
         Relationships: []
       }
+      faqs: {
+        Row: {
+          answer: string
+          category: string
+          created_at: string
+          id: string
+          question: string
+          updated_at: string
+          view_count: number
+        }
+        Insert: {
+          answer: string
+          category?: string
+          created_at?: string
+          id?: string
+          question: string
+          updated_at?: string
+          view_count?: number
+        }
+        Update: {
+          answer?: string
+          category?: string
+          created_at?: string
+          id?: string
+          question?: string
+          updated_at?: string
+          view_count?: number
+        }
+        Relationships: []
+      }
       goal_completions: {
         Row: {
           completion_date: string
@@ -413,6 +443,30 @@ export type Database = {
           phone?: string
           relationship?: string
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_questions: {
+        Row: {
+          created_at: string
+          id: string
+          question: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          question: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          question?: string
+          status?: string
           user_id?: string
         }
         Relationships: []

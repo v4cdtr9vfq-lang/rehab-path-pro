@@ -23,6 +23,7 @@ import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
 import TrialEnded from "./pages/TrialEnded";
 import SupportNetwork from "./pages/SupportNetwork";
+import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -127,6 +128,13 @@ const App = () => (
             <ProtectedRoute>
               <Layout>
                 <SupportNetwork />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/help" element={
+            <ProtectedRoute>
+              <Layout>
+                <Help />
               </Layout>
             </ProtectedRoute>
           } />
