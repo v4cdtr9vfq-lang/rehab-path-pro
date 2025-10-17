@@ -80,12 +80,19 @@ export default function SupportNetwork() {
       // Update existing contact
       const { error } = await supabase
         .from("support_contacts")
-        .update(contactData)
-        .eq("id", editingContact.id);
+        .update({
+          name: formData.name.trim(),
+          phone: formData.phone.trim(),
+          email: formData.email.trim() || null,
+          relationship: formData.relationship,
+          notes: formData.notes.trim() || null
+        })
+        .eq("id", editingContact.id)
+        .eq("user_id", user.id);
 
       if (error) {
         console.error("Error updating contact:", error);
-        toast.error("Error al actualizar contacto");
+        toast.error(`Error al actualizar contacto: ${error.message}`);
         return;
       }
 
@@ -98,7 +105,7 @@ export default function SupportNetwork() {
 
       if (error) {
         console.error("Error adding contact:", error);
-        toast.error("Error al añadir contacto");
+        toast.error(`Error al añadir contacto: ${error.message}`);
         return;
       }
 
@@ -210,9 +217,8 @@ export default function SupportNetwork() {
                       <Select
                         value={formData.relationship}
                         onValueChange={(value) => setFormData({ ...formData, relationship: value })}
-                        required
                       >
-                        <SelectTrigger>
+                        <SelectTrigger id="relationship">
                           <SelectValue placeholder="Selecciona una relación" />
                         </SelectTrigger>
                         <SelectContent>
@@ -294,9 +300,8 @@ export default function SupportNetwork() {
                         <Select
                           value={formData.relationship}
                           onValueChange={(value) => setFormData({ ...formData, relationship: value })}
-                          required
                         >
-                          <SelectTrigger>
+                          <SelectTrigger id="relationship">
                             <SelectValue placeholder="Selecciona una relación" />
                           </SelectTrigger>
                           <SelectContent>
