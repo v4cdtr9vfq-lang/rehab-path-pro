@@ -691,18 +691,18 @@ export default function Home() {
 
       {/* Daily Reflection */}
       <Card className="border-sky-blue/30 bg-gradient-to-br from-sky-blue/10 to-transparent">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">💡</span>
-            <h3 className="font-semibold text-foreground">Reflexión del día</h3>
+        <CardHeader className="flex flex-row items-start justify-between gap-4 pb-3">
+          <div className="flex items-center gap-2 flex-1">
+            <span className="text-2xl flex-shrink-0">💡</span>
+            <h3 className="font-semibold text-foreground text-lg">Reflexión del día</h3>
           </div>
           <Link to={`/journal?reflection=${encodeURIComponent(getReflectionOfTheDay())}`}>
-            <Button variant="ghost" size="sm" className="text-primary">Escribir</Button>
+            <Button variant="ghost" size="sm" className="text-primary flex-shrink-0">Escribir</Button>
           </Link>
         </CardHeader>
-        <CardContent className="p-6 flex items-center justify-center">
-          <p className="text-foreground/80 text-center text-lg">
-            ¿Qué cosa pequeña puedes hacer hoy para cuidar mejor de ti mismo?
+        <CardContent className="pt-2 px-6 pb-6">
+          <p className="text-foreground/80 text-base leading-relaxed">
+            {getReflectionOfTheDay()}
           </p>
         </CardContent>
       </Card>
