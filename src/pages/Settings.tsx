@@ -31,8 +31,12 @@ export default function Settings() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isUpdatingEmail, setIsUpdatingEmail] = useState(false);
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [abstinenceStartDate, setAbstinenceStartDate] = useState("");
+  const [isUpdatingDate, setIsUpdatingDate] = useState(false);
 
   useEffect(() => {
+    loadAbstinenceDate();
+    
     const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "true") {
       toast({
@@ -43,6 +47,73 @@ export default function Settings() {
       window.history.replaceState({}, "", "/settings");
     }
   }, []);
+
+  const loadAbstinenceDate = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('abstinence_start_date')
+        .eq('user_id', user.id)
+        .single();
+
+      if (profile?.abstinence_start_date) {
+        // Convert to local date string (YYYY-MM-DD)
+        const date = new Date(profile.abstinence_start_date);
+        const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+          .toISOString()
+          .split('T')[0];
+        setAbstinenceStartDate(localDate);
+      }
+    } catch (error) {
+      console.error('Error loading abstinence date:', error);
+    }
+  };
+
+  const handleUpdateAbstinenceDate = async () => {
+    if (!abstinenceStartDate) {
+      toast({
+        title: "Error",
+        description: "Por favor selecciona una fecha válida",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsUpdatingDate(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Usuario no autenticado");
+
+      // Convert local date to ISO timestamp
+      const dateObj = new Date(abstinenceStartDate + 'T00:00:00');
+      
+      const { error } = await supabase
+        .from('profiles')
+        .update({ abstinence_start_date: dateObj.toISOString() })
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Fecha actualizada",
+        description: "Tu fecha de inicio de abstinencia ha sido actualizada exitosamente",
+      });
+
+      // Notify Dashboard to update
+      window.dispatchEvent(new CustomEvent('abstinenceDateUpdated'));
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo actualizar la fecha",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdatingDate(false);
+    }
+  };
 
   const handleUpdateEmail = async () => {
     if (!newEmail.trim()) {
@@ -458,9 +529,25 @@ export default function Settings() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="space-y-2">
+          <div className="space-y-4">
             <Label htmlFor="start-date">Fecha de Inicio de Abstinencia</Label>
-            <Input id="start-date" type="date" defaultValue="2021-01-22" />
+            <div className="flex gap-2">
+              <Input 
+                id="start-date" 
+                type="date" 
+                value={abstinenceStartDate}
+                onChange={(e) => setAbstinenceStartDate(e.target.value)}
+              />
+              <Button 
+                onClick={handleUpdateAbstinenceDate}
+                disabled={isUpdatingDate}
+              >
+                {isUpdatingDate ? "Actualizando..." : "Guardar"}
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Esta fecha se usará para calcular tu tiempo de abstinencia en el dashboard
+            </p>
           </div>
 
           <div className="flex items-center justify-between">

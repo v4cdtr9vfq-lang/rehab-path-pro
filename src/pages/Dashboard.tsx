@@ -235,6 +235,27 @@ export default function Home() {
 
     fetchData();
 
+    // Listen for abstinence date updates
+    const handleDateUpdate = () => {
+      const loadDate = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('abstinence_start_date')
+          .eq('user_id', user.id)
+          .single();
+        
+        if (profile?.abstinence_start_date) {
+          setStartDate(new Date(profile.abstinence_start_date));
+        }
+      };
+      loadDate();
+    };
+
+    window.addEventListener('abstinenceDateUpdated', handleDateUpdate);
+
     // Set up realtime subscription for goal completions
     const channel = supabase
       .channel('goal_completions_changes')
@@ -267,6 +288,7 @@ export default function Home() {
       .subscribe();
 
     return () => {
+      window.removeEventListener('abstinenceDateUpdated', handleDateUpdate);
       supabase.removeChannel(channel);
     };
   }, []);
