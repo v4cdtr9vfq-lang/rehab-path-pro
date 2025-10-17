@@ -544,8 +544,20 @@ export default function Chat() {
                     ) : (
                       <>
                         {isOwnMessage ? (
-                          // Own messages: avatar (top) - options (below avatar) - message full width
-                          <div className="flex items-start gap-3 w-full pl-[15px]">
+                          // Own messages: message full width - avatar (top) - options (below avatar) on the right
+                          <div className="flex items-start gap-3 w-full pr-[15px]">
+                            <div className="flex flex-col items-end gap-1 flex-1">
+                              <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white max-w-full">
+                                <p className="text-xs">{msg.message}</p>
+                              </div>
+                              <span className="text-[10px] text-muted-foreground pr-6">
+                                {new Date(msg.created_at).toLocaleTimeString('es-ES', {
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </span>
+                            </div>
+
                             <div className="flex flex-col items-center gap-2 flex-shrink-0">
                               <Avatar className="h-11 w-11">
                                 <AvatarFallback className="bg-[#FF7A5C] text-white text-sm font-semibold">
@@ -574,18 +586,6 @@ export default function Chat() {
                                   </DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
-                            </div>
-                            
-                            <div className="flex flex-col items-end gap-1 flex-1">
-                              <div className="rounded-[28px] px-6 py-3 bg-[#FF7A5C] text-white max-w-full">
-                                <p className="text-xs">{msg.message}</p>
-                              </div>
-                              <span className="text-[10px] text-muted-foreground pr-6">
-                                {new Date(msg.created_at).toLocaleTimeString('es-ES', {
-                                  hour: '2-digit',
-                                  minute: '2-digit'
-                                })}
-                              </span>
                             </div>
                           </div>
                         ) : (
