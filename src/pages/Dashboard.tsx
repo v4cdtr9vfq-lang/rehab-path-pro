@@ -536,7 +536,7 @@ export default function Home() {
     { type: 'valor', name: 'Valor', emoji: '🥉', requiredDays: 0 },
     { type: 'constancia', name: 'Constancia', emoji: '🥈', requiredDays: 40 },
     { type: 'recuperacion', name: 'Recuperación', emoji: '🥇', requiredDays: 90 },
-    { type: 'servicio', name: 'Servicio', emoji: '🏆', requiredDays: 180 }
+    { type: 'servicio', name: 'Libertad', emoji: '🏆', requiredDays: 180 }
   ];
 
   const getMedalStatus = (medalType: string, requiredDays: number) => {
