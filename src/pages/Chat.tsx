@@ -38,13 +38,14 @@ interface ChatMessage {
 }
 
 const CHAT_ROOMS = [
+  { id: 'azucar', label: 'Azúcar' },
+  { id: 'codependencia', label: 'Codependencia' },
+  { id: 'comida', label: 'Comida' },
+  { id: 'compras', label: 'Compras' },
   { id: 'narcoticos', label: 'Narcóticos' },
-  { id: 'dependencia_emocional', label: 'Codependencia' },
   { id: 'pornografia', label: 'Pornografía' },
   { id: 'redes_sociales', label: 'Redes Sociales' },
-  { id: 'compras', label: 'Compras' },
   { id: 'videojuegos', label: 'Videojuegos' },
-  { id: 'comida', label: 'Comida' },
   { id: 'otros', label: 'Otros' },
 ] as const;
 
@@ -60,13 +61,14 @@ export default function Chat() {
     return savedRoom || 'narcoticos';
   });
   const [onlineCountByRoom, setOnlineCountByRoom] = useState<Record<string, number>>({
+    azucar: 0,
+    codependencia: 0,
+    comida: 0,
+    compras: 0,
     narcoticos: 0,
-    dependencia_emocional: 0,
     pornografia: 0,
     redes_sociales: 0,
-    compras: 0,
     videojuegos: 0,
-    comida: 0,
     otros: 0
   });
   const [isSending, setIsSending] = useState(false);
