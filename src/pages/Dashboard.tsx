@@ -704,6 +704,9 @@ export default function Home() {
           <p className="text-foreground/80">
             {getReflectionOfTheDay()}
           </p>
+          <p className="text-foreground/70 text-center mt-4">
+            ¿Qué cosa pequeña puedes hacer hoy para cuidar mejor de ti mismo?
+          </p>
         </CardContent>
       </Card>
 
