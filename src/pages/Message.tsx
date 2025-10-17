@@ -250,8 +250,10 @@ export default function Message() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
+              <span className="text-2xl">💭</span>
               <MessageSquare className="h-6 w-6 text-primary" />
               <CardTitle className="text-2xl">Frase del Día</CardTitle>
+              <span className="text-2xl">✨</span>
             </div>
             <Button
               variant="ghost"
