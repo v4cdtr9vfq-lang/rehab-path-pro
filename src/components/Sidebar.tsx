@@ -99,7 +99,7 @@ export function Sidebar() {
       {/* Logout Button - Fixed at bottom */}
       <div className="p-5 border-t border-sidebar-border">
         <button onClick={handleLogout} className="flex items-center gap-3 w-full rounded-xl px-3 py-2 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 font-medium">
-          <span className="text-lg flex-shrink-0">🔚</span>
+          <span className="text-lg flex-shrink-0">🫥</span>
           <span className="text-sm">Cerrar sesión</span>
         </button>
       </div>
