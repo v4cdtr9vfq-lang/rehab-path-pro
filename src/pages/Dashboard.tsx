@@ -750,10 +750,10 @@ export default function Home() {
 
       {/* Medals Widget */}
       <Card className="border-border/50">
-        <CardHeader>
+        <CardHeader className="pb-3">
           <CardTitle className="text-2xl font-bold">Mis medallas</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-0">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {medalConfig.map(medal => {
               const status = getMedalStatus(medal.type, medal.requiredDays);
