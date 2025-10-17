@@ -441,16 +441,11 @@ export default function Chat() {
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between mb-3">
               <CardTitle>Chat en Vivo</CardTitle>
-              {/* Mobile: Show current room online count */}
-              <Badge variant="secondary" className="gap-2 lg:hidden">
-                <Users className="h-4 w-4" />
-                {currentRoomOnline} en línea
-              </Badge>
             </div>
           </CardHeader>
           <div className="px-6 pb-3">
             <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="w-full">
-              <TabsList className="inline-flex h-10 items-center justify-center rounded-md bg-background p-1 text-muted-foreground w-full">
+              <TabsList className="flex h-auto min-h-10 items-center justify-center rounded-md bg-background p-1 text-muted-foreground w-full flex-wrap gap-1">
                 {CHAT_ROOMS.map((room, index) => (
                   <TabsTrigger 
                     key={room.id} 
@@ -459,10 +454,9 @@ export default function Chat() {
                   >
                     <span className="flex items-center gap-2">
                       {room.label}
-                      {/* Desktop: Show badge for each room */}
                       <Badge 
                         variant="secondary" 
-                        className="hidden lg:inline-flex gap-1 text-xs px-2 py-0.5 h-5"
+                        className="inline-flex gap-1 text-xs px-2 py-0.5 h-5"
                       >
                         <Users className="h-3 w-3" />
                         {onlineCountByRoom[room.id] || 0}
