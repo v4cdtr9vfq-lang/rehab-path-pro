@@ -123,7 +123,7 @@ const emotionCategories: PrimaryCategory[] = [
   },
   {
     id: "desconectado",
-    name: "Desconectado",
+    name: "Cansado",
     secondaryEmotions: [
       {
         id: "desconectado",
