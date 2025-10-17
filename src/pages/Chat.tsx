@@ -651,20 +651,18 @@ export default function Chat() {
                 disabled={isSending}
                 rows={3}
               />
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <Switch
-                    id="anonymous-mode"
-                    checked={isAnonymous}
-                    onCheckedChange={setIsAnonymous}
-                  />
-                  <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
-                    Escribir en modo anónimo.
-                  </Label>
-                </div>
-                <Button type="submit" disabled={!newMessage.trim() || isSending} className="bg-white text-black hover:bg-green-500 hover:text-white">
-                  Enviar
-                </Button>
+              <Button type="submit" disabled={!newMessage.trim() || isSending} className="w-full bg-white text-black hover:bg-green-500 hover:text-white">
+                Enviar
+              </Button>
+              <div className="flex items-center gap-2">
+                <Switch
+                  id="anonymous-mode"
+                  checked={isAnonymous}
+                  onCheckedChange={setIsAnonymous}
+                />
+                <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
+                  Escribir en modo anónimo.
+                </Label>
               </div>
             </div>
           ) : (
