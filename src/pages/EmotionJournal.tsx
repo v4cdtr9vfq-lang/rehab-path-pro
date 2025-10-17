@@ -528,7 +528,7 @@ export default function EmotionJournal() {
                       onClick={() => toggleSecondary(emotion.id)}
                       className={`rounded-full px-6 h-12 text-base font-medium transition-all ${
                         isSelected 
-                          ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
+                          ? "bg-[#e6c25c] hover:bg-[#d4b34a] text-white border-[#e6c25c]" 
                           : "hover:bg-primary/10 hover:border-primary/50"
                       }`}
                     >
