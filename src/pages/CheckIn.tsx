@@ -388,7 +388,7 @@ export default function CheckIn() {
                       </Label>
                       <Textarea
                         id="limiting-description"
-                        placeholder="Describe qué te gustaría cambiar y por qué crees que te cuesta..."
+                        placeholder="Me cuesta cambiar esta inercia en mi:"
                         value={limitingDescription}
                         onChange={(e) => setLimitingDescription(e.target.value)}
                         className="min-h-[100px]"
