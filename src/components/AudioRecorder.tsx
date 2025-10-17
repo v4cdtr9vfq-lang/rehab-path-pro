@@ -17,6 +17,8 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
   const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<number | null>(null);
 
+  console.log('🔴 AudioRecorder RENDER - isRecording:', isRecording, 'seconds:', seconds, 'isProcessing:', isProcessing);
+
   // Timer effect
   useEffect(() => {
     if (isRecording) {
@@ -40,7 +42,7 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
 
   const startRecording = async () => {
     try {
-      console.log('Starting recording...');
+      console.log('🎙️ START RECORDING CLICKED!');
       
       const stream = await navigator.mediaDevices.getUserMedia({ 
         audio: {
@@ -74,7 +76,9 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
       };
 
       mediaRecorder.start(100);
+      console.log('📝 About to set isRecording to TRUE');
       setIsRecording(true);
+      console.log('✅ isRecording has been set to TRUE');
       
       toast({
         title: "Grabando",
