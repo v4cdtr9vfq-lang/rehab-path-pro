@@ -37,7 +37,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const [plan, setPlan] = useState<"free" | "monthly" | "annual">("free");
   const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [trialDaysRemaining, setTrialDaysRemaining] = useState(30);
+  const [trialDaysRemaining, setTrialDaysRemaining] = useState(40);
   const [isTrialExpired, setIsTrialExpired] = useState(false);
 
   const checkSubscription = async (showLoading = true) => {
@@ -51,7 +51,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         setSubscribed(false);
         setPlan("free");
         setSubscriptionEnd(null);
-        setTrialDaysRemaining(30);
+        setTrialDaysRemaining(40);
         setIsTrialExpired(false);
         return;
       }
@@ -67,7 +67,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         const createdAt = new Date(profile.created_at);
         const now = new Date();
         const daysSinceCreation = Math.floor((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24));
-        const daysRemaining = Math.max(0, 30 - daysSinceCreation);
+        const daysRemaining = Math.max(0, 40 - daysSinceCreation);
         
         setTrialDaysRemaining(daysRemaining);
         setIsTrialExpired(daysRemaining === 0);

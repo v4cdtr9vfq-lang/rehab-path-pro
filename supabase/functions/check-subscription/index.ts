@@ -50,7 +50,7 @@ serve(async (req) => {
       return new Response(JSON.stringify({ 
         subscribed: false,
         plan: "free",
-        trial_days_remaining: 30
+        trial_days_remaining: 40
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,

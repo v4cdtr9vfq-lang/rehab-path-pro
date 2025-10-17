@@ -61,7 +61,7 @@ export default function Settings() {
     if (params.get("success") === "true") {
       toast({
         title: "¡Suscripción activada!",
-        description: "Tu suscripción ha sido activada exitosamente. Disfruta de 30 días gratis.",
+        description: "Tu suscripción ha sido activada exitosamente. Disfruta de 40 días gratis.",
       });
       checkSubscription();
       window.history.replaceState({}, "", "/settings");
@@ -436,7 +436,7 @@ export default function Settings() {
                   <div className="flex items-start justify-between">
                     <div>
                       <h4 className="font-semibold text-2xl">Plan Básico</h4>
-                      <p className="text-2xl font-bold text-primary mt-1">Gratis<span className="text-sm text-muted-foreground">/30 días</span></p>
+                      <p className="text-2xl font-bold text-primary mt-1">Gratis<span className="text-sm text-muted-foreground">/40 días</span></p>
                     </div>
                     {plan === "free" && (
                       <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
