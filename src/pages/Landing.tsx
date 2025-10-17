@@ -132,8 +132,8 @@ export default function Landing() {
         <div className="container mx-auto px-4 max-w-4xl">
           <Card className="border-primary/20">
             <CardContent className="p-12 text-center space-y-6">
-              <div className="flex justify-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => <CheckCircle2 key={i} className="h-6 w-6 text-primary" />)}
+              <div className="flex justify-center gap-2 mb-4 text-3xl">
+                🏅🏅🏅🏅🏅
               </div>
               <blockquote className="text-2xl md:text-3xl font-medium text-foreground leading-relaxed">
                 "La confianza se construye con consistencia. rehabp.org me ha ayudado a mantener el enfoque día a día"
