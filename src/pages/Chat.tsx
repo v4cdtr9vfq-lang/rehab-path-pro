@@ -639,7 +639,7 @@ export default function Chat() {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Escribe un mensaje..."
-                className="w-full pl-4 resize-none min-h-[60px] text-[11px]"
+                className="w-full p-[10px] resize-none min-h-[60px] text-[11px]"
                 disabled={isSending}
                 rows={3}
               />
@@ -653,7 +653,7 @@ export default function Chat() {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Escribe un mensaje..."
-                className="flex-1 pl-4 resize-none min-h-[44px] max-h-[44px] text-sm"
+                className="flex-1 p-[10px] resize-none min-h-[44px] max-h-[44px] text-sm"
                 disabled={isSending}
                 rows={2}
               />
