@@ -106,18 +106,17 @@ export function Footer() {
             {/* About Us Button */}
             <a 
               href="#" 
-              className="flex items-center gap-2 text-destructive hover:text-destructive/80 transition-colors"
+              className="text-white hover:text-white/80 transition-colors underline"
             >
-              <Info className="h-5 w-5" />
-              <span>Sobre nosotros</span>
+              Sobre nosotros
             </a>
             
             {/* Contact Email */}
             <div className="flex items-center gap-2">
-              <Mail className="h-5 w-5 text-destructive" />
+              <Mail className="h-5 w-5 text-white" />
               <a 
                 href="mailto:info@neurotropy.com" 
-                className="text-destructive hover:text-destructive/80 transition-colors"
+                className="text-white hover:text-white/80 transition-colors underline"
               >
                 info@neurotropy.com
               </a>
