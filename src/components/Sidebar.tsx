@@ -85,7 +85,7 @@ export function Sidebar() {
         <p className="text-xs text-sidebar-foreground/60 mt-1">Tu proceso hacia la reconexión</p>
       </Link>
       
-      <nav className="flex flex-col gap-0.5 px-5 flex-1 overflow-y-auto">
+      <nav className="flex flex-col gap-0 px-5 flex-1 overflow-y-auto">
         {menuItems.map(item => {
         // "Mi centro" también incluye /checkin
         const isActive = location.pathname === item.path || 
