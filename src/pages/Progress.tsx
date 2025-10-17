@@ -426,6 +426,12 @@ export default function ProgressPage() {
     </div>
   );
 
+  const getBarColor = (percentage: number): string => {
+    if (percentage === 100) return '#22c55e'; // Verde
+    if (percentage >= 30 && percentage <= 75) return '#e6c25c'; // Amarillo mostaza
+    return 'hsl(var(--primary))'; // Azul
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <Card className="border-sky-blue/40 bg-gradient-to-br from-sky-blue/15 to-sky-blue/5">
@@ -567,7 +573,7 @@ export default function ProgressPage() {
                       fill="hsl(var(--primary))"
                     >
                       {weeklyChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.isComplete ? '#22c55e' : 'hsl(var(--primary))'} />
+                        <Cell key={`cell-${index}`} fill={getBarColor(entry.progreso)} />
                       ))}
                     </Bar>
                   </BarChart>
@@ -596,7 +602,7 @@ export default function ProgressPage() {
                       fill="hsl(var(--primary))"
                     >
                       {monthlyChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.isComplete ? '#22c55e' : 'hsl(var(--primary))'} />
+                        <Cell key={`cell-${index}`} fill={getBarColor(entry.progreso)} />
                       ))}
                     </Bar>
                   </BarChart>
@@ -625,7 +631,7 @@ export default function ProgressPage() {
                       fill="hsl(var(--primary))"
                     >
                       {yearlyChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.isComplete ? '#22c55e' : 'hsl(var(--primary))'} />
+                        <Cell key={`cell-${index}`} fill={getBarColor(entry.progreso)} />
                       ))}
                     </Bar>
                   </BarChart>
