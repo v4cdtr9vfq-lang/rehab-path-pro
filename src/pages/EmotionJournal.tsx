@@ -483,7 +483,7 @@ export default function EmotionJournal() {
         <div className="space-y-8">
           {/* Primary Categories */}
           <div>
-            <h2 className="text-xl font-semibold text-foreground mb-4">Categoría:</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-4">¿Cómo te sientes aquí y ahora?</h2>
             <div className="flex flex-wrap gap-3">
               {emotionCategories.map((category) => {
                 const isSelected = selectedPrimary === category.id;
@@ -651,7 +651,7 @@ export default function EmotionJournal() {
                 <div className="space-y-3">
                   {entry.primary_emotion && (
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Categoría:</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Hoy me he sentido</h3>
                       <span className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm font-medium">
                         {entry.primary_emotion}
                       </span>
