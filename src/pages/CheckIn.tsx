@@ -32,6 +32,7 @@ export default function CheckIn() {
   const [triggerDescription, setTriggerDescription] = useState("");
   const [valuesDescription, setValuesDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userValues, setUserValues] = useState<string[]>([]);
 
   useEffect(() => {
     const loadExistingCheckIn = async () => {
@@ -56,6 +57,16 @@ export default function CheckIn() {
         if ((checkIn.answers as any).values_description) {
           setValuesDescription((checkIn.answers as any).values_description);
         }
+      }
+
+      // Load user values
+      const { data: values } = await supabase
+        .from('values')
+        .select('name')
+        .eq('user_id', user.id);
+
+      if (values) {
+        setUserValues(values.map(v => v.name));
       }
     };
 
@@ -234,6 +245,15 @@ export default function CheckIn() {
                       <p className="text-xs text-muted-foreground">
                         Esta descripción se guardará automáticamente como entrada en tu diario con el título "Cuándo soy infiel a mis valores"
                       </p>
+                      {userValues.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {userValues.map((value, index) => (
+                            <span key={index} className="text-sm text-red-500 font-medium">
+                              {value}{index < userValues.length - 1 ? ',' : ''}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
                 </>
