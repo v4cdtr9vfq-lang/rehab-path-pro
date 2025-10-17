@@ -36,7 +36,25 @@ export default function Journal() {
 
   useEffect(() => {
     loadEntries();
+    
+    // Load draft from localStorage
+    const savedTitle = localStorage.getItem('journal-draft-title');
+    const savedContent = localStorage.getItem('journal-draft-content');
+    const savedTags = localStorage.getItem('journal-draft-tags');
+    
+    if (savedTitle) setEntryTitle(savedTitle);
+    if (savedContent) setEntryContent(savedContent);
+    if (savedTags) setEntryTags(savedTags);
   }, []);
+
+  // Auto-save draft to localStorage
+  useEffect(() => {
+    if (showNewEntry) {
+      localStorage.setItem('journal-draft-title', entryTitle);
+      localStorage.setItem('journal-draft-content', entryContent);
+      localStorage.setItem('journal-draft-tags', entryTags);
+    }
+  }, [entryTitle, entryContent, entryTags, showNewEntry]);
 
   const loadEntries = async () => {
     try {
@@ -250,6 +268,11 @@ export default function Journal() {
       setEntryTitle("");
       setEntryContent("");
       setEntryTags("");
+      
+      // Clear draft from localStorage after successful save
+      localStorage.removeItem('journal-draft-title');
+      localStorage.removeItem('journal-draft-content');
+      localStorage.removeItem('journal-draft-tags');
     } catch (error) {
       console.error('Error saving entry:', error);
       toast({
@@ -402,6 +425,11 @@ export default function Journal() {
                 setEntryTitle("");
                 setEntryContent("");
                 setEntryTags("");
+                
+                // Clear draft from localStorage on cancel
+                localStorage.removeItem('journal-draft-title');
+                localStorage.removeItem('journal-draft-content');
+                localStorage.removeItem('journal-draft-tags');
               }}>
                 Cancelar
               </Button>

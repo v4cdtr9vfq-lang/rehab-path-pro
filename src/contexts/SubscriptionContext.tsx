@@ -147,12 +147,8 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    // Refresh subscription status every 5 minutes in background (no loading spinner)
-    const interval = setInterval(() => checkSubscription(false), 300000);
-
     return () => {
       subscription.unsubscribe();
-      clearInterval(interval);
     };
   }, []);
 
