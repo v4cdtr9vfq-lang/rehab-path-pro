@@ -643,8 +643,7 @@ export default function Chat() {
                 disabled={isSending}
                 rows={3}
               />
-              <Button type="submit" disabled={!newMessage.trim() || isSending} className="w-full gap-2">
-                <Send className="h-4 w-4" />
+              <Button type="submit" disabled={!newMessage.trim() || isSending} className="w-full bg-white text-black hover:bg-white/90">
                 Enviar
               </Button>
             </div>
@@ -658,8 +657,7 @@ export default function Chat() {
                 disabled={isSending}
                 rows={2}
               />
-              <Button type="submit" disabled={!newMessage.trim() || isSending} className="gap-2 h-[44px]">
-                <Send className="h-4 w-4" />
+              <Button type="submit" disabled={!newMessage.trim() || isSending} className="h-[44px] bg-white text-black hover:bg-white/90">
                 Enviar
               </Button>
             </div>
