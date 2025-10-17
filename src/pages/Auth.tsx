@@ -111,16 +111,16 @@ export default function Auth() {
             {isLogin ? "Bienvenido de vuelta" : "Comienza tu recuperación"}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {isLogin ? "Ingresa a tu cuenta" : "Crea tu cuenta gratuita"}
+            {isLogin ? "Ingresa a tu cuenta:" : "Crea tu cuenta gratuita"}
           </p>
         </div>
 
         <Card className="border-border/50">
           <CardHeader>
-            <CardTitle>{isLogin ? "Iniciar sesión" : "Registrarse"}</CardTitle>
+            <CardTitle>{isLogin ? "Iniciar sesión:" : "Registrarse"}</CardTitle>
             <CardDescription>
               {isLogin 
-                ? "Ingresa tus credenciales para continuar" 
+                ? "Ingresa tus credenciales para continuar." 
                 : "Completa el formulario para crear tu cuenta"}
             </CardDescription>
           </CardHeader>
