@@ -4,6 +4,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { HelpCircle } from "lucide-react";
@@ -23,6 +25,7 @@ export default function Help() {
   const [filter, setFilter] = useState<"recent" | "popular">("popular");
   const [userQuestion, setUserQuestion] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -111,6 +114,7 @@ export default function Help() {
       });
 
       setUserQuestion("");
+      setIsAnonymous(false);
     } catch (error: any) {
       console.error("Error submitting question:", error);
       toast({
@@ -208,21 +212,29 @@ export default function Help() {
             placeholder="Escribe tu pregunta aquí..."
             value={userQuestion}
             onChange={(e) => setUserQuestion(e.target.value)}
-            className="min-h-[120px]"
+            className="min-h-[120px] resize-none"
             maxLength={500}
           />
-          <div className="flex justify-between items-center">
-            <span className="text-xs text-muted-foreground">
-              {userQuestion.length}/500 caracteres
-            </span>
-            <Button
-              onClick={handleSubmitQuestion}
-              disabled={isSubmitting || !userQuestion.trim()}
-              className="rounded-xl"
-            >
-              {isSubmitting ? "Enviando..." : "Enviar pregunta"}
-            </Button>
+          <div className="text-xs text-muted-foreground">
+            {userQuestion.length}/500 caracteres
           </div>
+          <div className="flex items-center gap-2">
+            <Switch
+              id="anonymous-question"
+              checked={isAnonymous}
+              onCheckedChange={setIsAnonymous}
+            />
+            <Label htmlFor="anonymous-question" className="text-sm text-muted-foreground cursor-pointer">
+              Enviar de forma anónima
+            </Label>
+          </div>
+          <Button
+            onClick={handleSubmitQuestion}
+            disabled={isSubmitting || !userQuestion.trim()}
+            className="rounded-xl w-full"
+          >
+            {isSubmitting ? "Enviando..." : "Enviar pregunta"}
+          </Button>
         </CardContent>
       </Card>
     </div>
