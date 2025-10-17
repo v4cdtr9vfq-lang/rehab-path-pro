@@ -642,7 +642,7 @@ export default function Chat() {
 
         <form onSubmit={sendMessage} className="p-4 border-t space-y-3 bg-black shrink-0">
           {isMobile ? (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2.5">
               <Textarea
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
