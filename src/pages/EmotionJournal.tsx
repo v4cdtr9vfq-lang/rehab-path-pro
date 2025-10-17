@@ -424,7 +424,7 @@ export default function EmotionJournal() {
           {/* Sub Emotions */}
           {selectedMainEmotions.length > 0 && (
             <div>
-              <h2 className="text-xl font-semibold text-foreground mb-4">Emociones Específicas</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">Emociones Específicas:</h2>
               <div className="space-y-6">
                 {selectedEmotionsData.map((emotion) => (
                   <div key={emotion.id}>
