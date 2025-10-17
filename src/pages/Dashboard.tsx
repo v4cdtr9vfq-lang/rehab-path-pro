@@ -316,8 +316,8 @@ export default function Home() {
     color: "text-primary"
   }, {
     emoji: "📞",
-    label: "Contacto de apoyo",
-    path: "/message",
+    label: "Mi red de apoyo",
+    path: "/support-network",
     color: "text-accent"
   }, {
     emoji: "📔",
