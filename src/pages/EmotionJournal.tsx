@@ -22,36 +22,10 @@ interface SavedEmotionEntry {
 }
 
 const emotions: Emotion[] = [
-  // Emociones cuando las necesidades están satisfechas
   {
     id: "afectuoso",
     name: "Afectuoso",
     subEmotions: ["Compasivo", "Amigable", "Amoroso", "De corazón abierto", "Simpático", "Tierno", "Cálido"]
-  },
-  {
-    id: "confiado",
-    name: "Confiado",
-    subEmotions: ["Empoderado", "Abierto", "Orgulloso", "Seguro", "Protegido"]
-  },
-  {
-    id: "comprometido",
-    name: "Comprometido",
-    subEmotions: ["Absorto", "Alerta", "Curioso", "Absorto", "Encantado", "Fascinado", "Interesado", "Intrigado", "Involucrado", "Estimulado"]
-  },
-  {
-    id: "inspirado",
-    name: "Inspirado",
-    subEmotions: ["Asombrado", "Maravillado", "Admirado"]
-  },
-  {
-    id: "entusiasmado",
-    name: "Entusiasmado",
-    subEmotions: ["Animado", "Ardiente", "Emocionado", "Asombrado", "Deslumbrado", "Ansioso", "Enérgico", "Entusiasta", "Vigorizado", "Animado", "Apasionado", "Sorprendido", "Vibrante"]
-  },
-  {
-    id: "euforico",
-    name: "Eufórico",
-    subEmotions: ["Dichoso", "Extático", "Exaltado", "Embelesado", "Exuberante", "Radiante", "Arrebatado", "Emocionado", "Hechizado"]
   },
   {
     id: "agradecido",
@@ -59,14 +33,104 @@ const emotions: Emotion[] = [
     subEmotions: ["Apreciativo", "Conmovido", "Agradecido", "Tocado"]
   },
   {
+    id: "alegre",
+    name: "Alegre",
+    subEmotions: ["Divertido", "Encantado", "Contento", "Feliz", "Jubiloso", "Complacido", "Alegre"]
+  },
+  {
+    id: "anhelo",
+    name: "Anhelo",
+    subEmotions: ["Envidioso", "Celoso", "Anhelante", "Nostálgico", "Deseoso", "Melancólico"]
+  },
+  {
+    id: "asustado",
+    name: "Asustado",
+    subEmotions: ["Aprensivo", "Temor", "Presentimiento", "Atemorizado", "Desconfiado", "En pánico", "Petrificado", "Asustado", "Sospechoso", "Aterrorizado", "Cauteloso", "Preocupado"]
+  },
+  {
+    id: "aversion",
+    name: "Aversión",
+    subEmotions: ["Animosidad", "Horrorizado", "Desprecio", "Disgustado", "Desagrado", "Odio", "Hostil", "Repulsado"]
+  },
+  {
+    id: "avergonzado",
+    name: "Avergonzado",
+    subEmotions: ["Avergonzado", "Mortificado", "Turbado", "Culpable", "Cohibido"]
+  },
+  {
+    id: "comprometido",
+    name: "Comprometido",
+    subEmotions: ["Absorto", "Alerta", "Curioso", "Absorto", "Encantado", "Fascinado", "Interesado", "Intrigado", "Involucrado", "Estimulado"]
+  },
+  {
+    id: "confuso",
+    name: "Confuso",
+    subEmotions: ["Ambivalente", "Desconcertado", "Perplejo", "Aturdido", "Vacilante", "Perdido", "Desconcertado", "Confuso", "Dividido"]
+  },
+  {
+    id: "confiado",
+    name: "Confiado",
+    subEmotions: ["Empoderado", "Abierto", "Orgulloso", "Seguro", "Protegido"]
+  },
+  {
+    id: "conexion",
+    name: "Conexión",
+    subEmotions: ["Conectado", "Vinculado", "Cercano", "Unido", "Acompañado", "Integrado", "Perteneciente"]
+  },
+  {
+    id: "desconectado",
+    name: "Desconectado",
+    subEmotions: ["Alienado", "Distante", "Apático", "Aburrido", "Frío", "Desapegado", "Distraído", "Indiferente", "Adormecido", "Alejado", "Desinteresado", "Retraído"]
+  },
+  {
+    id: "dolor",
+    name: "Dolor",
+    subEmotions: ["Agonía", "Angustiado", "Afligido", "Devastado", "Duelo", "Desconsolado", "Herido", "Solo", "Miserable", "Arrepentido", "Remordido"]
+  },
+  {
+    id: "enojado",
+    name: "Enojado",
+    subEmotions: ["Enfurecido", "Furioso", "Indignado", "Airado", "Iracundo", "Lívido", "Ultrajado", "Resentido"]
+  },
+  {
+    id: "entusiasmado",
+    name: "Entusiasmado",
+    subEmotions: ["Animado", "Ardiente", "Emocionado", "Asombrado", "Deslumbrado", "Ansioso", "Enérgico", "Entusiasta", "Vigorizado", "Animado", "Apasionado", "Sorprendido", "Vibrante"]
+  },
+  {
     id: "esperanzado",
     name: "Esperanzado",
     subEmotions: ["Expectante", "Alentado", "Optimista"]
   },
   {
-    id: "alegre",
-    name: "Alegre",
-    subEmotions: ["Divertido", "Encantado", "Contento", "Feliz", "Jubiloso", "Complacido", "Alegre"]
+    id: "euforico",
+    name: "Eufórico",
+    subEmotions: ["Dichoso", "Extático", "Exaltado", "Embelesado", "Exuberante", "Radiante", "Arrebatado", "Emocionado", "Hechizado"]
+  },
+  {
+    id: "fatigado",
+    name: "Fatigado",
+    subEmotions: ["Agotado", "Quemado", "Agotado", "Exhausto", "Letárgico", "Apático", "Somnoliento", "Cansado", "Fatigado"]
+  },
+  {
+    id: "incomodo",
+    name: "Incómodo",
+    subEmotions: ["Incómodo", "Intranquilo", "Nervioso", "Inquieto", "Molesto"]
+  },
+  {
+    id: "inquieto",
+    name: "Inquieto",
+    subEmotions: ["Agitado", "Alarmado", "Desconcertado", "Perturbado", "Alterado", "Inquieto", "Conmocionado", "Sobresaltado", "Sorprendido", "Preocupado", "Turbulento", "Agitación"]
+  },
+  {
+    id: "inspirado",
+    name: "Inspirado",
+    subEmotions: ["Asombrado", "Maravillado", "Admirado"]
+  },
+  {
+    id: "molesto",
+    name: "Molesto",
+    subEmotions: ["Agravado", "Consternado", "Disgustado", "Descontento", "Exasperado", "Frustrado", "Impaciente", "Irritado", "Molesto"]
   },
   {
     id: "pacifico",
@@ -79,11 +143,6 @@ const emotions: Emotion[] = [
     subEmotions: ["Revitalizado", "Renovado", "Descansado", "Restaurado", "Revivido"]
   },
   {
-    id: "sentirse_seguro",
-    name: "Sentirse seguro",
-    subEmotions: ["Tranquilidad", "Confianza", "Calma", "Aceptación", "Pertenencia", "Previsibilidad", "Intimidad"]
-  },
-  {
     id: "sentirse_agradecido",
     name: "Sentirse agradecido",
     subEmotions: ["Humildad", "Asombro", "Alegría suave", "Calidez", "Generosidad", "Reconocimiento"]
@@ -94,60 +153,9 @@ const emotions: Emotion[] = [
     subEmotions: ["Empatía", "Complicidad", "Afiliación", "Sintonía", "Cuidado"]
   },
   {
-    id: "conexion",
-    name: "Conexión",
-    subEmotions: ["Conectado", "Vinculado", "Cercano", "Unido", "Acompañado", "Integrado", "Perteneciente"]
-  },
-  // Emociones cuando las necesidades no están satisfechas
-  {
-    id: "asustado",
-    name: "Asustado",
-    subEmotions: ["Aprensivo", "Temor", "Presentimiento", "Atemorizado", "Desconfiado", "En pánico", "Petrificado", "Asustado", "Sospechoso", "Aterrorizado", "Cauteloso", "Preocupado"]
-  },
-  {
-    id: "molesto",
-    name: "Molesto",
-    subEmotions: ["Agravado", "Consternado", "Disgustado", "Descontento", "Exasperado", "Frustrado", "Impaciente", "Irritado", "Molesto"]
-  },
-  {
-    id: "enojado",
-    name: "Enojado",
-    subEmotions: ["Enfurecido", "Furioso", "Indignado", "Airado", "Iracundo", "Lívido", "Ultrajado", "Resentido"]
-  },
-  {
-    id: "confuso",
-    name: "Confuso",
-    subEmotions: ["Ambivalente", "Desconcertado", "Perplejo", "Aturdido", "Vacilante", "Perdido", "Desconcertado", "Confuso", "Dividido"]
-  },
-  {
-    id: "desconectado",
-    name: "Desconectado",
-    subEmotions: ["Alienado", "Distante", "Apático", "Aburrido", "Frío", "Desapegado", "Distraído", "Indiferente", "Adormecido", "Alejado", "Desinteresado", "Retraído"]
-  },
-  {
-    id: "inquieto",
-    name: "Inquieto",
-    subEmotions: ["Agitado", "Alarmado", "Desconcertado", "Perturbado", "Alterado", "Inquieto", "Conmocionado", "Sobresaltado", "Sorprendido", "Preocupado", "Turbulento", "Agitación"]
-  },
-  {
-    id: "avergonzado",
-    name: "Avergonzado",
-    subEmotions: ["Avergonzado", "Mortificado", "Turbado", "Culpable", "Cohibido"]
-  },
-  {
-    id: "fatigado",
-    name: "Fatigado",
-    subEmotions: ["Agotado", "Quemado", "Agotado", "Exhausto", "Letárgico", "Apático", "Somnoliento", "Cansado", "Fatigado"]
-  },
-  {
-    id: "dolor",
-    name: "Dolor",
-    subEmotions: ["Agonía", "Angustiado", "Afligido", "Devastado", "Duelo", "Desconsolado", "Herido", "Solo", "Miserable", "Arrepentido", "Remordido"]
-  },
-  {
-    id: "triste",
-    name: "Triste",
-    subEmotions: ["Deprimido", "Abatido", "Desesperado", "Desalentado", "Decepcionado", "Desanimado", "Descorazonado", "Desolado", "Sombrío", "Sin esperanza", "Melancólico", "Infeliz", "Desdichado"]
+    id: "sentirse_seguro",
+    name: "Sentirse seguro",
+    subEmotions: ["Tranquilidad", "Confianza", "Calma", "Aceptación", "Pertenencia", "Previsibilidad", "Intimidad"]
   },
   {
     id: "tenso",
@@ -155,24 +163,14 @@ const emotions: Emotion[] = [
     subEmotions: ["Ansioso", "Angustiado", "Consternado", "Nervioso", "Inquieto", "Estresado", "Irritable", "Abrumado", "Estresado"]
   },
   {
+    id: "triste",
+    name: "Triste",
+    subEmotions: ["Deprimido", "Abatido", "Desesperado", "Desalentado", "Decepcionado", "Desanimado", "Descorazonado", "Desolado", "Sombrío", "Sin esperanza", "Melancólico", "Infeliz", "Desdichado"]
+  },
+  {
     id: "vulnerable",
     name: "Vulnerable",
     subEmotions: ["Frágil", "Indefenso", "Inseguro", "Cauteloso", "Reservado", "Sensible", "Tembloroso"]
-  },
-  {
-    id: "aversion",
-    name: "Aversión",
-    subEmotions: ["Animosidad", "Horrorizado", "Desprecio", "Disgustado", "Desagrado", "Odio", "Hostil", "Repulsado"]
-  },
-  {
-    id: "incomodo",
-    name: "Incómodo",
-    subEmotions: ["Incómodo", "Intranquilo", "Nervioso", "Inquieto", "Molesto"]
-  },
-  {
-    id: "anhelo",
-    name: "Anhelo",
-    subEmotions: ["Envidioso", "Celoso", "Anhelante", "Nostálgico", "Deseoso", "Melancólico"]
   }
 ];
 
