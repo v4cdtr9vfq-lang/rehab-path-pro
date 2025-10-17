@@ -30,6 +30,7 @@ export default function CheckIn() {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [triggerDescription, setTriggerDescription] = useState("");
+  const [valuesDescription, setValuesDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -50,6 +51,10 @@ export default function CheckIn() {
         // Load trigger description if exists
         if ((checkIn.answers as any).trigger_description) {
           setTriggerDescription((checkIn.answers as any).trigger_description);
+        }
+        // Load values description if exists
+        if ((checkIn.answers as any).values_description) {
+          setValuesDescription((checkIn.answers as any).values_description);
         }
       }
     };
@@ -75,10 +80,11 @@ export default function CheckIn() {
         return;
       }
 
-      // Save check-in with trigger description
-      const answersWithTrigger = {
+      // Save check-in with trigger and values descriptions
+      const answersWithDescriptions = {
         ...answers,
-        trigger_description: triggerDescription
+        trigger_description: triggerDescription,
+        values_description: valuesDescription
       };
 
       const { error: checkInError } = await supabase
@@ -86,17 +92,17 @@ export default function CheckIn() {
         .upsert({
           user_id: user.id,
           check_in_date: new Date().toISOString().split('T')[0],
-          answers: answersWithTrigger,
+          answers: answersWithDescriptions,
         }, {
           onConflict: 'user_id,check_in_date'
         });
 
       if (checkInError) throw checkInError;
 
+      const today = new Date().toISOString().split('T')[0];
+
       // If answered "yes" to trigger question and has description, save as journal entry
       if (answers[2] === "yes" && triggerDescription.trim()) {
-        const today = new Date().toISOString().split('T')[0];
-        
         const { error: journalError } = await supabase
           .from('journal_entries')
           .upsert({
@@ -105,6 +111,25 @@ export default function CheckIn() {
             title: "Gatillos emocionales",
             content: triggerDescription.trim(),
             tags: ["gatillos", "check-in"]
+          }, {
+            onConflict: 'user_id,entry_date,title'
+          });
+
+        if (journalError) {
+          console.error("Error saving journal entry:", journalError);
+        }
+      }
+
+      // If answered "no" to values question and has description, save as journal entry
+      if (answers[7] === "no" && valuesDescription.trim()) {
+        const { error: journalError } = await supabase
+          .from('journal_entries')
+          .upsert({
+            user_id: user.id,
+            entry_date: today,
+            title: "Cuándo soy infiel a mis valores",
+            content: valuesDescription.trim(),
+            tags: ["valores", "check-in"]
           }, {
             onConflict: 'user_id,entry_date,title'
           });
@@ -189,6 +214,25 @@ export default function CheckIn() {
                       />
                       <p className="text-xs text-muted-foreground">
                         Esta descripción se guardará automáticamente como entrada en tu diario con el título "Gatillos emocionales"
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Show values description field if question 7 answered "no" */}
+                  {question.id === 7 && answers[7] === "no" && (
+                    <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <Label htmlFor="values-description" className="text-sm font-medium text-foreground">
+                        A qué valor has sido infiel. Cómo y porqué has sido infiel. Cómo puedes enmendarlo.
+                      </Label>
+                      <Textarea
+                        id="values-description"
+                        placeholder="Reflexiona sobre tu infidelidad a tus valores..."
+                        value={valuesDescription}
+                        onChange={(e) => setValuesDescription(e.target.value)}
+                        className="min-h-[100px]"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Esta descripción se guardará automáticamente como entrada en tu diario con el título "Cuándo soy infiel a mis valores"
                       </p>
                     </div>
                   )}
