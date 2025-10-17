@@ -155,7 +155,9 @@ export default function CheckIn() {
       }
 
       // If answered "no" to values question and has description, save as journal entry
+      console.log("Checking values condition:", { answer7: answers[7], hasDescription: !!valuesDescription.trim() });
       if (answers[7] === "no" && valuesDescription.trim()) {
+        console.log("Saving values journal entry...");
         // Check if entry already exists
         const { data: existingEntry } = await supabase
           .from('journal_entries')
