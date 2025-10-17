@@ -79,6 +79,21 @@ const emotions: Emotion[] = [
     subEmotions: ["Revitalizado", "Renovado", "Descansado", "Restaurado", "Revivido"]
   },
   {
+    id: "sentirse_seguro",
+    name: "Sentirse seguro",
+    subEmotions: ["Tranquilidad", "Confianza", "Calma", "Aceptación", "Pertenencia", "Previsibilidad", "Intimidad"]
+  },
+  {
+    id: "sentirse_agradecido",
+    name: "Sentirse agradecido",
+    subEmotions: ["Humildad", "Asombro", "Alegría suave", "Calidez", "Generosidad", "Reconocimiento"]
+  },
+  {
+    id: "sentirse_conectado",
+    name: "Sentirse conectado",
+    subEmotions: ["Empatía", "Complicidad", "Afiliación", "Sintonía", "Cuidado"]
+  },
+  {
     id: "conexion",
     name: "Conexión",
     subEmotions: ["Conectado", "Vinculado", "Cercano", "Unido", "Acompañado", "Integrado", "Perteneciente"]
