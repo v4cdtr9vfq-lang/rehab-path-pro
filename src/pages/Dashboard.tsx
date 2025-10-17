@@ -636,7 +636,7 @@ export default function Home() {
 
       {/* Quick Tools */}
       <div>
-        <h2 className="text-2xl font-bold mb-4 text-foreground">Herramientas Rápidas</h2>
+        <h2 className="text-2xl font-bold mb-4 text-foreground">Herramientas rápidas</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {quickTools.map(tool => {
           return <Link key={tool.label} to={tool.path}>
@@ -684,7 +684,7 @@ export default function Home() {
       {/* Daily Progress Panel */}
       <Card className="border-border/50">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Progreso Diario</CardTitle>
+          <CardTitle className="text-2xl font-bold">Progreso diario</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Goals Progress Bar */}
@@ -703,7 +703,7 @@ export default function Home() {
                 {checkInCompleted ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
               </button>
               <div>
-                <p className="font-semibold text-foreground">Check-In Diario</p>
+                <p className="font-semibold text-foreground">Check-in diario</p>
                 <p className={`text-sm ${checkInCompleted ? "text-green-500" : "text-muted-foreground"}`}>
                   {checkInCompleted ? "Completado" : "Pendiente"}
                 </p>
@@ -729,7 +729,7 @@ export default function Home() {
       {/* Active Goals Summary */}
       <Card className="border-border/50">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-2xl font-bold">Metas Activas</CardTitle>
+          <CardTitle className="text-2xl font-bold">Metas activas</CardTitle>
           <Link to="/plan">
             <Button variant="ghost" size="sm" className="text-primary">Ver todas</Button>
           </Link>
@@ -769,7 +769,7 @@ export default function Home() {
       {/* Daily Reflection */}
       <Card className="border-sky-blue/30 bg-gradient-to-br from-sky-blue/10 to-transparent">
         <CardContent className="p-6">
-          <h3 className="font-semibold text-foreground mb-3">💡 Reflexión del Día</h3>
+          <h3 className="font-semibold text-foreground mb-3">💡 Reflexión del día</h3>
           <p className="text-foreground/80">
             {getReflectionOfTheDay()}
           </p>

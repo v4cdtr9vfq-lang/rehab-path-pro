@@ -7,7 +7,7 @@ export default function Tools() {
   const tools = [
     {
       icon: Wind,
-      title: "Ejercicio de Respiración",
+      title: "Ejercicio de respiración",
       description: "Calma tu mente con técnicas de respiración guiada",
       color: "text-sky-blue",
       bgColor: "bg-sky-blue/10"
@@ -56,7 +56,7 @@ export default function Tools() {
               <div className="flex flex-col sm:flex-row gap-2">
                 <Button variant="destructive" className="gap-2">
                   <Phone className="h-4 w-4" />
-                  Llamar Línea de Crisis
+                  Llamar línea de crisis
                 </Button>
                 <Link to="/support-network">
                   <Button variant="outline" className="w-full sm:w-auto">
@@ -101,7 +101,7 @@ export default function Tools() {
                   <Phone className="h-6 w-6 text-sky-blue" />
                 </div>
                 <div className="flex-1">
-                  <CardTitle className="text-xl">Mi Red de Apoyo</CardTitle>
+                  <CardTitle className="text-xl">Mi red de apoyo</CardTitle>
                   <p className="text-sm text-muted-foreground mt-1">
                     Gestiona tus contactos de confianza para momentos difíciles
                   </p>

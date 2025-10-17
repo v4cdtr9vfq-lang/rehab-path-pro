@@ -58,7 +58,7 @@ export function AddContactDialog({ open, onOpenChange, onSave }: AddContactDialo
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Añadir Contacto</DialogTitle>
+          <DialogTitle>Añadir contacto</DialogTitle>
           <DialogDescription>
             Añade un contacto a tu red de apoyo
           </DialogDescription>

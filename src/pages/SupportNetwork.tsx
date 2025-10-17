@@ -161,19 +161,19 @@ export default function SupportNetwork() {
           {contacts.length === 0 ? (
             <div className="text-center py-12">
               <Phone className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-foreground mb-2">Mi Red de Apoyo</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-2">Mi red de apoyo</h2>
               <p className="text-muted-foreground mb-4">No tienes contactos guardados aún</p>
               <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
                 <DialogTrigger asChild>
                   <Button className="gap-2">
                     <Phone className="h-4 w-4" />
-                    Añadir Primer Contacto
+                    Añadir primer contacto
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>
-                      {editingContact ? "Editar Contacto" : "Añadir Contacto"}
+                      {editingContact ? "Editar contacto" : "Añadir contacto"}
                     </DialogTitle>
                   </DialogHeader>
                   <form onSubmit={handleSubmit} className="space-y-4">
@@ -256,7 +256,7 @@ export default function SupportNetwork() {
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>
-                        {editingContact ? "Editar Contacto" : "Añadir Contacto"}
+                        {editingContact ? "Editar contacto" : "Añadir contacto"}
                       </DialogTitle>
                     </DialogHeader>
                     <form onSubmit={handleSubmit} className="space-y-4">

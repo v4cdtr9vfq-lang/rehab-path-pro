@@ -648,12 +648,12 @@ export default function Plan() {
           <DialogTrigger asChild>
             <Button variant="accent" className="gap-2">
               <Plus className="h-5 w-5" />
-              Añadir Meta
+              Añadir meta
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Añadir Nueva Meta</DialogTitle>
+              <DialogTitle>Añadir nueva meta</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -676,10 +676,10 @@ export default function Plan() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="today">Hoy</SelectItem>
-                    <SelectItem value="week">Esta Semana</SelectItem>
-                    <SelectItem value="month">Este Mes</SelectItem>
-                    <SelectItem value="onetime">Meta Única</SelectItem>
-                    <SelectItem value="periodic">Meta Periódica</SelectItem>
+                    <SelectItem value="week">Esta semana</SelectItem>
+                    <SelectItem value="month">Este mes</SelectItem>
+                    <SelectItem value="onetime">Meta única</SelectItem>
+                    <SelectItem value="periodic">Meta periódica</SelectItem>
                     <SelectItem value="always">Siempre</SelectItem>
                   </SelectContent>
                 </Select>
@@ -715,9 +715,9 @@ export default function Plan() {
                       <SelectValue placeholder="Seleccionar periodicidad" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="inicio_mes">Primero de Mes</SelectItem>
-                      <SelectItem value="mitad_mes">Mitad de Mes</SelectItem>
-                      <SelectItem value="final_mes">Final de Mes</SelectItem>
+                      <SelectItem value="inicio_mes">Primero de mes</SelectItem>
+                      <SelectItem value="mitad_mes">Mitad de mes</SelectItem>
+                      <SelectItem value="final_mes">Final de mes</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>}
@@ -741,7 +741,7 @@ export default function Plan() {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Editar Meta</DialogTitle>
+            <DialogTitle>Editar meta</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
@@ -762,9 +762,9 @@ export default function Plan() {
                     <SelectValue placeholder="Seleccionar periodicidad" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="inicio_mes">Primero de Mes</SelectItem>
-                    <SelectItem value="mitad_mes">Mitad de Mes</SelectItem>
-                    <SelectItem value="final_mes">Final de Mes</SelectItem>
+                    <SelectItem value="inicio_mes">Primero de mes</SelectItem>
+                    <SelectItem value="mitad_mes">Mitad de mes</SelectItem>
+                    <SelectItem value="final_mes">Final de mes</SelectItem>
                   </SelectContent>
                 </Select>
               </div>}
@@ -777,7 +777,7 @@ export default function Plan() {
             }))} />
             </div>
             <Button onClick={updateGoal} className="w-full">
-              Guardar Cambios
+              Guardar cambios
             </Button>
           </div>
         </DialogContent>
@@ -797,7 +797,7 @@ export default function Plan() {
         {/* This Week */}
         <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-lg">
           <CardHeader>
-            <SectionHeader title="Esta Semana (L-D)" sectionKey="week" />
+            <SectionHeader title="Esta semana (L-D)" sectionKey="week" />
           </CardHeader>
           {sections.week.open && <CardContent className="space-y-3">
               {sections.week.goals.filter(goal => goal.instanceIndex === 0).map(goal => <GoalItem key={goal.id} goal={goal} sectionKey="week" />)}
@@ -807,7 +807,7 @@ export default function Plan() {
         {/* This Month */}
         <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-lg">
           <CardHeader>
-            <SectionHeader title="Este Mes" sectionKey="month" />
+            <SectionHeader title="Este mes" sectionKey="month" />
           </CardHeader>
           {sections.month.open && <CardContent className="space-y-3">
               {sections.month.goals.filter(goal => goal.instanceIndex === 0).map(goal => <GoalItem key={goal.id} goal={goal} sectionKey="month" />)}
@@ -817,7 +817,7 @@ export default function Plan() {
         {/* One-Time Goals */}
         <Card className="border-border/50 bg-card/50 backdrop-blur rounded-3xl shadow-lg">
           <CardHeader>
-            <SectionHeader title="Metas Únicas" sectionKey="onetime" />
+            <SectionHeader title="Metas únicas" sectionKey="onetime" />
           </CardHeader>
           {sections.onetime.open && <CardContent className="space-y-3">
               {sections.onetime.goals.filter(goal => goal.instanceIndex === 0).map(goal => <GoalItem key={goal.id} goal={goal} sectionKey="onetime" />)}

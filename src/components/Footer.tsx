@@ -19,7 +19,7 @@ export function Footer() {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Enlaces Rápidos</h4>
+            <h4 className="font-semibold text-foreground">Enlaces rápidos</h4>
             <ul className="space-y-2">
               <li>
                 <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-primary transition-colors">
@@ -50,7 +50,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Centro de Ayuda
+                  Centro de ayuda
                 </a>
               </li>
               <li>
@@ -77,17 +77,17 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Política de Privacidad
+                  Política de privacidad
                 </a>
               </li>
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Términos de Servicio
+                  Términos de servicio
                 </a>
               </li>
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Política de Cookies
+                  Política de cookies
                 </a>
               </li>
               <li>

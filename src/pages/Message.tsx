@@ -251,7 +251,7 @@ export default function Message() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-2xl">✈️</span>
-              <CardTitle className="text-2xl">Frase del Día</CardTitle>
+              <CardTitle className="text-2xl">Frase del día</CardTitle>
               <span className="text-2xl">✨</span>
             </div>
             <Button
@@ -281,7 +281,7 @@ export default function Message() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle className="text-xl">Propón una frase a la Comunidad</CardTitle>
+          <CardTitle className="text-xl">Propón una frase a la comunidad</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={submitProposedQuote} className="space-y-4">
@@ -320,7 +320,7 @@ export default function Message() {
       {savedQuotes.length > 0 && (
         <Card className="border-border/50">
           <CardHeader>
-            <CardTitle className="text-xl">Frases Guardadas</CardTitle>
+            <CardTitle className="text-xl">Frases guardadas</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {savedQuotes.map((quote) => (

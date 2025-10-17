@@ -405,7 +405,7 @@ export default function Settings() {
                   <div className="flex items-center gap-2">
                     <span className="text-lg text-primary">✅</span>
                     <span className="font-semibold">
-                      {plan === "monthly" ? "Plan Mensual Activo" : "Plan Anual Activo"}
+                      {plan === "monthly" ? "Plan mensual activo" : "Plan anual activo"}
                     </span>
                   </div>
                   {subscriptionEnd && (
@@ -418,7 +418,7 @@ export default function Settings() {
                     onClick={openCustomerPortal}
                     className="w-full mt-2"
                   >
-                    Gestionar Suscripción
+                    Gestionar suscripción
                   </Button>
                 </div>
               )}
@@ -427,7 +427,7 @@ export default function Settings() {
               <div className="space-y-4">
                 <div className="text-center mb-4">
                   <h3 className="text-lg font-semibold mb-2">
-                    {subscribed ? "Cambiar de Plan" : "Elige tu Plan"}
+                    {subscribed ? "Cambiar de plan" : "Elige tu plan"}
                   </h3>
                 </div>
 
@@ -435,7 +435,7 @@ export default function Settings() {
                 <div className={`border rounded-lg p-4 space-y-3 ${plan === "free" ? "border-primary bg-primary/5" : "border-border"}`}>
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-semibold text-2xl">Plan Básico</h4>
+                      <h4 className="font-semibold text-2xl">Plan básico</h4>
                       <p className="text-2xl font-bold text-primary mt-1">Gratis<span className="text-sm text-muted-foreground">/40 días</span></p>
                     </div>
                     {plan === "free" && (
@@ -464,7 +464,7 @@ export default function Settings() {
                       variant="destructive"
                       className="w-full mt-48"
                     >
-                      Plan Actual
+                      Plan actual
                     </Button>
                   )}
                 </div>
@@ -473,12 +473,12 @@ export default function Settings() {
                 <div className={`border rounded-lg p-4 space-y-3 ${plan === "monthly" ? "border-primary bg-primary/5" : "border-border"}`}>
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-semibold text-lg">Plan Mensual</h4>
+                      <h4 className="font-semibold text-lg">Plan mensual</h4>
                       <p className="text-2xl font-bold text-primary mt-1">6€<span className="text-sm text-muted-foreground">/mes</span></p>
                     </div>
                     {plan === "monthly" && (
                       <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
-                        Tu Plan
+                        Tu plan
                       </span>
                     )}
                   </div>
@@ -521,13 +521,13 @@ export default function Settings() {
                   </div>
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-semibold text-lg">Plan Anual</h4>
+                      <h4 className="font-semibold text-lg">Plan anual</h4>
                       <p className="text-2xl font-bold text-primary mt-1">30€<span className="text-sm text-muted-foreground">/año</span></p>
                       <p className="text-xs text-muted-foreground">Solo 2.5€/mes</p>
                     </div>
                     {plan === "annual" && (
                       <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
-                        Tu Plan
+                        Tu plan
                       </span>
                     )}
                   </div>
@@ -573,12 +573,12 @@ export default function Settings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <span className="text-lg">⚙️</span>
-            Configuración de Recuperación
+            Configuración de recuperación
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
-            <Label htmlFor="start-date">Fecha de Inicio de Abstinencia</Label>
+            <Label htmlFor="start-date">Fecha de inicio de abstinencia</Label>
             <div className="flex gap-2">
               <Input 
                 id="start-date" 
@@ -733,7 +733,7 @@ export default function Settings() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle>Privacidad y Seguridad</CardTitle>
+          <CardTitle>Privacidad y seguridad</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
@@ -774,12 +774,12 @@ export default function Settings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive">
             <span className="text-lg">🗑️</span>
-            Zona de Peligro
+            Zona de peligro
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <Label className="text-destructive font-semibold">Eliminar Cuenta</Label>
+            <Label className="text-destructive font-semibold">Eliminar cuenta</Label>
             <p className="text-sm text-muted-foreground mb-4">
               Esta acción es permanente y no se puede deshacer. Todos tus datos serán eliminados permanentemente.
             </p>

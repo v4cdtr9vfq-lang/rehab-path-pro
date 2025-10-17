@@ -482,8 +482,8 @@ export default function ProgressPage() {
       <Tabs defaultValue="daily" className="w-full" onValueChange={setCurrentTab}>
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="daily">Diario</TabsTrigger>
-          <TabsTrigger value="week">Semana Actual</TabsTrigger>
-          <TabsTrigger value="month">Mes Actual</TabsTrigger>
+          <TabsTrigger value="week">Semana actual</TabsTrigger>
+          <TabsTrigger value="month">Mes actual</TabsTrigger>
         </TabsList>
 
         <TabsContent value="daily" className="space-y-6 mt-6">
@@ -497,7 +497,7 @@ export default function ProgressPage() {
             <CardContent className="space-y-3">
               <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-semibold text-foreground">Check-in Diario</span>
+                  <span className="text-sm font-semibold text-foreground">Check-in diario</span>
                   <span className={`text-sm font-bold ${hasCheckedInToday ? 'text-green-500' : 'text-sky-blue'}`}>{hasCheckedInToday ? '100' : '0'}%</span>
                 </div>
                 <Progress value={hasCheckedInToday ? 100 : 0} className={`h-2.5 ${hasCheckedInToday ? '[&>div]:bg-green-500' : '[&>div]:bg-sky-blue'}`} />

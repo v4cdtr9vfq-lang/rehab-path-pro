@@ -431,7 +431,7 @@ export default function Chat() {
     <div className="h-[calc(100vh-8rem+85px)] flex flex-col animate-in fade-in duration-500">
       <div className="mb-4">
         <div>
-          <h1 className="text-4xl font-bold text-foreground mb-2">Chat Comunitario</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-2">Chat comunitario</h1>
           <p className="text-muted-foreground text-lg">Conecta con otros miembros de la comunidad</p>
         </div>
       </div>
@@ -440,7 +440,7 @@ export default function Chat() {
         <div className="bg-muted/30 border-b shrink-0">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between mb-3">
-              <CardTitle>Chat en Vivo</CardTitle>
+              <CardTitle>Chat en vivo</CardTitle>
             </div>
           </CardHeader>
           <div className="px-3 pb-3">

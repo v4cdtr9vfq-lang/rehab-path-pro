@@ -216,7 +216,7 @@ export default function CheckIn() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Check-In Diario</h1>
+        <h1 className="text-4xl font-bold text-foreground mb-2">Check-in diario</h1>
         <p className="text-muted-foreground text-lg">Reflexiona sobre tu día y rastrea tu progreso</p>
       </div>
 

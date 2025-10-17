@@ -390,7 +390,7 @@ export default function Journal() {
       {showNewEntry && (
         <Card className="border-primary/20">
           <CardHeader>
-            <CardTitle>{editingEntryId ? 'Editar Entrada' : 'Nueva Entrada de Diario'}</CardTitle>
+            <CardTitle>{editingEntryId ? 'Editar entrada' : 'Nueva entrada de diario'}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <Input 
@@ -439,7 +439,7 @@ export default function Journal() {
       )}
 
       <div className="space-y-4">
-        <h2 className="text-2xl font-semibold text-foreground">Entradas Recientes</h2>
+        <h2 className="text-2xl font-semibold text-foreground">Entradas recientes</h2>
         {isLoading ? (
           <Card className="border-primary/20">
             <CardContent className="p-12 text-center">

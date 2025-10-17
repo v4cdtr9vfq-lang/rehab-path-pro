@@ -32,7 +32,7 @@ export default function TrialEnded() {
           {/* Monthly Plan */}
           <Card className="border-primary/20 hover:border-primary/40 transition-all flex flex-col">
             <CardHeader>
-              <CardTitle className="text-2xl">Plan Mensual</CardTitle>
+              <CardTitle className="text-2xl">Plan mensual</CardTitle>
               <div className="mt-4">
                 <span className="text-4xl font-bold text-primary">6€</span>
                 <span className="text-muted-foreground">/mes</span>
@@ -69,7 +69,7 @@ export default function TrialEnded() {
               Ahorra 50%
             </div>
             <CardHeader>
-              <CardTitle className="text-2xl">Plan Anual</CardTitle>
+              <CardTitle className="text-2xl">Plan anual</CardTitle>
               <div className="mt-4">
                 <span className="text-4xl font-bold text-primary">30€</span>
                 <span className="text-muted-foreground">/año</span>

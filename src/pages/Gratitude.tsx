@@ -153,7 +153,7 @@ export default function Gratitude() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Lista de Gratitud</h1>
+        <h1 className="text-4xl font-bold text-foreground mb-2">Lista de gratitud</h1>
         <p className="text-muted-foreground text-lg">Cultiva la gratitud y reconoce las bendiciones de la vida</p>
       </div>
 
@@ -259,7 +259,7 @@ export default function Gratitude() {
       {entries.length > 0 && entries.filter(e => e.date.toDateString() !== new Date().toDateString()).length > 0 && (
         <Card className="border-primary/20">
           <CardHeader>
-            <CardTitle>Entradas Recientes</CardTitle>
+            <CardTitle>Entradas recientes</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {entries.filter(e => e.date.toDateString() !== new Date().toDateString()).map((entry) => (

@@ -375,7 +375,7 @@ export default function Values() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             <Heart className="h-6 w-6 text-primary" />
-            Lo que más Importa
+            Lo que más importa
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -389,12 +389,12 @@ export default function Values() {
       {/* Tus Valores - Moved before Statistics */}
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-semibold text-foreground">Tus Valores</h2>
+          <h2 className="text-2xl font-semibold text-foreground">Tus valores</h2>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button className="gap-2">
                 <Plus className="h-4 w-4" />
-                Añadir Valor
+                Añadir valor
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -472,7 +472,7 @@ export default function Values() {
 
         <Card className="border-accent/20 bg-gradient-to-br from-accent/5 to-transparent">
           <CardContent className="p-6">
-            <h3 className="font-semibold text-foreground mb-3">💡 Recordatorio Diario de Valores</h3>
+            <h3 className="font-semibold text-foreground mb-3">💡 Recordatorio diario de valores</h3>
             <p className="text-foreground/80 text-sm">
               Has seleccionado <span className="font-bold text-green-500">{values.filter(v => v.selected).length} valores</span> para hoy. 
               Te haremos un seguimiento durante tu check-in diario para ver si has honrado estos valores.
@@ -493,8 +493,8 @@ export default function Values() {
           <Tabs defaultValue="today" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="today">Hoy</TabsTrigger>
-              <TabsTrigger value="week">Esta Semana</TabsTrigger>
-              <TabsTrigger value="month">Este Mes</TabsTrigger>
+              <TabsTrigger value="week">Esta semana</TabsTrigger>
+              <TabsTrigger value="month">Este mes</TabsTrigger>
             </TabsList>
             <TabsContent value="today" className="mt-6">
               {renderDonutChart(todayStats)}
