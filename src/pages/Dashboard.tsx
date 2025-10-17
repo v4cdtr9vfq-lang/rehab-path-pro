@@ -690,7 +690,7 @@ export default function Home() {
       </Card>
 
       {/* Daily Reflection */}
-      <Card className="border-sky-blue/30 bg-gradient-to-br from-sky-blue/10 to-transparent">
+      <Card className="border-sky-blue/30 bg-white dark:bg-gradient-to-br dark:from-sky-blue/10 dark:to-transparent">
         <CardContent className="p-6">
           <h3 className="font-semibold text-foreground mb-3">💡 Reflexión del día</h3>
           <p className="text-foreground/80">

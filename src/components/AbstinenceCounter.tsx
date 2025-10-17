@@ -33,7 +33,7 @@ export function AbstinenceCounter({
 
     return () => clearInterval(interval);
   }, [startDate]);
-  return <div className="rounded-3xl p-8 md:p-12 bg-card border border-border/50 shadow-xl">
+  return <div className="rounded-3xl p-8 md:p-12 bg-card border border-border/50 dark:shadow-xl">
       <p className="text-muted-foreground text-base mb-8">Soy libre desde hace:</p>
       <div className="grid grid-cols-3 gap-6 md:gap-8">
         <div className="text-center">
