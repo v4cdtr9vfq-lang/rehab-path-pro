@@ -606,21 +606,21 @@ export default function Home() {
       <div
         ref={setNodeRef}
         style={style}
-        className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50"
+        className="flex items-center justify-between p-3 md:p-4 rounded-xl bg-muted/50 border border-border/50"
       >
-        <div className="flex items-center gap-3 flex-1">
+        <div className="flex items-center gap-2 md:gap-3 flex-1">
           <button
             {...attributes}
             {...listeners}
-            className="flex-shrink-0 cursor-grab active:cursor-grabbing touch-none"
+            className="hidden md:flex flex-shrink-0 cursor-grab active:cursor-grabbing touch-none"
           >
             <GripVertical className="h-5 w-5 text-muted-foreground" />
           </button>
           <button onClick={() => toggleGoal(goal.id)} className="flex-shrink-0">
             {goal.status === "completed" ? (
-              <CheckCircle2 className="h-6 w-6 text-green-500" />
+              <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6 text-green-500" />
             ) : (
-              <Circle className="h-6 w-6 text-muted-foreground" />
+              <Circle className="h-5 w-5 md:h-6 md:w-6 text-muted-foreground" />
             )}
           </button>
           <div>
