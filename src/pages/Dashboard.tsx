@@ -754,21 +754,21 @@ export default function Home() {
           <CardTitle className="text-2xl font-bold">Mis medallas</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {medalConfig.map(medal => {
               const status = getMedalStatus(medal.type, medal.requiredDays);
               return (
                 <Card key={medal.type} className="border-border/50 h-full">
-                  <CardContent className="p-5 text-center space-y-3">
-                    <div className={`mx-auto w-12 h-12 rounded-2xl bg-sky-blue flex items-center justify-center ${status.opacity} transition-opacity duration-300`}>
-                      <span className="text-2xl">{medal.emoji}</span>
+                  <CardContent className="p-6 flex items-center gap-4">
+                    <div className={`w-20 h-20 rounded-2xl bg-sky-blue flex items-center justify-center flex-shrink-0 ${status.opacity} transition-opacity duration-300`}>
+                      <span className="text-4xl">{medal.emoji}</span>
                     </div>
-                    <div>
-                      <p className="font-semibold text-foreground text-xs leading-tight mb-1">{medal.name}</p>
-                      <p className={`text-xs ${status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
+                    <div className="flex-1">
+                      <p className="font-bold text-foreground text-lg mb-2">{medal.name}</p>
+                      <p className={`text-sm ${status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
                         {status.isUnlocked 
                           ? '¡Conseguido!' 
-                          : `+${status.progress} / ${medal.requiredDays} días`
+                          : `${status.progress} / ${medal.requiredDays} días`
                         }
                       </p>
                     </div>
