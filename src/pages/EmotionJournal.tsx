@@ -483,7 +483,7 @@ export default function EmotionJournal() {
         <div className="space-y-8">
           {/* Primary Categories */}
           <div>
-            <h2 className="text-xl font-semibold text-foreground mb-4">¿Cómo te sientes aquí y ahora?</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-4">Categoría:</h2>
             <div className="flex flex-wrap gap-3">
               {emotionCategories.map((category) => {
                 const isSelected = selectedPrimary === category.id;
@@ -516,7 +516,7 @@ export default function EmotionJournal() {
           {/* Secondary Emotions */}
           {selectedPrimary && selectedCategory && (
             <div>
-              <h2 className="text-xl font-semibold text-foreground mb-4">Emociones primarias:</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">Me he sentido:</h2>
               <div className="flex flex-wrap gap-3">
                 {selectedCategory.secondaryEmotions.map((emotion) => {
                   const isSelected = selectedSecondary.includes(emotion.id);
