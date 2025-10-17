@@ -26,15 +26,15 @@ export default function Landing() {
   const steps = [{
     number: "1",
     title: "Regístrate",
-    description: "Crea tu cuenta en segundos"
+    description: "Crea tu cuenta en segundos."
   }, {
     number: "2",
     title: "Configura",
-    description: "Personaliza tu perfil y fecha de inicio"
+    description: "Personaliza tu perfil y fecha de inicio en recuperación."
   }, {
     number: "3",
     title: "Progresa",
-    description: "Sigue tu recuperación día a día"
+    description: "Sigue tu recuperación día a día."
   }];
   return <div className="min-h-screen bg-background">
       {/* Hero Section */}
