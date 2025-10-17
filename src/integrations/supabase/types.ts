@@ -300,6 +300,30 @@ export type Database = {
         }
         Relationships: []
       }
+      proposed_quotes: {
+        Row: {
+          created_at: string
+          id: string
+          quote_author: string
+          quote_text: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          quote_author: string
+          quote_text: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          quote_author?: string
+          quote_text?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       saved_quotes: {
         Row: {
           created_at: string

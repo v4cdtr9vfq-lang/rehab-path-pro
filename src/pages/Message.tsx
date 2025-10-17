@@ -1,6 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Star, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { MessageSquare, Star, Trash2, Send } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -22,6 +25,9 @@ export default function Message() {
   const [dailyQuote, setDailyQuote] = useState<Quote | null>(null);
   const [savedQuotes, setSavedQuotes] = useState<SavedQuote[]>([]);
   const [isSaved, setIsSaved] = useState(false);
+  const [proposedQuote, setProposedQuote] = useState("");
+  const [proposedAuthor, setProposedAuthor] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const allQuotes: Quote[] = [
     { text: "Siempre es lo simple lo que produce lo maravilloso.", author: "Amelia Barr" },
@@ -183,6 +189,59 @@ export default function Message() {
     }
   };
 
+  const submitProposedQuote = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!proposedQuote.trim() || !proposedAuthor.trim()) {
+      toast({
+        title: "Error",
+        description: "Por favor completa todos los campos",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "Debes iniciar sesión para proponer frases",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const { error } = await supabase
+        .from('proposed_quotes')
+        .insert({
+          user_id: user.id,
+          quote_text: proposedQuote.trim(),
+          quote_author: proposedAuthor.trim()
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "¡Frase propuesta!",
+        description: "Tu frase ha sido enviada a la comunidad",
+      });
+
+      setProposedQuote("");
+      setProposedAuthor("");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "No se pudo enviar tu propuesta",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   if (!dailyQuote) return null;
 
   return (
@@ -216,6 +275,47 @@ export default function Message() {
               — {dailyQuote.author}
             </footer>
           </blockquote>
+        </CardContent>
+      </Card>
+
+      <Card className="border-primary/20">
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Send className="h-6 w-6 text-primary" />
+            <CardTitle className="text-xl">Propón una Frase a la Comunidad</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={submitProposedQuote} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="quote">Frase</Label>
+              <Textarea
+                id="quote"
+                placeholder="Escribe la frase que quieres compartir..."
+                value={proposedQuote}
+                onChange={(e) => setProposedQuote(e.target.value)}
+                className="min-h-[100px]"
+                maxLength={500}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="author">Autor</Label>
+              <Input
+                id="author"
+                placeholder="Nombre del autor"
+                value={proposedAuthor}
+                onChange={(e) => setProposedAuthor(e.target.value)}
+                maxLength={100}
+              />
+            </div>
+            <Button 
+              type="submit" 
+              className="w-full"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Enviando..." : "Enviar Propuesta"}
+            </Button>
+          </form>
         </CardContent>
       </Card>
 
