@@ -212,12 +212,16 @@ export default function Help() {
             placeholder="Escribe tu pregunta aquí..."
             value={userQuestion}
             onChange={(e) => setUserQuestion(e.target.value)}
-            className="min-h-[120px] resize-none"
+            className="min-h-[120px] resize-none text-[16px]"
             maxLength={500}
           />
-          <div className="text-xs text-muted-foreground">
-            {userQuestion.length}/500 caracteres
-          </div>
+          <Button
+            onClick={handleSubmitQuestion}
+            disabled={isSubmitting || !userQuestion.trim()}
+            className="rounded-xl w-full"
+          >
+            {isSubmitting ? "Enviando..." : "Enviar pregunta"}
+          </Button>
           <div className="flex items-center gap-2">
             <Switch
               id="anonymous-question"
@@ -228,13 +232,9 @@ export default function Help() {
               Enviar de forma anónima
             </Label>
           </div>
-          <Button
-            onClick={handleSubmitQuestion}
-            disabled={isSubmitting || !userQuestion.trim()}
-            className="rounded-xl w-full"
-          >
-            {isSubmitting ? "Enviando..." : "Enviar pregunta"}
-          </Button>
+          <div className="text-xs text-muted-foreground">
+            {userQuestion.length}/500 caracteres
+          </div>
         </CardContent>
       </Card>
     </div>
