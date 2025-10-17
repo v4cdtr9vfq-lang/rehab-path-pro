@@ -491,7 +491,7 @@ export default function EmotionJournal() {
       {/* Emotion Log Widget */}
       {savedEntries.length > 0 && (
         <div>
-          <h2 className="text-2xl font-bold text-foreground mb-6">Registro de Emociones</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-6">Registro de emociones:</h2>
           <div className="space-y-4">
             {savedEntries.map((entry) => (
               <Card key={entry.id} className="p-6 bg-card border-border">
