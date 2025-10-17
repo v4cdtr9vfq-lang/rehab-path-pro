@@ -260,7 +260,7 @@ export default function CheckIn() {
                   {question.id === 2 && answers[2] === "yes" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                       <Label htmlFor="trigger-description" className="text-sm font-medium text-foreground">
-                        Describe la situación
+                        Describe la situación:
                       </Label>
                       <Textarea
                         id="trigger-description"
@@ -279,7 +279,7 @@ export default function CheckIn() {
                   {question.id === 7 && answers[7] === "no" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                       <Label htmlFor="values-description" className="text-sm font-medium text-foreground">
-                        Describe la situación
+                        Describe la situación:
                       </Label>
                       <Textarea
                         id="values-description"
