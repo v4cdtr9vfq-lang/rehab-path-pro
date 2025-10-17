@@ -599,7 +599,7 @@ export default function ProgressPage() {
                     />
                     <Bar 
                       dataKey="progreso" 
-                      radius={[8, 8, 0, 0]}
+                      radius={0}
                       fill="hsl(var(--primary))"
                     >
                       {weeklyChartData.map((entry, index) => (
@@ -632,7 +632,7 @@ export default function ProgressPage() {
                     />
                     <Bar 
                       dataKey="progreso" 
-                      radius={[8, 8, 0, 0]}
+                      radius={0}
                       fill="hsl(var(--primary))"
                     >
                       {monthlyChartData.map((entry, index) => (
@@ -665,7 +665,7 @@ export default function ProgressPage() {
                     />
                     <Bar 
                       dataKey="progreso" 
-                      radius={[8, 8, 0, 0]}
+                      radius={0}
                       fill="hsl(var(--primary))"
                     >
                       {yearlyChartData.map((entry, index) => (
