@@ -455,13 +455,13 @@ export default function Chat() {
                 setCurrentRoom(value);
                 localStorage.setItem('chat_last_room_mobile', value);
               }}>
-                <SelectTrigger className="w-full bg-black text-white flex items-center justify-between pr-12">
-                  <span className="flex-1 text-left pl-2">
+                <SelectTrigger className="w-full bg-black text-white flex items-center justify-between pl-3 pr-12 [&>svg]:order-first [&>svg]:mr-2 [&>svg]:ml-0">
+                  <span className="flex-1 text-left">
                     {CHAT_ROOMS.find(room => room.id === currentRoom)?.label}
                   </span>
                   <Badge 
                     variant="secondary" 
-                    className="mr-2 flex-shrink-0 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 absolute right-8"
+                    className="flex-shrink-0 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 absolute right-3"
                   >
                     <Users className="h-3 w-3" />
                     {onlineCountByRoom[currentRoom] || 0}
