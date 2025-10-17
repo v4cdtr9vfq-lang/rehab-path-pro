@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/ThemeToggle";
 const menuItems = [{
-  emoji: "🏠",
+  emoji: "❤️",
   label: "Mi centro",
   path: "/dashboard"
 }, {
