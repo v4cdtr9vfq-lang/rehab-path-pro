@@ -675,7 +675,7 @@ export default function Chat() {
               onCheckedChange={setIsAnonymous}
             />
             <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
-              Escribir en modo anónimo
+              Escribir en modo anónimo.
             </Label>
           </div>
         </form>
