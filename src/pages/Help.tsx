@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { HelpCircle, Send } from "lucide-react";
+import { HelpCircle } from "lucide-react";
 
 interface FAQ {
   id: string;
@@ -201,10 +201,10 @@ export default function Help() {
 
       {/* Ask a Question Section */}
       <Card>
-        <CardHeader>
+        <CardHeader className="pb-0">
           <CardTitle className="text-xl">¿No encuentras lo que buscas?</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 pt-[15px]">
           <p className="text-sm text-muted-foreground">
             Envía tu pregunta y nuestros administradores te responderán lo antes posible.
           </p>
@@ -224,7 +224,6 @@ export default function Help() {
               disabled={isSubmitting || !userQuestion.trim()}
               className="rounded-xl"
             >
-              <Send className="h-4 w-4 mr-2" />
               {isSubmitting ? "Enviando..." : "Enviar pregunta"}
             </Button>
           </div>
