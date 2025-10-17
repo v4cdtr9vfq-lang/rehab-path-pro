@@ -335,7 +335,7 @@ export default function CheckIn() {
                       </Label>
                       <Textarea
                         id="trigger-description"
-                        placeholder="Cuenta tu versión de los echos sin juzgara y cómo y donde lo sentiste."
+                        placeholder="Cuenta tu versión de los hechos sin juzgar y cómo y dónde lo sentiste."
                         value={triggerDescription}
                         onChange={(e) => setTriggerDescription(e.target.value)}
                         className="min-h-[100px]"
