@@ -150,11 +150,11 @@ export default function Community() {
           {/* Header Legend */}
           <div className="grid grid-cols-[60px_1fr_60px_60px_60px_120px_100px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
             <div></div>
-            <div>Nombre</div>
-            <div className="text-center">Años</div>
-            <div className="text-center">Meses</div>
-            <div className="text-center">Días</div>
-            <div className="text-center">Medallas</div>
+            <div>Nombre:</div>
+            <div className="text-center">Años:</div>
+            <div className="text-center">Meses:</div>
+            <div className="text-center">Días:</div>
+            <div className="text-center">Medallas:</div>
             <div></div>
           </div>
 
