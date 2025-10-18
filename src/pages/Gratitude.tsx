@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Calendar, Plus, Sparkles, Pencil, Check, X } from "lucide-react";
+import { Calendar, Plus, Pencil, Check, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -155,7 +155,7 @@ export default function Gratitude() {
       <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            <Sparkles className="h-6 w-6 text-sky-blue" />
+            <span>🙏</span>
             Por Qué Importa la Gratitud
           </CardTitle>
         </CardHeader>
