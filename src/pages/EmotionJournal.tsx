@@ -38,18 +38,49 @@ interface SavedEmotionEntry {
 
 const emotionCategories: PrimaryCategory[] = [
   {
-    id: "cerrado",
-    name: "Cerrado",
+    id: "alegre",
+    name: "Alegre",
     secondaryEmotions: [
       {
-        id: "rechazo",
-        name: "Rechazo",
-        tertiaryEmotions: ["Animosidad", "Desprecio", "Desagrado", "Disgustado", "Horrorizado", "Hostil", "Odio", "Repulsado"]
+        id: "alegre",
+        name: "Alegre",
+        tertiaryEmotions: ["Alegre", "Complacido", "Contento", "Divertido", "Encantado", "Feliz", "Jubiloso"]
       },
       {
-        id: "triste",
-        name: "Triste",
-        tertiaryEmotions: ["Abatido", "Decepcionado", "Deprimido", "Desalentado", "Desanimado", "Descorazonado", "Desdichado", "Desesperado", "Desolado", "Infeliz", "Melancólico", "Sin esperanza", "Sombrío"]
+        id: "descansado",
+        name: "Descansado",
+        tertiaryEmotions: ["Renovado", "Restaurado", "Revitalizado", "Revivido"]
+      },
+      {
+        id: "entusiasmado",
+        name: "Entusiasmado",
+        tertiaryEmotions: ["Animado", "Ansioso", "Apasionado", "Ardiente", "Asombrado", "Deslumbrado", "Emocionado", "Enérgico", "Entusiasta", "Sorprendido", "Vibrante", "Vigorizado"]
+      },
+      {
+        id: "esperanzado",
+        name: "Esperanzado",
+        tertiaryEmotions: ["Alentado", "Expectante", "Optimista"]
+      },
+      {
+        id: "euforico",
+        name: "Eufórico",
+        tertiaryEmotions: ["Arrebatado", "Dichoso", "Embelesado", "Emocionado", "Exaltado", "Extático", "Exuberante", "Hechizado", "Radiante"]
+      },
+      {
+        id: "inspirado",
+        name: "Inspirado",
+        tertiaryEmotions: ["Admirado", "Asombrado", "Maravillado"]
+      }
+    ]
+  },
+  {
+    id: "cansado",
+    name: "Cansado",
+    secondaryEmotions: [
+      {
+        id: "desconectado",
+        name: "Desconectado",
+        tertiaryEmotions: ["Aburrido", "Adormecido", "Alejado", "Alienado", "Apático", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído"]
       }
     ]
   },
@@ -132,48 +163,17 @@ const emotionCategories: PrimaryCategory[] = [
   },
   {
     id: "desconectado",
-    name: "Cansado",
+    name: "Desconectado",
     secondaryEmotions: [
       {
-        id: "desconectado",
-        name: "Desconectado",
-        tertiaryEmotions: ["Aburrido", "Adormecido", "Alejado", "Alienado", "Apático", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído"]
-      }
-    ]
-  },
-  {
-    id: "energico",
-    name: "Enérgico",
-    secondaryEmotions: [
-      {
-        id: "alegre",
-        name: "Alegre",
-        tertiaryEmotions: ["Alegre", "Complacido", "Contento", "Divertido", "Encantado", "Feliz", "Jubiloso"]
+        id: "rechazo",
+        name: "Rechazo",
+        tertiaryEmotions: ["Animosidad", "Desprecio", "Desagrado", "Disgustado", "Horrorizado", "Hostil", "Odio", "Repulsado"]
       },
       {
-        id: "descansado",
-        name: "Descansado",
-        tertiaryEmotions: ["Renovado", "Restaurado", "Revitalizado", "Revivido"]
-      },
-      {
-        id: "entusiasmado",
-        name: "Entusiasmado",
-        tertiaryEmotions: ["Animado", "Ansioso", "Apasionado", "Ardiente", "Asombrado", "Deslumbrado", "Emocionado", "Enérgico", "Entusiasta", "Sorprendido", "Vibrante", "Vigorizado"]
-      },
-      {
-        id: "esperanzado",
-        name: "Esperanzado",
-        tertiaryEmotions: ["Alentado", "Expectante", "Optimista"]
-      },
-      {
-        id: "euforico",
-        name: "Eufórico",
-        tertiaryEmotions: ["Arrebatado", "Dichoso", "Embelesado", "Emocionado", "Exaltado", "Extático", "Exuberante", "Hechizado", "Radiante"]
-      },
-      {
-        id: "inspirado",
-        name: "Inspirado",
-        tertiaryEmotions: ["Admirado", "Asombrado", "Maravillado"]
+        id: "triste",
+        name: "Triste",
+        tertiaryEmotions: ["Abatido", "Decepcionado", "Deprimido", "Desalentado", "Desanimado", "Descorazonado", "Desdichado", "Desesperado", "Desolado", "Infeliz", "Melancólico", "Sin esperanza", "Sombrío"]
       }
     ]
   },
