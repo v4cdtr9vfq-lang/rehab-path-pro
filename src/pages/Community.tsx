@@ -148,10 +148,10 @@ export default function Community() {
         </CardHeader>
         <CardContent>
           {/* Header Legend */}
-          <div className="grid grid-cols-[120px_1fr_100px_100px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
-            <div className="flex gap-1">
-              <div className="text-center w-12">Años</div>
-              <div className="text-center w-12">Días</div>
+          <div className="grid grid-cols-[100px_1fr_100px_100px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
+            <div className="flex gap-[15px]">
+              <div className="text-center w-10">Años</div>
+              <div className="text-center w-10">Días</div>
             </div>
             <div>Nombre</div>
             <div className="text-center">Medallas</div>
@@ -162,18 +162,18 @@ export default function Community() {
             {sortedUsers.map((user) => (
               <div
                 key={user.id}
-                className={`grid grid-cols-[120px_1fr_100px_100px] gap-3 items-center p-4 rounded-xl transition-colors ${
+                className={`grid grid-cols-[100px_1fr_100px_100px] gap-3 items-center p-4 rounded-xl transition-colors ${
                   user.availableForHelp
                     ? "bg-success/10 border border-success/30"
                     : "bg-muted/30"
                 }`}
               >
                 {/* Years and Days */}
-                <div className="flex gap-1">
-                  <div className="text-center font-bold text-lg w-12">
+                <div className="flex gap-[15px]">
+                  <div className="text-center font-bold text-lg w-10">
                     {user.years.toString().padStart(2, "0")}
                   </div>
-                  <div className="text-center font-bold text-lg w-12">
+                  <div className="text-center font-bold text-lg w-10">
                     {user.days.toString().padStart(3, "0")}
                   </div>
                 </div>
