@@ -162,22 +162,6 @@ const emotionCategories: PrimaryCategory[] = [
     ]
   },
   {
-    id: "desconectado",
-    name: "Desconectado",
-    secondaryEmotions: [
-      {
-        id: "rechazo",
-        name: "Rechazo",
-        tertiaryEmotions: ["Animosidad", "Desprecio", "Desagrado", "Disgustado", "Horrorizado", "Hostil", "Odio", "Repulsado"]
-      },
-      {
-        id: "triste",
-        name: "Triste",
-        tertiaryEmotions: ["Abatido", "Decepcionado", "Deprimido", "Desalentado", "Desanimado", "Descorazonado", "Desdichado", "Desesperado", "Desolado", "Infeliz", "Melancólico", "Sin esperanza", "Sombrío"]
-      }
-    ]
-  },
-  {
     id: "reactivo",
     name: "Reactivo",
     secondaryEmotions: [
@@ -200,6 +184,22 @@ const emotionCategories: PrimaryCategory[] = [
         id: "tenso",
         name: "Tenso",
         tertiaryEmotions: ["Abrumado", "Angustiado", "Ansioso", "Consternado", "Estresado", "Inquieto", "Irritable", "Nervioso"]
+      }
+    ]
+  },
+  {
+    id: "solo",
+    name: "Solo",
+    secondaryEmotions: [
+      {
+        id: "rechazo",
+        name: "Rechazo",
+        tertiaryEmotions: ["Animosidad", "Desprecio", "Desagrado", "Disgustado", "Horrorizado", "Hostil", "Odio", "Repulsado"]
+      },
+      {
+        id: "triste",
+        name: "Triste",
+        tertiaryEmotions: ["Abatido", "Decepcionado", "Deprimido", "Desalentado", "Desanimado", "Descorazonado", "Desdichado", "Desesperado", "Desolado", "Infeliz", "Melancólico", "Sin esperanza", "Sombrío"]
       }
     ]
   },
