@@ -522,7 +522,6 @@ export default function ProgressPage() {
           <Card className="border-sidebar-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <span className="text-lg">📈</span>
                 Progreso semanal
               </CardTitle>
             </CardHeader>
@@ -542,7 +541,6 @@ export default function ProgressPage() {
           <Card className="border-sidebar-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <span className="text-lg">📈</span>
                 Progreso mensual
               </CardTitle>
             </CardHeader>
