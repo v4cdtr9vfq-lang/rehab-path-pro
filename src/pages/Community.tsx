@@ -148,68 +148,80 @@ export default function Community() {
         </CardHeader>
         <CardContent>
           {/* Header Legend */}
-          <div className="grid grid-cols-[60px_1fr_60px_60px_120px_100px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
+          <div className="grid grid-cols-[60px_1fr_60px_60px_60px_120px_100px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
             <div></div>
             <div>Nombre</div>
             <div className="text-center">Años</div>
+            <div className="text-center">Meses</div>
             <div className="text-center">Días</div>
             <div className="text-center">Medallas</div>
             <div></div>
           </div>
 
           <div className="space-y-3">
-            {sortedUsers.map((user) => (
-              <div
-                key={user.id}
-                className={`grid grid-cols-[60px_1fr_60px_60px_120px_100px] gap-3 items-center p-4 rounded-xl transition-colors ${
-                  user.availableForHelp
-                    ? "bg-success/10 border border-success/30"
-                    : "bg-muted/30"
-                }`}
-              >
-                {/* Avatar */}
-                <Avatar className="h-10 w-10 flex-shrink-0">
-                  <AvatarImage src={user.avatar} />
-                  <AvatarFallback 
-                    className={`${getAvatarColor(user.years, user.days).className} font-semibold`}
-                    style={getAvatarColor(user.years, user.days).style}
-                  >
-                    {getInitials(user.name)}
-                  </AvatarFallback>
-                </Avatar>
+            {sortedUsers.map((user) => {
+              // Calcular meses y días restantes
+              const months = Math.floor(user.days / 30);
+              const remainingDays = user.days % 30;
+              
+              return (
+                <div
+                  key={user.id}
+                  className={`grid grid-cols-[60px_1fr_60px_60px_60px_120px_100px] gap-3 items-center p-4 rounded-xl transition-colors ${
+                    user.availableForHelp
+                      ? "bg-success/10 border border-success/30"
+                      : "bg-muted/30"
+                  }`}
+                >
+                  {/* Avatar */}
+                  <Avatar className="h-10 w-10 flex-shrink-0">
+                    <AvatarImage src={user.avatar} />
+                    <AvatarFallback 
+                      className={`${getAvatarColor(user.years, user.days).className} font-semibold`}
+                      style={getAvatarColor(user.years, user.days).style}
+                    >
+                      {getInitials(user.name)}
+                    </AvatarFallback>
+                  </Avatar>
 
-                {/* Name */}
-                <h3 className="font-semibold truncate">{user.name.split(" ")[0]}</h3>
+                  {/* Name */}
+                  <h3 className="font-semibold truncate">{user.name.split(" ")[0]}</h3>
 
-                {/* Years */}
-                <div className="text-center font-bold text-lg">
-                  {user.years.toString().padStart(2, "0")}
+                  {/* Years */}
+                  <div className="text-center font-bold text-lg">
+                    {user.years.toString().padStart(2, "0")}
+                  </div>
+
+                  {/* Months */}
+                  <div className="text-center font-bold text-lg">
+                    {months.toString().padStart(2, "0")}
+                  </div>
+
+                  {/* Days */}
+                  <div className="text-center font-bold text-lg">
+                    {remainingDays.toString().padStart(2, "0")}
+                  </div>
+
+                  {/* Medals */}
+                  <div className="flex gap-1 justify-center">
+                    {getMedalsByTime(user.years, user.days).map((medal, idx) => (
+                      <span key={idx} className="text-xl">
+                        {medal}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Availability Badge */}
+                  <div className="flex justify-end">
+                    {user.availableForHelp && (
+                      <Badge variant="secondary" className="flex-shrink-0">
+                        Disponible
+                      </Badge>
+                    )}
+                  </div>
                 </div>
-
-                {/* Days */}
-                <div className="text-center font-bold text-lg">
-                  {user.days.toString().padStart(3, "0")}
-                </div>
-
-                {/* Medals */}
-                <div className="flex gap-1 justify-center">
-                  {getMedalsByTime(user.years, user.days).map((medal, idx) => (
-                    <span key={idx} className="text-xl">
-                      {medal}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Availability Badge */}
-                <div className="flex justify-end">
-                  {user.availableForHelp && (
-                    <Badge variant="secondary" className="flex-shrink-0">
-                      Disponible
-                    </Badge>
-                  )}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </CardContent>
       </Card>
