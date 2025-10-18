@@ -343,7 +343,7 @@ export default function Home() {
     };
     window.addEventListener('abstinenceDateUpdated', handleDateUpdate);
 
-    // Set up realtime subscription for goal completions
+    // Set up realtime subscription for goal completions and order changes
     const channel = supabase.channel('goal_completions_changes').on('postgres_changes', {
       event: '*',
       schema: 'public',
@@ -362,6 +362,56 @@ export default function Home() {
         const newCompleted = Array.from(completedInstances).filter(id => activeGoals.some(g => g.id === id)).length;
         return newCompleted + (checkInCompleted ? 1 : 0);
       });
+    }).on('postgres_changes', {
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'goals'
+    }, async (payload) => {
+      // Listen for order_index updates and refresh goals
+      if (payload.new && 'order_index' in payload.new) {
+        // Cancel any pending unsaved order changes
+        setHasUnsavedOrder(false);
+        setOriginalGoalsOrder([]);
+        
+        // Refetch to get the new order
+        setTimeout(async () => {
+          const {
+            data: {
+              user
+            }
+          } = await supabase.auth.getUser();
+          if (!user) return;
+
+          const {
+            data: goals
+          } = await supabase.from('goals').select('*').eq('user_id', user.id).order('order_index', {
+            ascending: true
+          });
+          
+          if (goals && goals.length > 0) {
+            const todayGoals = goals.filter(g => g.goal_type === 'today' || g.goal_type === 'week' || g.goal_type === 'always');
+            const todayStr = getLocalDateString();
+            const completedInstances = await loadCompletedInstances(todayStr);
+            const expandedGoals: any[] = [];
+            
+            todayGoals.forEach(g => {
+              for (let i = 0; i < g.remaining; i++) {
+                const instanceId = `${g.id}__${todayStr}__${i}`;
+                expandedGoals.push({
+                  id: instanceId,
+                  originalId: g.id,
+                  title: g.text,
+                  period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Pendiente' : 'Esta semana',
+                  status: completedInstances.has(instanceId) ? 'completed' : 'pending',
+                  instanceIndex: i
+                });
+              }
+            });
+            
+            setActiveGoals(expandedGoals);
+          }
+        }, 300);
+      }
     }).subscribe();
     return () => {
       window.removeEventListener('abstinenceDateUpdated', handleDateUpdate);

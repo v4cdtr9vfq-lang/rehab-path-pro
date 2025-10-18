@@ -332,6 +332,22 @@ export default function Plan() {
       setTimeout(() => {
         fetchGoals();
       }, 300);
+    }).on('postgres_changes', {
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'goals'
+    }, async (payload) => {
+      // Listen for order_index updates and refresh
+      if (payload.new && 'order_index' in payload.new) {
+        // Cancel any pending unsaved order changes
+        setHasUnsavedOrder(false);
+        setOriginalSectionsOrder(null);
+        
+        // Refetch to get the new order
+        setTimeout(() => {
+          fetchGoals();
+        }, 300);
+      }
     }).subscribe();
     return () => {
       supabase.removeChannel(channel);
