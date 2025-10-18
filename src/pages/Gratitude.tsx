@@ -222,7 +222,7 @@ export default function Gratitude() {
           </div>
 
           {todayEntry && todayEntry.items.length > 0 && (
-            <div className="space-y-3 pt-4 border-t">
+            <div className="space-y-3 pt-4">
               <h3 className="font-semibold text-foreground">Hoy estoy agradecido por:</h3>
               <ul className="space-y-2">
                 {todayEntry.items.map((item) => (
