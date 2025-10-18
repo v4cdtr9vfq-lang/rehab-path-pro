@@ -397,7 +397,15 @@ export default function CheckIn() {
                     <Button
                       key={num}
                       variant={answers[question.id] === String(num) ? "default" : "outline"}
-                      className="w-10 h-10 p-0"
+                      className={`w-10 h-10 p-0 ${
+                        answers[question.id] === String(num)
+                          ? num <= 4
+                            ? "bg-orange-600 hover:bg-orange-700 text-white"
+                            : num <= 7
+                            ? "bg-yellow-600 hover:bg-yellow-700 text-white"
+                            : "bg-green-600 hover:bg-green-700 text-white"
+                          : ""
+                      }`}
                       onClick={() => handleAnswer(question.id, String(num))}
                     >
                       {num}
