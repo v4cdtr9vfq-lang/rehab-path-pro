@@ -164,7 +164,7 @@ export default function Gratitude() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <Card className="border-sky-blue/20">
+      <Card className="border-border">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CalendarIcon className="h-5 w-5 text-sky-blue" />
@@ -195,7 +195,7 @@ export default function Gratitude() {
                 {todayEntry.items.map((item, index) => (
                   <li
                     key={index}
-                    className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-sky-blue/10"
+                    className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border"
                   >
                     <span className="text-sky-blue mt-1">•</span>
                     <div className="flex-1 space-y-1">
@@ -247,7 +247,7 @@ export default function Gratitude() {
         </CardContent>
       </Card>
 
-      <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
+      <Card className="border-border bg-gradient-to-br from-sky-blue/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             Por qué Importa la gratitud
@@ -268,10 +268,45 @@ export default function Gratitude() {
       {/* Example Entry Section */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-bold text-foreground">Ejemplo de registro</h2>
+          <h2 className="text-xl font-bold text-foreground">Registro de agradecimientos</h2>
+          
+          {/* Date Filter */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn(
+                  "justify-start text-left font-normal",
+                  !filterDate && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {filterDate ? format(filterDate, "d 'de' MMMM, yyyy", { locale: es }) : "Buscar por fecha"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <Calendar
+                mode="single"
+                selected={filterDate}
+                onSelect={setFilterDate}
+                className={cn("p-3 pointer-events-auto")}
+              />
+              {filterDate && (
+                <div className="p-3 border-t">
+                  <Button
+                    variant="ghost"
+                    className="w-full"
+                    onClick={() => setFilterDate(undefined)}
+                  >
+                    Limpiar filtro
+                  </Button>
+                </div>
+              )}
+            </PopoverContent>
+          </Popover>
         </div>
         
-        <Card className="border-sky-blue/30 bg-gradient-to-br from-sky-blue/10 to-transparent">
+        <Card className="border-border bg-gradient-to-br from-sky-blue/10 to-transparent">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-4">
               <CalendarIcon className="h-4 w-4 text-muted-foreground" />
@@ -280,28 +315,28 @@ export default function Gratitude() {
               </span>
             </div>
             <ul className="space-y-2">
-              <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-sky-blue/10">
+              <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border">
                 <span className="text-sky-blue mt-1">•</span>
                 <div className="flex-1 space-y-1">
                   <span className="text-foreground">Por el apoyo incondicional de mi familia durante mi proceso de recuperación</span>
                   <div className="text-xs text-muted-foreground">09:30</div>
                 </div>
               </li>
-              <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-sky-blue/10">
+              <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border">
                 <span className="text-sky-blue mt-1">•</span>
                 <div className="flex-1 space-y-1">
                   <span className="text-foreground">Por poder disfrutar de un café caliente en la mañana y sentir paz interior</span>
                   <div className="text-xs text-muted-foreground">10:15</div>
                 </div>
               </li>
-              <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-sky-blue/10">
+              <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border">
                 <span className="text-sky-blue mt-1">•</span>
                 <div className="flex-1 space-y-1">
                   <span className="text-foreground">Por mi salud y la capacidad de hacer ejercicio hoy</span>
                   <div className="text-xs text-muted-foreground">14:20</div>
                 </div>
               </li>
-              <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-sky-blue/10">
+              <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border">
                 <span className="text-sky-blue mt-1">•</span>
                 <div className="flex-1 space-y-1">
                   <span className="text-foreground">Por las pequeñas victorias del día y por seguir adelante</span>
@@ -316,7 +351,7 @@ export default function Gratitude() {
       {pastEntries.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-bold text-foreground">Registro de agradecimientos</h2>
+            <h2 className="text-xl font-bold text-foreground">Historial de registros</h2>
             
             {/* Date Filter */}
             <Popover>
@@ -357,7 +392,7 @@ export default function Gratitude() {
           <div className="space-y-4">
             {filteredPastEntries.length > 0 ? (
               filteredPastEntries.map((entry) => (
-                <Card key={entry.id} className="border-sky-blue/20">
+                <Card key={entry.id} className="border-border">
                   <CardContent className="pt-6">
                     <div className="flex items-center gap-2 mb-4">
                       <CalendarIcon className="h-4 w-4 text-muted-foreground" />
@@ -367,7 +402,7 @@ export default function Gratitude() {
                     </div>
                     <ul className="space-y-2">
                       {entry.items.map((item, i) => (
-                        <li key={i} className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-sky-blue/10">
+                        <li key={i} className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border">
                           <span className="text-sky-blue mt-1">•</span>
                           <div className="flex-1 space-y-1">
                             <span className="text-foreground">{item.text}</span>
@@ -382,7 +417,7 @@ export default function Gratitude() {
                 </Card>
               ))
             ) : (
-              <Card className="border-sky-blue/20">
+              <Card className="border-border">
                 <CardContent className="pt-6">
                   <p className="text-center text-muted-foreground">
                     No hay entradas para la fecha seleccionada.
