@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Check, Pencil, Trash2, Calendar } from "lucide-react";
+import { Check, Pencil, Trash2, Calendar as CalendarIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
 
 interface TertiaryEmotion {
   name: string;
@@ -231,6 +234,7 @@ export default function EmotionJournal() {
   const [savedEntries, setSavedEntries] = useState<SavedEmotionEntry[]>([]);
   const [editingEntry, setEditingEntry] = useState<string | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -522,6 +526,14 @@ export default function EmotionJournal() {
     .filter(e => selectedSecondary.includes(e.id))
     .sort((a, b) => a.name.localeCompare(b.name));
 
+  // Filter entries by date if a filter date is selected
+  const filteredEntries = filterDate
+    ? savedEntries.filter(entry => {
+        const entryDate = new Date(entry.entry_date);
+        return entryDate.toDateString() === filterDate.toDateString();
+      })
+    : savedEntries;
+
   return (
     <div className="space-y-6 animate-fade-in">
       <Card className="p-8 bg-card border-border">
@@ -674,13 +686,53 @@ export default function EmotionJournal() {
       {/* Emotion Log Widget */}
       {savedEntries.length > 0 && (
         <div>
-          <h2 className="text-xl font-bold text-foreground mb-6">Registro de emociones:</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-foreground">Registro de emociones:</h2>
+            
+            {/* Date Filter */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "justify-start text-left font-normal",
+                    !filterDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {filterDate ? format(filterDate, "d 'de' MMMM, yyyy", { locale: es }) : "Buscar por fecha"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <Calendar
+                  mode="single"
+                  selected={filterDate}
+                  onSelect={setFilterDate}
+                  initialFocus
+                  className={cn("p-3 pointer-events-auto")}
+                />
+                {filterDate && (
+                  <div className="p-3 border-t">
+                    <Button
+                      variant="ghost"
+                      className="w-full"
+                      onClick={() => setFilterDate(undefined)}
+                    >
+                      Limpiar filtro
+                    </Button>
+                  </div>
+                )}
+              </PopoverContent>
+            </Popover>
+          </div>
+          
           <div className="space-y-4">
-            {savedEntries.map((entry) => (
+            {filteredEntries.length > 0 ? (
+              filteredEntries.map((entry) => (
               <Card key={entry.id} className="p-6 bg-card border-border">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
+                    <CalendarIcon className="h-4 w-4" />
                     <span className="text-sm font-medium">
                       {format(new Date(entry.created_at), "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
                     </span>
@@ -748,7 +800,14 @@ export default function EmotionJournal() {
                   )}
                 </div>
               </Card>
-            ))}
+            ))
+            ) : (
+              <Card className="p-6 bg-card border-border">
+                <p className="text-center text-muted-foreground">
+                  No hay entradas para la fecha seleccionada.
+                </p>
+              </Card>
+            )}
           </div>
         </div>
       )}
