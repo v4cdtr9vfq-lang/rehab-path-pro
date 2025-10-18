@@ -550,20 +550,16 @@ export default function EmotionJournal() {
                     variant="outline"
                     size="lg"
                     onClick={() => togglePrimary(category.id)}
-                    className={`rounded-full px-6 h-12 text-xs font-medium transition-all ${
+                    className={`rounded-full px-6 h-12 text-xs font-medium transition-all min-w-fit ${
                       isSelected
                         ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
                         : "hover:bg-primary/10 hover:border-primary/50"
                     }`}
                   >
-                    {isSelected ? (
-                      <span className="flex items-center gap-2">
-                        <Check className="h-4 w-4" />
-                        {category.name}
-                      </span>
-                    ) : (
-                      <>+ {category.name}</>
-                    )}
+                    <span className="flex items-center gap-2">
+                      {isSelected && <Check className="h-4 w-4" />}
+                      <span>{category.name}</span>
+                    </span>
                   </Button>
                 );
               })}
@@ -591,20 +587,16 @@ export default function EmotionJournal() {
                               variant="outline"
                               size="lg"
                               onClick={() => toggleSecondary(emotion.id)}
-                              className={`rounded-full px-6 h-12 text-xs font-medium transition-all ${
+                              className={`rounded-full px-6 h-12 text-xs font-medium transition-all min-w-fit ${
                                 isSelected 
                                   ? "bg-green-600 hover:bg-green-700 text-white border-green-600"
                                   : "hover:bg-primary/10 hover:border-primary/50"
                               }`}
                             >
-                              {isSelected ? (
-                                <span className="flex items-center gap-2">
-                                  <Check className="h-4 w-4" />
-                                  {emotion.name}
-                                </span>
-                              ) : (
-                                <>+ {emotion.name}</>
-                              )}
+                              <span className="flex items-center gap-2">
+                                {isSelected && <Check className="h-4 w-4" />}
+                                <span>{emotion.name}</span>
+                              </span>
                             </Button>
                           );
                         })}
@@ -633,20 +625,16 @@ export default function EmotionJournal() {
                             variant="outline"
                             size="lg"
                             onClick={() => toggleTertiary(tertiaryEmotion)}
-                            className={`rounded-full px-6 h-12 text-xs font-medium transition-all ${
+                            className={`rounded-full px-6 h-12 text-xs font-medium transition-all min-w-fit ${
                               isSelected 
                                 ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
                                 : "hover:bg-primary/10 hover:border-primary/50"
                             }`}
                           >
-                            {isSelected ? (
-                              <span className="flex items-center gap-2">
-                                <Check className="h-4 w-4" />
-                                {tertiaryEmotion}
-                              </span>
-                            ) : (
-                              <>+ {tertiaryEmotion}</>
-                            )}
+                            <span className="flex items-center gap-2">
+                              {isSelected && <Check className="h-4 w-4" />}
+                              <span>{tertiaryEmotion}</span>
+                            </span>
                           </Button>
                         );
                       })}
