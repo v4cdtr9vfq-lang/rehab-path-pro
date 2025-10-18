@@ -343,29 +343,32 @@ export default function Plan() {
         }
       } = await supabase.auth.getUser();
       if (!user) return;
+      
+      // First fetch to check for missing order_index
       const {
         data: goals,
         error
-      } = await supabase.from('goals').select('*').eq('user_id', user.id).order('created_at', {
-        ascending: false
-      });
+      } = await supabase.from('goals').select('*').eq('user_id', user.id);
+      
       if (error) throw error;
       if (goals) {
         // Initialize order_index for goals that don't have it
         const goalsWithoutOrder = goals.filter(g => g.order_index === null || g.order_index === undefined);
         if (goalsWithoutOrder.length > 0) {
+          // Get max existing order_index
+          const maxOrder = Math.max(0, ...goals.filter(g => g.order_index !== null && g.order_index !== undefined).map(g => g.order_index!));
+          
           for (let i = 0; i < goalsWithoutOrder.length; i++) {
-            await supabase.from('goals').update({ order_index: i }).eq('id', goalsWithoutOrder[i].id);
+            await supabase.from('goals').update({ order_index: maxOrder + i + 1 }).eq('id', goalsWithoutOrder[i].id);
           }
-          // Refetch after initializing
-          const { data: updatedGoals } = await supabase.from('goals').select('*').eq('user_id', user.id).order('order_index', { ascending: true }).order('created_at', { ascending: false });
-          if (updatedGoals) {
-            goals.length = 0;
-            goals.push(...updatedGoals);
-          }
-        } else {
-          // Sort by order_index if all have it
-          goals.sort((a, b) => (a.order_index || 0) - (b.order_index || 0));
+        }
+        
+        // Always refetch with proper ordering
+        const { data: orderedGoals } = await supabase.from('goals').select('*').eq('user_id', user.id).order('order_index', { ascending: true, nullsFirst: false });
+        
+        if (orderedGoals) {
+          goals.length = 0;
+          goals.push(...orderedGoals);
         }
         const alwaysGoals = goals.filter(g => g.goal_type === 'always');
         const todayGoals = goals.filter(g => g.goal_type === 'today');
