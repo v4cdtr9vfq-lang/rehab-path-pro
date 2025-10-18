@@ -446,6 +446,8 @@ export default function Plan() {
     }
     
     try {
+      setIsDialogOpen(false); // Cerrar inmediatamente para evitar doble clic
+      
       const {
         data: {
           user
@@ -466,7 +468,7 @@ export default function Plan() {
         user_id: user.id,
         text: newGoal.text,
         goal_type: newGoal.type,
-        remaining: newGoal.type === 'onetime' ? 1 : newGoal.remaining, // Metas únicas siempre tienen 1 instancia
+        remaining: newGoal.type === 'onetime' ? 1 : newGoal.remaining,
         completed: false,
         target_date: newGoal.target_date ? format(newGoal.target_date, 'yyyy-MM-dd') : null,
         periodic_type: newGoal.periodic_type || null,
@@ -489,13 +491,13 @@ export default function Plan() {
         periodic_type: undefined,
         description: ""
       });
-      setIsDialogOpen(false);
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message || "No se pudo guardar la meta.",
         variant: "destructive"
       });
+      setIsDialogOpen(true); // Reabrir si hay error
     }
   };
   const deleteGoal = async (sectionKey: keyof typeof sections, goalId: string) => {
