@@ -399,7 +399,7 @@ export default function CheckIn() {
                     <Button
                       key={num}
                       variant={answers[question.id] === String(num) ? "default" : "outline"}
-                      className={`w-10 h-10 p-0 rounded-full md:rounded-2xl ${
+                      className={`w-10 h-10 p-0 rounded-full ${
                         answers[question.id] === String(num)
                           ? num <= 4
                             ? "bg-orange-600 hover:bg-orange-700 text-white"
