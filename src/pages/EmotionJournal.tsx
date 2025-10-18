@@ -189,7 +189,7 @@ const emotionCategories: PrimaryCategory[] = [
   },
   {
     id: "solo",
-    name: "Solo",
+    name: "Aislado",
     secondaryEmotions: [
       {
         id: "rechazo",
