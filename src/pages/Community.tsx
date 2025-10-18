@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -45,6 +45,28 @@ const mockUsers: CommunityUser[] = [
 
 export default function Community() {
   const [isAvailableForHelp, setIsAvailableForHelp] = useState(false);
+  const [userMedals, setUserMedals] = useState<string[]>([]);
+
+  // Calcular las medallas del usuario actual basado en días de sobriedad
+  // Este valor debería venir del backend en una implementación real
+  const calculateUserMedals = () => {
+    // Placeholder - en una implementación real obtendríamos esto del backend
+    const sobrietyDays = 45; // Ejemplo
+    const medals = [];
+    
+    if (sobrietyDays >= 180) medals.push("🏆");
+    if (sobrietyDays >= 90) medals.push("🥇");
+    if (sobrietyDays >= 40) medals.push("🥈");
+    if (sobrietyDays >= 0) medals.push("🥉");
+    
+    setUserMedals(medals);
+  };
+
+  useEffect(() => {
+    calculateUserMedals();
+  }, []);
+
+  const hasAnyMedal = userMedals.length > 0;
 
   // Sort users by time: years descending, then days descending
   const sortedUsers = [...mockUsers].sort((a, b) => {
@@ -93,26 +115,28 @@ export default function Community() {
         </p>
       </div>
 
-      {/* Availability Toggle */}
-      <Card className="mb-6 border-primary/20">
-        <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="available-help" className="text-base font-semibold">
-                Disponible para asistencia
-              </Label>
-              <p className="text-sm text-muted-foreground">
-                Indica si estás disponible para ayudar a otros miembros de la comunidad
-              </p>
+      {/* Availability Toggle - Solo para usuarios con medallas */}
+      {hasAnyMedal && (
+        <Card className="mb-6 border-primary/20">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="available-help" className="text-base font-semibold">
+                  Disponible para asistencia
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Indica si estás disponible para ayudar a otros miembros de la comunidad
+                </p>
+              </div>
+              <Switch
+                id="available-help"
+                checked={isAvailableForHelp}
+                onCheckedChange={setIsAvailableForHelp}
+              />
             </div>
-            <Switch
-              id="available-help"
-              checked={isAvailableForHelp}
-              onCheckedChange={setIsAvailableForHelp}
-            />
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Community Ranking */}
       <Card>
@@ -124,10 +148,10 @@ export default function Community() {
         </CardHeader>
         <CardContent>
           {/* Header Legend */}
-          <div className="grid grid-cols-[160px_1fr_120px_120px] gap-4 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
-            <div className="flex gap-2">
-              <div className="text-center w-20">Años</div>
-              <div className="text-center w-20">Días</div>
+          <div className="grid grid-cols-[120px_1fr_100px_100px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
+            <div className="flex gap-1">
+              <div className="text-center w-12">Años</div>
+              <div className="text-center w-12">Días</div>
             </div>
             <div>Nombre</div>
             <div className="text-center">Medallas</div>
@@ -138,18 +162,18 @@ export default function Community() {
             {sortedUsers.map((user) => (
               <div
                 key={user.id}
-                className={`grid grid-cols-[160px_1fr_120px_120px] gap-4 items-center p-4 rounded-xl transition-colors ${
+                className={`grid grid-cols-[120px_1fr_100px_100px] gap-3 items-center p-4 rounded-xl transition-colors ${
                   user.availableForHelp
                     ? "bg-success/10 border border-success/30"
                     : "bg-muted/30"
                 }`}
               >
                 {/* Years and Days */}
-                <div className="flex gap-2">
-                  <div className="text-center font-bold text-lg w-20">
+                <div className="flex gap-1">
+                  <div className="text-center font-bold text-lg w-12">
                     {user.years.toString().padStart(2, "0")}
                   </div>
-                  <div className="text-center font-bold text-lg w-20">
+                  <div className="text-center font-bold text-lg w-12">
                     {user.days.toString().padStart(3, "0")}
                   </div>
                 </div>
