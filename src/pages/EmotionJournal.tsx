@@ -65,7 +65,7 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Aturdido", "Confuso", "Desconcertado", "Desorientado", "Perdido", "Perplejo"]
       },
       {
-        id: "confundido",
+        id: "confundido_secundario",
         name: "Confundido",
         tertiaryEmotions: ["Ambivalente", "Aturdido", "Confuso", "Desconcertado", "Dividido", "Perdido", "Perplejo", "Vacilante"]
       },
@@ -106,7 +106,7 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Absorto", "Alerta", "Curioso", "Encantado", "Estimulado", "Fascinado", "Interesado", "Intrigado", "Involucrado"]
       },
       {
-        id: "conectado",
+        id: "conectado_secundario",
         name: "Conectado",
         tertiaryEmotions: ["Afiliación", "Complicidad", "Cuidado", "Empatía", "Sintonía"]
       },
@@ -535,7 +535,7 @@ export default function EmotionJournal() {
                 return (
                   <Button
                     key={category.id}
-                    variant={isSelected ? "accent" : "outline"}
+                    variant="outline"
                     size="lg"
                     onClick={() => togglePrimary(category.id)}
                     className={`rounded-full px-6 h-12 text-base font-medium transition-all ${
@@ -576,7 +576,7 @@ export default function EmotionJournal() {
                           return (
                             <Button
                               key={emotion.id}
-                              variant={isSelected ? "accent" : "outline"}
+                              variant="outline"
                               size="lg"
                               onClick={() => toggleSecondary(emotion.id)}
                               className={`rounded-full px-6 h-12 text-base font-medium transition-all ${
@@ -618,7 +618,7 @@ export default function EmotionJournal() {
                         return (
                           <Button
                             key={tertiaryEmotion}
-                            variant={isSelected ? "accent" : "outline"}
+                            variant="outline"
                             size="lg"
                             onClick={() => toggleTertiary(tertiaryEmotion)}
                             className={`rounded-full px-6 h-12 text-base font-medium transition-all ${
