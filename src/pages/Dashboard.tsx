@@ -726,7 +726,7 @@ export default function Home() {
               <p className="text-sm font-medium text-muted-foreground">Metas completadas hoy:</p>
               <p className="text-sm font-bold text-green-500">{goalsCompleted} de {totalGoals}</p>
             </div>
-            <Progress value={goalsProgress} className="h-3 [&>div]:bg-green-500" />
+            <Progress key="dashboard-progress" value={goalsProgress} className="h-3 [&>div]:bg-green-500" />
           </div>
 
           {/* Daily Check-In Status */}
