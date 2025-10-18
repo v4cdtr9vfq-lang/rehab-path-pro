@@ -623,7 +623,7 @@ export default function EmotionJournal() {
               <div className="space-y-6">
                 {selectedSecondaryData.map((emotion) => (
                   <div key={emotion.id}>
-                    <h3 className="text-lg font-medium text-[#e6c25c] mb-3">{emotion.name}</h3>
+                    <h3 className="text-lg font-medium text-green-600 mb-3">{emotion.name}</h3>
                     <div className="flex flex-wrap gap-3">
                       {emotion.tertiaryEmotions.map((tertiaryEmotion) => {
                         const isSelected = selectedTertiary.includes(tertiaryEmotion);
