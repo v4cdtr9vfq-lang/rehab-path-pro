@@ -573,7 +573,7 @@ export default function EmotionJournal() {
           {/* Secondary Emotions - Grouped by Primary Category */}
           {selectedPrimary.length > 0 && (
             <div>
-              <h2 className="text-xl font-semibold text-foreground mb-4">He sentido:</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">Me he sentido:</h2>
               <div className="space-y-6">
                 {[...selectedPrimary].reverse().map((categoryId) => {
                   const category = emotionCategories.find(c => c.id === categoryId);
