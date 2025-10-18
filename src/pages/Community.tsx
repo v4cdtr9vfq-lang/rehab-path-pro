@@ -167,8 +167,7 @@ export default function Community() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              Tiempo en Rehabilitación
-              <span className="text-2xl">✌️</span>
+              Tiempo limpio:
             </CardTitle>
             <Select value={selectedFilter} onValueChange={setSelectedFilter}>
               <SelectTrigger className="w-[180px]">
