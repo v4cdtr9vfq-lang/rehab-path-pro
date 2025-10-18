@@ -257,52 +257,20 @@ export default function ProgressPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Calcular datos semanales (últimos 7 días de lunes a domingo)
-      const weekData = [];
+      // Calcular datos trimestrales (últimos 3 meses)
+      const trimesterData = [];
       const today = new Date();
-      const dayOfWeek = today.getDay(); // 0 = domingo, 1 = lunes, etc.
-      const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Días desde el lunes más reciente
+      const currentYear = today.getFullYear();
+      const currentMonth = today.getMonth(); // 0-11
       
-      for (let i = 0; i < 7; i++) {
-        const date = new Date(today);
-        date.setDate(today.getDate() - daysToMonday + i);
-        const dateStr = getLocalDateString(date);
+      for (let i = 2; i >= 0; i--) {
+        const monthIndex = currentMonth - i;
+        const year = monthIndex < 0 ? currentYear - 1 : currentYear;
+        const month = monthIndex < 0 ? 12 + monthIndex : monthIndex;
         
-        // Obtener todas las metas del día
-        const { data: goals } = await supabase
-          .from('goals')
-          .select('*')
-          .eq('user_id', user.id)
-          .or('goal_type.eq.today,goal_type.eq.always');
-
-        // Obtener completadas
-        const { data: completions } = await supabase
-          .from('goal_completions')
-          .select('*')
-          .eq('user_id', user.id)
-          .eq('completion_date', dateStr);
-
-        const totalGoals = goals?.length || 0;
-        const completedGoals = completions?.length || 0;
-        const percentage = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
-
-        const dayName = date.toLocaleDateString('es-ES', { weekday: 'short' });
-        weekData.push({
-          name: dayName.charAt(0).toUpperCase() + dayName.slice(1),
-          progreso: percentage,
-          isComplete: percentage === 100
-        });
-      }
-      setWeeklyChartData(weekData);
-
-      // Calcular datos mensuales (últimas 4 semanas)
-      const monthData = [];
-      for (let i = 3; i >= 0; i--) {
-        const endDate = new Date();
-        endDate.setDate(endDate.getDate() - (i * 7));
-        const startDate = new Date(endDate);
-        startDate.setDate(startDate.getDate() - 6);
-
+        const startDate = new Date(year, month, 1);
+        const endDate = new Date(year, month + 1, 0);
+        
         const { data: completions } = await supabase
           .from('goal_completions')
           .select('*')
@@ -315,21 +283,58 @@ export default function ProgressPage() {
           .select('*')
           .eq('user_id', user.id);
 
-        const totalGoals = (goals?.length || 0) * 7;
+        const daysInMonth = endDate.getDate();
+        const totalGoals = (goals?.length || 0) * daysInMonth;
         const completedGoals = completions?.length || 0;
         const percentage = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
 
-        monthData.push({
-          name: `Sem ${4 - i}`,
+        const monthName = startDate.toLocaleDateString('es-ES', { month: 'short' });
+        trimesterData.push({
+          name: monthName.charAt(0).toUpperCase() + monthName.slice(1),
           progreso: percentage,
           isComplete: percentage === 100
         });
       }
-      setMonthlyChartData(monthData);
+      setWeeklyChartData(trimesterData);
+
+      // Calcular datos semestrales (últimos 6 meses)
+      const semesterData = [];
+      for (let i = 5; i >= 0; i--) {
+        const monthIndex = currentMonth - i;
+        const year = monthIndex < 0 ? currentYear - 1 : currentYear;
+        const month = monthIndex < 0 ? 12 + monthIndex : monthIndex;
+        
+        const startDate = new Date(year, month, 1);
+        const endDate = new Date(year, month + 1, 0);
+        
+        const { data: completions } = await supabase
+          .from('goal_completions')
+          .select('*')
+          .eq('user_id', user.id)
+          .gte('completion_date', getLocalDateString(startDate))
+          .lte('completion_date', getLocalDateString(endDate));
+
+        const { data: goals } = await supabase
+          .from('goals')
+          .select('*')
+          .eq('user_id', user.id);
+
+        const daysInMonth = endDate.getDate();
+        const totalGoals = (goals?.length || 0) * daysInMonth;
+        const completedGoals = completions?.length || 0;
+        const percentage = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
+
+        const monthName = startDate.toLocaleDateString('es-ES', { month: 'short' });
+        semesterData.push({
+          name: monthName.charAt(0).toUpperCase() + monthName.slice(1),
+          progreso: percentage,
+          isComplete: percentage === 100
+        });
+      }
+      setMonthlyChartData(semesterData);
 
       // Calcular datos anuales (enero a diciembre del año actual)
       const yearData = [];
-      const currentYear = new Date().getFullYear();
       
       for (let month = 1; month <= 12; month++) {
         const { data: completions } = await supabase
