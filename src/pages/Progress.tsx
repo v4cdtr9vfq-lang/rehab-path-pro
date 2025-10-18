@@ -412,14 +412,14 @@ export default function ProgressPage() {
   const GoalProgressBar = ({ goal }: { goal: { id: string; text: string; total: number; completed: number; percentage: number } }) => {
     const getProgressColor = () => {
       if (goal.percentage === 100) return 'text-green-500';
-      if (goal.percentage >= 50) return 'text-[#e6c25c]';
-      return 'text-sky-blue';
+      if (goal.percentage >= 20) return 'text-yellow-600';
+      return 'text-orange-600';
     };
 
     const getProgressBgColor = () => {
       if (goal.percentage === 100) return '[&>div]:bg-green-500';
-      if (goal.percentage >= 50) return '[&>div]:bg-[#e6c25c]';
-      return '[&>div]:bg-sky-blue';
+      if (goal.percentage >= 20) return '[&>div]:bg-yellow-600';
+      return '[&>div]:bg-orange-600';
     };
 
     return (
@@ -497,9 +497,9 @@ export default function ProgressPage() {
                     <span className="md:hidden">Check-in</span>
                     <span className="hidden md:inline">Check-in diario</span>
                   </span>
-                  <span className={`text-sm font-bold ${hasCheckedInToday ? 'text-green-500' : 'text-sky-blue'}`}>{hasCheckedInToday ? '100' : '0'}%</span>
+                  <span className={`text-sm font-bold ${hasCheckedInToday ? 'text-green-500' : 'text-orange-600'}`}>{hasCheckedInToday ? '100' : '0'}%</span>
                 </div>
-                <Progress value={hasCheckedInToday ? 100 : 0} className={`h-2.5 ${hasCheckedInToday ? '[&>div]:bg-green-500' : '[&>div]:bg-sky-blue'}`} />
+                <Progress value={hasCheckedInToday ? 100 : 0} className={`h-2.5 ${hasCheckedInToday ? '[&>div]:bg-green-500' : '[&>div]:bg-orange-600'}`} />
                 <div className="flex justify-between items-center mt-1">
                   <span className="text-xs text-muted-foreground">
                     {hasCheckedInToday ? '1 de 1 completadas' : '0 de 1 completadas'}
