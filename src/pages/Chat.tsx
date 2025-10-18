@@ -474,7 +474,7 @@ export default function Chat() {
                     {onlineCountByRoom[currentRoom] || 0}
                   </Badge>
                 </SelectTrigger>
-                <SelectContent className="bg-popover z-[100] mt-1 pb-5">
+                <SelectContent className="bg-muted text-foreground z-[100] mt-1 pb-5">
                   {CHAT_ROOMS.map((room) => (
                     <SelectItem key={room.id} value={room.id} className="cursor-pointer pr-[15px] pl-3 [&>span:first-child]:hidden">
                       <span className="flex items-center justify-between w-full pr-[40px]">
@@ -582,7 +582,7 @@ export default function Chat() {
                                     <MoreVertical className="h-4 w-4" />
                                   </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="bg-popover z-[100]">
+                                <DropdownMenuContent align="end" className="bg-muted text-foreground z-[100]">
                                   <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
                                     <Edit2 className="h-4 w-4 mr-2" />
                                     Editar
@@ -616,7 +616,7 @@ export default function Chat() {
                                       <MoreVertical className="h-4 w-4" />
                                     </Button>
                                   </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="start" className="bg-popover z-[100]">
+                                  <DropdownMenuContent align="start" className="bg-muted text-foreground z-[100]">
                                     <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
                                       <Edit2 className="h-4 w-4 mr-2" />
                                       Editar
