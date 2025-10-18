@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, Plus, X, CheckCircle2, Circle, TrendingUp } from "lucide-react";
+import { Plus, X, CheckCircle2, Circle, TrendingUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -400,7 +400,7 @@ export default function Values() {
       <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            <Heart className="h-6 w-6 text-sky-blue" />
+            <span>💝</span>
             Lo que más importa
           </CardTitle>
         </CardHeader>
