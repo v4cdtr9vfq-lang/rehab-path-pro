@@ -40,6 +40,10 @@ const menuItems = [{
   label: "Chat",
   path: "/chat"
 }, {
+  emoji: "👥",
+  label: "Comunidad",
+  path: "/community"
+}, {
   emoji: "🛠️",
   label: "Herramientas",
   path: "/tools"

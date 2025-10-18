@@ -20,6 +20,7 @@ import EmotionJournal from "./pages/EmotionJournal";
 import Tools from "./pages/Tools";
 import Message from "./pages/Message";
 import Chat from "./pages/Chat";
+import Community from "./pages/Community";
 import Settings from "./pages/Settings";
 import TrialEnded from "./pages/TrialEnded";
 import SupportNetwork from "./pages/SupportNetwork";
@@ -114,6 +115,13 @@ const App = () => (
             <ProtectedRoute>
               <Layout>
                 <Chat />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/community" element={
+            <ProtectedRoute>
+              <Layout>
+                <Community />
               </Layout>
             </ProtectedRoute>
           } />
