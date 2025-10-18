@@ -400,7 +400,6 @@ export default function Values() {
       <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            <span>💝</span>
             Lo que más importa
           </CardTitle>
         </CardHeader>
