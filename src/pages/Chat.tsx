@@ -466,7 +466,7 @@ export default function Chat() {
                 </span>
                 <Badge 
                   variant="secondary" 
-                  className="flex-shrink-0 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 !bg-secondary/80 text-black/60 dark:text-white/60 pointer-events-none mr-6"
+                  className="flex-shrink-0 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-black text-white pointer-events-none mr-6"
                 >
                   <Users className="h-3 w-3" />
                   {onlineCountByRoom[currentRoom] || 0}
@@ -479,7 +479,7 @@ export default function Chat() {
                       <span>{room.label}</span>
                       <Badge 
                         variant="secondary" 
-                        className="absolute right-[15px] inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 !bg-secondary/80 text-black/60 dark:text-white/60 pointer-events-none"
+                        className="absolute right-[15px] inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-black text-white pointer-events-none"
                       >
                         <Users className="h-3 w-3" />
                         {onlineCountByRoom[room.id] || 0}
