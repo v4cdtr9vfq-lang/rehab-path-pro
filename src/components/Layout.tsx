@@ -18,7 +18,7 @@ export function Layout({ children }: LayoutProps) {
       <Sidebar />
       <div className="lg:pl-72 flex flex-col min-h-screen">
         <div className="pt-[104px] lg:pt-[32px] flex-1">
-          <main className="container mx-auto px-[11px] lg:px-8 max-w-6xl pb-12">
+          <main className="container mx-auto px-[6px] lg:px-8 max-w-6xl pb-12">
             {children}
           </main>
         </div>
