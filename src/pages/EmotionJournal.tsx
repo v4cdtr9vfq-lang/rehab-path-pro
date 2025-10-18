@@ -38,6 +38,27 @@ interface SavedEmotionEntry {
 
 const emotionCategories: PrimaryCategory[] = [
   {
+    id: "solo",
+    name: "Aislado",
+    secondaryEmotions: [
+      {
+        id: "abandono",
+        name: "Abandono",
+        tertiaryEmotions: []
+      },
+      {
+        id: "rechazo",
+        name: "Rechazo",
+        tertiaryEmotions: ["Animosidad", "Desagrado", "Desprecio", "Disgustado", "Horrorizado", "Hostil", "Odio", "Repulsado"]
+      },
+      {
+        id: "triste",
+        name: "Triste",
+        tertiaryEmotions: ["Abatido", "Decepcionado", "Deprimido", "Desalentado", "Desanimado", "Descorazonado", "Desdichado", "Desesperado", "Desolado", "Infeliz", "Melancólico", "Sin esperanza", "Sombrío"]
+      }
+    ]
+  },
+  {
     id: "alegre",
     name: "Alegre",
     secondaryEmotions: [
@@ -94,14 +115,14 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Aprensivo", "Asustado", "Atemorizado", "Aterrorizado", "Cauteloso", "Desconfiado", "En pánico", "Petrificado", "Preocupado", "Presentimiento", "Sospechoso", "Temor"]
       },
       {
-        id: "desorientado",
-        name: "Desorientado",
-        tertiaryEmotions: ["Aturdido", "Confuso", "Desconcertado", "Desorientado", "Perdido", "Perplejo"]
-      },
-      {
         id: "confundido_secundario",
         name: "Confundido",
         tertiaryEmotions: ["Ambivalente", "Aturdido", "Confuso", "Desconcertado", "Dividido", "Perdido", "Perplejo", "Vacilante"]
+      },
+      {
+        id: "desorientado",
+        name: "Desorientado",
+        tertiaryEmotions: ["Aturdido", "Confuso", "Desconcertado", "Desorientado", "Perdido", "Perplejo"]
       },
       {
         id: "fatigado",
@@ -188,27 +209,6 @@ const emotionCategories: PrimaryCategory[] = [
     ]
   },
   {
-    id: "solo",
-    name: "Aislado",
-    secondaryEmotions: [
-      {
-        id: "rechazo",
-        name: "Rechazo",
-        tertiaryEmotions: ["Animosidad", "Desprecio", "Desagrado", "Disgustado", "Horrorizado", "Hostil", "Odio", "Repulsado"]
-      },
-      {
-        id: "abandono",
-        name: "Abandono",
-        tertiaryEmotions: []
-      },
-      {
-        id: "triste",
-        name: "Triste",
-        tertiaryEmotions: ["Abatido", "Decepcionado", "Deprimido", "Desalentado", "Desanimado", "Descorazonado", "Desdichado", "Desesperado", "Desolado", "Infeliz", "Melancólico", "Sin esperanza", "Sombrío"]
-      }
-    ]
-  },
-  {
     id: "vulnerable",
     name: "Vulnerable",
     secondaryEmotions: [
@@ -218,14 +218,14 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Avergonzado", "Cohibido", "Culpable", "Mortificado", "Turbado"]
       },
       {
-        id: "verguenza",
-        name: "Vergüenza",
-        tertiaryEmotions: []
-      },
-      {
         id: "dolor",
         name: "Dolor",
         tertiaryEmotions: ["Afligido", "Agonía", "Angustiado", "Arrepentido", "Desconsolado", "Devastado", "Duelo", "Herido", "Miserable", "Remordido", "Solo"]
+      },
+      {
+        id: "verguenza",
+        name: "Vergüenza",
+        tertiaryEmotions: []
       },
       {
         id: "vulnerable",
