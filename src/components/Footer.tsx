@@ -102,23 +102,23 @@ export function Footer() {
 
         {/* Bottom Section */}
         <div className="mt-[68px] pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-6 h-[90px]">
+          <div className="flex items-center gap-6">
             {/* About Us Button */}
             <a 
               href="https://somosfelices.substack.com/" 
               target="_blank"
               rel="noopener noreferrer"
-              className="text-foreground hover:text-foreground/80 transition-colors underline flex items-center h-full"
+              className="text-foreground hover:text-foreground/80 transition-colors underline"
             >
               Nosotr♡s
             </a>
             
             {/* Contact Email */}
-            <div className="flex items-center gap-2 h-full">
+            <div className="flex items-center gap-2">
               <Mail className="h-4 w-4 text-foreground" />
               <a 
                 href="mailto:info@neurotropy.com" 
-                className="text-foreground hover:text-foreground/80 transition-colors underline flex items-center"
+                className="text-foreground hover:text-foreground/80 transition-colors underline"
               >
                 info@neurotropy.com
               </a>
@@ -129,7 +129,7 @@ export function Footer() {
             href="https://neurotropy.com/" 
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground font-bold hover:text-foreground/80 transition-colors text-center md:text-right flex items-center h-[90px]"
+            className="text-foreground font-bold hover:text-foreground/80 transition-colors text-center md:text-right"
           >
             {new Date().getFullYear()} © Neurotropy™
           </a>
