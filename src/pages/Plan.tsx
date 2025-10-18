@@ -880,95 +880,96 @@ export default function Plan() {
               <DialogHeader>
                 <DialogTitle>Añadir nueva meta</DialogTitle>
               </DialogHeader>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="goal-text">Meta</Label>
-                <Input id="goal-text" placeholder="Escribe tu meta..." value={newGoal.text} onChange={e => setNewGoal(prev => ({
-                ...prev,
-                text: e.target.value
-              }))} />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="goal-description">Descripción</Label>
-                <Textarea 
-                  id="goal-description" 
-                  placeholder="Descripción de la meta..." 
-                  value={newGoal.description || ""} 
-                  onChange={e => setNewGoal(prev => ({
-                    ...prev,
-                    description: e.target.value
-                  }))}
-                  rows={2}
-                  className="resize-none"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="goal-type">Tipo</Label>
-                <Select value={newGoal.type} onValueChange={value => setNewGoal(prev => ({
-                ...prev,
-                type: value as (keyof typeof sections | 'always' | 'periodic'),
-                target_date: undefined,
-                periodic_type: undefined
-              }))}>
-                  <SelectTrigger id="goal-type">
-                    <SelectValue placeholder="Seleccionar tipo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="today">Hoy</SelectItem>
-                    <SelectItem value="week">Esta semana</SelectItem>
-                    <SelectItem value="month">Este mes</SelectItem>
-                    <SelectItem value="onetime">Meta única</SelectItem>
-                    <SelectItem value="periodic">Meta periódica</SelectItem>
-                    <SelectItem value="always">Siempre</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {newGoal.type === 'onetime' && <div className="space-y-2">
-                  <Label>Fecha objetivo</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !newGoal.target_date && "text-muted-foreground")}>
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {newGoal.target_date ? format(newGoal.target_date, "PPP", {
-                      locale: es
-                    }) : <span>Seleccionar fecha</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar mode="single" selected={newGoal.target_date} onSelect={date => setNewGoal(prev => ({
-                    ...prev,
-                    target_date: date
-                  }))} initialFocus className={cn("p-3 pointer-events-auto")} />
-                    </PopoverContent>
-                  </Popover>
-                </div>}
-
-              {newGoal.type === 'periodic' && <div className="space-y-2">
-                  <Label htmlFor="periodic-type">Periodicidad</Label>
-                  <Select value={newGoal.periodic_type} onValueChange={value => setNewGoal(prev => ({
-                ...prev,
-                periodic_type: value
-              }))}>
-                    <SelectTrigger id="periodic-type">
-                      <SelectValue placeholder="Seleccionar periodicidad" />
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="goal-type">Tipo</Label>
+                  <Select value={newGoal.type} onValueChange={value => setNewGoal(prev => ({
+                  ...prev,
+                  type: value as (keyof typeof sections | 'always' | 'periodic'),
+                  target_date: undefined,
+                  periodic_type: undefined
+                }))}>
+                    <SelectTrigger id="goal-type">
+                      <SelectValue placeholder="Seleccionar tipo" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="inicio_mes">Primero de mes</SelectItem>
-                      <SelectItem value="mitad_mes">Mitad de mes</SelectItem>
-                      <SelectItem value="final_mes">Final de mes</SelectItem>
+                      <SelectItem value="today">Hoy</SelectItem>
+                      <SelectItem value="week">Esta semana</SelectItem>
+                      <SelectItem value="month">Este mes</SelectItem>
+                      <SelectItem value="onetime">Meta única</SelectItem>
+                      <SelectItem value="periodic">Meta periódica</SelectItem>
+                      <SelectItem value="always">Siempre</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>}
+                </div>
 
-              {newGoal.type !== 'onetime' && <div className="space-y-2">
-                <Label htmlFor="goal-remaining">Número de veces</Label>
-                <Input id="goal-remaining" type="number" min="1" value={newGoal.remaining} onChange={e => setNewGoal(prev => ({
-                ...prev,
-                remaining: parseInt(e.target.value) || 1
-              }))} />
-              </div>}
+                <div className="space-y-2">
+                  <Label htmlFor="goal-text">Meta</Label>
+                  <Input id="goal-text" placeholder="Escribe tu meta..." value={newGoal.text} onChange={e => setNewGoal(prev => ({
+                  ...prev,
+                  text: e.target.value
+                }))} />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="goal-description">Descripción</Label>
+                  <Textarea 
+                    id="goal-description" 
+                    placeholder="Descripción de la meta..." 
+                    value={newGoal.description || ""} 
+                    onChange={e => setNewGoal(prev => ({
+                      ...prev,
+                      description: e.target.value
+                    }))}
+                    rows={2}
+                    className="resize-none"
+                  />
+                </div>
+                
+                {newGoal.type === 'onetime' && <div className="space-y-2">
+                    <Label>Fecha objetivo</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !newGoal.target_date && "text-muted-foreground")}>
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {newGoal.target_date ? format(newGoal.target_date, "PPP", {
+                        locale: es
+                      }) : <span>Seleccionar fecha</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar mode="single" selected={newGoal.target_date} onSelect={date => setNewGoal(prev => ({
+                      ...prev,
+                      target_date: date
+                    }))} initialFocus className={cn("p-3 pointer-events-auto")} />
+                      </PopoverContent>
+                    </Popover>
+                  </div>}
+
+                {newGoal.type === 'periodic' && <div className="space-y-2">
+                    <Label htmlFor="periodic-type">Periodicidad</Label>
+                    <Select value={newGoal.periodic_type} onValueChange={value => setNewGoal(prev => ({
+                  ...prev,
+                  periodic_type: value
+                }))}>
+                      <SelectTrigger id="periodic-type">
+                        <SelectValue placeholder="Seleccionar periodicidad" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="inicio_mes">Primero de mes</SelectItem>
+                        <SelectItem value="mitad_mes">Mitad de mes</SelectItem>
+                        <SelectItem value="final_mes">Final de mes</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>}
+
+                {newGoal.type !== 'onetime' && <div className="space-y-2">
+                  <Label htmlFor="goal-remaining">Número de veces</Label>
+                  <Input id="goal-remaining" type="number" min="1" value={newGoal.remaining} onChange={e => setNewGoal(prev => ({
+                  ...prev,
+                  remaining: parseInt(e.target.value) || 1
+                }))} />
+                </div>}
               <Button onClick={addGoal} className="w-full">
                 Añadir
               </Button>
