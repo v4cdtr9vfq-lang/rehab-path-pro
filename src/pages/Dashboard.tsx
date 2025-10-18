@@ -715,10 +715,11 @@ export default function Home() {
       <AbstinenceCounter startDate={startDate} />
 
       {/* Daily Progress Panel */}
-      <div>
-        <h2 className="text-2xl font-bold text-foreground mb-3 pl-[35px]">Progreso diario</h2>
-        <Card className="border-sidebar-border">
-          <CardContent className="pt-6 space-y-6">
+      <Card className="border-sidebar-border">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">Progreso diario</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
           {/* Goals Progress Bar */}
           <div className="space-y-2">
             <div className="flex justify-between items-center mb-2">
@@ -775,12 +776,11 @@ export default function Home() {
           </p>
         </CardContent>
       </Card>
-      </div>
 
       {/* Active Goals Summary */}
-      <div>
-        <div className="flex items-center justify-between mb-3 pl-[35px]">
-          <h2 className="text-2xl font-bold text-foreground">Metas de hoy:</h2>
+      <Card className="border-sidebar-border">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="text-2xl font-bold">Metas de hoy:</CardTitle>
           <div className="flex gap-2">
             {hasUnsavedOrder && (
               <>
@@ -796,9 +796,8 @@ export default function Home() {
               <Button variant="ghost" size="sm" className="text-primary">Ver todas</Button>
             </Link>
           </div>
-        </div>
-        <Card className="border-sidebar-border">
-          <CardContent className="pt-6">
+        </CardHeader>
+        <CardContent>
           {activeGoals.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground mb-4">No tienes metas activas aún</p>
@@ -829,13 +828,13 @@ export default function Home() {
           )}
         </CardContent>
       </Card>
-      </div>
 
       {/* Medals Widget */}
-      <div>
-        <h2 className="text-2xl font-bold text-foreground mb-3 pl-[35px]">Mis medallas</h2>
-        <Card className="border-sidebar-border">
-          <CardContent className="pt-6">
+      <Card className="border-sidebar-border">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-2xl font-bold">Mis medallas</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {medalConfig.map(medal => {
               const status = getMedalStatus(medal.type, medal.requiredDays);
@@ -861,11 +860,10 @@ export default function Home() {
           </div>
         </CardContent>
       </Card>
-      </div>
 
       {/* Quick Tools */}
       <div>
-        <h2 className="text-2xl font-bold mb-4 text-foreground pl-[35px]">Herramientas rápidas</h2>
+        <h2 className="text-2xl font-bold mb-4 text-foreground">Herramientas rápidas</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
           {quickTools.map(tool => {
           return <Link key={tool.label} to={tool.path}>

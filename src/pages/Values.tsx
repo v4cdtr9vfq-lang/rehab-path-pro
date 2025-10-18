@@ -397,20 +397,20 @@ export default function Values() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h2 className="text-2xl font-bold text-foreground mb-3 pl-[35px] flex items-center gap-2">
-          <span>💝</span>
-          Lo que más importa
-        </h2>
-        <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
-          <CardContent className="pt-6">
-            <p className="text-foreground/80">
-              Tus valores son los principios que guían tu camino de recuperación. Selecciona los valores en los que quieres enfocarte hoy, 
-              y te recordaremos honrarlos durante el día.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <span>💝</span>
+            Lo que más importa
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-foreground/80">
+            Tus valores son los principios que guían tu camino de recuperación. Selecciona los valores en los que quieres enfocarte hoy, 
+            y te recordaremos honrarlos durante el día.
+          </p>
+        </CardContent>
+      </Card>
 
       {/* Valores Primarios Widget */}
       <div className="space-y-4">
@@ -599,13 +599,14 @@ export default function Values() {
       </div>
 
       {/* Statistics Widget */}
-      <div>
-        <h2 className="text-2xl font-bold text-foreground mb-3 pl-[35px] flex items-center gap-2">
-          <TrendingUp className="h-6 w-6 text-sky-blue" />
-          Estadísticas
-        </h2>
-        <Card className="border-sky-blue/20">
-          <CardContent className="pt-6">
+      <Card className="border-sky-blue/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <TrendingUp className="h-6 w-6 text-sky-blue" />
+            Estadísticas
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
           <Tabs defaultValue="today" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="today">Hoy</TabsTrigger>
@@ -624,7 +625,6 @@ export default function Values() {
           </Tabs>
         </CardContent>
       </Card>
-      </div>
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>

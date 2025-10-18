@@ -378,10 +378,13 @@ export default function Settings() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h2 className="text-xl font-bold text-foreground mb-3 pl-[35px]">Cuenta</h2>
-        <Card className="border-primary/20">
-          <CardContent className="pt-6 space-y-6">
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            Cuenta
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="full-name">Nombre completo</Label>
@@ -469,12 +472,14 @@ export default function Settings() {
           </div>
         </CardContent>
       </Card>
-      </div>
 
-      <div>
-        <h2 className="text-xl font-bold text-foreground mb-3 pl-[35px]">Suscripción</h2>
-        <Card className="border-primary/20">
-          <CardContent className="pt-6 space-y-6">
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            Suscripción
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
           {loading ? (
             <div className="flex items-center justify-center py-8">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
@@ -652,15 +657,15 @@ export default function Settings() {
           )}
         </CardContent>
       </Card>
-      </div>
 
-      <div>
-        <h2 className="text-xl font-bold text-foreground mb-3 pl-[35px] flex items-center gap-2">
-          <span className="text-lg">⚙️</span>
-          Configuración de recuperación
-        </h2>
-        <Card className="border-primary/20">
-          <CardContent className="pt-6 space-y-6">
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <span className="text-lg">⚙️</span>
+            Configuración de recuperación
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
           <div className="space-y-4">
             <Label htmlFor="start-date">Fecha de inicio de abstinencia</Label>
             <div className="flex gap-2">
@@ -699,14 +704,15 @@ export default function Settings() {
           </div>
         </CardContent>
       </Card>
-      </div>
 
-      <div>
-        <div className="flex items-center justify-between mb-3 pl-[35px]">
-          <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <Bell className="h-5 w-5 text-primary" />
-            Recordatorios
-          </h2>
+      <Card className="border-primary/20">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Bell className="h-5 w-5 text-primary" />
+              Recordatorios
+            </CardTitle>
+            <Dialog open={isReminderDialogOpen} onOpenChange={setIsReminderDialogOpen}>
               <DialogTrigger asChild>
                 <Button size="sm" className="gap-2">
                   <Plus className="h-4 w-4" />
@@ -813,12 +819,12 @@ export default function Settings() {
           </div>
         </CardContent>
       </Card>
-      </div>
 
-      <div>
-        <h2 className="text-xl font-bold text-foreground mb-3 pl-[35px]">Privacidad y seguridad</h2>
-        <Card className="border-primary/20">
-          <CardContent className="pt-6 space-y-6">
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle>Privacidad y seguridad</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>Bloqueo de Aplicación</Label>
@@ -832,12 +838,12 @@ export default function Settings() {
           </Button>
         </CardContent>
       </Card>
-      </div>
 
-      <div>
-        <h2 className="text-xl font-bold text-foreground mb-3 pl-[35px]">Acerca de</h2>
-        <Card className="border-primary/20">
-          <CardContent className="pt-6 space-y-4">
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle>Acerca de</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
           <div className="flex justify-between">
             <span className="text-muted-foreground">Versión</span>
             <span className="font-medium">1.0.0</span>
@@ -852,14 +858,14 @@ export default function Settings() {
           </div>
         </CardContent>
       </Card>
-      </div>
 
-      <div>
-        <h2 className="text-xl font-bold text-foreground mb-3 pl-[35px] text-destructive flex items-center gap-2">
-          Zona de peligro
-        </h2>
-        <Card className="border-destructive/50 bg-destructive/5">
-          <CardContent className="pt-6">
+      <Card className="border-destructive/50 bg-destructive/5">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-destructive">
+            Zona de peligro
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
           <div className="space-y-6">
             {/* Reset goals */}
             <div className="space-y-2">
