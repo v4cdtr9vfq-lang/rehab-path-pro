@@ -199,9 +199,9 @@ export default function Gratitude() {
     <div className="space-y-6 animate-in fade-in duration-500">
       <div>
         <Card className="border-border">
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <span>Gratitud de hoy</span>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center justify-between px-1">
+              <span>Gratitud de hoy:</span>
               <span className="text-sm font-normal text-muted-foreground">
                 {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/^\w/, c => c.toUpperCase()).replace(/\sde\s(\w)/, (match, p1) => ` de ${p1.toUpperCase()}`)}
               </span>
