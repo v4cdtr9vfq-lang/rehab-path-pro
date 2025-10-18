@@ -550,14 +550,16 @@ export default function EmotionJournal() {
                     variant="outline"
                     size="lg"
                     onClick={() => togglePrimary(category.id)}
-                    className={`rounded-full px-6 h-12 text-xs font-medium transition-all min-w-fit ${
+                    className={`rounded-full px-6 h-12 text-sm font-medium transition-all ${
                       isSelected
                         ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
                         : "hover:bg-primary/10 hover:border-primary/50"
                     }`}
                   >
                     <span className="flex items-center gap-2">
-                      {isSelected && <Check className="h-4 w-4" />}
+                      <span className="w-4 flex items-center justify-center">
+                        {isSelected ? <Check className="h-4 w-4" /> : <span>+</span>}
+                      </span>
                       <span>{category.name}</span>
                     </span>
                   </Button>
@@ -587,14 +589,16 @@ export default function EmotionJournal() {
                               variant="outline"
                               size="lg"
                               onClick={() => toggleSecondary(emotion.id)}
-                              className={`rounded-full px-6 h-12 text-xs font-medium transition-all min-w-fit ${
+                              className={`rounded-full px-6 h-12 text-sm font-medium transition-all ${
                                 isSelected 
                                   ? "bg-green-600 hover:bg-green-700 text-white border-green-600"
                                   : "hover:bg-primary/10 hover:border-primary/50"
                               }`}
                             >
                               <span className="flex items-center gap-2">
-                                {isSelected && <Check className="h-4 w-4" />}
+                                <span className="w-4 flex items-center justify-center">
+                                  {isSelected ? <Check className="h-4 w-4" /> : <span>+</span>}
+                                </span>
                                 <span>{emotion.name}</span>
                               </span>
                             </Button>
@@ -625,14 +629,16 @@ export default function EmotionJournal() {
                             variant="outline"
                             size="lg"
                             onClick={() => toggleTertiary(tertiaryEmotion)}
-                            className={`rounded-full px-6 h-12 text-xs font-medium transition-all min-w-fit ${
+                            className={`rounded-full px-6 h-12 text-sm font-medium transition-all ${
                               isSelected 
                                 ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
                                 : "hover:bg-primary/10 hover:border-primary/50"
                             }`}
                           >
                             <span className="flex items-center gap-2">
-                              {isSelected && <Check className="h-4 w-4" />}
+                              <span className="w-4 flex items-center justify-center">
+                                {isSelected ? <Check className="h-4 w-4" /> : <span>+</span>}
+                              </span>
                               <span>{tertiaryEmotion}</span>
                             </span>
                           </Button>
