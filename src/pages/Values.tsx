@@ -413,12 +413,9 @@ export default function Values() {
       </Card>
 
       {/* Valores Primarios Widget */}
-      <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-2xl font-semibold text-foreground">Valores primarios</h2>
-            <p className="text-sm text-muted-foreground">Máximo 3 valores esenciales</p>
-          </div>
+      <div>
+        <div className="flex justify-between items-center mb-3 pl-[35px]">
+          <h2 className="text-2xl font-semibold text-foreground">Valores primarios - Máximo 3 valores esenciales.</h2>
           <Dialog open={isPrimaryDialogOpen} onOpenChange={setIsPrimaryDialogOpen}>
             <DialogTrigger asChild>
               <Button className="gap-2" disabled={values.filter(v => v.value_type === 'primary').length >= 3}>
@@ -501,12 +498,9 @@ export default function Values() {
       </div>
 
       {/* Valores Secundarios Widget */}
-      <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-2xl font-semibold text-foreground">Valores secundarios</h2>
-            <p className="text-sm text-muted-foreground">Máximo 6 valores de apoyo</p>
-          </div>
+      <div>
+        <div className="flex justify-between items-center mb-3 pl-[35px]">
+          <h2 className="text-2xl font-semibold text-foreground">Valores secundarios - Máximo 6 valores de apoyo.</h2>
           <Dialog open={isSecondaryDialogOpen} onOpenChange={setIsSecondaryDialogOpen}>
             <DialogTrigger asChild>
               <Button className="gap-2" disabled={values.filter(v => v.value_type === 'secondary').length >= 6}>
