@@ -799,7 +799,7 @@ export default function Home() {
       </div>
 
       {/* Daily Motivational Message */}
-      <Card className="border-sidebar-border bg-gradient-to-br from-sky-blue/10 to-transparent relative">
+      <Card className="border-sidebar-border relative">
         <Button
           variant="ghost"
           size="icon"
