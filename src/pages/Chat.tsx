@@ -24,7 +24,6 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -457,64 +456,39 @@ export default function Chat() {
       <Card className="flex-1 flex flex-col border-border overflow-hidden min-h-0">
         <div className="bg-muted/30 border-b shrink-0">
           <div className="px-4 pb-3 pt-3">
-            {isMobile ? (
-              <Select value={currentRoom} onValueChange={(value) => {
-                setCurrentRoom(value);
-                localStorage.setItem('chat_last_room_mobile', value);
-              }}>
-                <SelectTrigger className="w-full bg-muted text-foreground border-border flex items-center pr-3 pl-3 relative [&>svg]:absolute [&>svg]:right-3">
-                  <span className="flex-1 text-left text-black dark:text-white font-medium pr-8">
-                    {CHAT_ROOMS.find(room => room.id === currentRoom)?.label}
-                  </span>
-                  <Badge 
-                    variant="secondary" 
-                    className="flex-shrink-0 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 !bg-secondary/80 text-black/60 pointer-events-none mr-6"
-                  >
-                    <Users className="h-3 w-3" />
-                    {onlineCountByRoom[currentRoom] || 0}
-                  </Badge>
-                </SelectTrigger>
-                <SelectContent className="bg-muted text-foreground z-[100] mt-1 pb-5">
-                  {CHAT_ROOMS.map((room) => (
-                    <SelectItem key={room.id} value={room.id} className="cursor-pointer pr-[15px] pl-3 [&>span:first-child]:hidden">
-                      <span className="flex items-center justify-between w-full pr-[40px]">
-                        <span>{room.label}</span>
-                        <Badge 
-                          variant="secondary" 
-                          className="absolute right-[15px] inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 !bg-secondary/80 text-black/60 pointer-events-none"
-                        >
-                          <Users className="h-3 w-3" />
-                          {onlineCountByRoom[room.id] || 0}
-                        </Badge>
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            ) : (
-              <Tabs value={currentRoom} onValueChange={setCurrentRoom} className="w-full">
-                <TabsList className="flex h-auto min-h-10 items-center justify-start rounded-md bg-muted border border-border p-[15px] w-full flex-wrap gap-1">
-                  {CHAT_ROOMS.map((room, index) => (
-                    <TabsTrigger 
-                      key={room.id} 
-                      value={room.id} 
-                      className="group text-xs sm:text-sm whitespace-nowrap bg-white text-black data-[state=active]:bg-[#FF7A5C] data-[state=active]:text-white hover:bg-[#FF7A5C] hover:text-white dark:bg-black dark:text-white dark:data-[state=active]:bg-[#FF7A5C] dark:data-[state=active]:text-white dark:hover:bg-[#FF7A5C] dark:hover:text-black px-2 pl-[15px] relative"
-                    >
-                      <span className="flex items-center justify-between gap-2 w-full">
-                        {room.label}
-                        <Badge 
-                          variant="secondary" 
-                          className="inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 !bg-secondary/80 text-black/60 pointer-events-none"
-                        >
-                          <Users className="h-3 w-3" />
-                          {onlineCountByRoom[room.id] || 0}
-                        </Badge>
-                      </span>
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
-            )}
+            <Select value={currentRoom} onValueChange={(value) => {
+              setCurrentRoom(value);
+              localStorage.setItem('chat_last_room_mobile', value);
+            }}>
+              <SelectTrigger className="w-full bg-muted text-foreground border-border flex items-center pr-3 pl-3 relative [&>svg]:absolute [&>svg]:right-3">
+                <span className="flex-1 text-left font-medium pr-8">
+                  {CHAT_ROOMS.find(room => room.id === currentRoom)?.label}
+                </span>
+                <Badge 
+                  variant="secondary" 
+                  className="flex-shrink-0 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 !bg-secondary/80 text-black/60 dark:text-white/60 pointer-events-none mr-6"
+                >
+                  <Users className="h-3 w-3" />
+                  {onlineCountByRoom[currentRoom] || 0}
+                </Badge>
+              </SelectTrigger>
+              <SelectContent className="bg-muted text-foreground z-[100] mt-1 pb-5">
+                {CHAT_ROOMS.map((room) => (
+                  <SelectItem key={room.id} value={room.id} className="cursor-pointer pr-[15px] pl-3 [&>span:first-child]:hidden">
+                    <span className="flex items-center justify-between w-full pr-[40px]">
+                      <span>{room.label}</span>
+                      <Badge 
+                        variant="secondary" 
+                        className="absolute right-[15px] inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 !bg-secondary/80 text-black/60 dark:text-white/60 pointer-events-none"
+                      >
+                        <Users className="h-3 w-3" />
+                        {onlineCountByRoom[room.id] || 0}
+                      </Badge>
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
