@@ -136,7 +136,7 @@ export default function Community() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             Tiempo en Rehabilitación
-            <span className="text-2xl">💞</span>
+            <span className="text-2xl">✌️</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
