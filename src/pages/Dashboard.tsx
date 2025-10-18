@@ -782,11 +782,11 @@ export default function Home() {
                       <span className="text-3xl md:text-4xl">{medal.emoji}</span>
                     </div>
                     <div className="flex-1">
-                      <p className="font-bold text-foreground text-base md:text-lg mb-1 md:mb-2">{medal.name}</p>
+                      <p className="font-bold text-foreground text-base md:text-lg mb-0.5">{medal.name}</p>
                       <p className={`text-sm ${status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
                         {status.isUnlocked 
                           ? '¡Conseguido!' 
-                          : `+ ${status.progress} / ${medal.requiredDays} días.`
+                          : `+${status.progress} / ${medal.requiredDays} días.`
                         }
                       </p>
                     </div>
