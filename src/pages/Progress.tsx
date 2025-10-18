@@ -564,9 +564,9 @@ export default function ProgressPage() {
       {/* Chart Widget Tabs */}
       <Tabs defaultValue="week" className="w-full space-y-[25px]">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="week">Semana</TabsTrigger>
-          <TabsTrigger value="month">Mes</TabsTrigger>
-          <TabsTrigger value="year">Año</TabsTrigger>
+          <TabsTrigger value="week">Trimestre</TabsTrigger>
+          <TabsTrigger value="month">Simestre</TabsTrigger>
+          <TabsTrigger value="year">Este Año</TabsTrigger>
         </TabsList>
 
         {/* Chart Widget */}
