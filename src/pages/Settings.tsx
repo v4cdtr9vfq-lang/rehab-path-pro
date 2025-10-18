@@ -768,36 +768,98 @@ export default function Settings() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-2">
-            <Label className="text-destructive font-semibold">Eliminar cuenta</Label>
-            <p className="text-sm text-muted-foreground mb-4">
-              Esta acción es permanente y no se puede deshacer. Todos tus datos serán eliminados permanentemente.
-            </p>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" className="w-full">
-                  <span className="mr-2">🗑️</span>
-                  Eliminar mi cuenta
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Esta acción no se puede deshacer. Esto eliminará permanentemente tu cuenta y todos tus datos de nuestros servidores.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={handleDeleteAccount}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  >
-                    Sí, eliminar mi cuenta
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+          <div className="space-y-6">
+            {/* Reset data keeping goals */}
+            <div className="space-y-2">
+              <Label className="text-orange-600 dark:text-orange-500 font-semibold">Reiniciar datos (mantener metas)</Label>
+              <p className="text-sm text-muted-foreground mb-4">
+                Elimina todos tus datos de check-ins, diarios, contactos, etc., pero mantiene tus metas actuales. Ideal para empezar de nuevo sin perder tu plan.
+              </p>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline" className="w-full border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white">
+                    <span className="mr-2">🔄</span>
+                    Reiniciar mis datos
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>¿Reiniciar todos tus datos?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Esto eliminará todos tus datos (check-ins, diarios, contactos, etc.) EXCEPTO tus metas. 
+                      Es como empezar de nuevo pero con tu plan de metas actual. Esta acción no se puede deshacer.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={async () => {
+                        try {
+                          const { data: { user } } = await supabase.auth.getUser();
+                          if (!user) throw new Error("Usuario no autenticado");
+
+                          const { error } = await supabase.rpc('reset_user_data_keep_goals', {
+                            p_user_id: user.id
+                          });
+
+                          if (error) throw error;
+
+                          toast({
+                            title: "Datos reiniciados",
+                            description: "Tus datos han sido reiniciados exitosamente. Tus metas se mantienen.",
+                          });
+
+                          // Refresh the page to show clean state
+                          window.location.reload();
+                        } catch (error: any) {
+                          toast({
+                            title: "Error",
+                            description: error.message || "No se pudieron reiniciar los datos.",
+                            variant: "destructive",
+                          });
+                        }
+                      }}
+                      className="bg-orange-600 text-white hover:bg-orange-700"
+                    >
+                      Sí, reiniciar mis datos
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+
+            {/* Delete account */}
+            <div className="space-y-2">
+              <Label className="text-destructive font-semibold">Eliminar cuenta</Label>
+              <p className="text-sm text-muted-foreground mb-4">
+                Esta acción es permanente y no se puede deshacer. Todos tus datos serán eliminados permanentemente.
+              </p>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" className="w-full">
+                    <span className="mr-2">🗑️</span>
+                    Eliminar mi cuenta
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Esta acción no se puede deshacer. Esto eliminará permanentemente tu cuenta y todos tus datos de nuestros servidores.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleDeleteAccount}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      Sí, eliminar mi cuenta
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           </div>
         </CardContent>
       </Card>
