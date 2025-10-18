@@ -148,12 +148,14 @@ export default function Community() {
         </CardHeader>
         <CardContent>
           {/* Header Legend */}
-          <div className="grid grid-cols-[60px_1fr_60px_60px_60px_120px_100px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
+          <div className="grid grid-cols-[60px_1fr_auto_120px_100px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
             <div></div>
             <div>Nombre:</div>
-            <div className="text-center">Años:</div>
-            <div className="text-center">Meses:</div>
-            <div className="text-center">Días:</div>
+            <div className="flex gap-1 justify-center">
+              <div className="text-center w-[60px]">Años:</div>
+              <div className="text-center w-[60px]">Meses:</div>
+              <div className="text-center w-[60px]">Días:</div>
+            </div>
             <div className="text-center">Medallas:</div>
             <div></div>
           </div>
@@ -167,7 +169,7 @@ export default function Community() {
               return (
                 <div
                   key={user.id}
-                  className={`grid grid-cols-[60px_1fr_60px_60px_60px_120px_100px] gap-3 items-center p-4 rounded-xl transition-colors ${
+                  className={`grid grid-cols-[60px_1fr_auto_120px_100px] gap-3 items-center p-4 rounded-xl transition-colors ${
                     user.availableForHelp
                       ? "bg-success/10 border border-success/30"
                       : "bg-muted/30"
@@ -187,19 +189,22 @@ export default function Community() {
                   {/* Name */}
                   <h3 className="font-semibold truncate">{user.name.split(" ")[0]}</h3>
 
-                  {/* Years */}
-                  <div className="text-center font-bold text-lg">
-                    {user.years.toString().padStart(2, "0")}
-                  </div>
+                  {/* Years, Months, Days - grouped with smaller gap */}
+                  <div className="flex gap-1 items-center">
+                    {/* Years */}
+                    <div className="text-center font-bold text-lg w-[60px]">
+                      {user.years.toString().padStart(2, "0")}
+                    </div>
 
-                  {/* Months */}
-                  <div className="text-center font-bold text-lg">
-                    {months.toString().padStart(2, "0")}
-                  </div>
+                    {/* Months */}
+                    <div className="text-center font-bold text-lg w-[60px]">
+                      {months.toString().padStart(2, "0")}
+                    </div>
 
-                  {/* Days */}
-                  <div className="text-center font-bold text-lg">
-                    {remainingDays.toString().padStart(2, "0")}
+                    {/* Days */}
+                    <div className="text-center font-bold text-lg w-[60px]">
+                      {remainingDays.toString().padStart(2, "0")}
+                    </div>
                   </div>
 
                   {/* Medals */}
