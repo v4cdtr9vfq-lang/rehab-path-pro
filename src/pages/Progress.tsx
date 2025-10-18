@@ -379,11 +379,12 @@ export default function ProgressPage() {
 
       setHasCheckedInToday(!!checkIn);
 
-      // Fetch all goals
+      // Fetch all goals ordered by order_index
       const { data: goals } = await supabase
         .from('goals')
         .select('*')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .order('order_index', { ascending: true });
 
       if (goals) {
         const daily = goals.filter(g => g.goal_type === 'today' || g.goal_type === 'always');
