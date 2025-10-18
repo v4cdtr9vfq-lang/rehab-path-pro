@@ -690,7 +690,7 @@ export default function Home() {
       </Card>
 
       {/* Daily Reflection */}
-      <Card className="border-sky-blue/30 bg-gradient-to-br from-sky-blue/10 to-transparent">
+      <Card className="border-sidebar-border bg-gradient-to-br from-sky-blue/10 to-transparent">
         <CardHeader className="flex flex-row items-start justify-between gap-4 pb-3">
           <div className="flex items-center gap-2 flex-1">
             <span className="text-2xl flex-shrink-0">💡</span>
@@ -799,7 +799,7 @@ export default function Home() {
       </Card>
 
       {/* Daily Motivational Message */}
-      <Card className="border-sky-blue/30 bg-gradient-to-br from-sky-blue/10 to-transparent relative">
+      <Card className="border-sidebar-border bg-gradient-to-br from-sky-blue/10 to-transparent relative">
         <Button
           variant="ghost"
           size="icon"
