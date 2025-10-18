@@ -196,7 +196,7 @@ export default function Gratitude() {
     : pastEntries;
 
   return (
-    <div className="space-y-[3px] animate-in fade-in duration-500">
+    <div className="space-y-[35px] animate-in fade-in duration-500">
       <div>
         <Card className="border-border">
           <CardHeader className="pb-3">

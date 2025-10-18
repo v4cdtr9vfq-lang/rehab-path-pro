@@ -396,7 +396,7 @@ export default function Values() {
   };
 
   return (
-    <div className="space-y-[3px] animate-in fade-in duration-500">
+    <div className="space-y-[35px] animate-in fade-in duration-500">
       <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
