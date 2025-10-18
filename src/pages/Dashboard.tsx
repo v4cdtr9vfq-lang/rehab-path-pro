@@ -778,7 +778,7 @@ export default function Home() {
               return (
                 <Card key={medal.type} className="border-border/50 h-full">
                   <CardContent className="p-4 md:p-6 flex items-center gap-3 md:gap-4">
-                    <div className={`w-16 md:w-20 h-16 md:h-20 rounded-2xl bg-orange-500/20 border border-orange-500/30 flex items-center justify-center flex-shrink-0 ${status.opacity} transition-opacity duration-300`}>
+                    <div className={`w-16 md:w-20 h-16 md:h-20 rounded-2xl bg-orange-500/40 border border-orange-500/50 flex items-center justify-center flex-shrink-0 ${status.opacity} transition-opacity duration-300`}>
                       <span className="text-3xl md:text-4xl">{medal.emoji}</span>
                     </div>
                     <div className="flex-1">
