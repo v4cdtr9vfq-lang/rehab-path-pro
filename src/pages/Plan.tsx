@@ -88,6 +88,7 @@ export default function Plan() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [hasUnsavedOrder, setHasUnsavedOrder] = useState(false);
+  const [originalSectionsOrder, setOriginalSectionsOrder] = useState<typeof sections | null>(null);
   const [newGoal, setNewGoal] = useState<{
     text: string;
     type: keyof typeof sections | 'always' | 'periodic';
@@ -778,6 +779,11 @@ export default function Plan() {
       return;
     }
 
+    // Save original order before first change
+    if (!hasUnsavedOrder) {
+      setOriginalSectionsOrder(JSON.parse(JSON.stringify(sections)));
+    }
+
     const goalsInSection = sections[sectionKey].goals.filter(goal => goal.instanceIndex === 0);
     const oldIndex = goalsInSection.findIndex(g => g.originalId === active.id);
     const newIndex = goalsInSection.findIndex(g => g.originalId === over.id);
@@ -798,6 +804,18 @@ export default function Plan() {
     };
     setSections(updatedSections);
     setHasUnsavedOrder(true);
+  };
+
+  const cancelReorder = () => {
+    if (originalSectionsOrder) {
+      setSections(originalSectionsOrder);
+      setHasUnsavedOrder(false);
+      setOriginalSectionsOrder(null);
+      toast({
+        title: "Cambios cancelados",
+        description: "Se restauró el orden original de las metas."
+      });
+    }
   };
 
   const saveGoalOrder = async () => {
@@ -844,6 +862,7 @@ export default function Plan() {
       }
 
       setHasUnsavedOrder(false);
+      setOriginalSectionsOrder(null);
       toast({
         title: "Orden guardado",
         description: "El orden de las metas ha sido actualizado."
@@ -865,9 +884,14 @@ export default function Plan() {
         <h2 className="text-3xl font-bold text-foreground">Metas</h2>
         <div className="flex gap-2">
           {hasUnsavedOrder && (
-            <Button onClick={saveGoalOrder} variant="default" className="gap-2">
-              Guardar orden
-            </Button>
+            <>
+              <Button onClick={cancelReorder} variant="outline" className="gap-2">
+                Cancelar
+              </Button>
+              <Button onClick={saveGoalOrder} variant="default" className="gap-2">
+                Guardar orden
+              </Button>
+            </>
           )}
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>

@@ -46,6 +46,7 @@ export default function Home() {
   const [newMedal, setNewMedal] = useState<{type: string, name: string, emoji: string} | null>(null);
   const [sobrietyDays, setSobrietyDays] = useState(0);
   const [hasUnsavedOrder, setHasUnsavedOrder] = useState(false);
+  const [originalGoalsOrder, setOriginalGoalsOrder] = useState<any[]>([]);
   const allQuotes = [{
     text: "Siempre es lo simple lo que produce lo maravilloso.",
     author: "Amelia Barr"
@@ -384,6 +385,11 @@ export default function Home() {
       return;
     }
 
+    // Save original order before first change
+    if (!hasUnsavedOrder) {
+      setOriginalGoalsOrder([...activeGoals]);
+    }
+
     const oldIndex = activeGoals.findIndex((goal) => goal.id === active.id);
     const newIndex = activeGoals.findIndex((goal) => goal.id === over.id);
 
@@ -391,6 +397,17 @@ export default function Home() {
     const newGoals = arrayMove(activeGoals, oldIndex, newIndex);
     setActiveGoals(newGoals);
     setHasUnsavedOrder(true);
+  };
+
+  // Cancel reordering and restore original order
+  const cancelReorder = () => {
+    setActiveGoals(originalGoalsOrder);
+    setHasUnsavedOrder(false);
+    setOriginalGoalsOrder([]);
+    toast({
+      title: "Cambios cancelados",
+      description: "Se restauró el orden original de las metas."
+    });
   };
 
   // Save goal order to database
@@ -414,6 +431,7 @@ export default function Home() {
       await Promise.all(updates);
       
       setHasUnsavedOrder(false);
+      setOriginalGoalsOrder([]);
       toast({
         title: "Orden guardado",
         description: "El orden de las metas ha sido actualizado."
@@ -720,9 +738,14 @@ export default function Home() {
           <CardTitle className="text-2xl font-bold">Metas de hoy:</CardTitle>
           <div className="flex gap-2">
             {hasUnsavedOrder && (
-              <Button onClick={saveGoalOrder} variant="default" size="sm">
-                Guardar orden
-              </Button>
+              <>
+                <Button onClick={cancelReorder} variant="outline" size="sm">
+                  Cancelar
+                </Button>
+                <Button onClick={saveGoalOrder} variant="default" size="sm">
+                  Guardar orden
+                </Button>
+              </>
             )}
             <Link to="/plan">
               <Button variant="ghost" size="sm" className="text-primary">Ver todas</Button>
