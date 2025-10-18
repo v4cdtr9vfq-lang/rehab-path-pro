@@ -349,14 +349,14 @@ export default function Journal() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Buscar en tu diario..."
-              className="pl-10"
+              className="pl-10 h-10"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
         <div className="flex gap-2">
-          <Button onClick={() => setShowNewEntry(true)} className="gap-2">
+          <Button onClick={() => setShowNewEntry(true)} className="gap-2 h-10">
             <Plus className="h-4 w-4" />
             Nueva Entrada
           </Button>
@@ -365,10 +365,10 @@ export default function Journal() {
             <Button
               variant="outline"
               onClick={startQuickRecording}
-              className="gap-2"
+              className="gap-2 h-10"
             >
               <Mic className="h-4 w-4" />
-              Grabar Audio
+              Grabar audio
             </Button>
           )}
           
@@ -376,7 +376,7 @@ export default function Journal() {
             <Button
               variant="destructive"
               onClick={stopQuickRecording}
-              className="gap-2 animate-pulse"
+              className="gap-2 animate-pulse h-10"
             >
               <Square className="h-4 w-4" />
               Detener
@@ -387,7 +387,7 @@ export default function Journal() {
             <Button
               variant="outline"
               disabled
-              className="gap-2"
+              className="gap-2 h-10"
             >
               <Loader2 className="h-4 w-4 animate-spin" />
               Transcribiendo...
