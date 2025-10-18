@@ -561,7 +561,7 @@ export default function ProgressPage() {
       </Tabs>
 
       {/* Chart Widget */}
-      <Card className="border-primary/20">
+      <Card className="border-sidebar-border">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             Progreso total:
@@ -569,7 +569,7 @@ export default function ProgressPage() {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="week" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-6 [&>button]:hover:bg-muted/30 [&>button]:transition-colors">
+            <TabsList className="grid w-full grid-cols-3 mb-6">
               <TabsTrigger value="week">Semana</TabsTrigger>
               <TabsTrigger value="month">Mes</TabsTrigger>
               <TabsTrigger value="year">Año</TabsTrigger>
