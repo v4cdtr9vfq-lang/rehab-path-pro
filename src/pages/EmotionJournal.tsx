@@ -44,7 +44,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "alegre",
         name: "Alegre",
-        tertiaryEmotions: ["Alegre", "Complacido", "Contento", "Divertido", "Encantado", "Feliz", "Jubiloso"]
+        tertiaryEmotions: ["Complacido", "Contento", "Divertido", "Encantado", "Feliz", "Jubiloso"]
       },
       {
         id: "descansado",
@@ -70,6 +70,46 @@ const emotionCategories: PrimaryCategory[] = [
         id: "inspirado",
         name: "Inspirado",
         tertiaryEmotions: ["Admirado", "Asombrado", "Maravillado"]
+      },
+      {
+        id: "abierto",
+        name: "Abierto",
+        tertiaryEmotions: ["Accesible", "Disponible", "Receptivo", "Sincero", "Transparente"]
+      },
+      {
+        id: "afectuoso",
+        name: "Afectuoso",
+        tertiaryEmotions: ["Amigable", "Amoroso", "Cálido", "Compasivo", "De corazón abierto", "Simpático", "Tierno"]
+      },
+      {
+        id: "agradecido",
+        name: "Agradecido",
+        tertiaryEmotions: ["Alegría suave", "Asombro", "Calidez", "Generosidad", "Humildad", "Reconocimiento"]
+      },
+      {
+        id: "comprometido",
+        name: "Comprometido",
+        tertiaryEmotions: ["Absorto", "Alerta", "Curioso", "Encantado", "Estimulado", "Fascinado", "Interesado", "Intrigado", "Involucrado"]
+      },
+      {
+        id: "conectado_secundario",
+        name: "Conectado",
+        tertiaryEmotions: ["Afiliación", "Complicidad", "Cuidado", "Empatía", "Sintonía"]
+      },
+      {
+        id: "confiado",
+        name: "Confiado",
+        tertiaryEmotions: ["Abierto", "Empoderado", "Orgulloso", "Protegido", "Seguro"]
+      },
+      {
+        id: "pacifico",
+        name: "Pacífico",
+        tertiaryEmotions: ["Aliviado", "Calmado", "Centrado", "Cómodo", "Confiado", "Contento", "Despejado", "Ecuánime", "Quieto", "Realizado", "Relajado", "Satisfecho", "Sereno", "Tranquilo"]
+      },
+      {
+        id: "seguro",
+        name: "Seguro",
+        tertiaryEmotions: ["Aceptación", "Calma", "Confianza", "Intimidad", "Pertenencia", "Previsibilidad", "Tranquilidad"]
       }
     ]
   },
@@ -112,52 +152,6 @@ const emotionCategories: PrimaryCategory[] = [
         id: "incomodo",
         name: "Incómodo",
         tertiaryEmotions: ["Incómodo", "Inquieto", "Intranquilo", "Molesto", "Nervioso"]
-      }
-    ]
-  },
-  {
-    id: "conectado",
-    name: "Conectado",
-    secondaryEmotions: [
-      {
-        id: "abierto",
-        name: "Abierto",
-        tertiaryEmotions: ["Accesible", "Disponible", "Receptivo", "Sincero", "Transparente"]
-      },
-      {
-        id: "afectuoso",
-        name: "Afectuoso",
-        tertiaryEmotions: ["Amigable", "Amoroso", "Cálido", "Compasivo", "De corazón abierto", "Simpático", "Tierno"]
-      },
-      {
-        id: "agradecido",
-        name: "Agradecido",
-        tertiaryEmotions: ["Alegría suave", "Asombro", "Calidez", "Generosidad", "Humildad", "Reconocimiento"]
-      },
-      {
-        id: "comprometido",
-        name: "Comprometido",
-        tertiaryEmotions: ["Absorto", "Alerta", "Curioso", "Encantado", "Estimulado", "Fascinado", "Interesado", "Intrigado", "Involucrado"]
-      },
-      {
-        id: "conectado_secundario",
-        name: "Conectado",
-        tertiaryEmotions: ["Afiliación", "Complicidad", "Cuidado", "Empatía", "Sintonía"]
-      },
-      {
-        id: "confiado",
-        name: "Confiado",
-        tertiaryEmotions: ["Abierto", "Empoderado", "Orgulloso", "Protegido", "Seguro"]
-      },
-      {
-        id: "pacifico",
-        name: "Pacífico",
-        tertiaryEmotions: ["Aliviado", "Calmado", "Centrado", "Cómodo", "Confiado", "Contento", "Despejado", "Ecuánime", "Quieto", "Realizado", "Relajado", "Satisfecho", "Sereno", "Tranquilo"]
-      },
-      {
-        id: "seguro",
-        name: "Seguro",
-        tertiaryEmotions: ["Aceptación", "Calma", "Confianza", "Intimidad", "Pertenencia", "Previsibilidad", "Tranquilidad"]
       }
     ]
   },
