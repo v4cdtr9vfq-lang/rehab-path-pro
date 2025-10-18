@@ -2,10 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Calendar, Plus, Pencil, Check, X } from "lucide-react";
+import { Calendar as CalendarIcon, Plus, Pencil, Check, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 
 interface GratitudeItem {
   text: string;
@@ -23,6 +28,7 @@ export default function Gratitude() {
   const [newItem, setNewItem] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
+  const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -150,6 +156,12 @@ export default function Gratitude() {
     e.date.toDateString() === new Date().toDateString()
   );
 
+  // Filter entries by date if a filter date is selected
+  const pastEntries = entries.filter(e => e.date.toDateString() !== new Date().toDateString());
+  const filteredPastEntries = filterDate
+    ? pastEntries.filter(entry => entry.date.toDateString() === filterDate.toDateString())
+    : pastEntries;
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <Card className="border-sky-blue/20">
@@ -253,37 +265,86 @@ export default function Gratitude() {
         </CardContent>
       </Card>
 
-      {entries.length > 0 && entries.filter(e => e.date.toDateString() !== new Date().toDateString()).length > 0 && (
-        <Card className="border-sky-blue/20">
-          <CardHeader>
-            <CardTitle>Entradas recientes</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {entries.filter(e => e.date.toDateString() !== new Date().toDateString()).map((entry) => (
-              <div key={entry.id} className="p-4 rounded-lg bg-card/50 border border-sky-blue/10">
-                <div className="flex items-center gap-2 mb-3">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm font-medium text-muted-foreground">
-                    {entry.date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-                  </span>
-                </div>
-                <ul className="space-y-2">
-                  {entry.items.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-foreground/80">
-                      <span className="text-sky-blue">•</span>
-                      <div className="flex-1 space-y-1">
-                        <span>{item.text}</span>
-                        <div className="text-xs text-muted-foreground">
-                          {item.timestamp.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+      {pastEntries.length > 0 && (
+        <div>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-foreground">Registro de agradecimientos</h2>
+            
+            {/* Date Filter */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "justify-start text-left font-normal",
+                    !filterDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {filterDate ? format(filterDate, "d 'de' MMMM, yyyy", { locale: es }) : "Buscar por fecha"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <Calendar
+                  mode="single"
+                  selected={filterDate}
+                  onSelect={setFilterDate}
+                  initialFocus
+                  className={cn("p-3 pointer-events-auto")}
+                />
+                {filterDate && (
+                  <div className="p-3 border-t">
+                    <Button
+                      variant="ghost"
+                      className="w-full"
+                      onClick={() => setFilterDate(undefined)}
+                    >
+                      Limpiar filtro
+                    </Button>
+                  </div>
+                )}
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          <div className="space-y-4">
+            {filteredPastEntries.length > 0 ? (
+              filteredPastEntries.map((entry) => (
+                <Card key={entry.id} className="border-sky-blue/20">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm font-medium text-muted-foreground">
+                        {entry.date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                      </span>
+                    </div>
+                    <ul className="space-y-2">
+                      {entry.items.map((item, i) => (
+                        <li key={i} className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-sky-blue/10">
+                          <span className="text-sky-blue mt-1">•</span>
+                          <div className="flex-1 space-y-1">
+                            <span className="text-foreground">{item.text}</span>
+                            <div className="text-xs text-muted-foreground">
+                              {item.timestamp.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <Card className="border-sky-blue/20">
+                <CardContent className="pt-6">
+                  <p className="text-center text-muted-foreground">
+                    No hay entradas para la fecha seleccionada.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
