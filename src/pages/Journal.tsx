@@ -343,11 +343,6 @@ export default function Journal() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Diario</h1>
-        <p className="text-muted-foreground text-lg">Captura tus pensamientos, sentimientos y reflexiones</p>
-      </div>
-
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
           <div className="relative">
