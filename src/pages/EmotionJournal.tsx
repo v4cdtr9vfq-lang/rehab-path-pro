@@ -161,11 +161,6 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Absorto", "Alerta", "Curioso", "Encantado", "Estimulado", "Fascinado", "Interesado", "Intrigado", "Involucrado"]
       },
       {
-        id: "conectado_secundario",
-        name: "Conectado",
-        tertiaryEmotions: ["Afiliación", "Complicidad", "Cuidado", "Empatía", "Sintonía"]
-      },
-      {
         id: "confiado",
         name: "Confiado",
         tertiaryEmotions: ["Abierto", "Empoderado", "Orgulloso", "Protegido", "Seguro"]
