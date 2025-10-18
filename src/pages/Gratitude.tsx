@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Calendar as CalendarIcon, Plus, Pencil, Check, X } from "lucide-react";
+import { Calendar as CalendarIcon, Plus, Pencil, Check, X, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -13,6 +13,7 @@ import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
 interface GratitudeItem {
+  id: string;
   text: string;
   timestamp: Date;
 }
@@ -26,7 +27,7 @@ interface GratitudeEntry {
 export default function Gratitude() {
   const [entries, setEntries] = useState<GratitudeEntry[]>([]);
   const [newItem, setNewItem] = useState("");
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
   const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
   const { toast } = useToast();
@@ -57,6 +58,7 @@ export default function Gratitude() {
         );
 
         const item: GratitudeItem = {
+          id: entry.id,
           text: entry.text,
           timestamp: new Date(entry.created_at)
         };
@@ -119,37 +121,68 @@ export default function Gratitude() {
     }
   };
 
-  const startEditing = (index: number, text: string) => {
-    setEditingIndex(index);
+  const startEditing = (id: string, text: string) => {
+    setEditingId(id);
     setEditText(text);
   };
 
-  const saveEdit = () => {
-    if (editText.trim() && editingIndex !== null) {
-      const today = entries.find(e => 
-        e.date.toDateString() === new Date().toDateString()
-      );
-      
-      if (today) {
-        setEntries(entries.map(e => 
-          e.id === today.id 
-            ? { 
-                ...e, 
-                items: e.items.map((item, i) => 
-                  i === editingIndex ? { ...item, text: editText } : item
-                )
-              }
-            : e
-        ));
+  const saveEdit = async () => {
+    if (editText.trim() && editingId) {
+      try {
+        const { error } = await (supabase as any)
+          .from('gratitude_entries')
+          .update({ text: editText })
+          .eq('id', editingId);
+
+        if (error) throw error;
+
+        toast({
+          title: "Actualizado",
+          description: "Tu entrada ha sido actualizada"
+        });
+
+        setEditingId(null);
+        setEditText("");
+        await loadEntries();
+      } catch (error) {
+        console.error('Error updating entry:', error);
+        toast({
+          title: "Error",
+          description: "No se pudo actualizar tu entrada",
+          variant: "destructive"
+        });
       }
     }
-    setEditingIndex(null);
-    setEditText("");
   };
 
   const cancelEdit = () => {
-    setEditingIndex(null);
+    setEditingId(null);
     setEditText("");
+  };
+
+  const deleteEntry = async (id: string) => {
+    try {
+      const { error } = await (supabase as any)
+        .from('gratitude_entries')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Eliminado",
+        description: "Tu entrada ha sido eliminada"
+      });
+
+      await loadEntries();
+    } catch (error) {
+      console.error('Error deleting entry:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar tu entrada",
+        variant: "destructive"
+      });
+    }
   };
 
   const todayEntry = entries.find(e => 
@@ -192,14 +225,14 @@ export default function Gratitude() {
             <div className="space-y-3 pt-4 border-t">
               <h3 className="font-semibold text-foreground">Hoy estoy agradecido por:</h3>
               <ul className="space-y-2">
-                {todayEntry.items.map((item, index) => (
+                {todayEntry.items.map((item) => (
                   <li
-                    key={index}
+                    key={item.id}
                     className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border"
                   >
                     <span className="text-sky-blue mt-1">🙏</span>
                     <div className="flex-1 space-y-1">
-                      {editingIndex === index ? (
+                      {editingId === item.id ? (
                         <div className="flex gap-2">
                           <Input
                             value={editText}
@@ -218,14 +251,24 @@ export default function Gratitude() {
                         <>
                           <div className="flex items-start justify-between gap-2">
                             <span className="text-foreground flex-1">{item.text}</span>
-                            <Button 
-                              size="sm" 
-                              variant="ghost" 
-                              onClick={() => startEditing(index, item.text)}
-                              className="h-6 w-6 p-0"
-                            >
-                              <Pencil className="h-3 w-3" />
-                            </Button>
+                            <div className="flex gap-1">
+                              <Button 
+                                size="sm" 
+                                variant="ghost" 
+                                onClick={() => startEditing(item.id, item.text)}
+                                className="h-6 w-6 p-0"
+                              >
+                                <Pencil className="h-3 w-3" />
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="ghost" 
+                                onClick={() => deleteEntry(item.id)}
+                                className="h-6 w-6 p-0 text-destructive hover:text-destructive"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
                           </div>
                           <span className="text-xs text-muted-foreground">
                             {item.timestamp.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
@@ -401,14 +444,53 @@ export default function Gratitude() {
                       </span>
                     </div>
                     <ul className="space-y-2">
-                      {entry.items.map((item, i) => (
-                        <li key={i} className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border">
+                      {entry.items.map((item) => (
+                        <li key={item.id} className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border">
                           <span className="text-sky-blue mt-1">🙏</span>
                           <div className="flex-1 space-y-1">
-                            <span className="text-foreground">{item.text}</span>
-                            <div className="text-xs text-muted-foreground">
-                              {item.timestamp.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
-                            </div>
+                            {editingId === item.id ? (
+                              <div className="flex gap-2">
+                                <Input
+                                  value={editText}
+                                  onChange={(e) => setEditText(e.target.value)}
+                                  className="flex-1"
+                                  autoFocus
+                                />
+                                <Button size="sm" onClick={saveEdit}>
+                                  <Check className="h-4 w-4" />
+                                </Button>
+                                <Button size="sm" variant="outline" onClick={cancelEdit}>
+                                  <X className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            ) : (
+                              <>
+                                <div className="flex items-start justify-between gap-2">
+                                  <span className="text-foreground flex-1">{item.text}</span>
+                                  <div className="flex gap-1">
+                                    <Button 
+                                      size="sm" 
+                                      variant="ghost" 
+                                      onClick={() => startEditing(item.id, item.text)}
+                                      className="h-6 w-6 p-0"
+                                    >
+                                      <Pencil className="h-3 w-3" />
+                                    </Button>
+                                    <Button 
+                                      size="sm" 
+                                      variant="ghost" 
+                                      onClick={() => deleteEntry(item.id)}
+                                      className="h-6 w-6 p-0 text-destructive hover:text-destructive"
+                                    >
+                                      <Trash2 className="h-3 w-3" />
+                                    </Button>
+                                  </div>
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                  {item.timestamp.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                                </div>
+                              </>
+                            )}
                           </div>
                         </li>
                       ))}
