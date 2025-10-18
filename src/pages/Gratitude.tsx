@@ -241,6 +241,7 @@ export default function Gratitude() {
             Por qué Importa la gratitud
             <span>🙏</span>
             <span>🙏</span>
+            <span>🙏</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
