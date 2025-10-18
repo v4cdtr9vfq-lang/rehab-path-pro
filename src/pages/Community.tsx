@@ -142,14 +142,14 @@ export default function Community() {
         <CardContent>
           {/* Header Legend */}
           <div className="grid grid-cols-[auto_auto_100px_120px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
-            <div className="pl-14">Nombre:</div>
-            <div className="flex gap-1 justify-center">
-              <div className="text-left w-[60px]">Años:</div>
-              <div className="text-left w-[60px]">Meses:</div>
-              <div className="text-left w-[60px]">Días:</div>
+            <div className="pl-[65px]">Nombre:</div>
+            <div className="flex gap-1">
+              <div className="w-[60px]">Años:</div>
+              <div className="w-[60px]">Meses:</div>
+              <div className="w-[60px]">Días:</div>
             </div>
             <div></div>
-            <div className="text-left">Medallas:</div>
+            <div>Medallas:</div>
           </div>
 
           <div className="space-y-3">
@@ -184,17 +184,17 @@ export default function Community() {
                   {/* Years, Months, Days - grouped with smaller gap */}
                   <div className="flex gap-1 items-center">
                     {/* Years */}
-                    <div className="text-left font-bold text-lg w-[60px]">
+                    <div className="font-bold text-lg w-[60px]">
                       {user.years.toString().padStart(2, "0")}
                     </div>
 
                     {/* Months */}
-                    <div className="text-left font-bold text-lg w-[60px]">
+                    <div className="font-bold text-lg w-[60px]">
                       {months.toString().padStart(2, "0")}
                     </div>
 
                     {/* Days */}
-                    <div className="text-left font-bold text-lg w-[60px]">
+                    <div className="font-bold text-lg w-[60px]">
                       {remainingDays.toString().padStart(2, "0")}
                     </div>
                   </div>
