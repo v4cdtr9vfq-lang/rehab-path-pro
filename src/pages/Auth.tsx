@@ -16,6 +16,7 @@ export default function Auth() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isLogin, setIsLogin] = useState(searchParams.get("mode") !== "signup");
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -40,6 +41,40 @@ export default function Auth() {
         toast.error(error.errors[0].message);
       }
       return false;
+    }
+  };
+
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      emailSchema.parse(email);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
+      }
+      return;
+    }
+    
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth?reset=true`,
+      });
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.success("¡Revisa tu correo! Te hemos enviado un enlace para restablecer tu contraseña");
+      setIsForgotPassword(false);
+      setIsLogin(true);
+    } catch (error) {
+      toast.error("Ocurrió un error inesperado");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -108,105 +143,161 @@ export default function Auth() {
             <span className="text-2xl font-bold">rehabp.org</span>
           </Link>
           <h1 className="text-4xl font-bold text-foreground">
-            {isLogin ? "Bienvenido de vuelta" : "Comienza tu recuperación"}
+            {isForgotPassword ? "Recuperar contraseña" : isLogin ? "Bienvenido de vuelta" : "Comienza tu recuperación"}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {isLogin ? "Ingresa a tu cuenta:" : "Crea tu cuenta gratuita"}
+            {isForgotPassword ? "Te enviaremos un enlace para restablecer tu contraseña" : isLogin ? "Ingresa a tu cuenta:" : "Crea tu cuenta gratuita"}
           </p>
         </div>
 
         <Card className="border-border/50">
           <CardHeader>
-            <CardTitle>{isLogin ? "Iniciar sesión:" : "Registrarse"}</CardTitle>
+            <CardTitle>{isForgotPassword ? "Recuperar contraseña" : isLogin ? "Iniciar sesión:" : "Registrarse"}</CardTitle>
             <CardDescription>
-              {isLogin 
-                ? "Ingresa tus credenciales para continuar." 
-                : "Completa el formulario para crear tu cuenta"}
+              {isForgotPassword
+                ? "Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña"
+                : isLogin 
+                  ? "Ingresa tus credenciales para continuar." 
+                  : "Completa el formulario para crear tu cuenta"}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleAuth} className="space-y-4">
-              {!isLogin && (
+            {isForgotPassword ? (
+              <form onSubmit={handlePasswordReset} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="fullName">Nombre completo</Label>
+                  <Label htmlFor="email">Email</Label>
                   <Input
-                    id="fullName"
-                    type="text"
-                    placeholder="Juan Pérez"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    required={!isLogin}
+                    id="email"
+                    type="email"
+                    placeholder="tu@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                     disabled={loading}
                     className="rounded-xl"
                   />
                 </div>
-              )}
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="tu@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
+                <Button
+                  type="submit"
+                  className="w-full rounded-xl"
                   disabled={loading}
-                  className="rounded-xl"
-                />
-              </div>
+                  size="lg"
+                >
+                  {loading ? "Enviando..." : "Enviar enlace de recuperación"}
+                </Button>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Contraseña</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-full"
+                  onClick={() => {
+                    setIsForgotPassword(false);
+                    setIsLogin(true);
+                  }}
                   disabled={loading}
-                  className="rounded-xl"
-                />
-                {!isLogin && (
-                  <p className="text-xs text-muted-foreground">
-                    Mínimo 6 caracteres
-                  </p>
-                )}
-              </div>
+                >
+                  Volver a iniciar sesión
+                </Button>
+              </form>
+            ) : (
+              <>
+                <form onSubmit={handleAuth} className="space-y-4">
+                  {!isLogin && (
+                    <div className="space-y-2">
+                      <Label htmlFor="fullName">Nombre completo</Label>
+                      <Input
+                        id="fullName"
+                        type="text"
+                        placeholder="Juan Pérez"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        required={!isLogin}
+                        disabled={loading}
+                        className="rounded-xl"
+                      />
+                    </div>
+                  )}
 
-              <Button
-                type="submit"
-                className="w-full rounded-xl"
-                disabled={loading}
-                size="lg"
-              >
-                {loading ? "Procesando..." : isLogin ? "Iniciar sesión" : "Crear cuenta"}
-              </Button>
-            </form>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="tu@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      disabled={loading}
+                      className="rounded-xl"
+                    />
+                  </div>
 
-            <div className="mt-6 text-center space-y-4">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-border/50" />
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="password">Contraseña</Label>
+                      {isLogin && (
+                        <button
+                          type="button"
+                          onClick={() => setIsForgotPassword(true)}
+                          className="text-xs text-primary hover:underline"
+                          disabled={loading}
+                        >
+                          ¿Olvidaste tu contraseña?
+                        </button>
+                      )}
+                    </div>
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      disabled={loading}
+                      className="rounded-xl"
+                    />
+                    {!isLogin && (
+                      <p className="text-xs text-muted-foreground">
+                        Mínimo 6 caracteres
+                      </p>
+                    )}
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full rounded-xl"
+                    disabled={loading}
+                    size="lg"
+                  >
+                    {loading ? "Procesando..." : isLogin ? "Iniciar sesión" : "Crear cuenta"}
+                  </Button>
+                </form>
+
+                <div className="mt-6 text-center space-y-4">
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t border-border/50" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-card px-2 text-muted-foreground">
+                        {isLogin ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="w-full"
+                    onClick={() => setIsLogin(!isLogin)}
+                    disabled={loading}
+                  >
+                    {isLogin ? "Crear cuenta nueva" : "Iniciar sesión"}
+                  </Button>
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">
-                    {isLogin ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}
-                  </span>
-                </div>
-              </div>
-
-              <Button
-                type="button"
-                variant="ghost"
-                className="w-full"
-                onClick={() => setIsLogin(!isLogin)}
-                disabled={loading}
-              >
-                {isLogin ? "Crear cuenta nueva" : "Iniciar sesión"}
-              </Button>
-            </div>
+              </>
+            )}
           </CardContent>
         </Card>
 
