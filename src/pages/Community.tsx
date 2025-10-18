@@ -77,11 +77,11 @@ export default function Community() {
     const totalDays = years * 365 + days;
     
     // Verde para medallas de oro (90+) y copa (180+)
-    if (totalDays >= 90) return "bg-success/20 text-success";
-    // Amarillo para medalla de plata (40+)
-    if (totalDays >= 40) return "bg-warning/20 text-warning";
+    if (totalDays >= 90) return { className: "bg-success/20 text-success" };
+    // Amarillo específico para medalla de plata (40+)
+    if (totalDays >= 40) return { className: "text-[#e6c25c]", style: { backgroundColor: '#e6c25c20' } };
     // Naranja para medalla de bronce (0+)
-    return "bg-orange-500/20 text-orange-600";
+    return { className: "bg-orange-500/20 text-orange-600" };
   };
 
   return (
@@ -158,7 +158,10 @@ export default function Community() {
                 <div className="flex items-center gap-3 min-w-0">
                   <Avatar className="h-10 w-10 flex-shrink-0">
                     <AvatarImage src={user.avatar} />
-                    <AvatarFallback className={`${getAvatarColor(user.years, user.days)} font-semibold`}>
+                    <AvatarFallback 
+                      className={`${getAvatarColor(user.years, user.days).className} font-semibold`}
+                      style={getAvatarColor(user.years, user.days).style}
+                    >
                       {getInitials(user.name)}
                     </AvatarFallback>
                   </Avatar>
