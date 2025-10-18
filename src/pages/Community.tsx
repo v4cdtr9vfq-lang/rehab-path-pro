@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CommunityUser {
   id: string;
@@ -65,6 +66,7 @@ const REHABILITATION_TYPES = [
 ] as const;
 
 export default function Community() {
+  const isMobile = useIsMobile();
   const [isAvailableForHelp, setIsAvailableForHelp] = useState(false);
   const [userMedals, setUserMedals] = useState<string[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<string>("todos");
@@ -184,16 +186,18 @@ export default function Community() {
         </CardHeader>
         <CardContent>
           {/* Header Legend */}
-          <div className="grid grid-cols-[auto_auto_100px_120px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
-            <div className="pl-[55px]">Nombre:</div>
-            <div className="flex gap-1 -ml-[5px]">
-              <div className="w-[60px] text-left">Años:</div>
-              <div className="w-[60px] text-left">Meses:</div>
-              <div className="w-[60px] text-left">Días:</div>
+          {!isMobile && (
+            <div className="grid grid-cols-[auto_auto_100px_120px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
+              <div className="pl-[55px]">Nombre:</div>
+              <div className="flex gap-1 -ml-[5px]">
+                <div className="w-[60px] text-left">Años:</div>
+                <div className="w-[60px] text-left">Meses:</div>
+                <div className="w-[60px] text-left">Días:</div>
+              </div>
+              <div></div>
+              <div className="text-left pl-0">Medallas:</div>
             </div>
-            <div></div>
-            <div className="text-left pl-0">Medallas:</div>
-          </div>
+          )}
 
           <div className="space-y-3">
             {sortedUsers.map((user) => {
@@ -203,6 +207,59 @@ export default function Community() {
               const totalDays = user.years * 365 + user.days;
               const canShowAvailability = totalDays >= 90; // Necesita 90+ días (3+ medallas)
               
+              if (isMobile) {
+                return (
+                  <div
+                    key={user.id}
+                    className={`p-3 rounded-xl transition-colors ${
+                      user.availableForHelp
+                        ? "bg-success/10 border border-success/30"
+                        : "bg-muted/30"
+                    }`}
+                  >
+                    {/* Top row: Avatar, Name, and Badge */}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Avatar className="h-8 w-8 flex-shrink-0">
+                          <AvatarImage src={user.avatar} />
+                          <AvatarFallback 
+                            className={`${getAvatarColor(user.years, user.days).className} font-semibold text-xs`}
+                            style={getAvatarColor(user.years, user.days).style}
+                          >
+                            {getInitials(user.name)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <h3 className="font-semibold text-sm truncate">{user.name.split(" ")[0]}</h3>
+                      </div>
+                      {user.availableForHelp && canShowAvailability && (
+                        <Badge variant="secondary" className="flex-shrink-0 bg-success/20 text-success border-success/30 text-xs px-2 py-0">
+                          Disponible
+                        </Badge>
+                      )}
+                    </div>
+
+                    {/* Bottom row: Time and Medals */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-1 items-center text-sm">
+                        <span className="font-bold">{user.years.toString().padStart(2, "0")}</span>
+                        <span className="text-muted-foreground text-xs">a</span>
+                        <span className="font-bold">{months.toString().padStart(2, "0")}</span>
+                        <span className="text-muted-foreground text-xs">m</span>
+                        <span className="font-bold">{remainingDays.toString().padStart(2, "0")}</span>
+                        <span className="text-muted-foreground text-xs">d</span>
+                      </div>
+                      <div className="flex gap-1">
+                        {getMedalsByTime(user.years, user.days).map((medal, idx) => (
+                          <span key={idx} className="text-base">
+                            {medal}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
               return (
                 <div
                   key={user.id}
