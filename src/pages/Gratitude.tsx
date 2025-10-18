@@ -293,7 +293,7 @@ export default function Gratitude() {
       {/* Example Entry Section */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-foreground">Registro de agradecimientos:</h3>
+          <h2 className="text-xl font-bold text-foreground">Registro de agradecimientos:</h2>
           
           {/* Date Filter */}
           <Popover>
