@@ -363,14 +363,12 @@ export default function Home() {
         return newCompleted + (checkInCompleted ? 1 : 0);
       });
     }).on('postgres_changes', {
-      event: 'UPDATE',
+      event: '*',
       schema: 'public',
       table: 'goals'
     }, async (payload) => {
-      // Listen for order_index updates and refresh goals
-      // Only process if we don't have unsaved local changes
-      if (payload.new && 'order_index' in payload.new && !hasUnsavedOrder) {
-        // Refetch to get the new order
+      // Listen for any goal changes and refresh if we don't have unsaved local changes
+      if (!hasUnsavedOrder) {
         setTimeout(async () => {
           const {
             data: {

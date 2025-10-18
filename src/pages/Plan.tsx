@@ -333,14 +333,12 @@ export default function Plan() {
         fetchGoals();
       }, 300);
     }).on('postgres_changes', {
-      event: 'UPDATE',
+      event: '*',
       schema: 'public',
       table: 'goals'
     }, async (payload) => {
-      // Listen for order_index updates and refresh
-      // Only process if we don't have unsaved local changes
-      if (payload.new && 'order_index' in payload.new && !hasUnsavedOrder) {
-        // Refetch to get the new order
+      // Listen for any goal changes and refresh if we don't have unsaved local changes
+      if (!hasUnsavedOrder) {
         setTimeout(() => {
           fetchGoals();
         }, 300);
@@ -349,7 +347,7 @@ export default function Plan() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [hasUnsavedOrder]);
   const fetchGoals = async () => {
     try {
       const {
