@@ -580,7 +580,7 @@ export default function Values() {
           </CardContent>
         </Card>
 
-        <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent mt-4">
+        <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent mt-[31px]">
           <CardContent className="p-6">
             <h3 className="font-semibold text-foreground mb-3">💡 Recordatorio diario de valores</h3>
             <p className="text-foreground/80 text-sm">
