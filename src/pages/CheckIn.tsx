@@ -422,7 +422,7 @@ export default function CheckIn() {
                   placeholder={question.id === 3 ? "Lo mejor está por regar" : "Escribe..."}
                   value={answers[question.id] || ""}
                   onChange={(e) => handleAnswer(question.id, e.target.value)}
-                  className="text-base"
+                  className="text-sm lg:text-base"
                 />
               )}
             </div>
