@@ -448,7 +448,9 @@ export default function Journal() {
       )}
 
       <div className="space-y-4">
-        <h2 className="text-2xl font-semibold text-foreground">Entradas recientes</h2>
+        {!isLoading && entries.length > 0 && (
+          <h2 className="text-2xl font-semibold text-foreground">Entradas recientes</h2>
+        )}
         {isLoading ? (
           <Card className="border-primary/20">
             <CardContent className="p-12 text-center">
