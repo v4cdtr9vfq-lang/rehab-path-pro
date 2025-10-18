@@ -763,7 +763,6 @@ export default function Settings() {
       <Card className="border-destructive/50 bg-destructive/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive">
-            <span className="text-lg">🗑️</span>
             Zona de peligro
           </CardTitle>
         </CardHeader>
@@ -778,7 +777,6 @@ export default function Settings() {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="outline" className="w-full border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white">
-                    <span className="mr-2">🔄</span>
                     Reiniciar mis datos
                   </Button>
                 </AlertDialogTrigger>
@@ -837,7 +835,6 @@ export default function Settings() {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="destructive" className="w-full">
-                    <span className="mr-2">🗑️</span>
                     Eliminar mi cuenta
                   </Button>
                 </AlertDialogTrigger>
