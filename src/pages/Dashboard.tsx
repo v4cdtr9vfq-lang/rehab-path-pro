@@ -717,7 +717,7 @@ export default function Home() {
       {/* Daily Progress Panel */}
       <Card className="border-sidebar-border md:-mt-[3px]">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Progreso diario</CardTitle>
+          <CardTitle className="text-2xl font-bold">Progreso diario:</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Goals Progress Bar */}
@@ -863,7 +863,7 @@ export default function Home() {
 
       {/* Quick Tools */}
       <div>
-        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">Herramientas rápidas</h2>
+        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">Herramientas rápidas:</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
           {quickTools.map(tool => {
           return <Link key={tool.label} to={tool.path}>
