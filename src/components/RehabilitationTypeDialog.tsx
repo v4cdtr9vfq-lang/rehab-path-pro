@@ -111,7 +111,7 @@ export default function RehabilitationTypeDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-center text-xl">
+          <DialogTitle className="text-left text-xl pl-[17px]">
             ¿Qué quieres rehabilitar?
           </DialogTitle>
         </DialogHeader>
@@ -148,7 +148,7 @@ export default function RehabilitationTypeDialog() {
             variant="outline"
             className="w-full"
           >
-            Prefiero no decir ahora
+            Prefiero no decir ahora.
           </Button>
           <p className="text-xs text-muted-foreground text-center">
             Podrás cambiar esto más tarde en configuración.
