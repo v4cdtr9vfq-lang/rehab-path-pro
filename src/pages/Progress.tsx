@@ -498,7 +498,9 @@ export default function ProgressPage() {
                 </div>
                 <Progress value={hasCheckedInToday ? 100 : 0} className={`h-2.5 ${hasCheckedInToday ? '[&>div]:bg-green-500' : '[&>div]:bg-sky-blue'}`} />
                 <div className="flex justify-between items-center mt-1">
-                  <span className="text-xs text-muted-foreground">Check-in de recuperación</span>
+                  <span className="text-xs text-muted-foreground">
+                    {hasCheckedInToday ? '1 de 1 completadas' : '0 de 1 completadas'}
+                  </span>
                   <span className={`text-xs font-medium ${hasCheckedInToday ? 'text-green-500' : 'text-muted-foreground'}`}>
                     {hasCheckedInToday ? '✓ Completado' : 'Pendiente'}
                   </span>
