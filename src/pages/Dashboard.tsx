@@ -710,7 +710,7 @@ export default function Home() {
       {/* Active Goals Summary */}
       <Card className="border-sidebar-border">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-2xl font-bold">Metas de hoy</CardTitle>
+          <CardTitle className="text-2xl font-bold">Metas de hoy:</CardTitle>
           <Link to="/plan">
             <Button variant="ghost" size="sm" className="text-primary">Ver todas</Button>
           </Link>
