@@ -764,21 +764,21 @@ export default function Home() {
 
       {/* Daily Reflection */}
       <Card className="border-sidebar-border bg-gradient-to-br from-sky-blue/10 to-transparent md:-mt-[3px]">
-        <CardHeader className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-4 pb-3">
-          <div className="flex items-start md:items-center justify-between gap-2 w-full">
-            <div className="flex items-center gap-2 flex-1 min-w-0">
-              <span className="text-2xl flex-shrink-0">💡</span>
-              <h3 className="font-semibold text-foreground text-base md:text-xl leading-tight">Reflexión del día</h3>
-            </div>
-            <Link to={`/journal?reflection=${encodeURIComponent(getReflectionOfTheDay())}`} className="flex-shrink-0">
-              <Button variant="ghost" size="sm" className="text-primary">Escribir</Button>
-            </Link>
+        <CardHeader className="pb-4">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl">💡</span>
+            <CardTitle className="text-xl md:text-2xl">Reflexión del día</CardTitle>
           </div>
         </CardHeader>
-        <CardContent className="pl-[52px] pr-6 pb-6 pt-[25px]">
-          <p className="text-foreground/80 text-base leading-relaxed">
+        <CardContent className="space-y-6">
+          <p className="text-foreground/80 text-base md:text-lg leading-relaxed">
             {getReflectionOfTheDay()}
           </p>
+          <Link to={`/journal?reflection=${encodeURIComponent(getReflectionOfTheDay())}`} className="block">
+            <Button variant="outline" size="lg" className="w-full bg-background hover:bg-background/80">
+              Escribir reflexión
+            </Button>
+          </Link>
         </CardContent>
       </Card>
 
