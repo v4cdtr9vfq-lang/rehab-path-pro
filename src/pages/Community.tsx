@@ -168,7 +168,7 @@ export default function Community() {
                   }`}
                 >
                   {/* Avatar and Name - grouped with smaller gap */}
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-[15px]">
                     <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src={user.avatar} />
                       <AvatarFallback 
