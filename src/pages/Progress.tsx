@@ -561,22 +561,23 @@ export default function ProgressPage() {
 
       </Tabs>
 
-      {/* Chart Widget */}
-      <Card className="border-sidebar-border">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            Progreso total:
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="week" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-6">
-              <TabsTrigger value="week">Semana</TabsTrigger>
-              <TabsTrigger value="month">Mes</TabsTrigger>
-              <TabsTrigger value="year">Año</TabsTrigger>
-            </TabsList>
+      {/* Chart Widget Tabs */}
+      <Tabs defaultValue="week" className="w-full space-y-[35px]">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="week">Semana</TabsTrigger>
+          <TabsTrigger value="month">Mes</TabsTrigger>
+          <TabsTrigger value="year">Año</TabsTrigger>
+        </TabsList>
 
-            <TabsContent value="week" className="mt-18">
+        {/* Chart Widget */}
+        <Card className="border-sidebar-border">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              Progreso total:
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TabsContent value="week" className="mt-0">
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={weeklyChartData}>
@@ -674,9 +675,9 @@ export default function ProgressPage() {
                 </ResponsiveContainer>
               </div>
             </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </Tabs>
     </div>
   );
 }
