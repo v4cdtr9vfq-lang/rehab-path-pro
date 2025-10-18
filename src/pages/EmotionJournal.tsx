@@ -545,10 +545,10 @@ export default function EmotionJournal() {
                     }`}
                   >
                     {isSelected ? (
-                      <>
-                        <Check className="h-4 w-4 mr-2" />
+                      <span className="flex items-center gap-2">
+                        <Check className="h-4 w-4" />
                         {category.name}
-                      </>
+                      </span>
                     ) : (
                       <>+ {category.name}</>
                     )}
@@ -586,10 +586,10 @@ export default function EmotionJournal() {
                               }`}
                             >
                               {isSelected ? (
-                                <>
-                                  <Check className="h-4 w-4 mr-2" />
+                                <span className="flex items-center gap-2">
+                                  <Check className="h-4 w-4" />
                                   {emotion.name}
-                                </>
+                                </span>
                               ) : (
                                 <>+ {emotion.name}</>
                               )}
@@ -628,10 +628,10 @@ export default function EmotionJournal() {
                             }`}
                           >
                             {isSelected ? (
-                              <>
-                                <Check className="h-4 w-4 mr-2" />
+                              <span className="flex items-center gap-2">
+                                <Check className="h-4 w-4" />
                                 {tertiaryEmotion}
-                              </>
+                              </span>
                             ) : (
                               <>+ {tertiaryEmotion}</>
                             )}
