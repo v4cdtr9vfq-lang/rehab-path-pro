@@ -167,8 +167,8 @@ export default function Gratitude() {
       <Card className="border-sky-blue/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-sky-blue" />
-            Gratitud de Hoy
+            <CalendarIcon className="h-5 w-5 text-sky-blue" />
+            Gratitud de hoy
             <span className="text-sm font-normal text-muted-foreground ml-auto">
               {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
             </span>
