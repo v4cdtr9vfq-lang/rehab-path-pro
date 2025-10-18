@@ -776,7 +776,7 @@ export default function Home() {
           </p>
           <Link to={`/journal?reflection=${encodeURIComponent(getReflectionOfTheDay())}`} className="block">
             <Button variant="outline" size="lg" className="w-full bg-background hover:bg-background/80">
-              Escribir reflexión
+              Escribir sobre esto
             </Button>
           </Link>
         </CardContent>
