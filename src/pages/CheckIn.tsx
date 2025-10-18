@@ -36,6 +36,7 @@ const questions: Question[] = [
   { id: 8, text: "¿Has hecho algo que crees que te limita en lugar de expandirte?", type: "yesno" },
   { id: 9, text: "¿Cómo calificarías tu descanso ayer por la noche?", type: "scale" },
   { id: 10, text: "¿Has comido bien?", type: "scale" },
+  { id: 11, text: "¿Crees que te has movido lo suficiente?", type: "scale" },
 ];
 
 export default function CheckIn() {
