@@ -161,7 +161,7 @@ export default function CheckIn() {
       // Use default text for question 3 if empty
       const finalAnswers = { ...answers };
       if (!finalAnswers[3] || finalAnswers[3].trim() === "") {
-        finalAnswers[3] = "Lo mejor está por llegar";
+        finalAnswers[3] = "Lo mejor está por regar";
       }
       
       const answersWithDescriptions = {
@@ -416,7 +416,7 @@ export default function CheckIn() {
                 </div>
               ) : (
                 <Input
-                  placeholder={question.id === 3 ? "Lo mejor está por llegar" : "Escribe..."}
+                  placeholder={question.id === 3 ? "Lo mejor está por regar" : "Escribe..."}
                   value={answers[question.id] || ""}
                   onChange={(e) => handleAnswer(question.id, e.target.value)}
                   className="text-base"
