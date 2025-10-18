@@ -6,6 +6,13 @@ import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Bell, Plus, Mail, BellRing, Trash2, Check } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -47,6 +54,22 @@ export default function Settings() {
   const [fullName, setFullName] = useState("");
   const [isUpdatingName, setIsUpdatingName] = useState(false);
   const [trialDaysUsed, setTrialDaysUsed] = useState(0);
+  const [rehabilitationType, setRehabilitationType] = useState<string>("");
+  const [isUpdatingRehabType, setIsUpdatingRehabType] = useState(false);
+
+  const REHABILITATION_TYPES = [
+    { id: 'azucar', label: 'Azúcar' },
+    { id: 'codependencia', label: 'Codependencia' },
+    { id: 'comida', label: 'Comida' },
+    { id: 'compras', label: 'Compras' },
+    { id: 'drama', label: 'Drama' },
+    { id: 'narcoticos', label: 'Narcóticos' },
+    { id: 'pornografia', label: 'Pornografía' },
+    { id: 'redes_sociales', label: 'Redes Sociales' },
+    { id: 'videojuegos', label: 'Videojuegos' },
+    { id: 'otros', label: 'Otros' },
+    { id: 'prefiero_no_decir', label: 'Prefiero no decirlo' },
+  ] as const;
   
   // Reminders state
   const [reminders, setReminders] = useState<Reminder[]>([]);
@@ -104,15 +127,55 @@ export default function Settings() {
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('full_name')
+        .select('full_name, rehabilitation_type')
         .eq('user_id', user.id)
         .single();
 
       if (profile?.full_name) {
         setFullName(profile.full_name);
       }
+      if (profile?.rehabilitation_type) {
+        setRehabilitationType(profile.rehabilitation_type);
+      }
     } catch (error) {
       console.error('Error loading user profile:', error);
+    }
+  };
+
+  const handleUpdateRehabilitationType = async () => {
+    if (!rehabilitationType) {
+      toast({
+        title: "Error",
+        description: "Por favor selecciona una opción.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsUpdatingRehabType(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Usuario no autenticado");
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({ rehabilitation_type: rehabilitationType })
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Tipo de rehabilitación actualizado",
+        description: "Tu preferencia ha sido actualizada exitosamente.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo actualizar el tipo de rehabilitación.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdatingRehabType(false);
     }
   };
 
@@ -401,6 +464,30 @@ export default function Settings() {
                   disabled={isUpdatingName}
                 >
                   {isUpdatingName ? "Actualizando..." : "Actualizar"}
+                </Button>
+              </div>
+            </div>
+
+            <div className="border-t pt-4 space-y-2">
+              <Label htmlFor="rehab-type">Tipo de rehabilitación</Label>
+              <div className="flex gap-2">
+                <Select value={rehabilitationType} onValueChange={setRehabilitationType}>
+                  <SelectTrigger id="rehab-type">
+                    <SelectValue placeholder="Selecciona una opción" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {REHABILITATION_TYPES.map((type) => (
+                      <SelectItem key={type.id} value={type.id}>
+                        {type.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button 
+                  onClick={handleUpdateRehabilitationType} 
+                  disabled={isUpdatingRehabType}
+                >
+                  {isUpdatingRehabType ? "Actualizando..." : "Actualizar"}
                 </Button>
               </div>
             </div>

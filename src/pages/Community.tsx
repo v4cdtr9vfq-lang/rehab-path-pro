@@ -4,6 +4,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import RehabilitationTypeDialog from "@/components/RehabilitationTypeDialog";
 
 interface CommunityUser {
   id: string;
@@ -43,9 +51,24 @@ const mockUsers: CommunityUser[] = [
   { id: "25", name: "Alberto Méndez", avatar: "", years: 0, days: 14, medals: [], availableForHelp: true },
 ];
 
+const REHABILITATION_TYPES = [
+  { id: 'todos', label: 'Todos' },
+  { id: 'azucar', label: 'Azúcar' },
+  { id: 'codependencia', label: 'Codependencia' },
+  { id: 'comida', label: 'Comida' },
+  { id: 'compras', label: 'Compras' },
+  { id: 'drama', label: 'Drama' },
+  { id: 'narcoticos', label: 'Narcóticos' },
+  { id: 'pornografia', label: 'Pornografía' },
+  { id: 'redes_sociales', label: 'Redes Sociales' },
+  { id: 'videojuegos', label: 'Videojuegos' },
+  { id: 'otros', label: 'Otros' },
+] as const;
+
 export default function Community() {
   const [isAvailableForHelp, setIsAvailableForHelp] = useState(false);
   const [userMedals, setUserMedals] = useState<string[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<string>("todos");
 
   // Calcular las medallas del usuario actual basado en días de sobriedad
   // Este valor debería venir del backend en una implementación real
@@ -69,12 +92,19 @@ export default function Community() {
   const hasMinimumMedalsForHelp = userMedals.length >= 3; // Necesita al menos 3 medallas (90+ días)
 
   // Sort users by time: years descending, then days descending
-  const sortedUsers = [...mockUsers].sort((a, b) => {
-    if (a.years !== b.years) {
-      return b.years - a.years;
-    }
-    return b.days - a.days;
-  });
+  const sortedUsers = [...mockUsers]
+    .filter((user) => {
+      if (selectedFilter === "todos") return true;
+      // Filter by rehabilitation type (in real implementation, this would come from user data)
+      // For now, we'll show all users when filtering
+      return true;
+    })
+    .sort((a, b) => {
+      if (a.years !== b.years) {
+        return b.years - a.years;
+      }
+      return b.days - a.days;
+    });
 
   const getInitials = (name: string) => {
     // Solo tomar el primer nombre
@@ -108,6 +138,7 @@ export default function Community() {
 
   return (
     <div className="container mx-auto px-4 py-2 max-w-6xl">
+      <RehabilitationTypeDialog />
       {/* Availability Toggle - Solo para usuarios con 3+ medallas */}
       {hasMinimumMedalsForHelp && (
         <Card className="mb-6 border-primary/20">
@@ -134,10 +165,24 @@ export default function Community() {
       {/* Community Ranking */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            Tiempo en Rehabilitación
-            <span className="text-2xl">✌️</span>
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              Tiempo en Rehabilitación
+              <span className="text-2xl">✌️</span>
+            </CardTitle>
+            <Select value={selectedFilter} onValueChange={setSelectedFilter}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent align="end">
+                {REHABILITATION_TYPES.map((type) => (
+                  <SelectItem key={type.id} value={type.id}>
+                    {type.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </CardHeader>
         <CardContent>
           {/* Header Legend */}
