@@ -198,15 +198,16 @@ export default function Gratitude() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div>
-        <h2 className="text-lg font-semibold text-foreground mb-3 pl-[35px] flex items-center gap-2">
-          <CalendarIcon className="h-5 w-5 text-sky-blue" />
-          Gratitud de hoy:
-          <span className="text-sm font-normal text-muted-foreground ml-auto">
-            {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/^\w/, c => c.toUpperCase()).replace(/\sde\s(\w)/, (match, p1) => ` de ${p1.toUpperCase()}`)}
-          </span>
-        </h2>
         <Card className="border-border">
-          <CardContent className="pt-6 space-y-4">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span>Gratitud de hoy</span>
+              <span className="text-sm font-normal text-muted-foreground">
+                {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/^\w/, c => c.toUpperCase()).replace(/\sde\s(\w)/, (match, p1) => ` de ${p1.toUpperCase()}`)}
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
           <div className="space-y-3">
             <Textarea
               placeholder="¿Por qué estás agradecido hoy y cómo te hace sentir?"
