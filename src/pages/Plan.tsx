@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Plus, ChevronDown, ChevronUp, Pencil, Trash2, CheckCircle2, Circle, CalendarIcon } from "lucide-react";
+import { Plus, ChevronDown, ChevronUp, Pencil, Trash2, CheckCircle2, Circle, CalendarIcon, GripVertical } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -15,6 +15,23 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 interface Goal {
   id: string;
   text: string;
@@ -23,6 +40,7 @@ interface Goal {
   goal_type?: string;
   target_date?: string;
   periodic_type?: string;
+  order_index?: number;
 }
 interface ExpandedGoal extends Goal {
   originalId: string;
@@ -328,7 +346,9 @@ export default function Plan() {
       const {
         data: goals,
         error
-      } = await supabase.from('goals').select('*').eq('user_id', user.id).order('created_at', {
+      } = await supabase.from('goals').select('*').eq('user_id', user.id).order('order_index', {
+        ascending: true
+      }).order('created_at', {
         ascending: false
       });
       if (error) throw error;
@@ -642,24 +662,43 @@ export default function Plan() {
     const totalInstances = allGoalsInSection.length;
     return totalInstances - completedCount;
   };
-  const GoalItem = ({
+  const DraggableGoalItem = ({
     goal,
     sectionKey
   }: {
     goal: ExpandedGoal;
     sectionKey: keyof typeof sections;
   }) => {
-    // Read completion status directly from the goal prop (which comes from expanded goals)
-    // The goal.completed is already synced from localStorage in expandGoals
+    const {
+      attributes,
+      listeners,
+      setNodeRef,
+      transform,
+      transition,
+      isDragging,
+    } = useSortable({ id: goal.originalId });
+
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+      opacity: isDragging ? 0.5 : 1,
+    };
+
     const isClickable = sectionKey !== 'week' && sectionKey !== 'month';
-    
-    // For week/month views, check if ALL instances are completed
     const allInstancesOfGoal = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
     const allCompleted = allInstancesOfGoal.every(g => g.completed);
     const displayCompleted = (sectionKey === 'week' || sectionKey === 'month') ? allCompleted : goal.completed;
     
-    return <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
+    return (
+      <div ref={setNodeRef} style={style} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
         <div className="flex items-center gap-3 flex-1">
+          <button 
+            {...attributes} 
+            {...listeners} 
+            className="flex-shrink-0 cursor-grab active:cursor-grabbing touch-none"
+          >
+            <GripVertical className="h-5 w-5 text-muted-foreground" />
+          </button>
           <button onClick={isClickable ? () => toggleGoal(sectionKey, goal.id) : undefined} className={`flex-shrink-0 ${!isClickable ? 'cursor-default' : ''}`} disabled={!isClickable}>
             {displayCompleted ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
           </button>
@@ -703,7 +742,56 @@ export default function Plan() {
               </AlertDialog>
             </>}
         </div>
-      </div>;
+      </div>
+    );
+  };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = async (event: DragEndEvent, sectionKey: keyof typeof sections) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    const goalsInSection = sections[sectionKey].goals.filter(goal => goal.instanceIndex === 0);
+    const oldIndex = goalsInSection.findIndex(g => g.originalId === active.id);
+    const newIndex = goalsInSection.findIndex(g => g.originalId === over.id);
+
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    const reorderedGoals = arrayMove(goalsInSection, oldIndex, newIndex);
+
+    // Update order_index in database
+    try {
+      const updates = reorderedGoals.map((goal, index) => ({
+        id: goal.originalId,
+        order_index: index,
+      }));
+
+      for (const update of updates) {
+        await supabase
+          .from('goals')
+          .update({ order_index: update.order_index })
+          .eq('id', update.id);
+      }
+
+      // Refresh goals to reflect new order
+      await fetchGoals();
+    } catch (error) {
+      console.error('Error updating goal order:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar el orden de las metas.",
+        variant: "destructive"
+      });
+    }
   };
   return <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex justify-between items-center">
@@ -918,9 +1006,24 @@ export default function Plan() {
           <CardHeader>
             <SectionHeader title="Hoy" sectionKey="today" />
           </CardHeader>
-          {sections.today.open && <CardContent className="space-y-3">
-              {sections.today.goals.filter(goal => goal.instanceIndex === 0).map(goal => <GoalItem key={goal.id} goal={goal} sectionKey="today" />)}
-            </CardContent>}
+          {sections.today.open && (
+            <CardContent className="space-y-3">
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={(event) => handleDragEnd(event, 'today')}
+              >
+                <SortableContext
+                  items={sections.today.goals.filter(goal => goal.instanceIndex === 0).map(g => g.originalId)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {sections.today.goals.filter(goal => goal.instanceIndex === 0).map(goal => (
+                    <DraggableGoalItem key={goal.id} goal={goal} sectionKey="today" />
+                  ))}
+                </SortableContext>
+              </DndContext>
+            </CardContent>
+          )}
         </Card>
 
         {/* This Week */}
@@ -928,9 +1031,24 @@ export default function Plan() {
           <CardHeader>
             <SectionHeader title="Esta semana (L-D)" sectionKey="week" />
           </CardHeader>
-          {sections.week.open && <CardContent className="space-y-3">
-              {sections.week.goals.filter(goal => goal.instanceIndex === 0).map(goal => <GoalItem key={goal.id} goal={goal} sectionKey="week" />)}
-            </CardContent>}
+          {sections.week.open && (
+            <CardContent className="space-y-3">
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={(event) => handleDragEnd(event, 'week')}
+              >
+                <SortableContext
+                  items={sections.week.goals.filter(goal => goal.instanceIndex === 0).map(g => g.originalId)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {sections.week.goals.filter(goal => goal.instanceIndex === 0).map(goal => (
+                    <DraggableGoalItem key={goal.id} goal={goal} sectionKey="week" />
+                  ))}
+                </SortableContext>
+              </DndContext>
+            </CardContent>
+          )}
         </Card>
 
         {/* This Month */}
@@ -938,9 +1056,24 @@ export default function Plan() {
           <CardHeader>
             <SectionHeader title="Este mes" sectionKey="month" />
           </CardHeader>
-          {sections.month.open && <CardContent className="space-y-3">
-              {sections.month.goals.filter(goal => goal.instanceIndex === 0).map(goal => <GoalItem key={goal.id} goal={goal} sectionKey="month" />)}
-            </CardContent>}
+          {sections.month.open && (
+            <CardContent className="space-y-3">
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={(event) => handleDragEnd(event, 'month')}
+              >
+                <SortableContext
+                  items={sections.month.goals.filter(goal => goal.instanceIndex === 0).map(g => g.originalId)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {sections.month.goals.filter(goal => goal.instanceIndex === 0).map(goal => (
+                    <DraggableGoalItem key={goal.id} goal={goal} sectionKey="month" />
+                  ))}
+                </SortableContext>
+              </DndContext>
+            </CardContent>
+          )}
         </Card>
 
         {/* One-Time Goals */}
@@ -948,9 +1081,24 @@ export default function Plan() {
           <CardHeader>
             <SectionHeader title="Metas únicas" sectionKey="onetime" />
           </CardHeader>
-          {sections.onetime.open && <CardContent className="space-y-3">
-              {sections.onetime.goals.filter(goal => goal.instanceIndex === 0).map(goal => <GoalItem key={goal.id} goal={goal} sectionKey="onetime" />)}
-            </CardContent>}
+          {sections.onetime.open && (
+            <CardContent className="space-y-3">
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={(event) => handleDragEnd(event, 'onetime')}
+              >
+                <SortableContext
+                  items={sections.onetime.goals.filter(goal => goal.instanceIndex === 0).map(g => g.originalId)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {sections.onetime.goals.filter(goal => goal.instanceIndex === 0).map(goal => (
+                    <DraggableGoalItem key={goal.id} goal={goal} sectionKey="onetime" />
+                  ))}
+                </SortableContext>
+              </DndContext>
+            </CardContent>
+          )}
         </Card>
       </div>
     </div>;
