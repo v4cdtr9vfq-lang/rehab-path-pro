@@ -66,7 +66,7 @@ export default function Community() {
     calculateUserMedals();
   }, []);
 
-  const hasAnyMedal = userMedals.length > 0;
+  const hasMinimumMedalsForHelp = userMedals.length >= 3; // Necesita al menos 3 medallas (90+ días)
 
   // Sort users by time: years descending, then days descending
   const sortedUsers = [...mockUsers].sort((a, b) => {
@@ -108,8 +108,8 @@ export default function Community() {
 
   return (
     <div className="container mx-auto px-4 py-2 max-w-6xl">
-      {/* Availability Toggle - Solo para usuarios con medallas */}
-      {hasAnyMedal && (
+      {/* Availability Toggle - Solo para usuarios con 3+ medallas */}
+      {hasMinimumMedalsForHelp && (
         <Card className="mb-6 border-primary/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -157,6 +157,8 @@ export default function Community() {
               // Calcular meses y días restantes
               const months = Math.floor(user.days / 30);
               const remainingDays = user.days % 30;
+              const totalDays = user.years * 365 + user.days;
+              const canShowAvailability = totalDays >= 90; // Necesita 90+ días (3+ medallas)
               
               return (
                 <div
@@ -201,7 +203,7 @@ export default function Community() {
 
                   {/* Availability Badge */}
                   <div className="flex justify-center">
-                    {user.availableForHelp && (
+                    {user.availableForHelp && canShowAvailability && (
                       <Badge variant="secondary" className="flex-shrink-0">
                         Disponible
                       </Badge>
