@@ -375,7 +375,7 @@ export default function Gratitude() {
 
       <div>
         <h2 className="text-2xl font-bold text-foreground mb-3 pl-[35px] flex items-center gap-2">
-          Por qué Importa la gratitud
+          Por qué es importante la gratitud
           <span>🙏</span>
           <span>🙏</span>
           <span>🙏</span>
