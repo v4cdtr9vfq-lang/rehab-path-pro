@@ -832,7 +832,7 @@ export default function Home() {
       {/* Medals Widget */}
       <Card className="border-sidebar-border md:-mt-[3px]">
         <CardHeader className="pb-2">
-          <CardTitle className="text-2xl font-bold">Mis medallas</CardTitle>
+          <CardTitle className="text-2xl font-bold">Mis medallas:</CardTitle>
         </CardHeader>
         <CardContent className="pt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
