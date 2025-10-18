@@ -541,7 +541,7 @@ export default function EmotionJournal() {
           {/* Primary Categories */}
           <div>
             <h2 className="text-[27px] lg:text-xl font-semibold text-foreground mb-[24px]">¿Cómo te sientes aquí y ahora?</h2>
-            <div className="flex flex-col lg:flex-row lg:flex-wrap gap-3">
+            <div className="flex flex-col lg:flex-row items-start lg:flex-wrap gap-3">
               {emotionCategories.map((category) => {
                 const isSelected = selectedPrimary.includes(category.id);
                 return (
@@ -580,7 +580,7 @@ export default function EmotionJournal() {
                   return (
                     <div key={categoryId}>
                       <h3 className="text-lg font-medium text-green-600 mb-3">{category.name}</h3>
-                      <div className="flex flex-col lg:flex-row lg:flex-wrap gap-3">
+                      <div className="flex flex-col lg:flex-row items-start lg:flex-wrap gap-3">
                         {category.secondaryEmotions.map((emotion) => {
                           const isSelected = selectedSecondary.includes(emotion.id);
                           return (
@@ -620,7 +620,7 @@ export default function EmotionJournal() {
                 {selectedSecondaryData.map((emotion) => (
                   <div key={emotion.id}>
                     <h3 className="text-lg font-medium text-green-600 mb-3">{emotion.name}</h3>
-                    <div className="flex flex-col lg:flex-row lg:flex-wrap gap-3">
+                    <div className="flex flex-col lg:flex-row items-start lg:flex-wrap gap-3">
                       {emotion.tertiaryEmotions.map((tertiaryEmotion) => {
                         const isSelected = selectedTertiary.includes(tertiaryEmotion);
                         return (
