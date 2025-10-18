@@ -609,19 +609,19 @@ export default function Home() {
         className="flex items-center justify-between p-3 md:p-4 rounded-xl bg-muted/50 border border-sidebar-border"
       >
         <div className="flex items-center gap-2 md:gap-3 flex-1">
-          <button
-            {...attributes}
-            {...listeners}
-            className="hidden md:flex flex-shrink-0 cursor-grab active:cursor-grabbing touch-none"
-          >
-            <GripVertical className="h-5 w-5 text-muted-foreground" />
-          </button>
           <button onClick={() => toggleGoal(goal.id)} className="flex-shrink-0">
             {goal.status === "completed" ? (
               <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6 text-green-500" />
             ) : (
               <Circle className="h-5 w-5 md:h-6 md:w-6 text-muted-foreground" />
             )}
+          </button>
+          <button
+            {...attributes}
+            {...listeners}
+            className="hidden md:flex flex-shrink-0 cursor-grab active:cursor-grabbing touch-none"
+          >
+            <GripVertical className="h-5 w-5 text-muted-foreground" />
           </button>
           <div>
             <p className="font-semibold text-foreground text-sm md:text-base">{goal.title}</p>
