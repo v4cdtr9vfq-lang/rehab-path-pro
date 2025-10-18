@@ -55,7 +55,7 @@ All colors MUST be HSL.
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 0 0% 14%;
+    --sidebar-background: 0 0% 0%;
     --sidebar-foreground: 0 0% 85%;
     --sidebar-primary: 12 100% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
