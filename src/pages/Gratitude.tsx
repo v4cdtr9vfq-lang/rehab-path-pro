@@ -197,7 +197,7 @@ export default function Gratitude() {
                     key={index}
                     className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border"
                   >
-                    <span className="text-sky-blue mt-1">•</span>
+                    <span className="text-sky-blue mt-1">🙏</span>
                     <div className="flex-1 space-y-1">
                       {editingIndex === index ? (
                         <div className="flex gap-2">
@@ -298,28 +298,28 @@ export default function Gratitude() {
             </div>
             <ul className="space-y-2">
               <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border">
-                <span className="text-sky-blue mt-1">•</span>
+                <span className="text-sky-blue mt-1">🙏</span>
                 <div className="flex-1 space-y-1">
                   <span className="text-foreground">Por el apoyo incondicional de mi familia durante mi proceso de recuperación</span>
                   <div className="text-xs text-muted-foreground">09:30</div>
                 </div>
               </li>
               <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border">
-                <span className="text-sky-blue mt-1">•</span>
+                <span className="text-sky-blue mt-1">🙏</span>
                 <div className="flex-1 space-y-1">
                   <span className="text-foreground">Por poder disfrutar de un café caliente en la mañana y sentir paz interior</span>
                   <div className="text-xs text-muted-foreground">10:15</div>
                 </div>
               </li>
               <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border">
-                <span className="text-sky-blue mt-1">•</span>
+                <span className="text-sky-blue mt-1">🙏</span>
                 <div className="flex-1 space-y-1">
                   <span className="text-foreground">Por mi salud y la capacidad de hacer ejercicio hoy</span>
                   <div className="text-xs text-muted-foreground">14:20</div>
                 </div>
               </li>
               <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border">
-                <span className="text-sky-blue mt-1">•</span>
+                <span className="text-sky-blue mt-1">🙏</span>
                 <div className="flex-1 space-y-1">
                   <span className="text-foreground">Por las pequeñas victorias del día y por seguir adelante</span>
                   <div className="text-xs text-muted-foreground">20:45</div>
@@ -403,7 +403,7 @@ export default function Gratitude() {
                     <ul className="space-y-2">
                       {entry.items.map((item, i) => (
                         <li key={i} className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-border">
-                          <span className="text-sky-blue mt-1">•</span>
+                          <span className="text-sky-blue mt-1">🙏</span>
                           <div className="flex-1 space-y-1">
                             <span className="text-foreground">{item.text}</span>
                             <div className="text-xs text-muted-foreground">
