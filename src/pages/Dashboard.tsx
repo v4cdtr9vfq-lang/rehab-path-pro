@@ -767,23 +767,23 @@ export default function Home() {
       </div>
 
       {/* Medals Widget */}
-      <Card className="border-sky-blue/30 bg-gradient-to-br from-sky-blue/10 to-transparent">
+      <Card className="border-border/50">
         <CardHeader className="pb-2">
-          <CardTitle className="text-2xl font-bold text-sky-blue">Mis medallas</CardTitle>
+          <CardTitle className="text-2xl font-bold">Mis medallas</CardTitle>
         </CardHeader>
         <CardContent className="pt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {medalConfig.map(medal => {
               const status = getMedalStatus(medal.type, medal.requiredDays);
               return (
-                <Card key={medal.type} className="border-sky-blue/30 bg-sky-blue/5 h-full">
+                <Card key={medal.type} className="border-border/50 h-full">
                   <CardContent className="p-4 md:p-6 flex items-center gap-3 md:gap-4">
-                    <div className={`w-16 md:w-20 h-16 md:h-20 rounded-2xl bg-sky-blue/20 flex items-center justify-center flex-shrink-0 ${status.opacity} transition-opacity duration-300`}>
+                    <div className={`w-16 md:w-20 h-16 md:h-20 rounded-2xl bg-sky-blue flex items-center justify-center flex-shrink-0 ${status.opacity} transition-opacity duration-300`}>
                       <span className="text-3xl md:text-4xl">{medal.emoji}</span>
                     </div>
                     <div className="flex-1">
-                      <p className="font-bold text-sky-blue text-base md:text-lg mb-1 md:mb-2">{medal.name}</p>
-                      <p className={`text-sm ${status.isUnlocked ? 'text-green-500 font-semibold' : 'text-sky-blue/60'}`}>
+                      <p className="font-bold text-foreground text-base md:text-lg mb-1 md:mb-2">{medal.name}</p>
+                      <p className={`text-sm ${status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
                         {status.isUnlocked 
                           ? '¡Conseguido!' 
                           : `+ ${status.progress} / ${medal.requiredDays} días.`
