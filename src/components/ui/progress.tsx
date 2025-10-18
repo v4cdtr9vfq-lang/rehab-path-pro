@@ -11,6 +11,20 @@ const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
   ProgressProps
 >(({ className, value, delay = 0, ...props }, ref) => {
+  const [animatedValue, setAnimatedValue] = React.useState(0);
+  const hasAnimated = React.useRef(false);
+
+  React.useEffect(() => {
+    if (!hasAnimated.current && value !== undefined) {
+      hasAnimated.current = true;
+      const timer = setTimeout(() => {
+        setAnimatedValue(value);
+      }, 50 + delay);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [value, delay]);
+
   return (
     <ProgressPrimitive.Root
       ref={ref}
@@ -20,9 +34,8 @@ const Progress = React.forwardRef<
       <ProgressPrimitive.Indicator
         className="h-full w-full flex-1 bg-primary"
         style={{ 
-          transform: `translateX(-${100 - (value || 0)}%)`,
-          transition: 'transform 1000ms ease-out',
-          transitionDelay: `${delay}ms`
+          transform: `translateX(-${100 - animatedValue}%)`,
+          transition: 'transform 1200ms cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       />
     </ProgressPrimitive.Root>
