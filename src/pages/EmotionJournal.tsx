@@ -569,7 +569,7 @@ export default function EmotionJournal() {
                   
                   return (
                     <div key={categoryId}>
-                      <h3 className="text-lg font-medium text-primary mb-3">{category.name}</h3>
+                      <h3 className="text-lg font-medium text-green-600 mb-3">{category.name}</h3>
                       <div className="flex flex-wrap gap-3">
                         {category.secondaryEmotions.map((emotion) => {
                           const isSelected = selectedSecondary.includes(emotion.id);
