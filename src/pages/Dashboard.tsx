@@ -758,7 +758,7 @@ export default function Home() {
           {checkInCompleted && todayReminder && <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-sidebar-border">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Hoy elijo recordarme que:</p>
-                <p className="text-lg font-semibold text-green-500">{todayReminder}</p>
+                <p className="text-sm md:text-lg font-semibold text-green-500">{todayReminder}</p>
               </div>
             </div>}
         </CardContent>
