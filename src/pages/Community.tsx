@@ -143,7 +143,7 @@ export default function Community() {
           {/* Header Legend */}
           <div className="grid grid-cols-[auto_auto_100px_120px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
             <div className="pl-[55px]">Nombre:</div>
-            <div className="flex gap-1">
+            <div className="flex gap-1 -ml-[2px]">
               <div className="w-[60px] text-left">Años:</div>
               <div className="w-[60px] text-left">Meses:</div>
               <div className="w-[60px] text-left">Días:</div>
@@ -184,7 +184,7 @@ export default function Community() {
                   </div>
 
                   {/* Years, Months, Days - grouped with smaller gap */}
-                  <div className="flex gap-1 items-center">
+                  <div className="flex gap-1 items-center -ml-[2px]">
                     {/* Years */}
                     <div className="font-bold text-lg w-[60px] text-left">
                       {user.years.toString().padStart(2, "0")}
