@@ -102,7 +102,7 @@ export function Footer() {
 
         {/* Bottom Section */}
         <div className="mt-[68px] pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-6 h-10">
+          <div className="flex items-center gap-6 h-[90px]">
             {/* About Us Button */}
             <a 
               href="https://somosfelices.substack.com/" 
@@ -129,7 +129,7 @@ export function Footer() {
             href="https://neurotropy.com/" 
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground font-bold hover:text-foreground/80 transition-colors text-center md:text-right flex items-center h-10"
+            className="text-foreground font-bold hover:text-foreground/80 transition-colors text-center md:text-right flex items-center h-[90px]"
           >
             {new Date().getFullYear()} © Neurotropy™
           </a>
