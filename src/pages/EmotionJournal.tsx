@@ -622,7 +622,7 @@ export default function EmotionJournal() {
           {/* Tertiary Emotions */}
           {selectedSecondary.length > 0 && (
             <div>
-              <h2 className="text-xl font-semibold text-foreground mb-4">Y a nivel más profundo:</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">Emociones secundarias:</h2>
               <div className="space-y-6">
                 {selectedSecondaryData.map((emotion) => (
                   <div key={emotion.id}>
