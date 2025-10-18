@@ -36,7 +36,7 @@ export default function Tools() {
   ];
 
   return (
-    <div className="space-y-[30px] animate-in fade-in duration-500">
+    <div className="space-y-[3px] animate-in fade-in duration-500">
       <Card className="border-destructive/30 bg-gradient-to-br from-destructive/5 to-transparent">
         <CardContent className="p-6">
           <div className="flex items-start gap-4">
