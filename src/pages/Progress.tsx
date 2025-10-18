@@ -489,7 +489,7 @@ export default function ProgressPage() {
         </TabsList>
 
         <TabsContent value="daily" className="space-y-6 mt-6">
-          <Card className="border-primary/20">
+          <Card className="border-sidebar-border">
             <CardContent className="space-y-3 pt-6">
               <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
                 <div className="flex justify-between items-center mb-2">
@@ -519,7 +519,7 @@ export default function ProgressPage() {
         </TabsContent>
         
         <TabsContent value="week" className="space-y-6 mt-6">
-          <Card className="border-primary/20">
+          <Card className="border-sidebar-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <span className="text-lg">📈</span>
@@ -539,7 +539,7 @@ export default function ProgressPage() {
         </TabsContent>
 
         <TabsContent value="month" className="space-y-6 mt-6">
-          <Card className="border-primary/20">
+          <Card className="border-sidebar-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <span className="text-lg">📈</span>
