@@ -570,7 +570,7 @@ export default function EmotionJournal() {
                     variant="outline"
                     size="lg"
                     onClick={() => togglePrimary(category.id)}
-                    className={`rounded-full px-6 h-12 text-lg lg:text-sm font-medium transition-all ${
+                    className={`rounded-full px-6 h-12 text-xl lg:text-sm font-medium transition-all ${
                       isSelected
                         ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
                         : "hover:bg-primary/10 hover:border-primary/50"
@@ -609,7 +609,7 @@ export default function EmotionJournal() {
                               variant="outline"
                               size="lg"
                               onClick={() => toggleSecondary(emotion.id)}
-                              className={`rounded-full px-6 h-12 text-lg lg:text-sm font-medium transition-all flex-shrink-0 ${
+                              className={`rounded-full px-6 h-12 text-xl lg:text-sm font-medium transition-all flex-shrink-0 ${
                                 isSelected 
                                   ? "bg-green-600 hover:bg-green-700 text-white border-green-600"
                                   : "hover:bg-primary/10 hover:border-primary/50"
@@ -649,7 +649,7 @@ export default function EmotionJournal() {
                             variant="outline"
                             size="lg"
                             onClick={() => toggleTertiary(tertiaryEmotion)}
-                            className={`rounded-full px-6 h-12 text-lg lg:text-sm font-medium transition-all flex-shrink-0 ${
+                            className={`rounded-full px-6 h-12 text-xl lg:text-sm font-medium transition-all flex-shrink-0 ${
                               isSelected 
                                 ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
                                 : "hover:bg-primary/10 hover:border-primary/50"
@@ -680,7 +680,7 @@ export default function EmotionJournal() {
                 size="lg"
                 variant="outline"
                 onClick={handleCancelEdit}
-                className="rounded-full px-6 h-12 text-lg lg:text-sm font-medium"
+                className="rounded-full px-6 h-12 text-xl lg:text-sm font-medium"
               >
                 Cancelar
               </Button>
@@ -689,7 +689,7 @@ export default function EmotionJournal() {
               size="lg"
               onClick={editingEntry ? handleUpdate : handleSubmit}
               disabled={isSaving}
-              className="rounded-full px-6 h-12 text-lg lg:text-sm font-medium bg-primary hover:bg-primary/90"
+              className="rounded-full px-6 h-12 text-xl lg:text-sm font-medium bg-primary hover:bg-primary/90"
             >
               {isSaving ? (editingEntry ? "Actualizando..." : "Guardando...") : (editingEntry ? "Actualizar" : "Guardar")}
             </Button>
