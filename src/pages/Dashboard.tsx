@@ -790,7 +790,7 @@ export default function Home() {
                     <div className={`mx-auto w-12 h-12 rounded-2xl bg-sky-blue flex items-center justify-center ${tool.color}`}>
                       <span className="text-2xl">{tool.emoji}</span>
                     </div>
-                    <p className="font-semibold text-foreground text-xs leading-tight">{tool.label}</p>
+                    <p className="font-semibold text-foreground text-sm leading-tight">{tool.label}</p>
                   </CardContent>
                 </Card>
               </Link>;
