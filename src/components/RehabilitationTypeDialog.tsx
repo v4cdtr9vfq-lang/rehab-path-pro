@@ -22,6 +22,7 @@ const REHABILITATION_TYPES = [
   { id: 'comida', label: 'Comida' },
   { id: 'compras', label: 'Compras' },
   { id: 'drama', label: 'Drama' },
+  { id: 'medicamentos', label: 'Medicamentos' },
   { id: 'narcoticos', label: 'Narcóticos' },
   { id: 'pornografia', label: 'Pornografía' },
   { id: 'redes_sociales', label: 'Redes Sociales' },
