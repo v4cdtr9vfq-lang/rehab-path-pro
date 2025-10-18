@@ -397,7 +397,7 @@ export default function Journal() {
       </div>
 
       {showNewEntry && (
-        <Card className="border-primary/20">
+        <Card className="border-border">
           <CardHeader>
             <CardTitle>{editingEntryId ? 'Editar entrada' : 'Nueva entrada de diario'}</CardTitle>
           </CardHeader>
@@ -452,14 +452,14 @@ export default function Journal() {
           <h2 className="text-2xl font-semibold text-foreground">Entradas recientes</h2>
         )}
         {isLoading ? (
-          <Card className="border-primary/20">
+          <Card className="border-border">
             <CardContent className="p-12 text-center">
               <Loader2 className="h-12 w-12 text-muted-foreground mx-auto mb-4 animate-spin" />
               <p className="text-muted-foreground">Cargando entradas...</p>
             </CardContent>
           </Card>
         ) : entries.length === 0 ? (
-          <Card className="border-primary/20">
+          <Card className="border-border">
             <CardContent className="p-12 text-center">
               <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground mb-4">Aún no has creado ninguna entrada.</p>
@@ -469,7 +469,7 @@ export default function Journal() {
             </CardContent>
           </Card>
         ) : filteredEntries.length === 0 ? (
-          <Card className="border-primary/20">
+          <Card className="border-border">
             <CardContent className="p-12 text-center">
               <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground">No se encontraron entradas que coincidan con "{searchTerm}"</p>
@@ -477,7 +477,7 @@ export default function Journal() {
           </Card>
         ) : (
           filteredEntries.map((entry) => (
-            <Card key={entry.id} className="border-primary/20 hover:border-primary/40 transition-all">
+            <Card key={entry.id} className="border-border hover:border-border/60 transition-all">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="space-y-1 flex-1">
