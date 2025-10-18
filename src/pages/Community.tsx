@@ -124,9 +124,11 @@ export default function Community() {
         </CardHeader>
         <CardContent>
           {/* Header Legend */}
-          <div className="grid grid-cols-[80px_80px_1fr_120px_120px] gap-4 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
-            <div className="text-center">Años</div>
-            <div className="text-center">Días</div>
+          <div className="grid grid-cols-[160px_1fr_120px_120px] gap-4 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
+            <div className="flex gap-2">
+              <div className="text-center w-20">Años</div>
+              <div className="text-center w-20">Días</div>
+            </div>
             <div>Nombre</div>
             <div className="text-center">Medallas</div>
             <div></div>
@@ -136,20 +138,20 @@ export default function Community() {
             {sortedUsers.map((user) => (
               <div
                 key={user.id}
-                className={`grid grid-cols-[80px_80px_1fr_120px_120px] gap-4 items-center p-4 rounded-xl transition-colors ${
+                className={`grid grid-cols-[160px_1fr_120px_120px] gap-4 items-center p-4 rounded-xl transition-colors ${
                   user.availableForHelp
                     ? "bg-primary/5 border border-primary/20"
                     : "bg-muted/30"
                 }`}
               >
-                {/* Years */}
-                <div className="text-center font-bold text-lg">
-                  {user.years.toString().padStart(2, "0")}
-                </div>
-
-                {/* Days */}
-                <div className="text-center font-bold text-lg">
-                  {user.days.toString().padStart(3, "0")}
+                {/* Years and Days */}
+                <div className="flex gap-2">
+                  <div className="text-center font-bold text-lg w-20">
+                    {user.years.toString().padStart(2, "0")}
+                  </div>
+                  <div className="text-center font-bold text-lg w-20">
+                    {user.days.toString().padStart(3, "0")}
+                  </div>
                 </div>
 
                 {/* User Info */}
