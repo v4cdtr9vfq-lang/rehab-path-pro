@@ -674,7 +674,7 @@ export default function EmotionJournal() {
 
         {/* Save/Update Button */}
         {selectedPrimary.length > 0 && (
-          <div className="flex justify-start gap-4 mt-6">
+          <div className="flex justify-end gap-4 mt-6">
             {editingEntry && (
               <Button
                 size="lg"
