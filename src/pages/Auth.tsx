@@ -143,7 +143,7 @@ export default function Auth() {
             <span className="text-2xl font-bold">rehabp.org</span>
           </Link>
           <h1 className="text-4xl font-bold text-foreground">
-            {isForgotPassword ? "Recuperar contraseña" : isLogin ? "Bienvenido de vuelta" : "Comienza tu recuperación"}
+            {isForgotPassword ? "Recuperar contraseña" : isLogin ? "Bienvenido!" : "Comienza tu recuperación"}
           </h1>
           <p className="text-muted-foreground text-lg">
             {isForgotPassword ? "Te enviaremos un enlace para restablecer tu contraseña" : isLogin ? "Ingresa a tu cuenta:" : "Crea tu cuenta gratuita"}
