@@ -103,6 +103,10 @@ export default function RehabilitationTypeDialog() {
     }
   };
 
+  const handleSkip = () => {
+    setOpen(false);
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
@@ -113,7 +117,7 @@ export default function RehabilitationTypeDialog() {
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <p className="text-sm text-muted-foreground text-center">
+            <p className="text-sm text-muted-foreground text-left">
               Liberación de:
             </p>
             <Select value={selectedType} onValueChange={setSelectedType}>
@@ -132,9 +136,6 @@ export default function RehabilitationTypeDialog() {
               </SelectContent>
             </Select>
           </div>
-          <p className="text-xs text-muted-foreground text-center">
-            Podrás cambiar esto más tarde en Configuración
-          </p>
           <Button 
             onClick={handleSave} 
             disabled={isSaving || !selectedType}
@@ -142,6 +143,16 @@ export default function RehabilitationTypeDialog() {
           >
             {isSaving ? "Guardando..." : "Guardar"}
           </Button>
+          <Button 
+            onClick={handleSkip} 
+            variant="outline"
+            className="w-full"
+          >
+            Prefiero no decir ahora
+          </Button>
+          <p className="text-xs text-muted-foreground text-center">
+            Podrás cambiar esto más tarde en configuración
+          </p>
         </div>
       </DialogContent>
     </Dialog>
