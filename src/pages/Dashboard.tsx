@@ -715,7 +715,7 @@ export default function Home() {
       <AbstinenceCounter startDate={startDate} />
 
       {/* Daily Progress Panel */}
-      <Card className="border-sidebar-border">
+      <Card className="border-sidebar-border md:-mt-[3px]">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Progreso diario</CardTitle>
         </CardHeader>
@@ -760,7 +760,7 @@ export default function Home() {
       </Card>
 
       {/* Daily Reflection */}
-      <Card className="border-sidebar-border bg-gradient-to-br from-sky-blue/10 to-transparent">
+      <Card className="border-sidebar-border bg-gradient-to-br from-sky-blue/10 to-transparent md:-mt-[3px]">
         <CardHeader className="flex flex-row items-start justify-between gap-4 pb-3">
           <div className="flex items-center gap-2 flex-1">
             <span className="text-2xl flex-shrink-0">💡</span>
@@ -778,7 +778,7 @@ export default function Home() {
       </Card>
 
       {/* Active Goals Summary */}
-      <Card className="border-sidebar-border">
+      <Card className="border-sidebar-border md:-mt-[3px]">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold">Metas de hoy:</CardTitle>
           <div className="flex gap-2">
@@ -830,7 +830,7 @@ export default function Home() {
       </Card>
 
       {/* Medals Widget */}
-      <Card className="border-sidebar-border">
+      <Card className="border-sidebar-border md:-mt-[3px]">
         <CardHeader className="pb-2">
           <CardTitle className="text-2xl font-bold">Mis medallas</CardTitle>
         </CardHeader>
