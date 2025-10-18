@@ -784,9 +784,9 @@ export default function Home() {
 
       {/* Active Goals Summary */}
       <Card className="border-sidebar-border md:-mt-[3px]">
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
           <CardTitle className="text-2xl font-bold">Metas de hoy:</CardTitle>
-          <div className="flex gap-2">
+          <div className="flex gap-2 md:justify-end">
             {hasUnsavedOrder && (
               <>
                 <Button onClick={cancelReorder} variant="outline" size="sm">
