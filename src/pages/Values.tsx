@@ -403,7 +403,7 @@ export default function Values() {
             Lo que más importa
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="-mt-5">
           <p className="text-foreground/80">
             Tus valores son los principios que guían tu camino de recuperación. Selecciona los valores en los que quieres enfocarte hoy, 
             y te recordaremos honrarlos durante el día.
