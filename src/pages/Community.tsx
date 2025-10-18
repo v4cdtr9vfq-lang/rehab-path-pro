@@ -204,7 +204,7 @@ export default function Community() {
                   {/* Availability Badge */}
                   <div className="flex justify-center">
                     {user.availableForHelp && canShowAvailability && (
-                      <Badge variant="secondary" className="flex-shrink-0">
+                      <Badge variant="secondary" className="flex-shrink-0 bg-success/20 text-success border-success/30">
                         Disponible
                       </Badge>
                     )}
