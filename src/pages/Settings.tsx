@@ -302,11 +302,6 @@ export default function Settings() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Configuración</h1>
-        <p className="text-muted-foreground text-lg">Personaliza tu experiencia en rehabp.org</p>
-      </div>
-
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
