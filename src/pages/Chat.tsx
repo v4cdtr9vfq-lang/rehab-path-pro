@@ -474,14 +474,18 @@ export default function Chat() {
                   {onlineCountByRoom[currentRoom] || 0}
                 </Badge>
               </SelectTrigger>
-              <SelectContent className="bg-card text-card-foreground border border-border z-[100] mt-1 pb-5 shadow-lg">
+              <SelectContent className="bg-popover text-popover-foreground border-border z-[100] shadow-lg">
                 {CHAT_ROOMS.map((room) => (
-                  <SelectItem key={room.id} value={room.id} className="cursor-pointer pr-[15px] pl-3 [&>span:first-child]:hidden focus:bg-accent focus:text-accent-foreground">
-                    <span className="flex items-center justify-between w-full pr-[40px]">
-                      <span>{room.label}</span>
+                  <SelectItem 
+                    key={room.id} 
+                    value={room.id} 
+                    className="cursor-pointer hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground"
+                  >
+                    <span className="flex items-center justify-between w-full">
+                      <span className="flex-1">{room.label}</span>
                       <Badge 
                         variant="secondary" 
-                        className="absolute right-[15px] inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-muted text-muted-foreground pointer-events-none"
+                        className="ml-2 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-primary/20 text-primary pointer-events-none"
                       >
                         <Users className="h-3 w-3" />
                         {onlineCountByRoom[room.id] || 0}
@@ -581,7 +585,7 @@ export default function Chat() {
                                     <MoreVertical className="h-4 w-4" />
                                   </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="bg-card text-card-foreground border border-border z-[100] shadow-lg">
+                                <DropdownMenuContent align="end" className="bg-popover text-popover-foreground border-border z-[100] shadow-lg min-w-[160px]">
                                   <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
                                     <Edit2 className="h-4 w-4 mr-2" />
                                     Editar
@@ -615,7 +619,7 @@ export default function Chat() {
                                       <MoreVertical className="h-4 w-4" />
                                     </Button>
                                   </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="start" className="bg-card text-card-foreground border border-border z-[100] shadow-lg">
+                                  <DropdownMenuContent align="start" className="bg-popover text-popover-foreground border-border z-[100] shadow-lg min-w-[160px]">
                                     <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
                                       <Edit2 className="h-4 w-4 mr-2" />
                                       Editar
