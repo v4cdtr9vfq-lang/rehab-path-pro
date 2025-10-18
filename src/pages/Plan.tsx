@@ -207,19 +207,33 @@ export default function Plan() {
 
     // Load all completions for the date range at once
     const allCompletedInstances = await loadCompletedInstancesForRange(dates);
+    
     goals.forEach(g => {
-      // One-time goals: only show one instance total (not per day)
+      // One-time goals: check if target_date falls within the context
       if (g.goal_type === 'onetime') {
-        const todayStr = getLocalDateString();
-        // Create only ONE instance (index 0) regardless of remaining count
-        const instanceId = `${g.id}__${todayStr}__0`;
-        expanded.push({
-          ...g,
-          id: instanceId,
-          originalId: g.id,
-          instanceIndex: 0,
-          completed: allCompletedInstances.has(instanceId)
+        if (!g.target_date) return; // Skip if no target date
+        
+        const targetDate = new Date(g.target_date);
+        targetDate.setHours(0, 0, 0, 0);
+        
+        // Check if target date is within the context date range
+        const isInRange = dates.some(date => {
+          const compareDate = new Date(date);
+          compareDate.setHours(0, 0, 0, 0);
+          return compareDate.getTime() === targetDate.getTime();
         });
+        
+        if (isInRange) {
+          const dateStr = getLocalDateString(targetDate);
+          const instanceId = `${g.id}__${dateStr}__0`;
+          expanded.push({
+            ...g,
+            id: instanceId,
+            originalId: g.id,
+            instanceIndex: 0,
+            completed: allCompletedInstances.has(instanceId)
+          });
+        }
       } else {
         // Recurring goals: iterate through dates
         dates.forEach((date, dayIndex) => {
