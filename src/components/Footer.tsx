@@ -129,7 +129,7 @@ export function Footer() {
             href="https://neurotropy.com/" 
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground font-bold hover:text-foreground/80 transition-colors text-center md:text-right"
+            className="text-foreground font-extrabold hover:text-foreground/80 transition-colors text-center md:text-right"
           >
             {new Date().getFullYear()} © Neurotropy™
           </a>
