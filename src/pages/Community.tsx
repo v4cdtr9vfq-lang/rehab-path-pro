@@ -46,6 +46,14 @@ const mockUsers: CommunityUser[] = [
 export default function Community() {
   const [isAvailableForHelp, setIsAvailableForHelp] = useState(false);
 
+  // Sort users by time: years descending, then days descending
+  const sortedUsers = [...mockUsers].sort((a, b) => {
+    if (a.years !== b.years) {
+      return b.years - a.years;
+    }
+    return b.days - a.days;
+  });
+
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -55,10 +63,13 @@ export default function Community() {
       .slice(0, 2);
   };
 
-  const formatCleanTime = (years: number, days: number) => {
-    const yearsStr = years > 0 ? `${years.toString().padStart(2, "0")} ${years === 1 ? "Año" : "Años"}` : "";
-    const daysStr = `${days.toString().padStart(2, "0")} ${days === 1 ? "Día" : "Días"}`;
-    return yearsStr ? `${yearsStr} ${daysStr}` : daysStr;
+  const getMedalsByTime = (years: number, days: number) => {
+    const medals = [];
+    if (years >= 5) medals.push("💎");
+    if (years >= 3) medals.push("🏆");
+    if (years >= 1) medals.push("⭐");
+    if (days >= 90 && years === 0) medals.push("🎯");
+    return medals;
   };
 
   return (
@@ -100,52 +111,49 @@ export default function Community() {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          {/* Header Legend */}
+          <div className="grid grid-cols-[80px_80px_1fr_120px_120px] gap-4 px-4 pb-3 text-sm font-medium text-muted-foreground border-b mb-3">
+            <div className="text-center">Años</div>
+            <div className="text-center">Días</div>
+            <div>Nombre</div>
+            <div className="text-center">Medallas</div>
+            <div></div>
+          </div>
+
           <div className="space-y-3">
-            {mockUsers.map((user, index) => (
+            {sortedUsers.map((user) => (
               <div
                 key={user.id}
-                className={`flex items-center gap-4 p-4 rounded-xl transition-colors ${
+                className={`grid grid-cols-[80px_80px_1fr_120px_120px] gap-4 items-center p-4 rounded-xl transition-colors ${
                   user.availableForHelp
                     ? "bg-primary/5 border border-primary/20"
                     : "bg-muted/30"
                 }`}
               >
-                {/* Ranking Number */}
-                <div className="flex-shrink-0 w-8 text-center">
-                  <span
-                    className={`font-bold text-lg ${
-                      index === 0
-                        ? "text-yellow-500"
-                        : index === 1
-                        ? "text-gray-400"
-                        : index === 2
-                        ? "text-amber-700"
-                        : "text-muted-foreground"
-                    }`}
-                  >
-                    {index + 1}
-                  </span>
+                {/* Years */}
+                <div className="text-center font-bold text-lg">
+                  {user.years.toString().padStart(2, "0")}
                 </div>
 
-                {/* Avatar */}
-                <Avatar className="h-12 w-12">
-                  <AvatarImage src={user.avatar} />
-                  <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                    {getInitials(user.name)}
-                  </AvatarFallback>
-                </Avatar>
+                {/* Days */}
+                <div className="text-center font-bold text-lg">
+                  {user.days.toString().padStart(3, "0")}
+                </div>
 
                 {/* User Info */}
-                <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-3 min-w-0">
+                  <Avatar className="h-10 w-10 flex-shrink-0">
+                    <AvatarImage src={user.avatar} />
+                    <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                      {getInitials(user.name)}
+                    </AvatarFallback>
+                  </Avatar>
                   <h3 className="font-semibold truncate">{user.name}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Tiempo limpio: {formatCleanTime(user.years, user.days)}
-                  </p>
                 </div>
 
                 {/* Medals */}
-                <div className="flex gap-1">
-                  {user.medals.map((medal, idx) => (
+                <div className="flex gap-1 justify-center">
+                  {getMedalsByTime(user.years, user.days).map((medal, idx) => (
                     <span key={idx} className="text-xl">
                       {medal}
                     </span>
@@ -153,11 +161,13 @@ export default function Community() {
                 </div>
 
                 {/* Availability Badge */}
-                {user.availableForHelp && (
-                  <Badge variant="secondary" className="flex-shrink-0">
-                    Disponible
-                  </Badge>
-                )}
+                <div className="flex justify-end">
+                  {user.availableForHelp && (
+                    <Badge variant="secondary" className="flex-shrink-0">
+                      Disponible
+                    </Badge>
+                  )}
+                </div>
               </div>
             ))}
           </div>
