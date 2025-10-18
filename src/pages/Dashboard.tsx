@@ -697,7 +697,7 @@ export default function Home() {
             <h3 className="font-semibold text-foreground text-lg">Reflexión del día</h3>
           </div>
           <Link to={`/journal?reflection=${encodeURIComponent(getReflectionOfTheDay())}`}>
-            <Button variant="ghost" size="sm" className="text-primary flex-shrink-0">Escribir</Button>
+            <Button variant="ghost" size="sm" className="text-primary flex-shrink-0 -mt-5">Escribir</Button>
           </Link>
         </CardHeader>
         <CardContent className="-mt-5 pl-[52px] pr-6 pb-6">
