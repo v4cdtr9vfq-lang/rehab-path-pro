@@ -414,7 +414,7 @@ export default function Values() {
       {/* Valores Primarios Widget */}
       <div>
         <div className="flex justify-between items-center mb-3 pl-[35px]">
-          <h2 className="text-2xl font-semibold text-foreground">Valores primarios - Máximo 3 valores esenciales.</h2>
+          <h2 className="text-2xl font-semibold text-foreground">Valores primarios - Máximo 3.</h2>
           <Dialog open={isPrimaryDialogOpen} onOpenChange={setIsPrimaryDialogOpen}>
             <DialogTrigger asChild>
               <Button className="gap-2" disabled={values.filter(v => v.value_type === 'primary').length >= 3}>
