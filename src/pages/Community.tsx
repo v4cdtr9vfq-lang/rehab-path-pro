@@ -152,9 +152,9 @@ export default function Community() {
             <div></div>
             <div>Nombre:</div>
             <div className="flex gap-1 justify-center">
-              <div className="text-center w-[60px]">Años:</div>
-              <div className="text-center w-[60px]">Meses:</div>
-              <div className="text-center w-[60px]">Días:</div>
+              <div className="text-right w-[60px]">Años:</div>
+              <div className="text-right w-[60px]">Meses:</div>
+              <div className="text-right w-[60px]">Días:</div>
             </div>
             <div></div>
             <div className="text-center">Medallas:</div>
@@ -192,17 +192,17 @@ export default function Community() {
                   {/* Years, Months, Days - grouped with smaller gap */}
                   <div className="flex gap-1 items-center">
                     {/* Years */}
-                    <div className="text-center font-bold text-lg w-[60px]">
+                    <div className="text-right font-bold text-lg w-[60px]">
                       {user.years.toString().padStart(2, "0")}
                     </div>
 
                     {/* Months */}
-                    <div className="text-center font-bold text-lg w-[60px]">
+                    <div className="text-right font-bold text-lg w-[60px]">
                       {months.toString().padStart(2, "0")}
                     </div>
 
                     {/* Days */}
-                    <div className="text-center font-bold text-lg w-[60px]">
+                    <div className="text-right font-bold text-lg w-[60px]">
                       {remainingDays.toString().padStart(2, "0")}
                     </div>
                   </div>
