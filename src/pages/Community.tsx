@@ -107,7 +107,7 @@ export default function Community() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-6xl">
+    <div className="container mx-auto px-4 py-2 max-w-6xl">
       {/* Availability Toggle - Solo para usuarios con medallas */}
       {hasAnyMedal && (
         <Card className="mb-6 border-primary/20">
