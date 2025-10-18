@@ -723,17 +723,10 @@ export default function Plan() {
     
     if (isMobile) {
       return (
-        <div ref={setNodeRef} style={style} className="p-3 rounded-xl bg-muted/50 border border-border/50 relative">
+        <div className="p-3 rounded-xl bg-muted/50 border border-border/50 relative">
           <div className="flex items-start gap-2 mb-2">
             <button onClick={isClickable ? () => toggleGoal(sectionKey, goal.id) : undefined} className={`flex-shrink-0 ${!isClickable ? 'cursor-default' : ''}`} disabled={!isClickable}>
               {displayCompleted ? <CheckCircle2 className="h-5 w-5 text-green-500" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
-            </button>
-            <button 
-              {...attributes} 
-              {...listeners} 
-              className="flex-shrink-0 cursor-grab active:cursor-grabbing touch-none"
-            >
-              <GripVertical className="h-4 w-4 text-muted-foreground" />
             </button>
             <div className="flex-1">
               <p className="text-foreground font-semibold text-sm leading-tight">
