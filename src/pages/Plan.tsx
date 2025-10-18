@@ -222,11 +222,11 @@ export default function Plan() {
           });
         }
       } else {
-        // Recurring goals: create instances per day
+        // Recurring goals: iterate through dates
         dates.forEach((date, dayIndex) => {
           const dateStr = getLocalDateString(date);
-
-          // Check if periodic goals should show on this specific day
+          
+          // Periodic goals: only create instances on their specific day
           if (g.goal_type === 'periodic' && g.periodic_type) {
             const dayOfMonth = date.getDate();
             const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -240,14 +240,20 @@ export default function Plan() {
               isSpecificDay = true;
             }
             
-            // For today/week contexts: only show on the specific day
-            // For month context: always show on the specific day
-            if (!isSpecificDay) return;
-          }
-
-          // How many instances per day based on goal type
-          let instancesPerDay = g.remaining;
-          if (g.goal_type === 'week' && context === 'month') {
+            // Only create instances on the specific day
+            if (isSpecificDay) {
+              for (let i = 0; i < g.remaining; i++) {
+                const instanceId = `${g.id}__${dateStr}__${i}`;
+                expanded.push({
+                  ...g,
+                  id: instanceId,
+                  originalId: g.id,
+                  instanceIndex: i,
+                  completed: allCompletedInstances.has(instanceId)
+                });
+              }
+            }
+          } else if (g.goal_type === 'week' && context === 'month') {
             // Weekly goals in monthly view: only on week boundaries
             if (dayIndex % 7 === 0) {
               for (let i = 0; i < g.remaining; i++) {
@@ -262,8 +268,8 @@ export default function Plan() {
               }
             }
           } else {
-            // Daily goals: create instances for each day
-            for (let i = 0; i < instancesPerDay; i++) {
+            // Daily and always goals: create instances for each day
+            for (let i = 0; i < g.remaining; i++) {
               const instanceId = `${g.id}__${dateStr}__${i}`;
               expanded.push({
                 ...g,
@@ -427,6 +433,17 @@ export default function Plan() {
   };
   const addGoal = async () => {
     if (!newGoal.text.trim()) return;
+    
+    // Validar que si es periódica, tenga periodicidad seleccionada
+    if (newGoal.type === 'periodic' && !newGoal.periodic_type) {
+      toast({
+        title: "Error",
+        description: "Debes seleccionar una periodicidad para las metas periódicas.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     try {
       const {
         data: {
