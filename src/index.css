@@ -173,3 +173,10 @@ All colors MUST be HSL.
 [data-sonner-toast] [data-close-button]:hover {
   opacity: 1;
 }
+
+/* Progress bar animation - runs only once on mount */
+@keyframes progress-fill {
+  from {
+    transform: translateX(-100%);
+  }
+}
