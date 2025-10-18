@@ -572,13 +572,13 @@ export default function EmotionJournal() {
           {selectedPrimary.length > 0 && (
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-4">Me he sentido:</h2>
-              <div className="flex lg:flex-col gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory lg:snap-none">
+              <div className="flex lg:flex-col gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory lg:snap-none -mx-4 px-4 lg:mx-0 lg:px-0">
                 {[...selectedPrimary].reverse().map((categoryId) => {
                   const category = emotionCategories.find(c => c.id === categoryId);
                   if (!category) return null;
                   
                   return (
-                    <div key={categoryId} className="min-w-[85vw] lg:min-w-0 snap-center">
+                    <div key={categoryId} className="min-w-[calc(100vw-30px)] lg:min-w-0 snap-center flex-shrink-0">
                       <h3 className="text-lg font-medium text-green-600 mb-3">{category.name}</h3>
                       <div className="flex flex-wrap gap-3">
                         {category.secondaryEmotions.map((emotion) => {
@@ -589,7 +589,7 @@ export default function EmotionJournal() {
                               variant="outline"
                               size="lg"
                               onClick={() => toggleSecondary(emotion.id)}
-                              className={`rounded-full px-6 h-12 text-sm font-medium transition-all ${
+                              className={`rounded-full px-6 h-12 text-sm font-medium transition-all flex-shrink-0 ${
                                 isSelected 
                                   ? "bg-green-600 hover:bg-green-700 text-white border-green-600"
                                   : "hover:bg-primary/10 hover:border-primary/50"
@@ -616,9 +616,9 @@ export default function EmotionJournal() {
           {selectedSecondary.length > 0 && (
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-4">Y a nivel más profundo:</h2>
-              <div className="flex lg:flex-col gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory lg:snap-none">
+              <div className="flex lg:flex-col gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory lg:snap-none -mx-4 px-4 lg:mx-0 lg:px-0">
                 {selectedSecondaryData.map((emotion) => (
-                  <div key={emotion.id} className="min-w-[85vw] lg:min-w-0 snap-center">
+                  <div key={emotion.id} className="min-w-[calc(100vw-30px)] lg:min-w-0 snap-center flex-shrink-0">
                     <h3 className="text-lg font-medium text-green-600 mb-3">{emotion.name}</h3>
                     <div className="flex flex-wrap gap-3">
                       {emotion.tertiaryEmotions.map((tertiaryEmotion) => {
@@ -629,7 +629,7 @@ export default function EmotionJournal() {
                             variant="outline"
                             size="lg"
                             onClick={() => toggleTertiary(tertiaryEmotion)}
-                            className={`rounded-full px-6 h-12 text-sm font-medium transition-all ${
+                            className={`rounded-full px-6 h-12 text-sm font-medium transition-all flex-shrink-0 ${
                               isSelected 
                                 ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
                                 : "hover:bg-primary/10 hover:border-primary/50"
