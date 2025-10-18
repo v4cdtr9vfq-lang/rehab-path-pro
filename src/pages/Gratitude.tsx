@@ -265,6 +265,54 @@ export default function Gratitude() {
         </CardContent>
       </Card>
 
+      {/* Example Entry Card */}
+      <Card className="border-sky-blue/30 bg-gradient-to-br from-sky-blue/10 to-transparent">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CalendarIcon className="h-5 w-5 text-sky-blue" />
+            Ejemplo de registro del día
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-2 mb-4">
+            <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-medium text-muted-foreground">
+              Lunes, 15 de enero de 2025
+            </span>
+          </div>
+          <ul className="space-y-2">
+            <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-sky-blue/10">
+              <span className="text-sky-blue mt-1">•</span>
+              <div className="flex-1 space-y-1">
+                <span className="text-foreground">Por el apoyo incondicional de mi familia durante mi proceso de recuperación</span>
+                <div className="text-xs text-muted-foreground">09:30</div>
+              </div>
+            </li>
+            <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-sky-blue/10">
+              <span className="text-sky-blue mt-1">•</span>
+              <div className="flex-1 space-y-1">
+                <span className="text-foreground">Por poder disfrutar de un café caliente en la mañana y sentir paz interior</span>
+                <div className="text-xs text-muted-foreground">10:15</div>
+              </div>
+            </li>
+            <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-sky-blue/10">
+              <span className="text-sky-blue mt-1">•</span>
+              <div className="flex-1 space-y-1">
+                <span className="text-foreground">Por mi salud y la capacidad de hacer ejercicio hoy</span>
+                <div className="text-xs text-muted-foreground">14:20</div>
+              </div>
+            </li>
+            <li className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-sky-blue/10">
+              <span className="text-sky-blue mt-1">•</span>
+              <div className="flex-1 space-y-1">
+                <span className="text-foreground">Por las pequeñas victorias del día y por seguir adelante</span>
+                <div className="text-xs text-muted-foreground">20:45</div>
+              </div>
+            </li>
+          </ul>
+        </CardContent>
+      </Card>
+
       {pastEntries.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-6">
