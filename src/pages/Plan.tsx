@@ -734,9 +734,9 @@ export default function Plan() {
               </p>
             </div>
           </div>
-          <div className="flex items-center justify-between">
-            <p className={`text-xs ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'} pl-9`}>
-              {displayCompleted ? 'Completado' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+          <div className="flex items-center justify-between mt-[15px]">
+            <p className={`text-xs ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
+              {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
             </p>
             {goal.instanceIndex === 0 && (
               <div className="flex items-center gap-1">
@@ -788,8 +788,8 @@ export default function Plan() {
             <p className="text-foreground font-semibold">
               {goal.text}
             </p>
-            <p className={`text-sm ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
-              {displayCompleted ? 'Completado' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+            <p className={`text-sm ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'} mt-[15px]`}>
+              {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
             </p>
           </div>
         </div>
