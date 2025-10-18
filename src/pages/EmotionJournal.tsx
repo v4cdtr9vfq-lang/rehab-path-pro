@@ -42,11 +42,6 @@ const emotionCategories: PrimaryCategory[] = [
     name: "Alegre",
     secondaryEmotions: [
       {
-        id: "alegre",
-        name: "Alegre",
-        tertiaryEmotions: ["Complacido", "Contento", "Divertido", "Encantado", "Feliz", "Jubiloso"]
-      },
-      {
         id: "descansado",
         name: "Descansado",
         tertiaryEmotions: ["Renovado", "Restaurado", "Revitalizado", "Revivido"]
