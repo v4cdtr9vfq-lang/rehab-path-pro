@@ -142,14 +142,14 @@ export default function Community() {
         <CardContent>
           {/* Header Legend */}
           <div className="grid grid-cols-[auto_auto_100px_120px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
-            <div className="pl-[65px]">Nombre:</div>
+            <div className="pl-[55px]">Nombre:</div>
             <div className="flex gap-1">
-              <div className="w-[60px]">Años:</div>
-              <div className="w-[60px]">Meses:</div>
-              <div className="w-[60px]">Días:</div>
+              <div className="w-[60px] text-left">Años:</div>
+              <div className="w-[60px] text-left">Meses:</div>
+              <div className="w-[60px] text-left">Días:</div>
             </div>
             <div></div>
-            <div className="text-left">Medallas:</div>
+            <div className="text-left pl-0">Medallas:</div>
           </div>
 
           <div className="space-y-3">
