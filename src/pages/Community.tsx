@@ -55,20 +55,21 @@ export default function Community() {
   });
 
   const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
+    // Solo tomar el primer nombre
+    const firstName = name.split(" ")[0];
+    return firstName.slice(0, 2).toUpperCase();
   };
 
   const getMedalsByTime = (years: number, days: number) => {
+    const totalDays = years * 365 + days;
     const medals = [];
-    if (years >= 5) medals.push("💎");
-    if (years >= 3) medals.push("🏆");
-    if (years >= 1) medals.push("⭐");
-    if (days >= 90 && years === 0) medals.push("🎯");
+    
+    // Medallas basadas en días totales
+    if (totalDays >= 180) medals.push("🏆"); // Libertad
+    if (totalDays >= 90) medals.push("🥇"); // Recuperación
+    if (totalDays >= 40) medals.push("🥈"); // Constancia
+    medals.push("🥉"); // Valor (siempre)
+    
     return medals;
   };
 
@@ -112,7 +113,7 @@ export default function Community() {
         </CardHeader>
         <CardContent>
           {/* Header Legend */}
-          <div className="grid grid-cols-[80px_80px_1fr_120px_120px] gap-4 px-4 pb-3 text-sm font-medium text-muted-foreground border-b mb-3">
+          <div className="grid grid-cols-[80px_80px_1fr_120px_120px] gap-4 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
             <div className="text-center">Años</div>
             <div className="text-center">Días</div>
             <div>Nombre</div>
@@ -148,7 +149,7 @@ export default function Community() {
                       {getInitials(user.name)}
                     </AvatarFallback>
                   </Avatar>
-                  <h3 className="font-semibold truncate">{user.name}</h3>
+                  <h3 className="font-semibold truncate">{user.name.split(" ")[0]}</h3>
                 </div>
 
                 {/* Medals */}
