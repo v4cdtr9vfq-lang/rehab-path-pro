@@ -572,7 +572,7 @@ export default function EmotionJournal() {
           {selectedPrimary.length > 0 && (
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-4">Me he sentido:</h2>
-              <div className="flex lg:flex-col gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory lg:snap-none -mx-4 px-4 lg:mx-0 lg:px-0">
+              <div className="flex lg:flex-col gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory lg:snap-none -mx-4 px-4 lg:mx-0 lg:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {[...selectedPrimary].reverse().map((categoryId) => {
                   const category = emotionCategories.find(c => c.id === categoryId);
                   if (!category) return null;
@@ -616,7 +616,7 @@ export default function EmotionJournal() {
           {selectedSecondary.length > 0 && (
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-4">Y a nivel más profundo:</h2>
-              <div className="flex lg:flex-col gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory lg:snap-none -mx-4 px-4 lg:mx-0 lg:px-0">
+              <div className="flex lg:flex-col gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory lg:snap-none -mx-4 px-4 lg:mx-0 lg:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {selectedSecondaryData.map((emotion) => (
                   <div key={emotion.id} className="min-w-[calc(100vw-30px)] lg:min-w-0 snap-center flex-shrink-0">
                     <h3 className="text-lg font-medium text-green-600 mb-3">{emotion.name}</h3>
