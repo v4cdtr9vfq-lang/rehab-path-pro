@@ -29,7 +29,7 @@ const menuItems = [{
   path: "/journal"
 }, {
   emoji: "🙏",
-  label: "Lista de Gratitud",
+  label: "Agradecimiento",
   path: "/gratitude"
 }, {
   emoji: "❤️",
