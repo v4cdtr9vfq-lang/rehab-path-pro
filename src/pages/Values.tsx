@@ -532,15 +532,6 @@ export default function Values() {
             : "bg-card/50 border-2 border-transparent hover:border-sky-blue/10"
         }`}
       >
-        {!isMobile && (
-          <div
-            {...attributes}
-            {...listeners}
-            className="cursor-grab active:cursor-grabbing flex-shrink-0"
-          >
-            <GripVertical className="h-5 w-5 text-muted-foreground" />
-          </div>
-        )}
         <button
           onClick={onToggle}
           className="flex-shrink-0"
@@ -551,6 +542,15 @@ export default function Values() {
             <Circle className="h-6 w-6 text-muted-foreground" />
           )}
         </button>
+        {!isMobile && (
+          <div
+            {...attributes}
+            {...listeners}
+            className="cursor-grab active:cursor-grabbing flex-shrink-0"
+          >
+            <GripVertical className="h-5 w-5 text-muted-foreground" />
+          </div>
+        )}
         <span className={`text-lg text-foreground flex-1 ${value.value_type === 'primary' ? 'font-semibold' : ''}`}>
           {value.name}
         </span>
