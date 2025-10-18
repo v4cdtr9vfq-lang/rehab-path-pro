@@ -89,8 +89,8 @@ export default function Auth() {
           return;
         }
 
-        toast.success("¡Cuenta creada! Ya puedes iniciar sesión");
-        navigate("/dashboard");
+        toast.success("¡Cuenta creada! Revisa tu correo para validar tu cuenta");
+        setIsLogin(true);
       }
     } catch (error) {
       toast.error("Ocurrió un error inesperado");

@@ -44,6 +44,8 @@ export default function Settings() {
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
   const [abstinenceStartDate, setAbstinenceStartDate] = useState("");
   const [isUpdatingDate, setIsUpdatingDate] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [isUpdatingName, setIsUpdatingName] = useState(false);
   
   // Reminders state
   const [reminders, setReminders] = useState<Reminder[]>([]);
@@ -56,6 +58,7 @@ export default function Settings() {
 
   useEffect(() => {
     loadAbstinenceDate();
+    loadUserProfile();
     
     const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "true") {
@@ -89,6 +92,62 @@ export default function Settings() {
       }
     } catch (error) {
       console.error('Error loading abstinence date:', error);
+    }
+  };
+
+  const loadUserProfile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('user_id', user.id)
+        .single();
+
+      if (profile?.full_name) {
+        setFullName(profile.full_name);
+      }
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+    }
+  };
+
+  const handleUpdateName = async () => {
+    if (!fullName.trim()) {
+      toast({
+        title: "Error",
+        description: "Por favor ingresa un nombre válido.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsUpdatingName(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Usuario no autenticado");
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({ full_name: fullName })
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Nombre actualizado",
+        description: "Tu nombre ha sido actualizado exitosamente.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo actualizar el nombre.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdatingName(false);
     }
   };
 
@@ -311,6 +370,25 @@ export default function Settings() {
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
+              <Label htmlFor="full-name">Nombre completo</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="full-name"
+                  type="text"
+                  placeholder="Tu nombre completo"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+                <Button 
+                  onClick={handleUpdateName} 
+                  disabled={isUpdatingName}
+                >
+                  {isUpdatingName ? "Actualizando..." : "Actualizar"}
+                </Button>
+              </div>
+            </div>
+
+            <div className="border-t pt-4 space-y-2">
               <Label htmlFor="new-email">Cambiar Email</Label>
               <div className="flex gap-2">
                 <Input
