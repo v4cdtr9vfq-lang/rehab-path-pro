@@ -489,13 +489,7 @@ export default function ProgressPage() {
 
         <TabsContent value="daily" className="space-y-6 mt-6">
           <Card className="border-primary/20">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <span className="text-lg">📈</span>
-                Progreso hoy
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-3 pt-6">
               <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-semibold text-foreground">Check-in diario</span>
