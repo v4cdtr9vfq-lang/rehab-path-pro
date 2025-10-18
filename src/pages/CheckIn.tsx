@@ -395,19 +395,19 @@ export default function CheckIn() {
                   )}
                 </>
               ) : question.type === "scale" ? (
-                <div className="flex gap-2 justify-between">
+                <div className="flex gap-2 justify-between flex-wrap">
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                     <Button
                       key={num}
-                      variant={answers[question.id] === String(num) ? "default" : "outline"}
-                      className={`w-10 h-10 p-0 rounded-full ${
+                      variant="outline"
+                      className={`w-12 h-12 p-0 rounded-full font-semibold text-base shadow-md transition-all ${
                         answers[question.id] === String(num)
                           ? num <= 4
-                            ? "bg-orange-600 hover:bg-orange-700 text-white"
+                            ? "bg-orange-600 hover:bg-orange-700 text-white border-orange-600 shadow-orange-600/50 scale-110"
                             : num <= 7
-                            ? "bg-yellow-600 hover:bg-yellow-700 text-white"
-                            : "bg-green-600 hover:bg-green-700 text-white"
-                          : ""
+                            ? "bg-yellow-600 hover:bg-yellow-700 text-white border-yellow-600 shadow-yellow-600/50 scale-110"
+                            : "bg-green-600 hover:bg-green-700 text-white border-green-600 shadow-green-600/50 scale-110"
+                          : "hover:scale-105 hover:shadow-lg"
                       }`}
                       onClick={() => handleAnswer(question.id, String(num))}
                     >
