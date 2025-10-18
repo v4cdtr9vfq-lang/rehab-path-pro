@@ -555,12 +555,17 @@ export default function Plan() {
     try {
       const updateData: any = {
         text: editingGoal.text,
-        remaining: editingGoal.remaining
+        remaining: editingGoal.goal_type === 'onetime' ? 1 : editingGoal.remaining
       };
 
       // Only update periodic_type if it's a periodic goal
       if (editingGoal.goal_type === 'periodic') {
         updateData.periodic_type = editingGoal.periodic_type;
+      }
+      
+      // Only update target_date if it's a onetime goal
+      if (editingGoal.goal_type === 'onetime') {
+        updateData.target_date = editingGoal.target_date || null;
       }
       
       // Add notes if provided
@@ -829,13 +834,33 @@ export default function Plan() {
                 </Select>
               </div>}
 
-            <div className="space-y-2">
+            {editingGoal?.goal_type === 'onetime' && <div className="space-y-2">
+                <Label>Fecha objetivo</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !editingGoal?.target_date && "text-muted-foreground")}>
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {editingGoal?.target_date ? format(new Date(editingGoal.target_date), "PPP", {
+                    locale: es
+                  }) : <span>Seleccionar fecha</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar mode="single" selected={editingGoal?.target_date ? new Date(editingGoal.target_date) : undefined} onSelect={date => setEditingGoal(prev => ({
+                  ...prev,
+                  target_date: date ? format(date, 'yyyy-MM-dd') : undefined
+                }))} initialFocus className={cn("p-3 pointer-events-auto")} />
+                  </PopoverContent>
+                </Popover>
+              </div>}
+
+            {editingGoal?.goal_type !== 'onetime' && <div className="space-y-2">
               <Label htmlFor="edit-goal-remaining">Número de veces</Label>
               <Input id="edit-goal-remaining" type="number" min="1" value={editingGoal?.remaining || 1} onChange={e => setEditingGoal(prev => ({
               ...prev,
               remaining: parseInt(e.target.value) || 1
             }))} />
-            </div>
+            </div>}
             
             <div className="space-y-2">
               <Label htmlFor="edit-goal-notes">Observaciones</Label>
