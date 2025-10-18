@@ -519,6 +519,7 @@ export type Database = {
           name: string
           updated_at: string
           user_id: string
+          value_type: string
         }
         Insert: {
           created_at?: string
@@ -526,6 +527,7 @@ export type Database = {
           name: string
           updated_at?: string
           user_id: string
+          value_type?: string
         }
         Update: {
           created_at?: string
@@ -533,6 +535,7 @@ export type Database = {
           name?: string
           updated_at?: string
           user_id?: string
+          value_type?: string
         }
         Relationships: []
       }

@@ -15,6 +15,7 @@ interface Value {
   id: string;
   name: string;
   selected: boolean;
+  value_type: 'primary' | 'secondary';
 }
 
 interface ValueStats {
@@ -27,7 +28,8 @@ const COLORS = ['#22c55e', '#f97316', '#3b82f6', '#a855f7', '#ec4899', '#eab308'
 export default function Values() {
   const { toast } = useToast();
   const [values, setValues] = useState<Value[]>([]);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isPrimaryDialogOpen, setIsPrimaryDialogOpen] = useState(false);
+  const [isSecondaryDialogOpen, setIsSecondaryDialogOpen] = useState(false);
   const [newValueName, setNewValueName] = useState("");
   const [todayStats, setTodayStats] = useState<ValueStats[]>([]);
   const [weekStats, setWeekStats] = useState<ValueStats[]>([]);
@@ -131,7 +133,8 @@ export default function Values() {
       const mappedValues: Value[] = (valuesData || []).map(v => ({
         id: v.id,
         name: v.name,
-        selected: selectedIds.has(v.id)
+        selected: selectedIds.has(v.id),
+        value_type: (v.value_type as 'primary' | 'secondary') || 'secondary'
       }));
 
       setValues(mappedValues);
@@ -254,8 +257,21 @@ export default function Values() {
     }
   };
 
-  const addValue = async () => {
+  const addValue = async (type: 'primary' | 'secondary') => {
     if (!newValueName.trim()) return;
+
+    // Check limits
+    const currentCount = values.filter(v => v.value_type === type).length;
+    const maxCount = type === 'primary' ? 3 : 6;
+    
+    if (currentCount >= maxCount) {
+      toast({
+        title: "Límite alcanzado",
+        description: `Solo puedes tener ${maxCount} valores ${type === 'primary' ? 'primarios' : 'secundarios'}`,
+        variant: "destructive",
+      });
+      return;
+    }
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -272,7 +288,8 @@ export default function Values() {
         .from('values')
         .insert({
           user_id: user.id,
-          name: newValueName.trim()
+          name: newValueName.trim(),
+          value_type: type
         })
         .select()
         .single();
@@ -280,9 +297,15 @@ export default function Values() {
       if (error) throw error;
 
       if (data) {
-        setValues(prev => [...prev, { id: data.id, name: data.name, selected: false }]);
+        setValues(prev => [...prev, { 
+          id: data.id, 
+          name: data.name, 
+          selected: false,
+          value_type: type 
+        }]);
         setNewValueName("");
-        setIsDialogOpen(false);
+        setIsPrimaryDialogOpen(false);
+        setIsSecondaryDialogOpen(false);
         toast({
           title: "Valor añadido",
           description: "Tu valor ha sido guardado exitosamente",
@@ -389,37 +412,128 @@ export default function Values() {
         </CardContent>
       </Card>
 
-      {/* Tus Valores - Moved before Statistics */}
+      {/* Valores Primarios Widget */}
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-semibold text-foreground">Tus valores</h2>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <div>
+            <h2 className="text-2xl font-semibold text-foreground">Valores primarios</h2>
+            <p className="text-sm text-muted-foreground">Máximo 3 valores esenciales</p>
+          </div>
+          <Dialog open={isPrimaryDialogOpen} onOpenChange={setIsPrimaryDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="gap-2">
+              <Button className="gap-2" disabled={values.filter(v => v.value_type === 'primary').length >= 3}>
                 <Plus className="h-4 w-4" />
-                Añadir valor
+                Añadir primario
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Añadir Nuevo Valor</DialogTitle>
+                <DialogTitle>Añadir Valor Primario</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="value-name">Nombre del Valor</Label>
+                  <Label htmlFor="primary-value-name">Nombre del Valor</Label>
                   <Input
-                    id="value-name"
+                    id="primary-value-name"
                     placeholder="Ej: Honestidad, Perseverancia..."
                     value={newValueName}
                     onChange={(e) => setNewValueName(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
-                        addValue();
+                        addValue('primary');
                       }
                     }}
                   />
                 </div>
-                <Button onClick={addValue} className="w-full">
+                <Button onClick={() => addValue('primary')} className="w-full">
+                  Añadir
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+          <CardContent className="p-6 space-y-4">
+            {values.filter(v => v.value_type === 'primary').length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                No tienes valores primarios aún. Añade hasta 3 valores fundamentales.
+              </div>
+            ) : (
+              values.filter(v => v.value_type === 'primary').map((value) => (
+                <div
+                  key={value.id}
+                  className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
+                    value.selected
+                      ? "bg-green-500/10 border-2 border-green-500/30"
+                      : "bg-card/50 border-2 border-transparent hover:border-primary/10"
+                  }`}
+                >
+                  <button
+                    onClick={() => toggleValue(value.id)}
+                    className="flex-shrink-0"
+                  >
+                    {value.selected ? (
+                      <CheckCircle2 className="h-6 w-6 text-green-500" />
+                    ) : (
+                      <Circle className="h-6 w-6 text-muted-foreground" />
+                    )}
+                  </button>
+                  <span className="text-lg text-foreground flex-1 font-semibold">{value.name}</span>
+                  {value.selected && (
+                    <span className="text-xs bg-green-500 text-white px-3 py-1 rounded-full">
+                      Activo Hoy
+                    </span>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setDeleteConfirmId(value.id)}
+                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Valores Secundarios Widget */}
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <div>
+            <h2 className="text-2xl font-semibold text-foreground">Valores secundarios</h2>
+            <p className="text-sm text-muted-foreground">Máximo 6 valores de apoyo</p>
+          </div>
+          <Dialog open={isSecondaryDialogOpen} onOpenChange={setIsSecondaryDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="gap-2" disabled={values.filter(v => v.value_type === 'secondary').length >= 6}>
+                <Plus className="h-4 w-4" />
+                Añadir secundario
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Añadir Valor Secundario</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="secondary-value-name">Nombre del Valor</Label>
+                  <Input
+                    id="secondary-value-name"
+                    placeholder="Ej: Paciencia, Creatividad..."
+                    value={newValueName}
+                    onChange={(e) => setNewValueName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        addValue('secondary');
+                      }
+                    }}
+                  />
+                </div>
+                <Button onClick={() => addValue('secondary')} className="w-full">
                   Añadir
                 </Button>
               </div>
@@ -429,12 +543,12 @@ export default function Values() {
 
         <Card className="border-primary/20">
           <CardContent className="p-6 space-y-4">
-            {values.length === 0 ? (
+            {values.filter(v => v.value_type === 'secondary').length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
-                No tienes valores aún. Añade tu primer valor para comenzar.
+                No tienes valores secundarios aún. Añade hasta 6 valores de apoyo.
               </div>
             ) : (
-              values.map((value) => (
+              values.filter(v => v.value_type === 'secondary').map((value) => (
                 <div
                   key={value.id}
                   className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
