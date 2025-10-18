@@ -44,6 +44,7 @@ export default function Settings() {
   const navigate = useNavigate();
   const { subscribed, plan, subscriptionEnd, loading, checkSubscription, createCheckoutSession, openCustomerPortal } = useSubscription();
   const [newEmail, setNewEmail] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -286,6 +287,15 @@ export default function Settings() {
       return;
     }
 
+    if (newEmail !== confirmEmail) {
+      toast({
+        title: "Error",
+        description: "Los emails no coinciden.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsUpdatingEmail(true);
     try {
       const { error } = await supabase.auth.updateUser({ email: newEmail });
@@ -297,6 +307,7 @@ export default function Settings() {
         description: "Se ha enviado un correo de confirmación a tu nueva dirección.",
       });
       setNewEmail("");
+      setConfirmEmail("");
     } catch (error: any) {
       toast({
         title: "Error",
@@ -496,21 +507,28 @@ export default function Settings() {
 
             <div className="border-t pt-4 space-y-2">
               <Label htmlFor="new-email">Cambiar Email</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="new-email"
-                  type="email"
-                  placeholder="nuevo@email.com"
-                  value={newEmail}
-                  onChange={(e) => setNewEmail(e.target.value)}
-                />
-                <Button 
-                  onClick={handleUpdateEmail} 
-                  disabled={isUpdatingEmail}
-                >
-                  {isUpdatingEmail ? "Actualizando..." : "Actualizar"}
-                </Button>
-              </div>
+              <Input
+                id="new-email"
+                type="email"
+                placeholder="nuevo@email.com"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+              />
+              <Label htmlFor="confirm-email">Confirmar Email</Label>
+              <Input
+                id="confirm-email"
+                type="email"
+                placeholder="Repite tu nuevo email"
+                value={confirmEmail}
+                onChange={(e) => setConfirmEmail(e.target.value)}
+              />
+              <Button 
+                onClick={handleUpdateEmail} 
+                disabled={isUpdatingEmail}
+                className="w-full"
+              >
+                {isUpdatingEmail ? "Actualizando..." : "Actualizar"}
+              </Button>
               <p className="text-sm text-muted-foreground">
                 Se enviará un correo de confirmación a tu nueva dirección
               </p>
