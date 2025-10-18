@@ -152,11 +152,6 @@ export default function Gratitude() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-4xl font-bold text-foreground mb-2">Lista de gratitud</h1>
-        <p className="text-muted-foreground text-lg">Cultiva la gratitud y reconoce las bendiciones de la vida</p>
-      </div>
-
       <Card className="border-accent/20 bg-gradient-to-br from-accent/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
