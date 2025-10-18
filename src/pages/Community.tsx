@@ -108,13 +108,6 @@ export default function Community() {
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-6xl">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">Comunidad</h1>
-        <p className="text-muted-foreground">
-          Conecta con otros miembros en recuperación y celebra sus logros
-        </p>
-      </div>
-
       {/* Availability Toggle - Solo para usuarios con medallas */}
       {hasAnyMedal && (
         <Card className="mb-6 border-primary/20">
