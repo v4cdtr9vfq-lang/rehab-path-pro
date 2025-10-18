@@ -401,8 +401,8 @@ export default function CheckIn() {
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                     <Button
                       key={num}
-                      variant="outline"
-                      className={`w-12 h-12 p-0 rounded-full font-semibold text-base shadow-md transition-all ${
+                      variant={answers[question.id] === String(num) ? "default" : "outline"}
+                      className={`w-12 h-12 p-0 !rounded-full font-semibold text-base shadow-md transition-all ${
                         answers[question.id] === String(num)
                           ? num <= 4
                             ? "bg-orange-600 hover:bg-orange-700 text-white border-orange-600 shadow-orange-600/50 scale-110"
