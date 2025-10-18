@@ -704,7 +704,7 @@ export default function Home() {
                   : "text-muted-foreground"
               }`}
             >
-              {goal.status === "completed" ? "Completado" : goal.period}
+              {goal.status === "completed" ? "¡Completado!" : goal.period}
             </p>
           </div>
         </div>
@@ -841,7 +841,7 @@ export default function Home() {
                                 : "text-muted-foreground"
                             }`}
                           >
-                            {goal.status === "completed" ? "Completado" : goal.period}
+                            {goal.status === "completed" ? "¡Completado!" : goal.period}
                           </p>
                         </div>
                       </div>
