@@ -448,7 +448,7 @@ export default function ProgressPage() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-[30px] animate-in fade-in duration-500">
       <Card className="border-sky-blue/40 bg-gradient-to-br from-sky-blue/15 to-sky-blue/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">

@@ -287,7 +287,7 @@ export default function CheckIn() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-[30px] animate-in fade-in duration-500">
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

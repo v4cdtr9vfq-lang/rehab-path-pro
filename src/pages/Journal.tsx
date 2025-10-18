@@ -342,7 +342,7 @@ export default function Journal() {
   });
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-[30px] animate-in fade-in duration-500">
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
           <div className="relative">
@@ -447,7 +447,7 @@ export default function Journal() {
         </Card>
       )}
 
-      <div className="space-y-4">
+      <div className="space-y-[30px]">
         {!isLoading && entries.length > 0 && (
           <h2 className="text-2xl font-semibold text-foreground">Entradas recientes</h2>
         )}

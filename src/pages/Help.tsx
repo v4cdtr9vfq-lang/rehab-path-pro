@@ -146,7 +146,7 @@ export default function Help() {
   };
 
   return (
-    <div className="container mx-auto px-4 pt-4 md:pt-0 md:-mt-[3px] pb-8 max-w-4xl space-y-6 animate-in fade-in duration-500">
+    <div className="container mx-auto px-4 pt-4 md:pt-0 md:-mt-[3px] pb-8 max-w-4xl space-y-[30px] animate-in fade-in duration-500">
       {/* FAQs Section */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0">

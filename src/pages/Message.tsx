@@ -248,7 +248,7 @@ export default function Message() {
   if (!dailyQuote) return null;
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-[30px] animate-in fade-in duration-500">
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
         <CardHeader>
           <div className="flex items-center justify-between">

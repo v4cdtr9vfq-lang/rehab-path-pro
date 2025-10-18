@@ -535,7 +535,7 @@ export default function EmotionJournal() {
     : savedEntries;
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-[30px] animate-fade-in">
       <Card className="p-8 bg-card border-border">
         <div className="space-y-8">
           {/* Primary Categories */}

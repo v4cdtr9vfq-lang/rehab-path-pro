@@ -158,7 +158,7 @@ export default function SupportNetwork() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-[30px] animate-in fade-in duration-500">
       <Card className="border-primary/20">
         <CardContent className="p-6">
           {contacts.length === 0 ? (

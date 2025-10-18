@@ -139,7 +139,7 @@ export default function Community() {
     <div className="container mx-auto px-4 py-2 max-w-6xl">
       {/* Availability Toggle - Solo para usuarios con 3+ medallas */}
       {hasMinimumMedalsForHelp && (
-        <Card className="mb-6 border-primary/20">
+        <Card className="mb-[30px] border-primary/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
