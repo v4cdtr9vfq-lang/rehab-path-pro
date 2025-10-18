@@ -208,19 +208,18 @@ export default function Plan() {
     // Load all completions for the date range at once
     const allCompletedInstances = await loadCompletedInstancesForRange(dates);
     goals.forEach(g => {
-      if (context === 'onetime') {
-        // One-time goals: simple expansion
+      // One-time goals: only show one instance total (not per day)
+      if (g.goal_type === 'onetime') {
         const todayStr = getLocalDateString();
-        for (let i = 0; i < g.remaining; i++) {
-          const instanceId = `${g.id}__${todayStr}__${i}`;
-          expanded.push({
-            ...g,
-            id: instanceId,
-            originalId: g.id,
-            instanceIndex: i,
-            completed: allCompletedInstances.has(instanceId)
-          });
-        }
+        // Create only ONE instance (index 0) regardless of remaining count
+        const instanceId = `${g.id}__${todayStr}__0`;
+        expanded.push({
+          ...g,
+          id: instanceId,
+          originalId: g.id,
+          instanceIndex: 0,
+          completed: allCompletedInstances.has(instanceId)
+        });
       } else {
         // Recurring goals: iterate through dates
         dates.forEach((date, dayIndex) => {
@@ -325,22 +324,24 @@ export default function Plan() {
         const weekGoals = goals.filter(g => g.goal_type === 'week');
         const monthGoals = goals.filter(g => g.goal_type === 'month');
         const periodicGoals = goals.filter(g => g.goal_type === 'periodic');
+        const onetimeGoals = goals.filter(g => g.goal_type === 'onetime');
+        
         const groupedGoals = {
           today: {
             open: sections.today.open,
-            goals: await expandGoals([...todayGoals, ...periodicGoals, ...alwaysGoals], 'today')
+            goals: await expandGoals([...todayGoals, ...periodicGoals, ...alwaysGoals, ...onetimeGoals], 'today')
           },
           week: {
             open: sections.week.open,
-            goals: await expandGoals([...weekGoals, ...periodicGoals, ...todayGoals, ...alwaysGoals], 'week')
+            goals: await expandGoals([...weekGoals, ...periodicGoals, ...todayGoals, ...alwaysGoals, ...onetimeGoals], 'week')
           },
           month: {
             open: sections.month.open,
-            goals: await expandGoals([...monthGoals, ...periodicGoals, ...weekGoals, ...todayGoals, ...alwaysGoals], 'month')
+            goals: await expandGoals([...monthGoals, ...periodicGoals, ...weekGoals, ...todayGoals, ...alwaysGoals, ...onetimeGoals], 'month')
           },
           onetime: {
             open: sections.onetime.open,
-            goals: await expandGoals(goals.filter(g => g.goal_type === 'onetime'), 'onetime')
+            goals: await expandGoals(onetimeGoals, 'onetime')
           }
         };
         setSections(groupedGoals);
@@ -465,7 +466,7 @@ export default function Plan() {
         user_id: user.id,
         text: newGoal.text,
         goal_type: newGoal.type,
-        remaining: newGoal.remaining,
+        remaining: newGoal.type === 'onetime' ? 1 : newGoal.remaining, // Metas únicas siempre tienen 1 instancia
         completed: false,
         target_date: newGoal.target_date ? format(newGoal.target_date, 'yyyy-MM-dd') : null,
         periodic_type: newGoal.periodic_type || null,
@@ -779,13 +780,13 @@ export default function Plan() {
                   </Select>
                 </div>}
 
-              <div className="space-y-2">
+              {newGoal.type !== 'onetime' && <div className="space-y-2">
                 <Label htmlFor="goal-remaining">Número de veces</Label>
                 <Input id="goal-remaining" type="number" min="1" value={newGoal.remaining} onChange={e => setNewGoal(prev => ({
                 ...prev,
                 remaining: parseInt(e.target.value) || 1
               }))} />
-              </div>
+              </div>}
               <Button onClick={addGoal} className="w-full">
                 Añadir
               </Button>
