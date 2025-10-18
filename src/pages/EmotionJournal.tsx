@@ -681,7 +681,10 @@ export default function EmotionJournal() {
       {savedEntries.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg lg:text-xl font-bold text-foreground pl-[10px] lg:pl-8">Registro de emociones:</h2>
+            <h2 className="text-lg lg:text-xl font-bold text-foreground pl-[10px] lg:pl-8">
+              <span className="lg:hidden">Registro:</span>
+              <span className="hidden lg:inline">Registro de emociones:</span>
+            </h2>
             
             {/* Date Filter */}
             <Popover>
