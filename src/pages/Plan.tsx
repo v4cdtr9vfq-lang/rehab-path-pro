@@ -709,15 +709,15 @@ export default function Plan() {
     return (
       <div ref={setNodeRef} style={style} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
         <div className="flex items-center gap-3 flex-1">
+          <button onClick={isClickable ? () => toggleGoal(sectionKey, goal.id) : undefined} className={`flex-shrink-0 ${!isClickable ? 'cursor-default' : ''}`} disabled={!isClickable}>
+            {displayCompleted ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
+          </button>
           <button 
             {...attributes} 
             {...listeners} 
             className="flex-shrink-0 cursor-grab active:cursor-grabbing touch-none"
           >
             <GripVertical className="h-5 w-5 text-muted-foreground" />
-          </button>
-          <button onClick={isClickable ? () => toggleGoal(sectionKey, goal.id) : undefined} className={`flex-shrink-0 ${!isClickable ? 'cursor-default' : ''}`} disabled={!isClickable}>
-            {displayCompleted ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
           </button>
           <div className="flex-1">
             <p className="text-foreground font-semibold">
