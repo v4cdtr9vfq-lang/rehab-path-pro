@@ -488,7 +488,7 @@ export default function ProgressPage() {
           <TabsTrigger value="month">Este mes</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="daily" className="space-y-6 mt-6">
+        <TabsContent value="daily" className="space-y-6 mt-4">
           <Card className="border-sidebar-border">
             <CardContent className="space-y-3 pt-6">
               <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
@@ -521,7 +521,7 @@ export default function ProgressPage() {
           </Card>
         </TabsContent>
         
-        <TabsContent value="week" className="space-y-6 mt-6">
+        <TabsContent value="week" className="space-y-6 mt-4">
           <Card className="border-sidebar-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -540,7 +540,7 @@ export default function ProgressPage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="month" className="space-y-6 mt-6">
+        <TabsContent value="month" className="space-y-6 mt-4">
           <Card className="border-sidebar-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -562,7 +562,7 @@ export default function ProgressPage() {
       </Tabs>
 
       {/* Chart Widget Tabs */}
-      <Tabs defaultValue="week" className="w-full space-y-[35px]">
+      <Tabs defaultValue="week" className="w-full space-y-[25px]">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="week">Semana</TabsTrigger>
           <TabsTrigger value="month">Mes</TabsTrigger>
