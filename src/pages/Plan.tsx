@@ -87,6 +87,7 @@ export default function Plan() {
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [hasUnsavedOrder, setHasUnsavedOrder] = useState(false);
   const [newGoal, setNewGoal] = useState<{
     text: string;
     type: keyof typeof sections | 'always' | 'periodic';
@@ -770,7 +771,7 @@ export default function Plan() {
     })
   );
 
-  const handleDragEnd = async (event: DragEndEvent, sectionKey: keyof typeof sections) => {
+  const handleDragEnd = (event: DragEndEvent, sectionKey: keyof typeof sections) => {
     const { active, over } = event;
 
     if (!over || active.id === over.id) {
@@ -785,7 +786,7 @@ export default function Plan() {
 
     const reorderedGoals = arrayMove(goalsInSection, oldIndex, newIndex);
 
-    // Optimistically update UI
+    // Only update UI locally, don't save yet
     const updatedSections = { ...sections };
     updatedSections[sectionKey] = {
       ...updatedSections[sectionKey],
@@ -796,31 +797,45 @@ export default function Plan() {
       ]
     };
     setSections(updatedSections);
+    setHasUnsavedOrder(true);
+  };
 
-    // Update order_index in database for ALL goals
+  const saveGoalOrder = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Get all goals for this user to update their order
-      const { data: allGoals } = await supabase
-        .from('goals')
-        .select('*')
-        .eq('user_id', user.id);
+      // Get all unique goals from all sections (by originalId)
+      const allUniqueGoals = new Map<string, ExpandedGoal>();
+      Object.keys(sections).forEach(key => {
+        const sectionKey = key as keyof typeof sections;
+        sections[sectionKey].goals
+          .filter(g => g.instanceIndex === 0)
+          .forEach(goal => {
+            if (!allUniqueGoals.has(goal.originalId)) {
+              allUniqueGoals.set(goal.originalId, goal);
+            }
+          });
+      });
 
-      if (!allGoals) return;
+      // Update order_index for each goal based on current position
+      const updates: Array<{ id: string; order_index: number }> = [];
+      let index = 0;
+      
+      // Process sections in order: today, week, month, onetime
+      ['today', 'week', 'month', 'onetime'].forEach(key => {
+        const sectionKey = key as keyof typeof sections;
+        sections[sectionKey].goals
+          .filter(g => g.instanceIndex === 0)
+          .forEach(goal => {
+            updates.push({
+              id: goal.originalId,
+              order_index: index++
+            });
+          });
+      });
 
-      // Create a map of new orders
-      const orderMap = new Map(reorderedGoals.map((goal, index) => [goal.originalId, index]));
-
-      // Update only the goals that changed
-      const updates = allGoals
-        .filter(g => orderMap.has(g.id))
-        .map(g => ({
-          id: g.id,
-          order_index: orderMap.get(g.id)!,
-        }));
-
+      // Save to database
       for (const update of updates) {
         await supabase
           .from('goals')
@@ -828,33 +843,43 @@ export default function Plan() {
           .eq('id', update.id);
       }
 
+      setHasUnsavedOrder(false);
+      toast({
+        title: "Orden guardado",
+        description: "El orden de las metas ha sido actualizado."
+      });
+
       // Refresh to ensure consistency
       await fetchGoals();
     } catch (error) {
-      console.error('Error updating goal order:', error);
+      console.error('Error saving goal order:', error);
       toast({
         title: "Error",
-        description: "No se pudo actualizar el orden de las metas.",
+        description: "No se pudo guardar el orden de las metas.",
         variant: "destructive"
       });
-      // Revert UI on error
-      fetchGoals();
     }
   };
   return <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center gap-4">
         <h2 className="text-3xl font-bold text-foreground">Metas</h2>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button variant="accent" className="gap-2">
-              <Plus className="h-5 w-5" />
-              Añadir meta
+        <div className="flex gap-2">
+          {hasUnsavedOrder && (
+            <Button onClick={saveGoalOrder} variant="default" className="gap-2">
+              Guardar orden
             </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Añadir nueva meta</DialogTitle>
-            </DialogHeader>
+          )}
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="accent" className="gap-2">
+                <Plus className="h-5 w-5" />
+                Añadir meta
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Añadir nueva meta</DialogTitle>
+              </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="goal-text">Meta</Label>
@@ -950,6 +975,7 @@ export default function Plan() {
             </div>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       {/* Edit Goal Dialog */}
