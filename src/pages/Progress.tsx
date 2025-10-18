@@ -484,8 +484,8 @@ export default function ProgressPage() {
       <Tabs defaultValue="daily" className="w-full" onValueChange={setCurrentTab}>
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="daily">Diario</TabsTrigger>
-          <TabsTrigger value="week">Semana actual</TabsTrigger>
-          <TabsTrigger value="month">Mes actual</TabsTrigger>
+          <TabsTrigger value="week">Esta semana</TabsTrigger>
+          <TabsTrigger value="month">Este mes</TabsTrigger>
         </TabsList>
 
         <TabsContent value="daily" className="space-y-6 mt-6">
