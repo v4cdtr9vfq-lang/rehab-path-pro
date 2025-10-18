@@ -400,7 +400,7 @@ export default function Values() {
       <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            <Heart className="h-6 w-6 text-primary" />
+            <Heart className="h-6 w-6 text-sky-blue" />
             Lo que más importa
           </CardTitle>
         </CardHeader>
@@ -453,7 +453,7 @@ export default function Values() {
           </Dialog>
         </div>
 
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+        <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
           <CardContent className="p-6 space-y-4">
             {values.filter(v => v.value_type === 'primary').length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
@@ -466,7 +466,7 @@ export default function Values() {
                   className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
                     value.selected
                       ? "bg-green-500/10 border-2 border-green-500/30"
-                      : "bg-card/50 border-2 border-transparent hover:border-primary/10"
+                      : "bg-card/50 border-2 border-transparent hover:border-sky-blue/10"
                   }`}
                 >
                   <button
@@ -541,7 +541,7 @@ export default function Values() {
           </Dialog>
         </div>
 
-        <Card className="border-primary/20">
+        <Card className="border-sky-blue/20">
           <CardContent className="p-6 space-y-4">
             {values.filter(v => v.value_type === 'secondary').length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
@@ -554,7 +554,7 @@ export default function Values() {
                   className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
                     value.selected
                       ? "bg-green-500/10 border-2 border-green-500/30"
-                      : "bg-card/50 border-2 border-transparent hover:border-primary/10"
+                      : "bg-card/50 border-2 border-transparent hover:border-sky-blue/10"
                   }`}
                 >
                   <button
@@ -587,7 +587,7 @@ export default function Values() {
           </CardContent>
         </Card>
 
-        <Card className="border-accent/20 bg-gradient-to-br from-accent/5 to-transparent">
+        <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
           <CardContent className="p-6">
             <h3 className="font-semibold text-foreground mb-3">💡 Recordatorio diario de valores</h3>
             <p className="text-foreground/80 text-sm">
@@ -599,10 +599,10 @@ export default function Values() {
       </div>
 
       {/* Statistics Widget */}
-      <Card className="border-primary/20">
+      <Card className="border-sky-blue/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            <TrendingUp className="h-6 w-6 text-primary" />
+            <TrendingUp className="h-6 w-6 text-sky-blue" />
             Estadísticas
           </CardTitle>
         </CardHeader>
