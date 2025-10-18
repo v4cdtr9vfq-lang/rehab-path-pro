@@ -201,7 +201,7 @@ export default function Gratitude() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CalendarIcon className="h-5 w-5 text-sky-blue" />
-            Gratitud de hoy
+            - Gratitud de hoy
             <span className="text-sm font-normal text-muted-foreground ml-auto">
               {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/^\w/, c => c.toUpperCase()).replace(/\sde\s(\w)/, (match, p1) => ` de ${p1.toUpperCase()}`)}
             </span>
@@ -292,44 +292,7 @@ export default function Gratitude() {
 
       {/* Example Entry Section */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-bold text-foreground">Registro de agradecimientos</h2>
-          
-          {/* Date Filter */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "justify-start text-left font-normal",
-                  !filterDate && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {filterDate ? format(filterDate, "d 'de' MMMM, yyyy", { locale: es }) : "Buscar por fecha"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="end">
-              <Calendar
-                mode="single"
-                selected={filterDate}
-                onSelect={setFilterDate}
-                className={cn("p-3 pointer-events-auto")}
-              />
-              {filterDate && (
-                <div className="p-3 border-t">
-                  <Button
-                    variant="ghost"
-                    className="w-full"
-                    onClick={() => setFilterDate(undefined)}
-                  >
-                    Limpiar filtro
-                  </Button>
-                </div>
-              )}
-            </PopoverContent>
-          </Popover>
-        </div>
+        <h2 className="text-xl font-bold text-foreground mb-3">- Registro de agradecimientos</h2>
         
         <Card className="border-border bg-gradient-to-br from-sky-blue/10 to-transparent">
           <CardContent className="pt-6">
