@@ -152,10 +152,10 @@ export default function Gratitude() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <Card className="border-accent/20 bg-gradient-to-br from-accent/5 to-transparent">
+      <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            <Sparkles className="h-6 w-6 text-accent" />
+            <Sparkles className="h-6 w-6 text-sky-blue" />
             Por Qué Importa la Gratitud
           </CardTitle>
         </CardHeader>
@@ -168,10 +168,10 @@ export default function Gratitude() {
         </CardContent>
       </Card>
 
-      <Card className="border-primary/20">
+      <Card className="border-sky-blue/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-primary" />
+            <Calendar className="h-5 w-5 text-sky-blue" />
             Gratitud de Hoy
             <span className="text-sm font-normal text-muted-foreground ml-auto">
               {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
@@ -199,9 +199,9 @@ export default function Gratitude() {
                 {todayEntry.items.map((item, index) => (
                   <li
                     key={index}
-                    className="flex items-start gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10"
+                    className="flex items-start gap-3 p-3 rounded-lg bg-sky-blue/5 border border-sky-blue/10"
                   >
-                    <span className="text-primary mt-1">•</span>
+                    <span className="text-sky-blue mt-1">•</span>
                     <div className="flex-1 space-y-1">
                       {editingIndex === index ? (
                         <div className="flex gap-2">
@@ -252,13 +252,13 @@ export default function Gratitude() {
       </Card>
 
       {entries.length > 0 && entries.filter(e => e.date.toDateString() !== new Date().toDateString()).length > 0 && (
-        <Card className="border-primary/20">
+        <Card className="border-sky-blue/20">
           <CardHeader>
             <CardTitle>Entradas recientes</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {entries.filter(e => e.date.toDateString() !== new Date().toDateString()).map((entry) => (
-              <div key={entry.id} className="p-4 rounded-lg bg-card/50 border border-primary/10">
+              <div key={entry.id} className="p-4 rounded-lg bg-card/50 border border-sky-blue/10">
                 <div className="flex items-center gap-2 mb-3">
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm font-medium text-muted-foreground">
@@ -268,7 +268,7 @@ export default function Gratitude() {
                 <ul className="space-y-2">
                   {entry.items.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-foreground/80">
-                      <span className="text-accent">•</span>
+                      <span className="text-sky-blue">•</span>
                       <div className="flex-1 space-y-1">
                         <span>{item.text}</span>
                         <div className="text-xs text-muted-foreground">
