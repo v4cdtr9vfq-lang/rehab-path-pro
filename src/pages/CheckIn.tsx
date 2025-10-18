@@ -26,7 +26,7 @@ interface Question {
 }
 
 const questions: Question[] = [
-  { id: 1, text: "¿Me mantuve limpio hoy?", type: "yesno" },
+  { id: 1, text: "¿Me mantuve limpio de consumo hoy?", type: "yesno" },
   { id: 2, text: "¿Encontré alguna situación que me alterara hoy?", type: "yesno" },
   { id: 3, text: "Hoy lo más importante recordarme es:", type: "text" },
   { id: 4, text: "¿Sentí resentimiento hoy?", type: "yesno" },
