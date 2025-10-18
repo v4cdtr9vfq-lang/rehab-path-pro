@@ -788,7 +788,7 @@ export default function EmotionJournal() {
 
                   {entry.tertiary_emotions && entry.tertiary_emotions.length > 0 && (
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Secundarias:</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Y a nivel más profundo:</h3>
                       <div className="flex flex-wrap gap-2">
                         {[...entry.tertiary_emotions].sort().map((emotion, idx) => (
                           <span
