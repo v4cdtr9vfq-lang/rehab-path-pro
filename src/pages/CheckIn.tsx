@@ -291,7 +291,8 @@ export default function CheckIn() {
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            Check-In Diario
+            <span className="md:hidden">Check-In</span>
+            <span className="hidden md:inline">Check-In Diario</span>
             <span className="text-xl">👀</span>
           </CardTitle>
           <p className="text-sm text-muted-foreground">

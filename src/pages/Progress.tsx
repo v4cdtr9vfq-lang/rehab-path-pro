@@ -493,7 +493,10 @@ export default function ProgressPage() {
             <CardContent className="space-y-3 pt-6">
               <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-semibold text-foreground">Check-in diario</span>
+                  <span className="text-sm font-semibold text-foreground">
+                    <span className="md:hidden">Check-in</span>
+                    <span className="hidden md:inline">Check-in diario</span>
+                  </span>
                   <span className={`text-sm font-bold ${hasCheckedInToday ? 'text-green-500' : 'text-sky-blue'}`}>{hasCheckedInToday ? '100' : '0'}%</span>
                 </div>
                 <Progress value={hasCheckedInToday ? 100 : 0} className={`h-2.5 ${hasCheckedInToday ? '[&>div]:bg-green-500' : '[&>div]:bg-sky-blue'}`} />

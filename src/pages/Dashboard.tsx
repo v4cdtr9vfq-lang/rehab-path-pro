@@ -736,7 +736,10 @@ export default function Home() {
                 {checkInCompleted ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
               </button>
               <div>
-                <p className="font-semibold text-foreground">Check-in diario</p>
+                <p className="font-semibold text-foreground">
+                  <span className="md:hidden">Check-in</span>
+                  <span className="hidden md:inline">Check-in diario</span>
+                </p>
                 <p className={`text-sm ${checkInCompleted ? "text-green-500" : "text-muted-foreground"}`}>
                   {checkInCompleted ? "Completado" : "Pendiente"}
                 </p>
