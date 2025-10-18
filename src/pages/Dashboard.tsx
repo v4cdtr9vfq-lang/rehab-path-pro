@@ -606,7 +606,7 @@ export default function Home() {
       <div
         ref={setNodeRef}
         style={style}
-        className="flex items-center justify-between p-3 md:p-4 rounded-xl bg-muted/50 border border-border/50"
+        className="flex items-center justify-between p-3 md:p-4 rounded-xl bg-muted/50 border border-sidebar-border"
       >
         <div className="flex items-center gap-2 md:gap-3 flex-1">
           <button
@@ -645,7 +645,7 @@ export default function Home() {
       <AbstinenceCounter startDate={startDate} />
 
       {/* Daily Progress Panel */}
-      <Card className="border-border/50">
+      <Card className="border-sidebar-border">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Progreso diario</CardTitle>
         </CardHeader>
@@ -660,7 +660,7 @@ export default function Home() {
           </div>
 
           {/* Daily Check-In Status */}
-          <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
+          <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-sidebar-border">
             <div className="flex items-center gap-3">
               <button className="flex-shrink-0 cursor-default">
                 {checkInCompleted ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
@@ -680,7 +680,7 @@ export default function Home() {
           </div>
 
           {/* Today's Reminder */}
-          {checkInCompleted && todayReminder && <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
+          {checkInCompleted && todayReminder && <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-sidebar-border">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Hoy elijo recordarme que:</p>
                 <p className="text-lg font-semibold text-green-500">{todayReminder}</p>
@@ -708,7 +708,7 @@ export default function Home() {
       </Card>
 
       {/* Active Goals Summary */}
-      <Card className="border-border/50">
+      <Card className="border-sidebar-border">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold">Metas de hoy</CardTitle>
           <Link to="/plan">
@@ -753,7 +753,7 @@ export default function Home() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
           {quickTools.map(tool => {
           return <Link key={tool.label} to={tool.path}>
-                <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-border/50 h-full">
+                <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-sidebar-border h-full">
                   <CardContent className="p-5 text-center space-y-3">
                     <div className={`mx-auto w-12 h-12 rounded-2xl bg-sky-blue flex items-center justify-center ${tool.color}`}>
                       <span className="text-2xl">{tool.emoji}</span>
@@ -767,7 +767,7 @@ export default function Home() {
       </div>
 
       {/* Medals Widget */}
-      <Card className="border-border/50">
+      <Card className="border-sidebar-border">
         <CardHeader className="pb-2">
           <CardTitle className="text-2xl font-bold">Mis medallas</CardTitle>
         </CardHeader>
@@ -776,7 +776,7 @@ export default function Home() {
             {medalConfig.map(medal => {
               const status = getMedalStatus(medal.type, medal.requiredDays);
               return (
-                <Card key={medal.type} className="border-border/50 h-full">
+                <Card key={medal.type} className="border-sidebar-border h-full">
                   <CardContent className="p-4 md:p-6 flex items-center gap-3 md:gap-4">
                     <div className={`w-16 md:w-20 h-16 md:h-20 rounded-2xl flex items-center justify-center flex-shrink-0 ${status.opacity} transition-opacity duration-300`} style={{ backgroundColor: 'hsl(var(--medal-bg))' }}>
                       <span className="text-3xl md:text-4xl">{medal.emoji}</span>
