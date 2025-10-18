@@ -152,23 +152,6 @@ export default function Gratitude() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            <span>🙏</span>
-            Por Qué Importa la Gratitud
-            <span>🙏</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-foreground/80">
-            Practicar la gratitud cambia tu enfoque de lo que falta a lo que está presente. 
-            La práctica regular de gratitud ha demostrado mejorar la salud mental, fortalecer relaciones 
-            y apoyar la recuperación a largo plazo.
-          </p>
-        </CardContent>
-      </Card>
-
       <Card className="border-sky-blue/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -249,6 +232,23 @@ export default function Gratitude() {
               <p>Aún no has añadido nada a tu lista de hoy</p>
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            Por qué Importa la gratitud
+            <span>🙏</span>
+            <span>🙏</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-foreground/80">
+            Practicar la gratitud cambia tu enfoque de lo que falta a lo que está presente. 
+            La práctica regular de gratitud ha demostrado mejorar la salud mental, fortalecer relaciones 
+            y apoyar la recuperación a largo plazo.
+          </p>
         </CardContent>
       </Card>
 
