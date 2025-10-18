@@ -890,7 +890,7 @@ export default function Plan() {
       });
     }
   };
-  return <div className="space-y-6 animate-in fade-in duration-500">
+  return <div className="space-y-6 animate-in fade-in duration-500 -mt-[35px]">
       <div className="flex justify-between items-center gap-4">
         <h2 className="text-3xl font-bold text-foreground">Metas</h2>
         <div className="flex gap-2">
