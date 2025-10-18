@@ -654,13 +654,13 @@ export default function EmotionJournal() {
 
         {/* Save/Update Button */}
         {selectedPrimary.length > 0 && (
-          <div className="flex justify-end gap-4 mt-6">
+          <div className="flex justify-start md:justify-end gap-4 mt-6">
             {editingEntry && (
               <Button
                 size="lg"
                 variant="outline"
                 onClick={handleCancelEdit}
-                className="rounded-full px-8 h-14 text-lg font-semibold"
+                className="rounded-full px-6 md:px-8 h-12 md:h-14 text-sm md:text-lg font-semibold"
               >
                 Cancelar
               </Button>
@@ -669,7 +669,7 @@ export default function EmotionJournal() {
               size="lg"
               onClick={editingEntry ? handleUpdate : handleSubmit}
               disabled={isSaving}
-              className="rounded-full px-12 h-14 text-lg font-semibold bg-primary hover:bg-primary/90"
+              className="rounded-full px-6 md:px-12 h-12 md:h-14 text-sm md:text-lg font-semibold bg-primary hover:bg-primary/90"
             >
               {isSaving ? (editingEntry ? "Actualizando..." : "Guardando...") : (editingEntry ? "Actualizar" : "Guardar")}
             </Button>
