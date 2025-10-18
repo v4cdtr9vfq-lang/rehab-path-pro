@@ -544,7 +544,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      reset_user_data_keep_goals: {
+      reset_goals_and_abstinence: {
         Args: { p_user_id: string }
         Returns: undefined
       }

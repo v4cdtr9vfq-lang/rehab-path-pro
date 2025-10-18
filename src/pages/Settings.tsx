@@ -768,24 +768,25 @@ export default function Settings() {
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
-            {/* Reset data keeping goals */}
+            {/* Reset goals */}
             <div className="space-y-2">
-              <Label className="text-orange-600 dark:text-orange-500 font-semibold">Reiniciar datos (mantener metas)</Label>
+              <Label className="text-orange-600 dark:text-orange-500 font-semibold">Reiniciar tus metas</Label>
               <p className="text-sm text-muted-foreground mb-4">
-                Elimina todos tus datos de check-ins, diarios, contactos, etc., pero mantiene tus metas actuales. Ideal para empezar de nuevo sin perder tu plan.
+                Restaura las metas a su configuración por defecto y reinicia el contador de abstinencia. 
+                Todos tus demás datos (check-ins, diarios, contactos, etc.) se mantendrán intactos.
               </p>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="outline" className="w-full border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white">
-                    Reiniciar mis datos
+                    Reiniciar metas
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>¿Reiniciar todos tus datos?</AlertDialogTitle>
+                    <AlertDialogTitle>¿Reiniciar tus metas?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Esto eliminará todos tus datos (check-ins, diarios, contactos, etc.) EXCEPTO tus metas. 
-                      Es como empezar de nuevo pero con tu plan de metas actual. Esta acción no se puede deshacer.
+                      Esto restaurará tus metas a la configuración por defecto y reiniciará el contador "Soy libre desde hace". 
+                      Todos tus demás datos (check-ins, diarios, contactos, etc.) se mantendrán guardados. Esta acción no se puede deshacer.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -796,30 +797,35 @@ export default function Settings() {
                           const { data: { user } } = await supabase.auth.getUser();
                           if (!user) throw new Error("Usuario no autenticado");
 
-                          const { error } = await supabase.rpc('reset_user_data_keep_goals', {
+                          const { error } = await supabase.rpc('reset_goals_and_abstinence', {
                             p_user_id: user.id
                           });
 
                           if (error) throw error;
 
                           toast({
-                            title: "Datos reiniciados",
-                            description: "Tus datos han sido reiniciados exitosamente. Tus metas se mantienen.",
+                            title: "Metas reiniciadas",
+                            description: "Tus metas han sido restauradas a la configuración por defecto y tu contador ha sido reiniciado.",
                           });
 
-                          // Refresh the page to show clean state
-                          window.location.reload();
+                          // Dispatch event to update dashboard
+                          window.dispatchEvent(new CustomEvent('abstinenceDateUpdated'));
+                          
+                          // Refresh the page to show updated goals
+                          setTimeout(() => {
+                            window.location.reload();
+                          }, 1500);
                         } catch (error: any) {
                           toast({
                             title: "Error",
-                            description: error.message || "No se pudieron reiniciar los datos.",
+                            description: error.message || "No se pudieron reiniciar las metas.",
                             variant: "destructive",
                           });
                         }
                       }}
                       className="bg-orange-600 text-white hover:bg-orange-700"
                     >
-                      Sí, reiniciar mis datos
+                      Sí, reiniciar metas
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
