@@ -241,11 +241,11 @@ export default function Community() {
                     <div className="flex items-center justify-between">
                       <div className="flex gap-1 items-center text-sm">
                         <span className="font-bold">{user.years.toString().padStart(2, "0")}</span>
-                        <span className="text-muted-foreground text-xs">a</span>
+                        <span className="text-muted-foreground text-xs">A.</span>
                         <span className="font-bold">{months.toString().padStart(2, "0")}</span>
-                        <span className="text-muted-foreground text-xs">m</span>
+                        <span className="text-muted-foreground text-xs">M.</span>
                         <span className="font-bold">{remainingDays.toString().padStart(2, "0")}</span>
-                        <span className="text-muted-foreground text-xs">d</span>
+                        <span className="text-muted-foreground text-xs">D.</span>
                       </div>
                       <div className="flex gap-1">
                         {getMedalsByTime(user.years, user.days).map((medal, idx) => (
