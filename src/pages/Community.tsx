@@ -140,7 +140,7 @@ export default function Community() {
                 key={user.id}
                 className={`grid grid-cols-[160px_1fr_120px_120px] gap-4 items-center p-4 rounded-xl transition-colors ${
                   user.availableForHelp
-                    ? "bg-primary/5 border border-primary/20"
+                    ? "bg-success/10 border border-success/30"
                     : "bg-muted/30"
                 }`}
               >
