@@ -710,7 +710,7 @@ export default function Home() {
     );
   }
 
-  return <div className="container mx-auto px-[15px] pt-4 md:pt-0 md:-mt-[1px] pb-8 max-w-4xl space-y-6 animate-in fade-in duration-500">
+  return <div className="container mx-auto px-[15px] pt-4 md:pt-0 md:-mt-[3px] pb-8 max-w-4xl space-y-6 animate-in fade-in duration-500">
       {/* Header - Abstinence Counter */}
       <AbstinenceCounter startDate={startDate} />
 
