@@ -95,27 +95,6 @@ const emotionCategories: PrimaryCategory[] = [
     ]
   },
   {
-    id: "cansado",
-    name: "Triste",
-    secondaryEmotions: [
-      {
-        id: "agotado",
-        name: "Agotado",
-        tertiaryEmotions: []
-      },
-      {
-        id: "cansado_sub",
-        name: "Cansado",
-        tertiaryEmotions: []
-      },
-      {
-        id: "desconectado",
-        name: "Desconectado",
-        tertiaryEmotions: ["Aburrido", "Adormecido", "Alejado", "Alienado", "Apático", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído"]
-      }
-    ]
-  },
-  {
     id: "confundido",
     name: "Confundido",
     secondaryEmotions: [
@@ -215,6 +194,27 @@ const emotionCategories: PrimaryCategory[] = [
         id: "tenso",
         name: "Tenso",
         tertiaryEmotions: ["Abrumado", "Angustiado", "Ansioso", "Consternado", "Estresado", "Inquieto", "Irritable", "Nervioso"]
+      }
+    ]
+  },
+  {
+    id: "cansado",
+    name: "Triste",
+    secondaryEmotions: [
+      {
+        id: "agotado",
+        name: "Agotado",
+        tertiaryEmotions: []
+      },
+      {
+        id: "cansado_sub",
+        name: "Cansado",
+        tertiaryEmotions: []
+      },
+      {
+        id: "desconectado",
+        name: "Desconectado",
+        tertiaryEmotions: ["Aburrido", "Adormecido", "Alejado", "Alienado", "Apático", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído"]
       }
     ]
   },
