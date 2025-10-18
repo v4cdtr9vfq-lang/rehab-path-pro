@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Bell, Plus, Mail, BellRing, Trash2 } from "lucide-react";
+import { Bell, Plus, Mail, BellRing, Trash2, Check } from "lucide-react";
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -46,6 +46,7 @@ export default function Settings() {
   const [isUpdatingDate, setIsUpdatingDate] = useState(false);
   const [fullName, setFullName] = useState("");
   const [isUpdatingName, setIsUpdatingName] = useState(false);
+  const [trialDaysUsed, setTrialDaysUsed] = useState(0);
   
   // Reminders state
   const [reminders, setReminders] = useState<Reminder[]>([]);
@@ -59,6 +60,7 @@ export default function Settings() {
   useEffect(() => {
     loadAbstinenceDate();
     loadUserProfile();
+    calculateTrialDays();
     
     const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "true") {
@@ -148,6 +150,21 @@ export default function Settings() {
       });
     } finally {
       setIsUpdatingName(false);
+    }
+  };
+
+  const calculateTrialDays = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const createdAt = new Date(user.created_at);
+      const now = new Date();
+      const diffTime = Math.abs(now.getTime() - createdAt.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      setTrialDaysUsed(Math.min(diffDays, 40));
+    } catch (error) {
+      console.error('Error calculating trial days:', error);
     }
   };
 
@@ -494,8 +511,8 @@ export default function Settings() {
 
               {/* Subscription Plans */}
               <div className="space-y-4">
-                <div className="text-center mb-4">
-                  <h3 className="text-lg font-semibold mb-2">
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold">
                     {subscribed ? "Cambiar de plan" : "Elige tu plan"}
                   </h3>
                 </div>
@@ -504,8 +521,11 @@ export default function Settings() {
                 <div className={`border rounded-lg p-4 space-y-3 ${plan === "free" ? "border-primary bg-primary/5" : "border-border"}`}>
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-semibold text-2xl">Plan básico</h4>
-                      <p className="text-2xl font-bold text-primary mt-1">Gratis<span className="text-sm text-muted-foreground">/40 días</span></p>
+                      <h4 className="font-semibold text-lg">Plan básico</h4>
+                      <div className="flex items-center gap-2 mt-1">
+                        <p className="text-2xl font-bold text-primary">Gratis</p>
+                        <span className="text-sm text-muted-foreground">+{trialDaysUsed}/40 días</span>
+                      </div>
                     </div>
                     {plan === "free" && (
                       <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
@@ -515,12 +535,15 @@ export default function Settings() {
                   </div>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-destructive" />
                       Acceso completo a todas las funciones.
                     </li>
                     <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-destructive" />
                       Chat comunitario.
                     </li>
                     <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-destructive" />
                       Seguimiento personalizado.
                     </li>
                   </ul>
@@ -550,12 +573,15 @@ export default function Settings() {
                   </div>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-destructive" />
                       Acceso completo a todas las funciones.
                     </li>
                     <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-destructive" />
                       Chat comunitario.
                     </li>
                     <li className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-destructive" />
                       Seguimiento personalizado.
                     </li>
                   </ul>
@@ -596,15 +622,15 @@ export default function Settings() {
                   </div>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
-                      <span className="text-primary">✅</span>
+                      <Check className="h-4 w-4 text-destructive" />
                       Todo lo del plan mensual.
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-primary">✅</span>
+                      <Check className="h-4 w-4 text-destructive" />
                       Ahorra 42€ al año.
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-primary">✅</span>
+                      <Check className="h-4 w-4 text-destructive" />
                       Mejor valor por tu dinero.
                     </li>
                   </ul>
