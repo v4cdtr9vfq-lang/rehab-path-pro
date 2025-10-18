@@ -11,6 +11,7 @@ import { Plus, ChevronDown, ChevronUp, Pencil, Trash2, CheckCircle2, Circle, Cal
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
@@ -47,6 +48,7 @@ interface ExpandedGoal extends Goal {
   instanceIndex: number;
 }
 export default function Plan() {
+  const isMobile = useIsMobile();
   const {
     toast
   } = useToast();
@@ -719,6 +721,63 @@ export default function Plan() {
     const allCompleted = allInstancesOfGoal.every(g => g.completed);
     const displayCompleted = (sectionKey === 'week' || sectionKey === 'month') ? allCompleted : goal.completed;
     
+    if (isMobile) {
+      return (
+        <div ref={setNodeRef} style={style} className="p-3 rounded-xl bg-muted/50 border border-border/50 relative">
+          <div className="flex items-start gap-2 mb-2">
+            <button onClick={isClickable ? () => toggleGoal(sectionKey, goal.id) : undefined} className={`flex-shrink-0 ${!isClickable ? 'cursor-default' : ''}`} disabled={!isClickable}>
+              {displayCompleted ? <CheckCircle2 className="h-5 w-5 text-green-500" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
+            </button>
+            <button 
+              {...attributes} 
+              {...listeners} 
+              className="flex-shrink-0 cursor-grab active:cursor-grabbing touch-none"
+            >
+              <GripVertical className="h-4 w-4 text-muted-foreground" />
+            </button>
+            <div className="flex-1">
+              <p className="text-foreground font-semibold text-sm leading-tight">
+                {goal.text}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className={`text-xs ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'} pl-9`}>
+              {displayCompleted ? 'Completado' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+            </p>
+            {goal.instanceIndex === 0 && (
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => openEditDialog(goal, sectionKey)}>
+                  <Pencil className="h-3.5 w-3.5" />
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive flex-shrink-0">
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>¿Eliminar meta?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Esta acción no se puede deshacer. La meta será eliminada permanentemente.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => deleteGoal(sectionKey, goal.originalId)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                        Eliminar
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div ref={setNodeRef} style={style} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
         <div className="flex items-center gap-3 flex-1">
