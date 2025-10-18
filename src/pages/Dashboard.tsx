@@ -863,7 +863,7 @@ export default function Home() {
 
       {/* Quick Tools */}
       <div>
-        <h2 className="text-2xl font-bold mb-4 text-foreground">Herramientas rápidas</h2>
+        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">Herramientas rápidas</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
           {quickTools.map(tool => {
           return <Link key={tool.label} to={tool.path}>
