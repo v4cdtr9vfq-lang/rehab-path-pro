@@ -495,6 +495,29 @@ export default function Chat() {
         <div className="flex-1 min-h-0 overflow-hidden">
           <ScrollArea className="h-full">
             <div className="space-y-4 p-4">
+              {messages.length === 0 && (
+                <div className="flex justify-start mb-6">
+                  <div className="flex items-start gap-3 w-full pl-[15px]">
+                    <div className="flex flex-col items-center gap-2 flex-shrink-0">
+                      <Avatar className="h-11 w-11">
+                        <AvatarFallback className="bg-muted text-foreground text-sm font-semibold">
+                          E
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
+                    <div className="flex flex-col gap-1 flex-1">
+                      <span className="text-xs text-muted-foreground pl-6">
+                        Esperanza
+                      </span>
+                      <div className="rounded-[18px] px-6 py-3 max-w-full bg-muted/70 text-foreground">
+                        <p className="text-xs">
+                          Siempre hay un primer valiente...
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
               {messages.map((msg) => {
                 const isOwnMessage = msg.user_id === userId;
                 const isAnonymousOwnMessage = isOwnMessage && msg.user_name.startsWith('Anónimo');
