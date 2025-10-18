@@ -144,3 +144,22 @@ All colors MUST be HSL.
     letter-spacing: -0.02em;
   }
 }
+
+/* Sonner toast success icon styling */
+[data-sonner-toast][data-type="success"] [data-icon] {
+  color: hsl(var(--success)) !important;
+}
+
+[data-sonner-toast][data-type="success"] [data-icon] svg {
+  fill: hsl(var(--success)) !important;
+  color: hsl(var(--success)) !important;
+}
+
+[data-sonner-toast][data-type="error"] [data-icon] {
+  color: hsl(var(--destructive)) !important;
+}
+
+[data-sonner-toast][data-type="error"] [data-icon] svg {
+  fill: hsl(var(--destructive)) !important;
+  color: hsl(var(--destructive)) !important;
+}
