@@ -558,34 +558,46 @@ export default function EmotionJournal() {
             </div>
           </div>
 
-          {/* Secondary Emotions */}
+          {/* Secondary Emotions - Grouped by Primary Category */}
           {selectedPrimary.length > 0 && (
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-4">He sentido:</h2>
-              <div className="flex flex-wrap gap-3">
-                {allSecondaryEmotions.map((emotion) => {
-                  const isSelected = selectedSecondary.includes(emotion.id);
+              <div className="space-y-6">
+                {[...selectedPrimary].reverse().map((categoryId) => {
+                  const category = emotionCategories.find(c => c.id === categoryId);
+                  if (!category) return null;
+                  
                   return (
-                    <Button
-                      key={emotion.id}
-                      variant={isSelected ? "accent" : "outline"}
-                      size="lg"
-                      onClick={() => toggleSecondary(emotion.id)}
-                      className={`rounded-full px-6 h-12 text-base font-medium transition-all ${
-                        isSelected 
-                          ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
-                          : "hover:bg-primary/10 hover:border-primary/50"
-                      }`}
-                    >
-                      {isSelected ? (
-                        <>
-                          <Check className="h-4 w-4 mr-2" />
-                          {emotion.name}
-                        </>
-                      ) : (
-                        <>+ {emotion.name}</>
-                      )}
-                    </Button>
+                    <div key={categoryId}>
+                      <h3 className="text-lg font-medium text-foreground/80 mb-3">{category.name}</h3>
+                      <div className="flex flex-wrap gap-3">
+                        {category.secondaryEmotions.map((emotion) => {
+                          const isSelected = selectedSecondary.includes(emotion.id);
+                          return (
+                            <Button
+                              key={emotion.id}
+                              variant={isSelected ? "accent" : "outline"}
+                              size="lg"
+                              onClick={() => toggleSecondary(emotion.id)}
+                              className={`rounded-full px-6 h-12 text-base font-medium transition-all ${
+                                isSelected 
+                                  ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
+                                  : "hover:bg-primary/10 hover:border-primary/50"
+                              }`}
+                            >
+                              {isSelected ? (
+                                <>
+                                  <Check className="h-4 w-4 mr-2" />
+                                  {emotion.name}
+                                </>
+                              ) : (
+                                <>+ {emotion.name}</>
+                              )}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    </div>
                   );
                 })}
               </div>
