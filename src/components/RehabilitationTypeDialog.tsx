@@ -151,7 +151,7 @@ export default function RehabilitationTypeDialog() {
             Prefiero no decir ahora
           </Button>
           <p className="text-xs text-muted-foreground text-center">
-            Podrás cambiar esto más tarde en configuración
+            Podrás cambiar esto más tarde en configuración.
           </p>
         </div>
       </DialogContent>
