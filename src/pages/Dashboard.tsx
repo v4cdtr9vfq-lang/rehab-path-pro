@@ -543,10 +543,10 @@ export default function Home() {
 
   // Medal configuration
   const medalConfig = [
-    { type: 'valor', name: 'Valor', emoji: '🥉', requiredDays: 0 },
-    { type: 'constancia', name: 'Constancia', emoji: '🥈', requiredDays: 40 },
+    { type: 'servicio', name: 'Libertad', emoji: '🏆', requiredDays: 180 },
     { type: 'recuperacion', name: 'Recuperación', emoji: '🥇', requiredDays: 90 },
-    { type: 'servicio', name: 'Libertad', emoji: '🏆', requiredDays: 180 }
+    { type: 'constancia', name: 'Constancia', emoji: '🥈', requiredDays: 40 },
+    { type: 'valor', name: 'Valor', emoji: '🥉', requiredDays: 0 }
   ];
 
   const getMedalStatus = (medalType: string, requiredDays: number) => {
