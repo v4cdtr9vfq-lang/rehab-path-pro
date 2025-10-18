@@ -397,11 +397,10 @@ export default function Journal() {
       </div>
 
       {showNewEntry && (
-        <Card className="border-border">
-          <CardHeader>
-            <CardTitle>{editingEntryId ? 'Editar entrada' : 'Nueva entrada de diario'}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div>
+          <h2 className="text-xl font-bold text-foreground mb-3 pl-[35px]">{editingEntryId ? 'Editar entrada' : 'Nueva entrada de diario'}</h2>
+          <Card className="border-border">
+            <CardContent className="pt-6 space-y-4">
             <Input 
               placeholder="Título de la entrada..." 
               value={entryTitle}
@@ -445,6 +444,7 @@ export default function Journal() {
             </div>
           </CardContent>
         </Card>
+        </div>
       )}
 
       <div className="space-y-4">

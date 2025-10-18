@@ -288,17 +288,18 @@ export default function CheckIn() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <Card className="border-primary/20">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <div>
+        <div className="mb-3 pl-[35px]">
+          <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
             Resumen del Check-In Diario
             <span className="text-xl">👀</span>
-          </CardTitle>
-          <p className="text-sm text-muted-foreground">
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">
             {new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
-        </CardHeader>
-        <CardContent className="space-y-6">
+        </div>
+        <Card className="border-primary/20">
+          <CardContent className="pt-6 space-y-6">
           {questions.map((question) => (
             <div key={question.id} className="space-y-3">
               <Label className="text-base font-medium text-foreground">
@@ -436,6 +437,7 @@ export default function CheckIn() {
           </Button>
         </CardContent>
       </Card>
+      </div>
 
       <Card className="bg-gradient-to-br from-accent/5 to-transparent border-accent/20">
         <CardContent className="p-6">
