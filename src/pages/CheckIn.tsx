@@ -397,7 +397,7 @@ export default function CheckIn() {
                   )}
                 </>
               ) : question.type === "scale" ? (
-                <div className="flex gap-2 justify-between flex-wrap">
+                <div className="flex gap-2 justify-start">
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                     <Button
                       key={num}
