@@ -157,6 +157,7 @@ export default function Gratitude() {
           <CardTitle className="flex items-center gap-2 text-2xl">
             <span>🙏</span>
             Por Qué Importa la Gratitud
+            <span>🙏</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
