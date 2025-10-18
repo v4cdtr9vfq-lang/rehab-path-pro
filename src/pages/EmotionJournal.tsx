@@ -550,7 +550,7 @@ export default function EmotionJournal() {
                     variant="outline"
                     size="lg"
                     onClick={() => togglePrimary(category.id)}
-                    className={`rounded-full px-6 h-12 text-sm font-medium transition-all ${
+                    className={`rounded-full px-6 h-12 text-base lg:text-sm font-medium transition-all ${
                       isSelected
                         ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
                         : "hover:bg-primary/10 hover:border-primary/50"
@@ -589,7 +589,7 @@ export default function EmotionJournal() {
                               variant="outline"
                               size="lg"
                               onClick={() => toggleSecondary(emotion.id)}
-                              className={`rounded-full px-6 h-12 text-sm font-medium transition-all flex-shrink-0 ${
+                              className={`rounded-full px-6 h-12 text-base lg:text-sm font-medium transition-all flex-shrink-0 ${
                                 isSelected 
                                   ? "bg-green-600 hover:bg-green-700 text-white border-green-600"
                                   : "hover:bg-primary/10 hover:border-primary/50"
@@ -629,7 +629,7 @@ export default function EmotionJournal() {
                             variant="outline"
                             size="lg"
                             onClick={() => toggleTertiary(tertiaryEmotion)}
-                            className={`rounded-full px-6 h-12 text-sm font-medium transition-all flex-shrink-0 ${
+                            className={`rounded-full px-6 h-12 text-base lg:text-sm font-medium transition-all flex-shrink-0 ${
                               isSelected 
                                 ? "bg-green-600 hover:bg-green-700 text-white border-green-600" 
                                 : "hover:bg-primary/10 hover:border-primary/50"
