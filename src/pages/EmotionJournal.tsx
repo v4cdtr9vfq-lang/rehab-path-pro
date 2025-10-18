@@ -686,7 +686,7 @@ export default function EmotionJournal() {
       {/* Emotion Log Widget */}
       {savedEntries.length > 0 && (
         <div>
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-3">
             <h2 className="text-xl font-bold text-foreground">Registro de emociones:</h2>
             
             {/* Date Filter */}
@@ -757,7 +757,7 @@ export default function EmotionJournal() {
                   </div>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3 px-2">
                   {entry.primary_emotion && (
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground mb-2">Me he sentido:</h3>
