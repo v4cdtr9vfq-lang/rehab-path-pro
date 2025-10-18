@@ -578,7 +578,7 @@ export default function EmotionJournal() {
                   if (!category) return null;
                   
                   return (
-                    <div key={categoryId} className="min-w-[calc(100vw-30px)] lg:min-w-0 snap-center flex-shrink-0">
+                    <div key={categoryId} className="min-w-[calc(100vw-30px)] lg:min-w-0 snap-start flex-shrink-0">
                       <h3 className="text-lg font-medium text-green-600 mb-3">{category.name}</h3>
                       <div className="flex flex-wrap gap-3">
                         {category.secondaryEmotions.map((emotion) => {
@@ -618,7 +618,7 @@ export default function EmotionJournal() {
               <h2 className="text-xl font-semibold text-foreground mb-4">Y a nivel más profundo:</h2>
               <div className="flex lg:flex-col gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory lg:snap-none -mx-4 px-4 lg:mx-0 lg:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {selectedSecondaryData.map((emotion) => (
-                  <div key={emotion.id} className="min-w-[calc(100vw-30px)] lg:min-w-0 snap-center flex-shrink-0">
+                  <div key={emotion.id} className="min-w-[calc(100vw-30px)] lg:min-w-0 snap-start flex-shrink-0">
                     <h3 className="text-lg font-medium text-green-600 mb-3">{emotion.name}</h3>
                     <div className="flex flex-wrap gap-3">
                       {emotion.tertiaryEmotions.map((tertiaryEmotion) => {
