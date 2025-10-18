@@ -338,11 +338,8 @@ export default function Plan() {
       table: 'goals'
     }, async (payload) => {
       // Listen for order_index updates and refresh
-      if (payload.new && 'order_index' in payload.new) {
-        // Cancel any pending unsaved order changes
-        setHasUnsavedOrder(false);
-        setOriginalSectionsOrder(null);
-        
+      // Only process if we don't have unsaved local changes
+      if (payload.new && 'order_index' in payload.new && !hasUnsavedOrder) {
         // Refetch to get the new order
         setTimeout(() => {
           fetchGoals();
