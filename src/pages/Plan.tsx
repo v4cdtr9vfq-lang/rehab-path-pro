@@ -346,13 +346,27 @@ export default function Plan() {
       const {
         data: goals,
         error
-      } = await supabase.from('goals').select('*').eq('user_id', user.id).order('order_index', {
-        ascending: true
-      }).order('created_at', {
+      } = await supabase.from('goals').select('*').eq('user_id', user.id).order('created_at', {
         ascending: false
       });
       if (error) throw error;
       if (goals) {
+        // Initialize order_index for goals that don't have it
+        const goalsWithoutOrder = goals.filter(g => g.order_index === null || g.order_index === undefined);
+        if (goalsWithoutOrder.length > 0) {
+          for (let i = 0; i < goalsWithoutOrder.length; i++) {
+            await supabase.from('goals').update({ order_index: i }).eq('id', goalsWithoutOrder[i].id);
+          }
+          // Refetch after initializing
+          const { data: updatedGoals } = await supabase.from('goals').select('*').eq('user_id', user.id).order('order_index', { ascending: true }).order('created_at', { ascending: false });
+          if (updatedGoals) {
+            goals.length = 0;
+            goals.push(...updatedGoals);
+          }
+        } else {
+          // Sort by order_index if all have it
+          goals.sort((a, b) => (a.order_index || 0) - (b.order_index || 0));
+        }
         const alwaysGoals = goals.filter(g => g.goal_type === 'always');
         const todayGoals = goals.filter(g => g.goal_type === 'today');
         const weekGoals = goals.filter(g => g.goal_type === 'week');
@@ -768,12 +782,41 @@ export default function Plan() {
 
     const reorderedGoals = arrayMove(goalsInSection, oldIndex, newIndex);
 
-    // Update order_index in database
+    // Optimistically update UI
+    const updatedSections = { ...sections };
+    updatedSections[sectionKey] = {
+      ...updatedSections[sectionKey],
+      goals: [
+        ...reorderedGoals.flatMap(g => 
+          sections[sectionKey].goals.filter(goal => goal.originalId === g.originalId)
+        )
+      ]
+    };
+    setSections(updatedSections);
+
+    // Update order_index in database for ALL goals
     try {
-      const updates = reorderedGoals.map((goal, index) => ({
-        id: goal.originalId,
-        order_index: index,
-      }));
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Get all goals for this user to update their order
+      const { data: allGoals } = await supabase
+        .from('goals')
+        .select('*')
+        .eq('user_id', user.id);
+
+      if (!allGoals) return;
+
+      // Create a map of new orders
+      const orderMap = new Map(reorderedGoals.map((goal, index) => [goal.originalId, index]));
+
+      // Update only the goals that changed
+      const updates = allGoals
+        .filter(g => orderMap.has(g.id))
+        .map(g => ({
+          id: g.id,
+          order_index: orderMap.get(g.id)!,
+        }));
 
       for (const update of updates) {
         await supabase
@@ -782,7 +825,7 @@ export default function Plan() {
           .eq('id', update.id);
       }
 
-      // Refresh goals to reflect new order
+      // Refresh to ensure consistency
       await fetchGoals();
     } catch (error) {
       console.error('Error updating goal order:', error);
@@ -791,6 +834,8 @@ export default function Plan() {
         description: "No se pudo actualizar el orden de las metas.",
         variant: "destructive"
       });
+      // Revert UI on error
+      fetchGoals();
     }
   };
   return <div className="space-y-6 animate-in fade-in duration-500">
