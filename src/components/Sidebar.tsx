@@ -32,7 +32,7 @@ const menuItems = [{
   label: "Lista de Gratitud",
   path: "/gratitude"
 }, {
-  emoji: "💝",
+  emoji: "❤️",
   label: "Valores",
   path: "/values"
 }, {
