@@ -409,7 +409,7 @@ export default function ProgressPage() {
     { name: "Espiritual", percentage: 0, color: "bg-accent" },
   ];
 
-  const GoalProgressBar = ({ goal }: { goal: { id: string; text: string; total: number; completed: number; percentage: number } }) => {
+  const GoalProgressBar = ({ goal, delay = 0 }: { goal: { id: string; text: string; total: number; completed: number; percentage: number }, delay?: number }) => {
     const getProgressColor = () => {
       if (goal.percentage === 100) return 'text-green-500';
       if (goal.percentage >= 50) return 'text-[#e6c25c]';
@@ -428,7 +428,7 @@ export default function ProgressPage() {
           <span className="text-sm font-semibold text-foreground">{goal.text}</span>
           <span className={`text-sm font-bold ${getProgressColor()}`}>{goal.percentage}%</span>
         </div>
-        <Progress value={goal.percentage} className={`h-2.5 ${getProgressBgColor()}`} />
+        <Progress value={goal.percentage} delay={delay} className={`h-2.5 ${getProgressBgColor()}`} />
         <div className="flex justify-between items-center mt-1">
           <span className="text-xs text-muted-foreground">
             {goal.completed} de {goal.total} completadas
@@ -507,8 +507,8 @@ export default function ProgressPage() {
                 </div>
               </div>
               
-              {groupGoalsByOriginal(dailyGoals).map((goal) => (
-                <GoalProgressBar key={goal.id} goal={goal} />
+              {groupGoalsByOriginal(dailyGoals).map((goal, index) => (
+                <GoalProgressBar key={goal.id} goal={goal} delay={index * 100} />
               ))}
 
               {dailyGoals.length === 0 && (
@@ -527,8 +527,8 @@ export default function ProgressPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {groupGoalsByOriginal(weeklyGoals).map((goal) => (
-                <GoalProgressBar key={goal.id} goal={goal} />
+              {groupGoalsByOriginal(weeklyGoals).map((goal, index) => (
+                <GoalProgressBar key={goal.id} goal={goal} delay={index * 100} />
               ))}
 
               {weeklyGoals.length === 0 && (
@@ -547,8 +547,8 @@ export default function ProgressPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {groupGoalsByOriginal(monthlyGoals).map((goal) => (
-                <GoalProgressBar key={goal.id} goal={goal} />
+              {groupGoalsByOriginal(monthlyGoals).map((goal, index) => (
+                <GoalProgressBar key={goal.id} goal={goal} delay={index * 100} />
               ))}
 
               {monthlyGoals.length === 0 && (

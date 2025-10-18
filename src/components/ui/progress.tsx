@@ -3,18 +3,22 @@ import * as ProgressPrimitive from "@radix-ui/react-progress";
 
 import { cn } from "@/lib/utils";
 
+interface ProgressProps extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
+  delay?: number;
+}
+
 const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
->(({ className, value, ...props }, ref) => {
+  ProgressProps
+>(({ className, value, delay = 0, ...props }, ref) => {
   const [displayValue, setDisplayValue] = React.useState(0);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setDisplayValue(value || 0);
-    }, 100);
+    }, 100 + delay);
     return () => clearTimeout(timer);
-  }, [value]);
+  }, [value, delay]);
 
   return (
     <ProgressPrimitive.Root
