@@ -10,7 +10,7 @@ interface ProgressProps extends React.ComponentPropsWithoutRef<typeof ProgressPr
 const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
   ProgressProps
->(({ className, value, delay = 0, ...props }, ref) => {
+>(({ className, value, ...props }, ref) => {
   return (
     <ProgressPrimitive.Root
       ref={ref}
@@ -18,10 +18,9 @@ const Progress = React.forwardRef<
       {...props}
     >
       <ProgressPrimitive.Indicator
-        className="h-full w-full flex-1 bg-primary [animation:progress-fill_1.2s_cubic-bezier(0.4,0,0.2,1)_forwards]"
+        className="h-full w-full flex-1 bg-primary"
         style={{ 
-          transform: `translateX(-${100 - (value || 0)}%)`,
-          animationDelay: `${delay}ms`
+          transform: `translateX(-${100 - (value || 0)}%)`
         }}
       />
     </ProgressPrimitive.Root>
