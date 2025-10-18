@@ -8,6 +8,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -296,7 +298,7 @@ export default function CheckIn() {
             <span className="text-xl">👀</span>
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            {new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            {format(new Date(), "EEEE, d MMM. yyyy", { locale: es }).replace(/^\w/, (c) => c.toUpperCase())}
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
