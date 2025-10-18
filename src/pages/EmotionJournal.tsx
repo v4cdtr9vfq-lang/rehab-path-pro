@@ -734,7 +734,7 @@ export default function EmotionJournal() {
                       {format(new Date(entry.created_at), "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
                     </span>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 mr-[10px] lg:mr-0">
                     <Button
                       size="sm"
                       variant="ghost"
