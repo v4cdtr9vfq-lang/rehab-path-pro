@@ -494,7 +494,7 @@ export default function Chat() {
 
         <div className="flex-1 min-h-0 overflow-hidden">
           <ScrollArea className="h-full">
-            <div className="space-y-4 p-4">
+            <div className="space-y-2 p-4">
               {messages.length === 0 && (
                 <div className="flex justify-start mb-6">
                   <div className="flex items-start gap-3 w-full pl-[15px]">
@@ -527,7 +527,7 @@ export default function Chat() {
                 return (
                   <div
                     key={msg.id}
-                    className={`flex ${(isOwnMessage && !isAnonymousOwnMessage) ? 'justify-end' : 'justify-start'} mb-6 group`}
+                    className={`flex ${(isOwnMessage && !isAnonymousOwnMessage) ? 'justify-end' : 'justify-start'} mb-3 group`}
                   >
                     {isEditing ? (
                       <div className="w-full max-w-[70%] space-y-2">
