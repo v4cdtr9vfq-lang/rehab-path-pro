@@ -21,7 +21,7 @@ const menuItems = [{
   path: "/progress"
 }, {
   emoji: "😊",
-  label: "Diario de Emociones",
+  label: "Diario de emociones",
   path: "/emotion-journal"
 }, {
   emoji: "📔",
