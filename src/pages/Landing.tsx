@@ -131,9 +131,9 @@ export default function Landing() {
       </section>
 
       {/* Testimonial */}
-      <section className="py-20 bg-primary/5">
+      <section className="py-20 bg-sky-blue/10">
         <div className="container mx-auto px-4 max-w-4xl">
-          <Card className="border-primary/20">
+          <Card className="border-2 border-sky-blue/30 bg-sky-blue/5">
             <CardContent className="p-12 text-center space-y-6">
               <div className="flex justify-center gap-2 mb-4 text-3xl">
                 🏅🏅🏅🏅🏅
