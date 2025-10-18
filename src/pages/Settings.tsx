@@ -127,15 +127,15 @@ export default function Settings() {
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('full_name, rehabilitation_type')
+        .select('*')
         .eq('user_id', user.id)
         .single();
 
       if (profile?.full_name) {
         setFullName(profile.full_name);
       }
-      if (profile?.rehabilitation_type) {
-        setRehabilitationType(profile.rehabilitation_type);
+      if ((profile as any)?.rehabilitation_type) {
+        setRehabilitationType((profile as any).rehabilitation_type);
       }
     } catch (error) {
       console.error('Error loading user profile:', error);
@@ -157,9 +157,11 @@ export default function Settings() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Usuario no autenticado");
 
+      const updateData: any = { rehabilitation_type: rehabilitationType };
+
       const { error } = await supabase
         .from('profiles')
-        .update({ rehabilitation_type: rehabilitationType })
+        .update(updateData)
         .eq('user_id', user.id);
 
       if (error) throw error;

@@ -11,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import RehabilitationTypeDialog from "@/components/RehabilitationTypeDialog";
 
 interface CommunityUser {
   id: string;
@@ -138,7 +137,6 @@ export default function Community() {
 
   return (
     <div className="container mx-auto px-4 py-2 max-w-6xl">
-      <RehabilitationTypeDialog />
       {/* Availability Toggle - Solo para usuarios con 3+ medallas */}
       {hasMinimumMedalsForHelp && (
         <Card className="mb-6 border-primary/20">

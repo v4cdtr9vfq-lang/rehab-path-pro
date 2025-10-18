@@ -46,16 +46,18 @@ export default function RehabilitationTypeDialog() {
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('rehabilitation_type')
+        .select('*')
         .eq('user_id', user.id)
         .single();
 
-      // Show dialog if rehabilitation_type is null
-      if (profile && profile.rehabilitation_type === null) {
+      // Show dialog if rehabilitation_type is null or undefined
+      if (profile && !(profile as any).rehabilitation_type) {
         setOpen(true);
       }
     } catch (error) {
       console.error('Error checking rehabilitation type:', error);
+      // Show dialog on error as well (column might not exist yet)
+      setOpen(true);
     }
   };
 
@@ -74,11 +76,13 @@ export default function RehabilitationTypeDialog() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Usuario no autenticado");
 
+      const updateData: any = { 
+        rehabilitation_type: selectedType === 'prefiero_no_decir' ? 'prefiero_no_decir' : selectedType 
+      };
+
       const { error } = await supabase
         .from('profiles')
-        .update({ 
-          rehabilitation_type: selectedType === 'prefiero_no_decir' ? 'prefiero_no_decir' : selectedType 
-        })
+        .update(updateData)
         .eq('user_id', user.id);
 
       if (error) throw error;
