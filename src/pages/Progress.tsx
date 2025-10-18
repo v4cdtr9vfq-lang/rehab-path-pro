@@ -561,7 +561,6 @@ export default function ProgressPage() {
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <span className="text-lg">📊</span>
             Progreso total:
           </CardTitle>
         </CardHeader>
