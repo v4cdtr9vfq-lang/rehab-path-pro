@@ -451,7 +451,6 @@ export default function ProgressPage() {
       <Card className="border-sky-blue/40 bg-gradient-to-br from-sky-blue/15 to-sky-blue/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            <span className="text-2xl">📈</span>
             {currentTab === 'daily' && 'Progreso hoy'}
             {currentTab === 'week' && 'Progreso semanal'}
             {currentTab === 'month' && 'Progreso mensual'}
