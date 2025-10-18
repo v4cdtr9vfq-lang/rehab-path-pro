@@ -117,11 +117,11 @@ export default function RehabilitationTypeDialog() {
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <p className="text-sm text-muted-foreground text-left">
+            <p className="text-sm text-muted-foreground pl-3">
               Liberación de:
             </p>
             <Select value={selectedType} onValueChange={setSelectedType}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full pl-3">
                 <SelectValue placeholder="Selecciona una opción" />
               </SelectTrigger>
               <SelectContent>
