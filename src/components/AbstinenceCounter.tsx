@@ -33,20 +33,20 @@ export function AbstinenceCounter({
 
     return () => clearInterval(interval);
   }, [startDate]);
-  return <div className="rounded-3xl p-8 md:p-12 bg-card border border-border/50">
-      <p className="text-muted-foreground text-base mb-8">Soy libre desde hace:</p>
+  return <div className="rounded-3xl p-8 md:p-12 bg-gradient-to-br from-sky-blue/10 to-transparent border border-sky-blue/30">
+      <p className="text-sky-blue text-base mb-8">Soy libre desde hace:</p>
       <div className="grid grid-cols-3 gap-6 md:gap-8">
         <div className="text-center">
-          <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight">{count.years}</div>
-          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium">Años</div>
+          <div className="text-7xl md:text-8xl font-bold text-sky-blue mb-3 tracking-tight">{count.years}</div>
+          <div className="text-sm uppercase tracking-widest text-sky-blue/80 font-medium">Años</div>
         </div>
         <div className="text-center">
-          <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight">{count.months}</div>
-          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium">Meses</div>
+          <div className="text-7xl md:text-8xl font-bold text-sky-blue mb-3 tracking-tight">{count.months}</div>
+          <div className="text-sm uppercase tracking-widest text-sky-blue/80 font-medium">Meses</div>
         </div>
         <div className="text-center">
-          <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight">{count.days}</div>
-          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium">Días</div>
+          <div className="text-7xl md:text-8xl font-bold text-sky-blue mb-3 tracking-tight">{count.days}</div>
+          <div className="text-sm uppercase tracking-widest text-sky-blue/80 font-medium">Días</div>
         </div>
       </div>
     </div>;
