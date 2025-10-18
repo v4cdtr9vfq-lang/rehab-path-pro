@@ -45,6 +45,7 @@ export default function Home() {
   const [showMedalPopup, setShowMedalPopup] = useState(false);
   const [newMedal, setNewMedal] = useState<{type: string, name: string, emoji: string} | null>(null);
   const [sobrietyDays, setSobrietyDays] = useState(0);
+  const [hasUnsavedOrder, setHasUnsavedOrder] = useState(false);
   const allQuotes = [{
     text: "Siempre es lo simple lo que produce lo maravilloso.",
     author: "Amelia Barr"
@@ -376,7 +377,7 @@ export default function Home() {
   );
 
   // Handle drag end
-  const handleDragEnd = async (event: DragEndEvent) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!over || active.id === over.id) {
@@ -386,17 +387,20 @@ export default function Home() {
     const oldIndex = activeGoals.findIndex((goal) => goal.id === active.id);
     const newIndex = activeGoals.findIndex((goal) => goal.id === over.id);
 
-    // Optimistically update UI
+    // Only update UI locally, don't save yet
     const newGoals = arrayMove(activeGoals, oldIndex, newIndex);
     setActiveGoals(newGoals);
+    setHasUnsavedOrder(true);
+  };
 
-    // Save new order to database
+  // Save goal order to database
+  const saveGoalOrder = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       // Get unique original goal IDs in the new order
-      const uniqueGoalIds = Array.from(new Set(newGoals.map(g => g.originalId)));
+      const uniqueGoalIds = Array.from(new Set(activeGoals.map(g => g.originalId)));
       
       // Update order_index for each unique goal
       const updates = uniqueGoalIds.map((goalId, index) => 
@@ -408,6 +412,12 @@ export default function Home() {
       );
 
       await Promise.all(updates);
+      
+      setHasUnsavedOrder(false);
+      toast({
+        title: "Orden guardado",
+        description: "El orden de las metas ha sido actualizado."
+      });
     } catch (error) {
       console.error('Error updating goal order:', error);
       toast({
@@ -415,9 +425,6 @@ export default function Home() {
         description: "No se pudo guardar el orden de las metas.",
         variant: "destructive",
       });
-      // Revert on error
-      const revertedGoals = arrayMove(newGoals, newIndex, oldIndex);
-      setActiveGoals(revertedGoals);
     }
   };
 
@@ -711,9 +718,16 @@ export default function Home() {
       <Card className="border-sidebar-border">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold">Metas de hoy:</CardTitle>
-          <Link to="/plan">
-            <Button variant="ghost" size="sm" className="text-primary">Ver todas</Button>
-          </Link>
+          <div className="flex gap-2">
+            {hasUnsavedOrder && (
+              <Button onClick={saveGoalOrder} variant="default" size="sm">
+                Guardar orden
+              </Button>
+            )}
+            <Link to="/plan">
+              <Button variant="ghost" size="sm" className="text-primary">Ver todas</Button>
+            </Link>
+          </div>
         </CardHeader>
         <CardContent>
           {activeGoals.length === 0 ? (
