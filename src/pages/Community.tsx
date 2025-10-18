@@ -148,7 +148,7 @@ export default function Community() {
         </CardHeader>
         <CardContent>
           {/* Header Legend */}
-          <div className="grid grid-cols-[60px_1fr_auto_120px_100px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
+          <div className="grid grid-cols-[60px_1fr_auto_100px_120px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
             <div></div>
             <div>Nombre:</div>
             <div className="flex gap-1 justify-center">
@@ -156,8 +156,8 @@ export default function Community() {
               <div className="text-center w-[60px]">Meses:</div>
               <div className="text-center w-[60px]">Días:</div>
             </div>
-            <div className="text-center">Medallas:</div>
             <div></div>
+            <div className="text-center">Medallas:</div>
           </div>
 
           <div className="space-y-3">
@@ -169,7 +169,7 @@ export default function Community() {
               return (
                 <div
                   key={user.id}
-                  className={`grid grid-cols-[60px_1fr_auto_120px_100px] gap-3 items-center p-4 rounded-xl transition-colors ${
+                  className={`grid grid-cols-[60px_1fr_auto_100px_120px] gap-3 items-center p-4 rounded-xl transition-colors ${
                     user.availableForHelp
                       ? "bg-success/10 border border-success/30"
                       : "bg-muted/30"
@@ -207,6 +207,15 @@ export default function Community() {
                     </div>
                   </div>
 
+                  {/* Availability Badge */}
+                  <div className="flex justify-center">
+                    {user.availableForHelp && (
+                      <Badge variant="secondary" className="flex-shrink-0">
+                        Disponible
+                      </Badge>
+                    )}
+                  </div>
+
                   {/* Medals */}
                   <div className="flex gap-1 justify-center">
                     {getMedalsByTime(user.years, user.days).map((medal, idx) => (
@@ -214,15 +223,6 @@ export default function Community() {
                         {medal}
                       </span>
                     ))}
-                  </div>
-
-                  {/* Availability Badge */}
-                  <div className="flex justify-end">
-                    {user.availableForHelp && (
-                      <Badge variant="secondary" className="flex-shrink-0">
-                        Disponible
-                      </Badge>
-                    )}
                   </div>
                 </div>
               );
