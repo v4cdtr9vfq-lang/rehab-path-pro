@@ -12,19 +12,17 @@ const Progress = React.forwardRef<
   ProgressProps
 >(({ className, value, delay = 0, ...props }, ref) => {
   const [displayValue, setDisplayValue] = React.useState(0);
-  const hasAnimatedRef = React.useRef(false);
+  const [hasAnimated, setHasAnimated] = React.useState(false);
 
   React.useEffect(() => {
-    if (!hasAnimatedRef.current) {
+    if (!hasAnimated && value !== undefined) {
       const timer = setTimeout(() => {
-        setDisplayValue(value || 0);
-        hasAnimatedRef.current = true;
+        setDisplayValue(value);
+        setHasAnimated(true);
       }, 100 + delay);
       return () => clearTimeout(timer);
-    } else {
-      setDisplayValue(value || 0);
     }
-  }, [value, delay]);
+  }, [value, delay, hasAnimated]);
 
   return (
     <ProgressPrimitive.Root
