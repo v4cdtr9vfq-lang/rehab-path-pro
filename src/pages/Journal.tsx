@@ -462,10 +462,9 @@ export default function Journal() {
           <Card className="border-primary/20">
             <CardContent className="p-12 text-center">
               <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground mb-4">Aún no has creado ninguna entrada</p>
-              <Button onClick={() => setShowNewEntry(true)} className="gap-2">
-                <Plus className="h-4 w-4" />
-                Crear Primera Entrada
+              <p className="text-muted-foreground mb-4">Aún no has creado ninguna entrada.</p>
+              <Button onClick={() => setShowNewEntry(true)} size="icon" className="h-12 w-12 rounded-full">
+                <Plus className="h-6 w-6" />
               </Button>
             </CardContent>
           </Card>
