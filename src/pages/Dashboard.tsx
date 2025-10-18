@@ -764,16 +764,18 @@ export default function Home() {
 
       {/* Daily Reflection */}
       <Card className="border-sidebar-border bg-gradient-to-br from-sky-blue/10 to-transparent md:-mt-[3px]">
-        <CardHeader className="flex flex-row items-start justify-between gap-4 pb-3">
-          <div className="flex items-center gap-2 flex-1">
-            <span className="text-2xl flex-shrink-0">💡</span>
-            <h3 className="font-semibold text-foreground text-sm md:text-lg">Reflexión del día</h3>
+        <CardHeader className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-4 pb-3">
+          <div className="flex items-start md:items-center justify-between gap-2 w-full">
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <span className="text-2xl flex-shrink-0">💡</span>
+              <h3 className="font-semibold text-foreground text-base md:text-xl leading-tight">Reflexión del día</h3>
+            </div>
+            <Link to={`/journal?reflection=${encodeURIComponent(getReflectionOfTheDay())}`} className="flex-shrink-0">
+              <Button variant="ghost" size="sm" className="text-primary">Escribir</Button>
+            </Link>
           </div>
-          <Link to={`/journal?reflection=${encodeURIComponent(getReflectionOfTheDay())}`}>
-            <Button variant="ghost" size="sm" className="text-primary flex-shrink-0 -mt-9">Escribir</Button>
-          </Link>
         </CardHeader>
-        <CardContent className="-mt-5 pl-[52px] pr-6 pb-6">
+        <CardContent className="pl-[52px] pr-6 pb-6 pt-[25px]">
           <p className="text-foreground/80 text-base leading-relaxed">
             {getReflectionOfTheDay()}
           </p>
