@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   DndContext,
   closestCenter,
@@ -31,6 +32,7 @@ export default function Home() {
   const {
     toast
   } = useToast();
+  const isMobile = useIsMobile();
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [loading, setLoading] = useState(true);
   const [checkInCompleted, setCheckInCompleted] = useState(false);
@@ -814,22 +816,57 @@ export default function Home() {
               </Link>
             </div>
           ) : (
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
-            >
-              <SortableContext
-                items={activeGoals.map(g => g.id)}
-                strategy={verticalListSortingStrategy}
-              >
+            <>
+              {isMobile ? (
                 <div className="space-y-3">
                   {activeGoals.map((goal) => (
-                    <SortableGoalItem key={goal.id} goal={goal} />
+                    <div
+                      key={goal.id}
+                      className="flex items-center justify-between p-3 rounded-xl bg-muted/50 border border-sidebar-border"
+                    >
+                      <div className="flex items-center gap-2 flex-1">
+                        <button onClick={() => toggleGoal(goal.id)} className="flex-shrink-0">
+                          {goal.status === "completed" ? (
+                            <CheckCircle2 className="h-5 w-5 text-green-500" />
+                          ) : (
+                            <Circle className="h-5 w-5 text-muted-foreground" />
+                          )}
+                        </button>
+                        <div>
+                          <p className="font-semibold text-foreground text-sm">{goal.title}</p>
+                          <p
+                            className={`text-xs ${
+                              goal.status === "completed"
+                                ? "text-green-500"
+                                : "text-muted-foreground"
+                            }`}
+                          >
+                            {goal.status === "completed" ? "Completado" : goal.period}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   ))}
                 </div>
-              </SortableContext>
-            </DndContext>
+              ) : (
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={handleDragEnd}
+                >
+                  <SortableContext
+                    items={activeGoals.map(g => g.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    <div className="space-y-3">
+                      {activeGoals.map((goal) => (
+                        <SortableGoalItem key={goal.id} goal={goal} />
+                      ))}
+                    </div>
+                  </SortableContext>
+                </DndContext>
+              )}
+            </>
           )}
         </CardContent>
       </Card>
