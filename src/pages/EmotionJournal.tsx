@@ -572,13 +572,13 @@ export default function EmotionJournal() {
           {selectedPrimary.length > 0 && (
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-4">Me he sentido:</h2>
-              <div className="space-y-6">
+              <div className="flex lg:flex-col gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory lg:snap-none">
                 {[...selectedPrimary].reverse().map((categoryId) => {
                   const category = emotionCategories.find(c => c.id === categoryId);
                   if (!category) return null;
                   
                   return (
-                    <div key={categoryId}>
+                    <div key={categoryId} className="min-w-[85vw] lg:min-w-0 snap-center">
                       <h3 className="text-lg font-medium text-green-600 mb-3">{category.name}</h3>
                       <div className="flex flex-wrap gap-3">
                         {category.secondaryEmotions.map((emotion) => {
@@ -616,9 +616,9 @@ export default function EmotionJournal() {
           {selectedSecondary.length > 0 && (
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-4">Y a nivel más profundo:</h2>
-              <div className="space-y-6">
+              <div className="flex lg:flex-col gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory lg:snap-none">
                 {selectedSecondaryData.map((emotion) => (
-                  <div key={emotion.id}>
+                  <div key={emotion.id} className="min-w-[85vw] lg:min-w-0 snap-center">
                     <h3 className="text-lg font-medium text-green-600 mb-3">{emotion.name}</h3>
                     <div className="flex flex-wrap gap-3">
                       {emotion.tertiaryEmotions.map((tertiaryEmotion) => {
