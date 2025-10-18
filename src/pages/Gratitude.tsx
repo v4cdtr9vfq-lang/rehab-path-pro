@@ -267,13 +267,7 @@ export default function Gratitude() {
 
       {/* Example Entry Card */}
       <Card className="border-sky-blue/30 bg-gradient-to-br from-sky-blue/10 to-transparent">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CalendarIcon className="h-5 w-5 text-sky-blue" />
-            Ejemplo de registro del día
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="flex items-center gap-2 mb-4">
             <CalendarIcon className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm font-medium text-muted-foreground">
