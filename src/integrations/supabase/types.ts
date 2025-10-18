@@ -348,6 +348,7 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          rehabilitation_type: string | null
           updated_at: string
           user_id: string
         }
@@ -356,6 +357,7 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          rehabilitation_type?: string | null
           updated_at?: string
           user_id: string
         }
@@ -364,6 +366,7 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          rehabilitation_type?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -517,6 +520,7 @@ export type Database = {
           created_at: string
           id: string
           name: string
+          order_index: number | null
           updated_at: string
           user_id: string
           value_type: string
@@ -525,6 +529,7 @@ export type Database = {
           created_at?: string
           id?: string
           name: string
+          order_index?: number | null
           updated_at?: string
           user_id: string
           value_type?: string
@@ -533,6 +538,7 @@ export type Database = {
           created_at?: string
           id?: string
           name?: string
+          order_index?: number | null
           updated_at?: string
           user_id?: string
           value_type?: string

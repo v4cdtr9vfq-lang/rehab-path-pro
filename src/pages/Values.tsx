@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, X, CheckCircle2, Circle, TrendingUp } from "lucide-react";
+import { Plus, X, CheckCircle2, Circle, TrendingUp, GripVertical } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -10,12 +10,31 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Value {
   id: string;
   name: string;
   selected: boolean;
   value_type: 'primary' | 'secondary';
+  order_index: number;
 }
 
 interface ValueStats {
@@ -27,6 +46,7 @@ const COLORS = ['#22c55e', '#f97316', '#3b82f6', '#a855f7', '#ec4899', '#eab308'
 
 export default function Values() {
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   const [values, setValues] = useState<Value[]>([]);
   const [isPrimaryDialogOpen, setIsPrimaryDialogOpen] = useState(false);
   const [isSecondaryDialogOpen, setIsSecondaryDialogOpen] = useState(false);
@@ -35,6 +55,15 @@ export default function Values() {
   const [weekStats, setWeekStats] = useState<ValueStats[]>([]);
   const [monthStats, setMonthStats] = useState<ValueStats[]>([]);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [hasUnsavedOrder, setHasUnsavedOrder] = useState(false);
+  const [originalValuesOrder, setOriginalValuesOrder] = useState<Value[]>([]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   useEffect(() => {
     initializeValues();
@@ -114,7 +143,7 @@ export default function Values() {
         .from('values')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: true });
+        .order('order_index', { ascending: true });
 
       if (valuesError) throw valuesError;
 
@@ -134,10 +163,12 @@ export default function Values() {
         id: v.id,
         name: v.name,
         selected: selectedIds.has(v.id),
-        value_type: (v.value_type as 'primary' | 'secondary') || 'secondary'
+        value_type: (v.value_type as 'primary' | 'secondary') || 'secondary',
+        order_index: v.order_index || 0
       }));
 
       setValues(mappedValues);
+      setOriginalValuesOrder(mappedValues);
     } catch (error: any) {
       console.error('Error fetching values:', error);
       toast({
@@ -297,12 +328,15 @@ export default function Values() {
       if (error) throw error;
 
       if (data) {
-        setValues(prev => [...prev, { 
+        const newValue: Value = { 
           id: data.id, 
           name: data.name, 
           selected: false,
-          value_type: type 
-        }]);
+          value_type: type,
+          order_index: data.order_index || 0
+        };
+        setValues(prev => [...prev, newValue]);
+        setOriginalValuesOrder(prev => [...prev, newValue]);
         setNewValueName("");
         setIsPrimaryDialogOpen(false);
         setIsSecondaryDialogOpen(false);
@@ -331,6 +365,7 @@ export default function Values() {
       if (error) throw error;
 
       setValues(prev => prev.filter(v => v.id !== id));
+      setOriginalValuesOrder(prev => prev.filter(v => v.id !== id));
       
       toast({
         title: "Valor eliminado",
@@ -343,6 +378,75 @@ export default function Values() {
       toast({
         title: "Error",
         description: "No se pudo eliminar el valor",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDragEnd = (event: DragEndEvent, type: 'primary' | 'secondary') => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    const filteredValues = values.filter(v => v.value_type === type);
+    const oldIndex = filteredValues.findIndex(v => v.id === active.id);
+    const newIndex = filteredValues.findIndex(v => v.id === over.id);
+
+    const reorderedFiltered = arrayMove(filteredValues, oldIndex, newIndex);
+    
+    // Update order_index for reordered items
+    const updatedFiltered = reorderedFiltered.map((v, idx) => ({ ...v, order_index: idx }));
+    
+    // Merge with other type values
+    const otherValues = values.filter(v => v.value_type !== type);
+    const newValues = [...otherValues, ...updatedFiltered].sort((a, b) => {
+      if (a.value_type === b.value_type) {
+        return a.order_index - b.order_index;
+      }
+      return a.value_type === 'primary' ? -1 : 1;
+    });
+
+    setValues(newValues);
+    setHasUnsavedOrder(true);
+  };
+
+  const cancelReorder = () => {
+    setValues([...originalValuesOrder]);
+    setHasUnsavedOrder(false);
+    toast({
+      title: "Cambios cancelados",
+      description: "Se ha restaurado el orden original",
+    });
+  };
+
+  const saveValueOrder = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Update order_index for all values
+      const updates = values.map((value, index) => 
+        supabase
+          .from('values')
+          .update({ order_index: value.order_index })
+          .eq('id', value.id)
+      );
+
+      await Promise.all(updates);
+
+      setOriginalValuesOrder([...values]);
+      setHasUnsavedOrder(false);
+      
+      toast({
+        title: "Orden guardado",
+        description: "El orden de tus valores ha sido actualizado",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "No se pudo guardar el orden",
         variant: "destructive",
       });
     }
@@ -395,8 +499,94 @@ export default function Values() {
     );
   };
 
+  // Sortable Value Item Component
+  interface SortableValueItemProps {
+    value: Value;
+    onToggle: () => void;
+    onDelete: () => void;
+  }
+
+  const SortableValueItem = ({ value, onToggle, onDelete }: SortableValueItemProps) => {
+    const {
+      attributes,
+      listeners,
+      setNodeRef,
+      transform,
+      transition,
+      isDragging,
+    } = useSortable({ id: value.id });
+
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+      opacity: isDragging ? 0.5 : 1,
+    };
+
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
+          value.selected
+            ? "bg-green-500/10 border-2 border-green-500/30"
+            : "bg-card/50 border-2 border-transparent hover:border-sky-blue/10"
+        }`}
+      >
+        {!isMobile && (
+          <div
+            {...attributes}
+            {...listeners}
+            className="cursor-grab active:cursor-grabbing flex-shrink-0"
+          >
+            <GripVertical className="h-5 w-5 text-muted-foreground" />
+          </div>
+        )}
+        <button
+          onClick={onToggle}
+          className="flex-shrink-0"
+        >
+          {value.selected ? (
+            <CheckCircle2 className="h-6 w-6 text-green-500" />
+          ) : (
+            <Circle className="h-6 w-6 text-muted-foreground" />
+          )}
+        </button>
+        <span className={`text-lg text-foreground flex-1 ${value.value_type === 'primary' ? 'font-semibold' : ''}`}>
+          {value.name}
+        </span>
+        {value.selected && (
+          <span className="text-xs bg-green-500 text-white px-3 py-1 rounded-full">
+            Activo Hoy
+          </span>
+        )}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onDelete}
+          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-[35px] animate-in fade-in duration-500">
+      {hasUnsavedOrder && !isMobile && (
+        <div className="flex items-center justify-end gap-2 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+          <span className="text-sm text-foreground mr-auto">
+            Hay cambios sin guardar en el orden de valores
+          </span>
+          <Button variant="outline" onClick={cancelReorder}>
+            Cancelar
+          </Button>
+          <Button onClick={saveValueOrder}>
+            Guardar orden
+          </Button>
+        </div>
+      )}
+
       <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
@@ -456,41 +646,28 @@ export default function Values() {
                 No tienes valores primarios aún. Añade hasta 3 valores fundamentales.
               </div>
             ) : (
-              values.filter(v => v.value_type === 'primary').map((value) => (
-                <div
-                  key={value.id}
-                  className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
-                    value.selected
-                      ? "bg-green-500/10 border-2 border-green-500/30"
-                      : "bg-card/50 border-2 border-transparent hover:border-sky-blue/10"
-                  }`}
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={(event) => handleDragEnd(event, 'primary')}
+              >
+                <SortableContext
+                  items={values.filter(v => v.value_type === 'primary').map(v => v.id)}
+                  strategy={verticalListSortingStrategy}
+                  disabled={isMobile}
                 >
-                  <button
-                    onClick={() => toggleValue(value.id)}
-                    className="flex-shrink-0"
-                  >
-                    {value.selected ? (
-                      <CheckCircle2 className="h-6 w-6 text-green-500" />
-                    ) : (
-                      <Circle className="h-6 w-6 text-muted-foreground" />
-                    )}
-                  </button>
-                  <span className="text-lg text-foreground flex-1 font-semibold">{value.name}</span>
-                  {value.selected && (
-                    <span className="text-xs bg-green-500 text-white px-3 py-1 rounded-full">
-                      Activo Hoy
-                    </span>
-                  )}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setDeleteConfirmId(value.id)}
-                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))
+                  <div className="space-y-4">
+                    {values.filter(v => v.value_type === 'primary').map((value) => (
+                      <SortableValueItem
+                        key={value.id}
+                        value={value}
+                        onToggle={() => toggleValue(value.id)}
+                        onDelete={() => setDeleteConfirmId(value.id)}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
             )}
           </CardContent>
         </Card>
@@ -541,41 +718,28 @@ export default function Values() {
                 No tienes valores secundarios aún. Añade hasta 6 valores de apoyo.
               </div>
             ) : (
-              values.filter(v => v.value_type === 'secondary').map((value) => (
-                <div
-                  key={value.id}
-                  className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
-                    value.selected
-                      ? "bg-green-500/10 border-2 border-green-500/30"
-                      : "bg-card/50 border-2 border-transparent hover:border-sky-blue/10"
-                  }`}
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={(event) => handleDragEnd(event, 'secondary')}
+              >
+                <SortableContext
+                  items={values.filter(v => v.value_type === 'secondary').map(v => v.id)}
+                  strategy={verticalListSortingStrategy}
+                  disabled={isMobile}
                 >
-                  <button
-                    onClick={() => toggleValue(value.id)}
-                    className="flex-shrink-0"
-                  >
-                    {value.selected ? (
-                      <CheckCircle2 className="h-6 w-6 text-green-500" />
-                    ) : (
-                      <Circle className="h-6 w-6 text-muted-foreground" />
-                    )}
-                  </button>
-                  <span className="text-lg text-foreground flex-1">{value.name}</span>
-                  {value.selected && (
-                    <span className="text-xs bg-green-500 text-white px-3 py-1 rounded-full">
-                      Activo Hoy
-                    </span>
-                  )}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setDeleteConfirmId(value.id)}
-                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))
+                  <div className="space-y-4">
+                    {values.filter(v => v.value_type === 'secondary').map((value) => (
+                      <SortableValueItem
+                        key={value.id}
+                        value={value}
+                        onToggle={() => toggleValue(value.id)}
+                        onDelete={() => setDeleteConfirmId(value.id)}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
             )}
           </CardContent>
         </Card>
