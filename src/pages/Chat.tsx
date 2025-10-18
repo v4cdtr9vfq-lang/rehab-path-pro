@@ -474,11 +474,11 @@ export default function Chat() {
                     {onlineCountByRoom[currentRoom] || 0}
                   </Badge>
                 </SelectTrigger>
-                <SelectContent className="bg-popover z-[100] mt-1 pb-5">
+                <SelectContent className="bg-popover text-popover-foreground z-[100] mt-1 pb-5">
                   {CHAT_ROOMS.map((room) => (
-                    <SelectItem key={room.id} value={room.id} className="cursor-pointer pr-[15px] pl-3 [&>span:first-child]:hidden">
+                    <SelectItem key={room.id} value={room.id} className="cursor-pointer pr-[15px] pl-3 text-popover-foreground [&>span:first-child]:hidden">
                       <span className="flex items-center justify-between w-full pr-[40px]">
-                        <span>{room.label}</span>
+                        <span className="text-popover-foreground">{room.label}</span>
                         <Badge 
                           variant="secondary" 
                           className="absolute right-[15px] inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 !bg-secondary/80 text-black/60 pointer-events-none"
@@ -582,7 +582,7 @@ export default function Chat() {
                                     <MoreVertical className="h-4 w-4" />
                                   </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="bg-popover z-[100]">
+                                <DropdownMenuContent align="end" className="bg-popover text-popover-foreground z-[100]">
                                   <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
                                     <Edit2 className="h-4 w-4 mr-2" />
                                     Editar
@@ -616,7 +616,7 @@ export default function Chat() {
                                       <MoreVertical className="h-4 w-4" />
                                     </Button>
                                   </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="start" className="bg-popover z-[100]">
+                                  <DropdownMenuContent align="start" className="bg-popover text-popover-foreground z-[100]">
                                     <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
                                       <Edit2 className="h-4 w-4 mr-2" />
                                       Editar
