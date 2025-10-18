@@ -104,11 +104,6 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Aprensivo", "Asustado", "Atemorizado", "Aterrorizado", "Cauteloso", "Desconfiado", "En pánico", "Petrificado", "Preocupado", "Presentimiento", "Sospechoso", "Temor"]
       },
       {
-        id: "confundido_secundario",
-        name: "Confundido",
-        tertiaryEmotions: ["Ambivalente", "Aturdido", "Confuso", "Desconcertado", "Dividido", "Perdido", "Perplejo", "Vacilante"]
-      },
-      {
         id: "desorientado",
         name: "Desorientado",
         tertiaryEmotions: ["Aturdido", "Confuso", "Desconcertado", "Desorientado", "Perdido", "Perplejo"]
