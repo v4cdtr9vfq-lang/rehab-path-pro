@@ -47,6 +47,11 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Renovado", "Restaurado", "Revitalizado", "Revivido"]
       },
       {
+        id: "energico",
+        name: "Enérgico",
+        tertiaryEmotions: []
+      },
+      {
         id: "entusiasmado",
         name: "Entusiasmado",
         tertiaryEmotions: ["Animado", "Ansioso", "Apasionado", "Ardiente", "Asombrado", "Deslumbrado", "Emocionado", "Enérgico", "Entusiasta", "Sorprendido", "Vibrante", "Vigorizado"]
