@@ -226,9 +226,8 @@ export default function Plan() {
         dates.forEach((date, dayIndex) => {
           const dateStr = getLocalDateString(date);
 
-          // For today/week contexts, periodic goals only show on their specific day
-          // For month context, show periodic goals every day (they'll complete on their specific day)
-          if (g.goal_type === 'periodic' && g.periodic_type && context !== 'month') {
+          // For periodic goals, only show on their specific day regardless of context
+          if (g.goal_type === 'periodic' && g.periodic_type) {
             const dayOfMonth = date.getDate();
             const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
             let shouldShow = false;
@@ -239,7 +238,7 @@ export default function Plan() {
             } else if (g.periodic_type === 'final_mes' && dayOfMonth === lastDayOfMonth) {
               shouldShow = true;
             }
-            if (!shouldShow) return; // Skip for today/week if not the right day
+            if (!shouldShow) return; // Skip if not the right day
           }
 
           // How many instances per day based on goal type
