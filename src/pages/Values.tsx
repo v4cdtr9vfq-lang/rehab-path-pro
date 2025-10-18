@@ -453,7 +453,7 @@ export default function Values() {
           </Dialog>
         </div>
 
-        <Card className="border-border/50 bg-muted/20">
+        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
           <CardContent className="p-6 space-y-4">
             {values.filter(v => v.value_type === 'primary').length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
@@ -541,7 +541,7 @@ export default function Values() {
           </Dialog>
         </div>
 
-        <Card className="border-border/50 bg-muted/20">
+        <Card className="border-primary/20">
           <CardContent className="p-6 space-y-4">
             {values.filter(v => v.value_type === 'secondary').length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
