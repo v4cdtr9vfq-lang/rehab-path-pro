@@ -186,7 +186,7 @@ export default function Auth() {
             {isForgotPassword ? (
               <form onSubmit={handlePasswordReset} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email" className="pl-4">Email</Label>
                   <Input
                     id="email"
                     type="email"
@@ -226,7 +226,7 @@ export default function Auth() {
                 <form onSubmit={handleAuth} className="space-y-4">
                   {!isLogin && (
                     <div className="space-y-2">
-                      <Label htmlFor="fullName">Nombre completo</Label>
+                      <Label htmlFor="fullName" className="pl-4">Nombre completo</Label>
                       <Input
                         id="fullName"
                         type="text"
@@ -241,7 +241,7 @@ export default function Auth() {
                   )}
 
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email" className="pl-4">Email</Label>
                     <Input
                       id="email"
                       type="email"
@@ -255,7 +255,7 @@ export default function Auth() {
                   </div>
 
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between pl-4">
                       <Label htmlFor="password">Contraseña</Label>
                       {isLogin && (
                         <button
