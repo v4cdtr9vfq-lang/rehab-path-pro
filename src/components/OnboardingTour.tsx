@@ -94,8 +94,13 @@ export function OnboardingTour() {
 
   const checkOnboardingStatus = async () => {
     try {
+      console.log("🎯 Checking onboarding status...");
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        console.log("❌ No user found");
+        return;
+      }
+      console.log("✅ User found:", user.id);
 
       const { data: profile } = await supabase
         .from("profiles")
@@ -103,12 +108,21 @@ export function OnboardingTour() {
         .eq("user_id", user.id)
         .single();
 
+      console.log("📊 Profile data:", profile);
+      console.log("🎓 Onboarding completed:", profile?.onboarding_completed);
+
       if (profile && !profile.onboarding_completed) {
+        console.log("🚀 Starting onboarding tour in 1 second...");
         // Delay to let the page render first
-        setTimeout(() => setIsVisible(true), 1000);
+        setTimeout(() => {
+          console.log("✨ Setting tour visible NOW");
+          setIsVisible(true);
+        }, 1000);
+      } else {
+        console.log("⏭️ Skipping tour - already completed or no profile");
       }
     } catch (error) {
-      console.error("Error checking onboarding status:", error);
+      console.error("💥 Error checking onboarding status:", error);
     }
   };
 
@@ -212,7 +226,12 @@ export function OnboardingTour() {
     };
   };
 
-  if (!isVisible) return null;
+  if (!isVisible) {
+    console.log("👻 Tour not visible - isVisible is false");
+    return null;
+  }
+
+  console.log("🎨 Rendering tour - step:", currentStep, "highlightRect:", highlightRect);
 
   return (
     <>
