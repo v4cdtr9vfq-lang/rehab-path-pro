@@ -23,35 +23,36 @@ interface CommunityUser {
   days: number;
   medals: string[];
   availableForHelp: boolean;
+  rehabilitationType: string;
   realMedalsCount?: number;
 }
 
 const mockUsers: CommunityUser[] = [
-  { id: "1", name: "Carlos Martínez", avatar: "", years: 5, months: 4, days: 7, medals: ["🏆", "⭐", "💎"], availableForHelp: true },
-  { id: "2", name: "Ana García", avatar: "", years: 4, months: 9, days: 19, medals: ["🏆", "⭐", "💎", "🎯"], availableForHelp: true },
-  { id: "3", name: "Luis Hernández", avatar: "", years: 3, months: 1, days: 15, medals: ["🏆", "⭐"], availableForHelp: false },
-  { id: "4", name: "María López", avatar: "", years: 3, months: 0, days: 12, medals: ["🏆", "⭐", "💎"], availableForHelp: true },
-  { id: "5", name: "Pedro Sánchez", avatar: "", years: 2, months: 11, days: 24, medals: ["🏆", "⭐"], availableForHelp: false },
-  { id: "6", name: "Laura Rodríguez", avatar: "", years: 2, months: 6, days: 21, medals: ["🏆", "⭐", "💎", "🎯"], availableForHelp: true },
-  { id: "7", name: "José Fernández", avatar: "", years: 2, months: 2, days: 27, medals: ["🏆"], availableForHelp: false },
-  { id: "8", name: "Carmen Díaz", avatar: "", years: 1, months: 10, days: 12, medals: ["🏆", "⭐", "💎"], availableForHelp: true },
-  { id: "9", name: "Antonio Ruiz", avatar: "", years: 1, months: 8, days: 27, medals: ["🏆", "⭐"], availableForHelp: true },
-  { id: "10", name: "Isabel Torres", avatar: "", years: 1, months: 6, days: 18, medals: ["🏆"], availableForHelp: false },
-  { id: "11", name: "Miguel Ramírez", avatar: "", years: 1, months: 5, days: 4, medals: ["🏆", "⭐"], availableForHelp: true },
-  { id: "12", name: "Rosa Jiménez", avatar: "", years: 1, months: 2, days: 29, medals: ["🏆"], availableForHelp: false },
-  { id: "13", name: "Francisco Moreno", avatar: "", years: 1, months: 1, days: 15, medals: ["🏆", "⭐"], availableForHelp: true },
-  { id: "14", name: "Pilar Álvarez", avatar: "", years: 0, months: 10, days: 21, medals: ["⭐"], availableForHelp: false },
-  { id: "15", name: "David Romero", avatar: "", years: 0, months: 9, days: 19, medals: ["⭐", "💎"], availableForHelp: true },
-  { id: "16", name: "Teresa Navarro", avatar: "", years: 0, months: 7, days: 24, medals: ["⭐"], availableForHelp: true },
-  { id: "17", name: "Javier Gil", avatar: "", years: 0, months: 6, days: 7, medals: ["⭐"], availableForHelp: false },
-  { id: "18", name: "Elena Castro", avatar: "", years: 0, months: 5, days: 6, medals: ["⭐", "💎"], availableForHelp: true },
-  { id: "19", name: "Manuel Ortiz", avatar: "", years: 0, months: 4, days: 3, medals: ["⭐"], availableForHelp: false },
-  { id: "20", name: "Lucía Rubio", avatar: "", years: 0, months: 3, days: 8, medals: [], availableForHelp: true },
-  { id: "21", name: "Sergio Molina", avatar: "", years: 0, months: 2, days: 16, medals: ["⭐"], availableForHelp: true },
-  { id: "22", name: "Marta Delgado", avatar: "", years: 0, months: 1, days: 24, medals: [], availableForHelp: false },
-  { id: "23", name: "Raúl Serrano", avatar: "", years: 0, months: 1, days: 2, medals: [], availableForHelp: true },
-  { id: "24", name: "Patricia Vega", avatar: "", years: 0, months: 0, days: 21, medals: [], availableForHelp: false },
-  { id: "25", name: "Alberto Méndez", avatar: "", years: 0, months: 0, days: 14, medals: [], availableForHelp: true },
+  { id: "1", name: "Carlos Martínez", avatar: "", years: 5, months: 4, days: 7, medals: ["🏆", "⭐", "💎"], availableForHelp: true, rehabilitationType: "narcoticos" },
+  { id: "2", name: "Ana García", avatar: "", years: 4, months: 9, days: 19, medals: ["🏆", "⭐", "💎", "🎯"], availableForHelp: true, rehabilitationType: "pornografia" },
+  { id: "3", name: "Luis Hernández", avatar: "", years: 3, months: 1, days: 15, medals: ["🏆", "⭐"], availableForHelp: false, rehabilitationType: "narcoticos" },
+  { id: "4", name: "María López", avatar: "", years: 3, months: 0, days: 12, medals: ["🏆", "⭐", "💎"], availableForHelp: true, rehabilitationType: "codependencia" },
+  { id: "5", name: "Pedro Sánchez", avatar: "", years: 2, months: 11, days: 24, medals: ["🏆", "⭐"], availableForHelp: false, rehabilitationType: "azucar" },
+  { id: "6", name: "Laura Rodríguez", avatar: "", years: 2, months: 6, days: 21, medals: ["🏆", "⭐", "💎", "🎯"], availableForHelp: true, rehabilitationType: "pornografia" },
+  { id: "7", name: "José Fernández", avatar: "", years: 2, months: 2, days: 27, medals: ["🏆"], availableForHelp: false, rehabilitationType: "videojuegos" },
+  { id: "8", name: "Carmen Díaz", avatar: "", years: 1, months: 10, days: 12, medals: ["🏆", "⭐", "💎"], availableForHelp: true, rehabilitationType: "comida" },
+  { id: "9", name: "Antonio Ruiz", avatar: "", years: 1, months: 8, days: 27, medals: ["🏆", "⭐"], availableForHelp: true, rehabilitationType: "narcoticos" },
+  { id: "10", name: "Isabel Torres", avatar: "", years: 1, months: 6, days: 18, medals: ["🏆"], availableForHelp: false, rehabilitationType: "redes_sociales" },
+  { id: "11", name: "Miguel Ramírez", avatar: "", years: 1, months: 5, days: 4, medals: ["🏆", "⭐"], availableForHelp: true, rehabilitationType: "pornografia" },
+  { id: "12", name: "Rosa Jiménez", avatar: "", years: 1, months: 2, days: 29, medals: ["🏆"], availableForHelp: false, rehabilitationType: "compras" },
+  { id: "13", name: "Francisco Moreno", avatar: "", years: 1, months: 1, days: 15, medals: ["🏆", "⭐"], availableForHelp: true, rehabilitationType: "pornografia" },
+  { id: "14", name: "Pilar Álvarez", avatar: "", years: 0, months: 10, days: 21, medals: ["⭐"], availableForHelp: false, rehabilitationType: "drama" },
+  { id: "15", name: "David Romero", avatar: "", years: 0, months: 9, days: 19, medals: ["⭐", "💎"], availableForHelp: true, rehabilitationType: "pornografia" },
+  { id: "16", name: "Teresa Navarro", avatar: "", years: 0, months: 7, days: 24, medals: ["⭐"], availableForHelp: true, rehabilitationType: "narcoticos" },
+  { id: "17", name: "Javier Gil", avatar: "", years: 0, months: 6, days: 7, medals: ["⭐"], availableForHelp: false, rehabilitationType: "videojuegos" },
+  { id: "18", name: "Elena Castro", avatar: "", years: 0, months: 5, days: 6, medals: ["⭐", "💎"], availableForHelp: true, rehabilitationType: "codependencia" },
+  { id: "19", name: "Manuel Ortiz", avatar: "", years: 0, months: 4, days: 3, medals: ["⭐"], availableForHelp: false, rehabilitationType: "azucar" },
+  { id: "20", name: "Lucía Rubio", avatar: "", years: 0, months: 3, days: 8, medals: [], availableForHelp: true, rehabilitationType: "redes_sociales" },
+  { id: "21", name: "Sergio Molina", avatar: "", years: 0, months: 2, days: 16, medals: ["⭐"], availableForHelp: true, rehabilitationType: "pornografia" },
+  { id: "22", name: "Marta Delgado", avatar: "", years: 0, months: 1, days: 24, medals: [], availableForHelp: false, rehabilitationType: "comida" },
+  { id: "23", name: "Raúl Serrano", avatar: "", years: 0, months: 1, days: 2, medals: [], availableForHelp: true, rehabilitationType: "otros" },
+  { id: "24", name: "Patricia Vega", avatar: "", years: 0, months: 0, days: 21, medals: [], availableForHelp: false, rehabilitationType: "narcoticos" },
+  { id: "25", name: "Alberto Méndez", avatar: "", years: 0, months: 0, days: 14, medals: [], availableForHelp: true, rehabilitationType: "pornografia" },
 ];
 
 const REHABILITATION_TYPES = [
@@ -88,7 +89,7 @@ export default function Community() {
         // Obtener perfil y fecha de abstinencia
         const { data: profile } = await supabase
           .from('profiles')
-          .select('full_name, abstinence_start_date')
+          .select('full_name, abstinence_start_date, rehabilitation_type')
           .eq('user_id', user.id)
           .single();
 
@@ -123,6 +124,7 @@ export default function Community() {
             days,
             medals: getMedalsByTime(totalDays),
             availableForHelp: isAvailableForHelp,
+            rehabilitationType: profile.rehabilitation_type || 'otros',
             realMedalsCount
           });
           
@@ -157,7 +159,8 @@ export default function Community() {
   const sortedUsers = allUsers
     .filter((user) => {
       if (selectedFilter === "todos") return true;
-      return true;
+      // Filtrar por tipo de rehabilitación
+      return user.rehabilitationType === selectedFilter;
     })
     .sort((a, b) => {
       // Sort by years first
