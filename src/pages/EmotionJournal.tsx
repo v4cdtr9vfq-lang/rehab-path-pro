@@ -235,9 +235,14 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "vulnerable",
         name: "Vulnerable",
-        tertiaryEmotions: ["Cauteloso", "Frágil", "Indefenso", "Inseguro", "Reservado", "Sensible", "Tembloroso"]
+        tertiaryEmotions: ["Cauteloso", "Frágil", "Indefenso", "Reservado", "Sensible", "Tembloroso"]
       }
     ]
+  },
+  {
+    id: "inseguro",
+    name: "Inseguro",
+    secondaryEmotions: []
   }
 ];
 
