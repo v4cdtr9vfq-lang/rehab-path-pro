@@ -205,9 +205,9 @@ export default function Gratitude() {
       <div>
         <Card className="border-border">
           <CardHeader className="pb-3">
-            <CardTitle className="flex items-center justify-between pl-[14px]">
+            <CardTitle className="flex flex-col md:flex-row md:items-center md:justify-between pl-[14px] gap-2">
               <span>Gratitud de hoy:</span>
-              <span className="text-sm font-normal text-muted-foreground pr-6">
+              <span className="text-sm font-normal text-muted-foreground md:pr-6">
                 {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/^\w/, c => c.toUpperCase()).replace(/\sde\s(\w)/, (match, p1) => ` de ${p1.toUpperCase()}`)}
               </span>
             </CardTitle>
@@ -288,7 +288,7 @@ export default function Gratitude() {
           )}
 
           {(!todayEntry || todayEntry.items.length === 0) && (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="text-center py-3 text-muted-foreground">
               <p>Aún no has añadido nada a tu lista de hoy</p>
             </div>
           )}
