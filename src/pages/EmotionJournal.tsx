@@ -99,6 +99,11 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Avergonzado", "Cohibido", "Culpable", "Mortificado", "Turbado"]
       },
       {
+        id: "desconfiado",
+        name: "Desconfiado",
+        tertiaryEmotions: []
+      },
+      {
         id: "dolor",
         name: "Dolor",
         tertiaryEmotions: ["Afligido", "Agonía", "Angustiado", "Arrepentido", "Desconsolado", "Devastado", "Duelo", "Herido", "Miserable", "Remordido", "Solo"]
