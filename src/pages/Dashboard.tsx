@@ -791,7 +791,7 @@ export default function Home() {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          <p className="text-foreground/80 text-base md:text-lg leading-relaxed">
+          <p className="text-foreground/80 text-base md:text-lg leading-relaxed px-[15px]">
             {getReflectionOfTheDay()}
           </p>
           <Link to={`/journal?reflection=${encodeURIComponent(getReflectionOfTheDay())}`} className="block">
