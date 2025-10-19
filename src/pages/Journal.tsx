@@ -661,12 +661,13 @@ export default function Journal() {
                   <p className="text-foreground/80 mb-4">{entry.content}</p>
                   <div className="flex flex-wrap gap-2">
                     {entry.tags.map((tag, i) => (
-                      <span
+                      <button
                         key={i}
-                        className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full"
+                        onClick={() => setSearchTerm(tag)}
+                        className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full hover:bg-primary/20 transition-colors cursor-pointer"
                       >
                         #{tag}
-                      </span>
+                      </button>
                     ))}
                   </div>
                 </CardContent>
