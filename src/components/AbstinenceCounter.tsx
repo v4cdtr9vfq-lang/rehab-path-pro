@@ -18,14 +18,17 @@ export function AbstinenceCounter({
       const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
       
       const diff = today.getTime() - start.getTime();
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const years = Math.floor(days / 365);
-      const months = Math.floor(days % 365 / 30);
-      const remainingDays = days % 30;
+      const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+      
+      const years = Math.floor(totalDays / 365);
+      const daysAfterYears = totalDays % 365;
+      const months = Math.floor(daysAfterYears / 30);
+      const days = daysAfterYears % 30;
+      
       setCount({
         years,
         months,
-        days: remainingDays
+        days
       });
     };
     calculateTime();
