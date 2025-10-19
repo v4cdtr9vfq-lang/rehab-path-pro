@@ -39,7 +39,13 @@ export default function Auth() {
   const validateInputs = () => {
     try {
       emailSchema.parse(email);
-      passwordSchema.parse(password);
+      // Solo validar requisitos estrictos en registro, no en login
+      if (!isLogin) {
+        passwordSchema.parse(password);
+      } else {
+        // En login, solo verificar que no esté vacía
+        z.string().min(1, "La contraseña es requerida").parse(password);
+      }
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {
