@@ -629,7 +629,7 @@ export default function Values() {
           </Dialog>
         </div>
 
-        <p className="text-foreground/80 mb-3 pl-[35px]">
+        <p className="text-foreground/80 mb-[15px] pl-[35px]">
           Selecciona con qué valor has conectado hoy:
         </p>
 
@@ -705,7 +705,7 @@ export default function Values() {
           </Dialog>
         </div>
 
-        <p className="text-foreground/80 mb-3 pl-[35px]">
+        <p className="text-foreground/80 mb-[15px] pl-[35px]">
           Selecciona con qué valor has conectado hoy:
         </p>
 
