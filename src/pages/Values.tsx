@@ -66,31 +66,35 @@ export default function Values() {
   );
 
   useEffect(() => {
-    initializeValues();
-    fetchStats();
-
-    // Check for day change every minute
-    const checkDayChange = () => {
-      const now = new Date();
-      const currentDate = now.toISOString().split('T')[0];
-      const storedDate = localStorage.getItem('valuesLastDate');
-      
-      if (storedDate && storedDate !== currentDate) {
-        // Day has changed, reset selections
-        fetchValues();
-        fetchStats();
-      }
-      
-      localStorage.setItem('valuesLastDate', currentDate);
+    // Initialize values and stats on mount
+    const init = async () => {
+      await initializeValues();
+      await fetchStats();
     };
+    
+    init();
 
-    // Check immediately
-    checkDayChange();
+    // Set up realtime subscription for value selections
+    const channel = supabase
+      .channel('value_selections_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'value_selections'
+        },
+        async () => {
+          // Reload values and stats when selections change
+          await fetchValues();
+          await fetchStats();
+        }
+      )
+      .subscribe();
 
-    // Set up interval to check every minute
-    const intervalId = setInterval(checkDayChange, 60000);
-
-    return () => clearInterval(intervalId);
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const initializeValues = async () => {
