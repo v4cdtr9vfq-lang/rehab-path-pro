@@ -149,7 +149,16 @@ export default function Auth() {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {isLogin && !isForgotPassword && (
-          <div className="mb-[120px] pl-6">
+          <div className="mb-6">
+            <Link to="/" className="inline-flex items-center gap-2 text-primary hover:opacity-80 transition-opacity">
+              <Heart className="h-10 w-10" />
+              <span className="text-4xl font-bold">rehabp.org</span>
+            </Link>
+          </div>
+        )}
+        
+        {(!isLogin || isForgotPassword) && (
+          <div className="mb-6">
             <Link to="/" className="inline-flex items-center gap-2 text-primary hover:opacity-80 transition-opacity">
               <Heart className="h-10 w-10" />
               <span className="text-4xl font-bold">rehabp.org</span>
@@ -159,15 +168,12 @@ export default function Auth() {
         
         {(!isLogin || isForgotPassword) && (
           <div className="text-center space-y-4 mb-8">
-            <Link to="/" className="inline-flex items-center gap-2 text-primary hover:opacity-80 transition-opacity">
-              <Heart className="h-6 w-6" />
-              <span className="text-2xl font-bold">rehabp.org</span>
-            </Link>
-            {!isLogin && !isForgotPassword ? (
+            {!isLogin && !isForgotPassword && (
               <h1 className="text-4xl font-bold text-foreground">Comienza tu recuperación</h1>
-            ) : isForgotPassword ? (
+            )}
+            {isForgotPassword && (
               <h1 className="text-4xl font-bold text-foreground">Recuperar contraseña</h1>
-            ) : null}
+            )}
             <p className="text-muted-foreground text-lg">
               {isForgotPassword ? "Te enviaremos un enlace para restablecer tu contraseña" : "Crea tu cuenta gratuita"}
             </p>
