@@ -329,7 +329,7 @@ export default function Auth() {
           </CardContent>
         </Card>
 
-        <p className="text-center text-sm text-muted-foreground">
+        <p className="text-center text-sm text-muted-foreground mt-8">
           Al continuar, aceptas nuestros términos de servicio y política de privacidad
         </p>
       </div>
