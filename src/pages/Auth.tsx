@@ -10,7 +10,12 @@ import { Heart } from "lucide-react";
 import { z } from "zod";
 
 const emailSchema = z.string().email("Email inválido");
-const passwordSchema = z.string().min(6, "La contraseña debe tener al menos 6 caracteres");
+const passwordSchema = z.string()
+  .min(8, "La contraseña debe tener al menos 8 caracteres")
+  .regex(/[A-Z]/, "Debe contener al menos una mayúscula")
+  .regex(/[a-z]/, "Debe contener al menos una minúscula")
+  .regex(/[0-9]/, "Debe contener al menos un número")
+  .regex(/[^A-Za-z0-9]/, "Debe contener al menos un carácter especial (!@#$%^&*)");
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -259,7 +264,7 @@ export default function Auth() {
                     />
                     {!isLogin && (
                       <p className="text-xs text-muted-foreground">
-                        Mínimo 6 caracteres
+                        Mínimo 8 caracteres con mayúsculas, minúsculas, números y símbolos
                       </p>
                     )}
                   </div>
