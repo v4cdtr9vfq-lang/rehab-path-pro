@@ -296,111 +296,10 @@ export default function Gratitude() {
       </Card>
       </div>
 
-      {/* Example Entry Section */}
-      <div>
-        <div className="flex items-center justify-between mb-3 pl-[35px]">
-          <h2 className="text-xl font-bold text-foreground">Registro de agradecimientos:</h2>
-          
-          {/* Date Filter */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "justify-start text-left font-normal",
-                  !filterDate && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {filterDate ? format(filterDate, "d 'de' MMMM, yyyy", { locale: es }) : "Buscar por fecha"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="end">
-              <Calendar
-                mode="single"
-                selected={filterDate}
-                onSelect={setFilterDate}
-                className={cn("p-3 pointer-events-auto")}
-              />
-              {filterDate && (
-                <div className="p-3 border-t">
-                  <Button
-                    variant="ghost"
-                    className="w-full"
-                    onClick={() => setFilterDate(undefined)}
-                  >
-                    Limpiar filtro
-                  </Button>
-                </div>
-              )}
-            </PopoverContent>
-          </Popover>
-        </div>
-        
-        <Card className="border-border">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-4">
-              <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium text-muted-foreground">
-                Lunes, 15 de enero de 2025
-              </span>
-            </div>
-            <ul className="space-y-2">
-              <li className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 border border-border">
-                <span className="text-muted-foreground mt-1">🙏</span>
-                <div className="flex-1 space-y-1">
-                  <span className="text-foreground">Por el apoyo incondicional de mi familia durante mi proceso de recuperación</span>
-                  <div className="text-xs text-muted-foreground">09:30</div>
-                </div>
-              </li>
-              <li className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 border border-border">
-                <span className="text-muted-foreground mt-1">🙏</span>
-                <div className="flex-1 space-y-1">
-                  <span className="text-foreground">Por poder disfrutar de un café caliente en la mañana y sentir paz interior</span>
-                  <div className="text-xs text-muted-foreground">10:15</div>
-                </div>
-              </li>
-              <li className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 border border-border">
-                <span className="text-muted-foreground mt-1">🙏</span>
-                <div className="flex-1 space-y-1">
-                  <span className="text-foreground">Por mi salud y la capacidad de hacer ejercicio hoy</span>
-                  <div className="text-xs text-muted-foreground">14:20</div>
-                </div>
-              </li>
-              <li className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 border border-border">
-                <span className="text-muted-foreground mt-1">🙏</span>
-                <div className="flex-1 space-y-1">
-                  <span className="text-foreground">Por las pequeñas victorias del día y por seguir adelante</span>
-                  <div className="text-xs text-muted-foreground">20:45</div>
-                </div>
-              </li>
-            </ul>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div>
-        <h2 className="text-2xl font-bold text-foreground mb-3 pl-[35px] flex items-center gap-2">
-          Por qué es importante la gratitud
-          <span>🙏</span>
-          <span>🙏</span>
-          <span>🙏</span>
-        </h2>
-        <Card className="border-border bg-gradient-to-br from-sky-blue/5 to-transparent">
-          <CardContent className="pt-6">
-            <p className="text-foreground/80">
-              Practicar la gratitud cambia tu enfoque de lo que falta a lo que está presente. 
-              La práctica regular de gratitud ha demostrado mejorar la salud mental, fortalecer relaciones 
-              y apoyar la recuperación a largo plazo.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
       {pastEntries.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-3 pl-[35px]">
-            <h2 className="text-xl font-bold text-foreground">Historial de registros</h2>
+            <h2 className="text-xl font-bold text-foreground">Historial de registros:</h2>
             
             {/* Date Filter */}
             <Popover>
@@ -516,6 +415,24 @@ export default function Gratitude() {
           </div>
         </div>
       )}
+
+      <div>
+        <h2 className="text-2xl font-bold text-foreground mb-3 pl-[35px] flex items-center gap-2">
+          Por qué es tan importante
+          <span>🙏</span>
+          <span>🙏</span>
+          <span>🙏</span>
+        </h2>
+        <Card className="border-border bg-gradient-to-br from-sky-blue/5 to-transparent">
+          <CardContent className="pt-6">
+            <p className="text-foreground/80">
+              Practicar la gratitud cambia tu enfoque de lo que falta a lo que está presente. 
+              La práctica regular de gratitud ha demostrado mejorar la salud mental, fortalecer relaciones 
+              y apoyar la recuperación a largo plazo.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Quick Tools */}
       <div className="mt-12">
