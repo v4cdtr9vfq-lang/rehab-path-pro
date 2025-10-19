@@ -528,12 +528,7 @@ export default function ProgressPage() {
         
         <TabsContent value="week" className="space-y-6 mt-4">
           <Card className="border-sidebar-border">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                Progreso semanal:
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="pt-6 space-y-3">
               {groupGoalsByOriginal(weeklyGoals).map((goal) => (
                 <GoalProgressBar key={goal.id} goal={goal} />
               ))}
@@ -547,12 +542,7 @@ export default function ProgressPage() {
 
         <TabsContent value="month" className="space-y-6 mt-4">
           <Card className="border-sidebar-border">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                Progreso mensual:
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="pt-6 space-y-3">
               {groupGoalsByOriginal(monthlyGoals).map((goal) => (
                 <GoalProgressBar key={goal.id} goal={goal} />
               ))}
