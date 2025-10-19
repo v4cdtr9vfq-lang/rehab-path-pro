@@ -39,17 +39,23 @@ export default function Journal() {
   useEffect(() => {
     loadEntries();
     
-    // Check for reflection parameter from URL
+    // Check for URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const reflectionParam = urlParams.get('reflection');
+    const titleParam = urlParams.get('title');
     
     if (reflectionParam) {
       setEntryTitle(reflectionParam);
       setShowNewEntry(true);
       // Clear the URL parameter
       window.history.replaceState({}, '', '/journal');
+    } else if (titleParam) {
+      setEntryTitle(titleParam);
+      setShowNewEntry(true);
+      // Clear the URL parameter
+      window.history.replaceState({}, '', '/journal');
     } else {
-      // Load draft from localStorage only if no reflection parameter
+      // Load draft from localStorage only if no URL parameters
       const savedTitle = localStorage.getItem('journal-draft-title');
       const savedContent = localStorage.getItem('journal-draft-content');
       const savedTags = localStorage.getItem('journal-draft-tags');
