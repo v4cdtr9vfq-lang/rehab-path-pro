@@ -259,7 +259,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "abandono",
         name: "Abandono",
-        tertiaryEmotions: []
+        tertiaryEmotions: ["Abandonado", "Dejado", "Desamparado", "Descuidado", "Desplazado", "Ignorado", "Olvidado", "Rechazado", "Solo"]
       },
       {
         id: "agotado",
