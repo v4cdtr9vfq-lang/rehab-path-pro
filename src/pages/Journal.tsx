@@ -492,9 +492,9 @@ export default function Journal() {
                       {new Date(entry.created_at).toLocaleDateString('es-ES', { 
                         weekday: 'long', 
                         year: 'numeric', 
-                        month: 'long', 
+                        month: 'short', 
                         day: 'numeric' 
-                      })}
+                      }).replace(/^\w/, c => c.toUpperCase())}
                     </p>
                   </div>
                   <div className="flex gap-2">
