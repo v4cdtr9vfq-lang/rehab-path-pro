@@ -225,14 +225,14 @@ export default function Community() {
         <CardContent>
           {/* Header Legend */}
           {!isMobile && (
-            <div className="grid grid-cols-[auto_auto_100px_120px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
+            <div className="grid grid-cols-[minmax(180px,1fr)_180px_100px_120px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
               <div className="pl-[55px]">Nombre:</div>
-              <div className="flex gap-1 -ml-[5px]">
-                <div className="w-[60px] text-left">Años:</div>
-                <div className="w-[60px] text-left">Meses:</div>
-                <div className="w-[60px] text-left">Días:</div>
+              <div className="flex gap-1">
+                <div className="w-[60px] text-center">Años:</div>
+                <div className="w-[60px] text-center">Meses:</div>
+                <div className="w-[60px] text-center">Días:</div>
               </div>
-              <div></div>
+              <div className="text-center"></div>
               <div className="text-left pl-0">Medallas:</div>
             </div>
           )}
@@ -302,7 +302,7 @@ export default function Community() {
               return (
                 <div
                   key={user.id}
-                  className={`grid grid-cols-[auto_auto_100px_120px] gap-3 items-center p-4 rounded-xl transition-colors ${
+                  className={`grid grid-cols-[minmax(180px,1fr)_180px_100px_120px] gap-3 items-center p-4 rounded-xl transition-colors ${
                     isCurrentUser
                       ? "bg-primary/10 border border-primary"
                       : user.availableForHelp && canShowAvailability
@@ -311,7 +311,7 @@ export default function Community() {
                   }`}
                 >
                   {/* Avatar and Name */}
-                  <div className="flex items-center gap-[15px]">
+                  <div className="flex items-center gap-[15px] min-w-0">
                     <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src={user.avatar} />
                       <AvatarFallback 
@@ -325,14 +325,14 @@ export default function Community() {
                   </div>
 
                   {/* Years, Months, Days */}
-                  <div className="flex gap-1 items-center -ml-[5px]">
-                    <div className="font-bold text-lg w-[60px] text-left">
+                  <div className="flex gap-1 items-center justify-start">
+                    <div className="font-bold text-lg w-[60px] text-center">
                       {user.years.toString().padStart(2, "0")}
                     </div>
-                    <div className="font-bold text-lg w-[60px] text-left">
+                    <div className="font-bold text-lg w-[60px] text-center">
                       {user.months.toString().padStart(2, "0")}
                     </div>
-                    <div className="font-bold text-lg w-[60px] text-left">
+                    <div className="font-bold text-lg w-[60px] text-center">
                       {user.days.toString().padStart(2, "0")}
                     </div>
                   </div>
@@ -340,7 +340,7 @@ export default function Community() {
                   {/* Availability Badge */}
                   <div className="flex justify-center">
                     {user.availableForHelp && canShowAvailability && (
-                      <Badge variant="secondary" className="flex-shrink-0 bg-success/20 text-success border-success/30">
+                      <Badge variant="secondary" className="bg-success/20 text-success border-success/30">
                         Disponible
                       </Badge>
                     )}
