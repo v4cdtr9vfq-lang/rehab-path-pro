@@ -46,6 +46,7 @@ const CHAT_ROOMS = [
   { id: 'narcoticos', label: 'Narcóticos' },
   { id: 'pornografia', label: 'Pornografía' },
   { id: 'redes_sociales', label: 'Redes Sociales' },
+  { id: 'trabajo', label: 'Trabajo' },
   { id: 'videojuegos', label: 'Videojuegos' },
   { id: 'otros', label: 'Otros' },
 ] as const;
@@ -71,6 +72,7 @@ export default function Chat() {
     narcoticos: 0,
     pornografia: 0,
     redes_sociales: 0,
+    trabajo: 0,
     videojuegos: 0,
     otros: 0
   });
