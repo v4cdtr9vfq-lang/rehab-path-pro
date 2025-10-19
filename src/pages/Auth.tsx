@@ -261,8 +261,8 @@ export default function Auth() {
                     />
                   </div>
 
-                  <div className="space-y-2">
-                  <div className="flex items-center justify-between pl-4">
+                  <div className="space-y-2 pb-[35px]">
+                    <div className="flex items-center justify-between pl-4">
                       <Label htmlFor="password">Contraseña</Label>
                       {isLogin && (
                         <button
