@@ -22,6 +22,7 @@ interface CommunityUser {
   days: number;
   medals: string[];
   availableForHelp: boolean;
+  realMedalsCount?: number;
 }
 
 const mockUsers: CommunityUser[] = [
@@ -97,22 +98,25 @@ export default function Community() {
           const years = Math.floor(totalDays / 365);
           const remainingDays = totalDays % 365;
 
-          // Obtener medallas del usuario
+          // Obtener medallas reales del usuario desde la base de datos
           const { data: medals } = await supabase
             .from('medals')
             .select('medal_type')
             .eq('user_id', user.id);
 
+          // Convertir las medallas de la DB al formato de emojis
           const userMedals = getMedalsByTime(years, remainingDays);
+          const realMedalsCount = medals?.length || 0;
 
           setCurrentUser({
             id: user.id,
-            name: profile.full_name || 'Usuario',
+            name: profile.full_name || user.user_metadata?.full_name || 'Javier',
             avatar: '',
             years,
             days: remainingDays,
             medals: userMedals,
-            availableForHelp: isAvailableForHelp
+            availableForHelp: isAvailableForHelp,
+            realMedalsCount // Guardamos el conteo real de medallas
           });
         }
       } catch (error) {
@@ -125,8 +129,8 @@ export default function Community() {
     fetchUserData();
   }, [isAvailableForHelp]);
 
-  // Solo mostrar el widget cuando tenga TODAS las medallas (4 medallas)
-  const hasAllMedals = currentUser ? currentUser.medals.length >= 4 : false;
+  // Solo mostrar el widget cuando tenga TODAS las medallas (4 medallas) en la base de datos
+  const hasAllMedals = currentUser ? (currentUser as any).realMedalsCount >= 4 : false;
 
   // Combinar usuario actual con usuarios mock y ordenar
   const allUsers = currentUser 
@@ -180,31 +184,9 @@ export default function Community() {
 
   return (
     <div className="container mx-auto px-4 py-2 max-w-6xl">
-      {/* Availability Toggle - Solo para usuarios con TODAS las medallas (4) */}
-      {hasAllMedals && (
-        <Card className="mb-[30px] border-primary/20">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label htmlFor="available-help" className="text-base font-semibold">
-                  Disponible para asistencia
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  Has desbloqueado todas las medallas. Indica si estás disponible para ayudar a otros miembros de la comunidad.
-                </p>
-              </div>
-              <Switch
-                id="available-help"
-                checked={isAvailableForHelp}
-                onCheckedChange={setIsAvailableForHelp}
-              />
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Community Ranking */}
-      <Card>
+      <Card className="mb-[30px]">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
@@ -255,8 +237,8 @@ export default function Community() {
                     key={user.id}
                     className={`p-3 rounded-xl transition-colors ${
                       isCurrentUser
-                        ? "bg-primary/10 border-2 border-primary"
-                        : user.availableForHelp
+                        ? "bg-primary/10 border border-primary"
+                        : user.availableForHelp && canShowAvailability
                         ? "bg-success/10 border border-success/30"
                         : "bg-muted/30"
                     }`}
@@ -309,8 +291,8 @@ export default function Community() {
                   key={user.id}
                   className={`grid grid-cols-[auto_auto_100px_120px] gap-3 items-center p-4 rounded-xl transition-colors ${
                     isCurrentUser
-                      ? "bg-primary/10 border-2 border-primary"
-                      : user.availableForHelp
+                      ? "bg-primary/10 border border-primary"
+                      : user.availableForHelp && canShowAvailability
                       ? "bg-success/10 border border-success/30"
                       : "bg-muted/30"
                   }`}
@@ -370,6 +352,29 @@ export default function Community() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Availability Toggle - Solo para usuarios con TODAS las medallas (4) */}
+      {hasAllMedals && (
+        <Card className="border-primary/20">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="available-help" className="text-base font-semibold">
+                  Disponible para asistencia
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Has desbloqueado todas las medallas. Indica si estás disponible para ayudar a otros miembros de la comunidad.
+                </p>
+              </div>
+              <Switch
+                id="available-help"
+                checked={isAvailableForHelp}
+                onCheckedChange={setIsAvailableForHelp}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
