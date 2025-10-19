@@ -52,6 +52,7 @@ export default function CheckIn() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userValues, setUserValues] = useState<string[]>([]);
   const [showRelapseDialog, setShowRelapseDialog] = useState(false);
+  const [relapseConfirmed, setRelapseConfirmed] = useState(false);
 
   useEffect(() => {
     const loadExistingCheckIn = async () => {
@@ -106,6 +107,7 @@ export default function CheckIn() {
     // Show relapse dialog if question 1 is answered "no"
     if (questionId === 1 && answer === "no") {
       setShowRelapseDialog(true);
+      setRelapseConfirmed(false);
     }
   };
 
@@ -124,7 +126,7 @@ export default function CheckIn() {
 
       if (error) throw error;
 
-      setShowRelapseDialog(false);
+      setRelapseConfirmed(true);
       
       toast({
         title: "Contador reseteado",
@@ -160,6 +162,7 @@ export default function CheckIn() {
       if (journalError) throw journalError;
 
       setShowRelapseDialog(false);
+      setRelapseConfirmed(false);
       navigate('/journal');
     } catch (error: any) {
       toast({
@@ -537,7 +540,12 @@ export default function CheckIn() {
         </CardContent>
       </Card>
 
-      <AlertDialog open={showRelapseDialog} onOpenChange={setShowRelapseDialog}>
+      <AlertDialog open={showRelapseDialog} onOpenChange={(open) => {
+        setShowRelapseDialog(open);
+        if (!open) {
+          setRelapseConfirmed(false);
+        }
+      }}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Nada de culpa. ¡Seguimos!</AlertDialogTitle>
@@ -546,15 +554,20 @@ export default function CheckIn() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex-col sm:flex-row gap-2">
-            <AlertDialogAction onClick={handleConfirmRelapse} className="bg-primary">
-              Confirmar
-            </AlertDialogAction>
-            <AlertDialogCancel onClick={() => setShowRelapseDialog(false)}>
-              Cancelar
-            </AlertDialogCancel>
             <AlertDialogAction onClick={handleRelapseInventory} className="bg-secondary">
               Inventario
             </AlertDialogAction>
+            {!relapseConfirmed && (
+              <AlertDialogAction onClick={handleConfirmRelapse} className="bg-primary">
+                Confirmar
+              </AlertDialogAction>
+            )}
+            <AlertDialogCancel onClick={() => {
+              setShowRelapseDialog(false);
+              setRelapseConfirmed(false);
+            }}>
+              Cerrar
+            </AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
