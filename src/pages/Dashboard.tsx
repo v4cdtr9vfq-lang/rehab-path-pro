@@ -300,6 +300,7 @@ export default function Home() {
               id: instanceId,
               originalId: g.id,
               title: g.text,
+              link: g.link,
               period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Pendiente' : 'Esta semana',
               status: completedInstances.has(instanceId) ? 'completed' : 'pending',
               instanceIndex: i
@@ -398,6 +399,7 @@ export default function Home() {
                   id: instanceId,
                   originalId: g.id,
                   title: g.text,
+                  link: g.link,
                   period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Pendiente' : 'Esta semana',
                   status: completedInstances.has(instanceId) ? 'completed' : 'pending',
                   instanceIndex: i
@@ -696,7 +698,17 @@ export default function Home() {
             <GripVertical className="h-5 w-5 text-muted-foreground" />
           </button>
           <div>
-            <p className="font-semibold text-foreground text-sm md:text-base">{goal.title}</p>
+            {goal.link ? (
+              <a 
+                href={goal.link} 
+                className="font-semibold text-foreground text-sm md:text-base hover:text-green-600"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {goal.title}
+              </a>
+            ) : (
+              <p className="font-semibold text-foreground text-sm md:text-base">{goal.title}</p>
+            )}
             <p
               className={`text-xs md:text-sm ${
                 goal.status === "completed"
@@ -833,7 +845,17 @@ export default function Home() {
                           )}
                         </button>
                         <div>
-                          <p className="font-semibold text-foreground text-sm">{goal.title}</p>
+                          {goal.link ? (
+                            <a 
+                              href={goal.link} 
+                              className="font-semibold text-foreground text-sm hover:text-green-600"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {goal.title}
+                            </a>
+                          ) : (
+                            <p className="font-semibold text-foreground text-sm">{goal.title}</p>
+                          )}
                           <p
                             className={`text-xs ${
                               goal.status === "completed"
