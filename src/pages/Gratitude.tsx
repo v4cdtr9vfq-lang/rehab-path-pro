@@ -299,7 +299,7 @@ export default function Gratitude() {
       {pastEntries.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-3 pl-[35px]">
-            <h2 className="text-xl font-bold text-foreground">Historial de registros:</h2>
+            <h2 className="text-xl font-bold text-foreground">Historial:</h2>
             
             {/* Date Filter */}
             <Popover>
