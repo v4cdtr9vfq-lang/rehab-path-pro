@@ -150,14 +150,16 @@ export default function Auth() {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center space-y-4">
           <Link to="/" className="inline-flex items-center gap-2 text-primary hover:opacity-80 transition-opacity">
-            <Heart className="h-6 w-6" />
-            <span className="text-2xl font-bold">rehabp.org</span>
+            <Heart className={isForgotPassword || !isLogin ? "h-6 w-6" : "h-10 w-10"} />
+            <span className={isForgotPassword || !isLogin ? "text-2xl font-bold" : "text-4xl font-bold"}>rehabp.org</span>
           </Link>
-          <h1 className="text-4xl font-bold text-foreground">
-            {isForgotPassword ? "Recuperar contraseña" : isLogin ? "Bienvenido!" : "Comienza tu recuperación"}
-          </h1>
+          {!isLogin && !isForgotPassword ? (
+            <h1 className="text-4xl font-bold text-foreground">Comienza tu recuperación</h1>
+          ) : isForgotPassword ? (
+            <h1 className="text-4xl font-bold text-foreground">Recuperar contraseña</h1>
+          ) : null}
           <p className="text-muted-foreground text-lg">
-            {isForgotPassword ? "Te enviaremos un enlace para restablecer tu contraseña" : isLogin ? "Ingresa a tu cuenta:" : "Crea tu cuenta gratuita"}
+            {isForgotPassword ? "Te enviaremos un enlace para restablecer tu contraseña" : isLogin ? "¡Bienvenido!" : "Crea tu cuenta gratuita"}
           </p>
         </div>
 
@@ -168,7 +170,7 @@ export default function Auth() {
               {isForgotPassword
                 ? "Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña"
                 : isLogin 
-                  ? "Ingresa tus credenciales para continuar." 
+                  ? "Ingresa tus credenciales para continuar:" 
                   : "Completa el formulario para crear tu cuenta"}
             </CardDescription>
           </CardHeader>
