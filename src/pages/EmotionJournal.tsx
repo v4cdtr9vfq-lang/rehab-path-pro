@@ -194,7 +194,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "seguro",
         name: "Conectado",
-        tertiaryEmotions: ["Aceptación", "Calma", "Confianza", "Intimidad", "Pertenencia", "Previsibilidad", "Tranquilidad"]
+        tertiaryEmotions: ["Aceptación", "Calma", "Confianza", "Feliz", "Intimidad", "Pertenencia", "Previsibilidad", "Tranquilidad"]
       }
     ]
   },
