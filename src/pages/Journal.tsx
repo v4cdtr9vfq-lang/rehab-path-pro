@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { BookOpen, Plus, Search, Mic, Square, Loader2, Pencil, Trash2 } from "lucide-react";
+import { BookOpen, Plus, Search, Mic, Square, Loader2, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { AudioRecorder } from "@/components/AudioRecorder";
 import { useToast } from "@/hooks/use-toast";
@@ -33,8 +33,12 @@ export default function Journal() {
   const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoadingDemo, setIsLoadingDemo] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+
+  const ENTRIES_PER_PAGE = 3;
 
   useEffect(() => {
     loadEntries();
@@ -347,6 +351,124 @@ export default function Journal() {
     );
   });
 
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredEntries.length / ENTRIES_PER_PAGE);
+  const indexOfLastEntry = currentPage * ENTRIES_PER_PAGE;
+  const indexOfFirstEntry = indexOfLastEntry - ENTRIES_PER_PAGE;
+  const currentEntries = filteredEntries.slice(indexOfFirstEntry, indexOfLastEntry);
+
+  // Reset to page 1 when search term changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
+  const loadDemoEntries = async () => {
+    setIsLoadingDemo(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "Debes iniciar sesión para cargar las entradas.",
+          variant: "destructive",
+        });
+        setIsLoadingDemo(false);
+        return;
+      }
+
+      const demoEntries = [
+        {
+          user_id: user.id,
+          title: 'Mi primer día',
+          content: 'Hoy comencé mi camino hacia la recuperación. Me siento esperanzado pero también nervioso. Sé que no será fácil, pero estoy comprometido con este cambio.',
+          tags: ['inicio', 'esperanza', 'compromiso'],
+          entry_date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        },
+        {
+          user_id: user.id,
+          title: 'Reflexiones sobre mi pasado',
+          content: 'Hoy estuve pensando en las razones que me llevaron a este punto. No fue un solo evento, sino una serie de decisiones. Pero ahora puedo cambiar el rumbo.',
+          tags: ['reflexión', 'autoconocimiento'],
+          entry_date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        },
+        {
+          user_id: user.id,
+          title: 'Un día difícil',
+          content: 'Hoy tuve tentaciones fuertes. Pero llamé a mi red de apoyo y pude superarlo. Aprendí que pedir ayuda no es debilidad, es fortaleza.',
+          tags: ['desafío', 'apoyo', 'fortaleza'],
+          entry_date: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        },
+        {
+          user_id: user.id,
+          title: 'Pequeñas victorias',
+          content: 'Hoy celebré una semana limpio. Puede parecer poco para algunos, pero para mí es un logro enorme. Cada día cuenta.',
+          tags: ['victoria', 'celebración', 'gratitud'],
+          entry_date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        },
+        {
+          user_id: user.id,
+          title: 'Descubriendo mis valores',
+          content: 'Hice el ejercicio de identificar mis valores más importantes. Me di cuenta de que había estado viviendo de una manera que contradecía lo que realmente importa para mí.',
+          tags: ['valores', 'autoconocimiento', 'propósito'],
+          entry_date: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        },
+        {
+          user_id: user.id,
+          title: 'Agradecimiento',
+          content: 'Hoy practiqué la gratitud. Estoy agradecido por mi familia, por esta oportunidad de cambio, y por cada día que avanzo en mi recuperación.',
+          tags: ['gratitud', 'familia', 'positivo'],
+          entry_date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        },
+        {
+          user_id: user.id,
+          title: 'Aprendiendo a sentir',
+          content: 'Por primera vez en mucho tiempo, permití sentir mis emociones sin escapar de ellas. Fue incómodo pero liberador.',
+          tags: ['emociones', 'crecimiento', 'honestidad'],
+          entry_date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        },
+        {
+          user_id: user.id,
+          title: 'Mi rutina de bienestar',
+          content: 'Establecí una rutina matutina que incluye meditación y ejercicio. Me hace sentir más centrado y en control de mi día.',
+          tags: ['rutina', 'bienestar', 'meditación'],
+          entry_date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        },
+        {
+          user_id: user.id,
+          title: 'Mirando hacia adelante',
+          content: 'Hoy reflexioné sobre mis metas a largo plazo. Quiero reconstruir las relaciones que dañé y encontrar un propósito que me llene.',
+          tags: ['futuro', 'metas', 'relaciones'],
+          entry_date: new Date().toISOString().split('T')[0]
+        }
+      ];
+
+      const { data, error } = await supabase
+        .from('journal_entries')
+        .insert(demoEntries)
+        .select();
+
+      if (error) throw error;
+
+      if (data) {
+        setEntries(prev => [...data.reverse(), ...prev]);
+        toast({
+          title: "Entradas cargadas",
+          description: "Se han añadido 9 entradas de demostración a tu diario.",
+        });
+      }
+    } catch (error) {
+      console.error('Error loading demo entries:', error);
+      toast({
+        title: "Error",
+        description: "No se pudieron cargar las entradas de demostración.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoadingDemo(false);
+    }
+  };
+
   return (
     <div className="space-y-[35px] animate-in fade-in duration-500">
       <div className="flex flex-col sm:flex-row gap-4">
@@ -466,12 +588,29 @@ export default function Journal() {
           </Card>
         ) : entries.length === 0 ? (
           <Card className="border-border">
-            <CardContent className="p-12 text-center">
+            <CardContent className="p-12 text-center space-y-4">
               <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground mb-4">Aún no has creado ninguna entrada.</p>
-              <Button onClick={() => setShowNewEntry(true)} size="icon" className="h-12 w-12">
-                <Plus className="h-6 w-6" />
-              </Button>
+              <div className="flex flex-col gap-3 items-center">
+                <Button onClick={() => setShowNewEntry(true)} size="icon" className="h-12 w-12">
+                  <Plus className="h-6 w-6" />
+                </Button>
+                <Button 
+                  onClick={loadDemoEntries} 
+                  variant="outline"
+                  disabled={isLoadingDemo}
+                  className="gap-2"
+                >
+                  {isLoadingDemo ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Cargando...
+                    </>
+                  ) : (
+                    'Cargar entradas de demostración'
+                  )}
+                </Button>
+              </div>
             </CardContent>
           </Card>
         ) : filteredEntries.length === 0 ? (
@@ -482,56 +621,87 @@ export default function Journal() {
             </CardContent>
           </Card>
         ) : (
-          filteredEntries.map((entry) => (
-            <Card key={entry.id} className="border-border hover:border-border/60 transition-all">
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1 flex-1">
-                    <CardTitle className="text-xl">{entry.title}</CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      {new Date(entry.created_at).toLocaleDateString('es-ES', { 
-                        weekday: 'long', 
-                        year: 'numeric', 
-                        month: 'short', 
-                        day: 'numeric' 
-                      }).replace(/^\w/, c => c.toUpperCase()).replace(/\sde\s(\w)/, (match, p1) => ` de ${p1.toUpperCase()}`)}
-                    </p>
+          <>
+            {currentEntries.map((entry) => (
+              <Card key={entry.id} className="border-border hover:border-border/60 transition-all">
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-1 flex-1">
+                      <CardTitle className="text-xl">{entry.title}</CardTitle>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(entry.created_at).toLocaleDateString('es-ES', { 
+                          weekday: 'long', 
+                          year: 'numeric', 
+                          month: 'short', 
+                          day: 'numeric' 
+                        }).replace(/^\w/, c => c.toUpperCase()).replace(/\sde\s(\w)/, (match, p1) => ` de ${p1.toUpperCase()}`)}
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => startEditEntry(entry)}
+                        className="h-8 w-8"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setDeleteConfirmId(entry.id)}
+                        className="h-8 w-8 text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => startEditEntry(entry)}
-                      className="h-8 w-8"
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setDeleteConfirmId(entry.id)}
-                      className="h-8 w-8 text-destructive hover:text-destructive"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-foreground/80 mb-4">{entry.content}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {entry.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-foreground/80 mb-4">{entry.content}</p>
-                <div className="flex flex-wrap gap-2">
-                  {entry.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))
+                </CardContent>
+              </Card>
+            ))}
+
+            {/* Pagination Controls */}
+            {filteredEntries.length > ENTRIES_PER_PAGE && (
+              <div className="flex items-center justify-center gap-2 mt-6">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  className="h-9 w-9 p-0"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                
+                <span className="text-sm text-muted-foreground px-4">
+                  Página {currentPage} de {totalPages}
+                </span>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
+                  className="h-9 w-9 p-0"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+          </>
         )}
       </div>
 
