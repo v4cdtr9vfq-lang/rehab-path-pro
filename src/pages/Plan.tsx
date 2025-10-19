@@ -742,7 +742,7 @@ export default function Plan() {
               {goal.link ? (
                 <a 
                   href={goal.link} 
-                  className="font-semibold text-foreground text-sm hover:text-primary"
+                  className="font-semibold text-foreground text-sm hover:text-green-600"
                   onClick={(e) => e.stopPropagation()}
                 >
                   {goal.text}
@@ -804,7 +804,7 @@ export default function Plan() {
             {goal.link ? (
               <a 
                 href={goal.link} 
-                className="font-semibold text-foreground text-sm md:text-base hover:text-primary"
+                className="font-semibold text-foreground text-sm md:text-base hover:text-green-600"
                 onClick={(e) => e.stopPropagation()}
               >
                 {goal.text}
