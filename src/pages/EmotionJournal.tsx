@@ -44,7 +44,7 @@ interface EmotionStats {
   count: number;
 }
 
-const COLORS = ['#10b981', '#f59e0b', '#3b82f6', '#8b5cf6', '#ec4899', '#ef4444', '#14b8a6'];
+const COLORS = ['#22c55e', '#ff6b00', '#0ea5e9', '#9333ea', '#f43f5e', '#facc15', '#06b6d4'];
 
 const emotionCategories: PrimaryCategory[] = [
   {
