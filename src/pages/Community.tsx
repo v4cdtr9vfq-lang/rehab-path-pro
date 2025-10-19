@@ -153,9 +153,8 @@ export default function Community() {
     });
 
   const getInitials = (name: string) => {
-    // Solo tomar el primer nombre
-    const firstName = name.split(" ")[0];
-    return firstName.slice(0, 2).toUpperCase();
+    // Solo tomar la primera letra del nombre
+    return name.charAt(0).toUpperCase();
   };
 
   const getMedalsByTime = (years: number, days: number) => {
