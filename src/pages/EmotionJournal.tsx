@@ -111,6 +111,79 @@ const emotionCategories: PrimaryCategory[] = [
     ]
   },
   {
+    id: "vulnerable",
+    name: "Inseguro",
+    secondaryEmotions: [
+      {
+        id: "avergonzado",
+        name: "Avergonzado",
+        tertiaryEmotions: ["Avergonzado", "Cohibido", "Culpable", "Mortificado", "Turbado"]
+      },
+      {
+        id: "dolor",
+        name: "Dolor",
+        tertiaryEmotions: ["Afligido", "Agonía", "Angustiado", "Arrepentido", "Desconsolado", "Devastado", "Duelo", "Herido", "Miserable", "Remordido", "Solo"]
+      },
+      {
+        id: "incomodo",
+        name: "Incómodo",
+        tertiaryEmotions: ["Incómodo", "Inquieto", "Intranquilo", "Molesto", "Nervioso"]
+      },
+      {
+        id: "verguenza",
+        name: "Vergüenza",
+        tertiaryEmotions: []
+      },
+      {
+        id: "vulnerable",
+        name: "Vulnerable",
+        tertiaryEmotions: ["Cauteloso", "Frágil", "Indefenso", "Inseguro", "Reservado", "Sensible", "Tembloroso"]
+      }
+    ]
+  },
+  {
+    id: "irritado",
+    name: "Irritado",
+    secondaryEmotions: [
+      {
+        id: "enojado",
+        name: "Enojado",
+        tertiaryEmotions: ["Airado", "Enfurecido", "Furioso", "Indignado", "Iracundo", "Lívido", "Resentido", "Ultrajado"]
+      },
+      {
+        id: "frustracion",
+        name: "Frustrado",
+        tertiaryEmotions: ["Impotente"]
+      }
+    ]
+  },
+  {
+    id: "miedo",
+    name: "Miedo",
+    secondaryEmotions: [
+      {
+        id: "asustado",
+        name: "Asustado",
+        tertiaryEmotions: ["Aprensivo", "Asustado", "Atemorizado", "Aterrorizado", "Cauteloso", "Desconfiado", "En pánico", "Petrificado", "Preocupado", "Presentimiento", "Sospechoso", "Temor"]
+      },
+      {
+        id: "inquieto",
+        name: "Inquieto",
+        tertiaryEmotions: ["Agitación", "Agitado", "Alarmado", "Alterado", "Conmocionado", "Desconcertado", "Inquieto", "Perturbado", "Preocupado", "Sobresaltado", "Sorprendido", "Turbulento"]
+      },
+      {
+        id: "molesto",
+        name: "Molesto",
+        tertiaryEmotions: ["Agravado", "Consternado", "Descontento", "Disgustado", "Exasperado", "Frustrado", "Impaciente", "Irritado", "Molesto"]
+      },
+      {
+        id: "tenso",
+        name: "Tenso",
+        tertiaryEmotions: ["Abrumado", "Angustiado", "Ansioso", "Consternado", "Estresado", "Inquieto", "Irritable", "Nervioso"]
+      }
+    ]
+  },
+  {
     id: "conectado",
     name: "Seguro",
     secondaryEmotions: [
@@ -152,42 +225,6 @@ const emotionCategories: PrimaryCategory[] = [
     ]
   },
   {
-    id: "miedo",
-    name: "Miedo",
-    secondaryEmotions: [
-      {
-        id: "asustado",
-        name: "Asustado",
-        tertiaryEmotions: ["Aprensivo", "Asustado", "Atemorizado", "Aterrorizado", "Cauteloso", "Desconfiado", "En pánico", "Petrificado", "Preocupado", "Presentimiento", "Sospechoso", "Temor"]
-      },
-      {
-        id: "enojado",
-        name: "Enojado",
-        tertiaryEmotions: ["Airado", "Enfurecido", "Furioso", "Indignado", "Iracundo", "Lívido", "Resentido", "Ultrajado"]
-      },
-      {
-        id: "frustracion",
-        name: "Frustrado",
-        tertiaryEmotions: ["Impotente"]
-      },
-      {
-        id: "inquieto",
-        name: "Inquieto",
-        tertiaryEmotions: ["Agitación", "Agitado", "Alarmado", "Alterado", "Conmocionado", "Desconcertado", "Inquieto", "Perturbado", "Preocupado", "Sobresaltado", "Sorprendido", "Turbulento"]
-      },
-      {
-        id: "molesto",
-        name: "Molesto",
-        tertiaryEmotions: ["Agravado", "Consternado", "Descontento", "Disgustado", "Exasperado", "Frustrado", "Impaciente", "Irritado", "Molesto"]
-      },
-      {
-        id: "tenso",
-        name: "Tenso",
-        tertiaryEmotions: ["Abrumado", "Angustiado", "Ansioso", "Consternado", "Estresado", "Inquieto", "Irritable", "Nervioso"]
-      }
-    ]
-  },
-  {
     id: "cansado",
     name: "Triste",
     secondaryEmotions: [
@@ -205,37 +242,6 @@ const emotionCategories: PrimaryCategory[] = [
         id: "desconectado",
         name: "Desconectado",
         tertiaryEmotions: ["Aburrido", "Adormecido", "Alejado", "Alienado", "Apático", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído"]
-      }
-    ]
-  },
-  {
-    id: "vulnerable",
-    name: "Inseguro",
-    secondaryEmotions: [
-      {
-        id: "avergonzado",
-        name: "Avergonzado",
-        tertiaryEmotions: ["Avergonzado", "Cohibido", "Culpable", "Mortificado", "Turbado"]
-      },
-      {
-        id: "dolor",
-        name: "Dolor",
-        tertiaryEmotions: ["Afligido", "Agonía", "Angustiado", "Arrepentido", "Desconsolado", "Devastado", "Duelo", "Herido", "Miserable", "Remordido", "Solo"]
-      },
-      {
-        id: "incomodo",
-        name: "Incómodo",
-        tertiaryEmotions: ["Incómodo", "Inquieto", "Intranquilo", "Molesto", "Nervioso"]
-      },
-      {
-        id: "verguenza",
-        name: "Vergüenza",
-        tertiaryEmotions: []
-      },
-      {
-        id: "vulnerable",
-        name: "Vulnerable",
-        tertiaryEmotions: ["Cauteloso", "Frágil", "Indefenso", "Inseguro", "Reservado", "Sensible", "Tembloroso"]
       }
     ]
   }
