@@ -239,6 +239,11 @@ const emotionCategories: PrimaryCategory[] = [
         id: "estabilidad",
         name: "Estabilidad",
         tertiaryEmotions: ["Arraigo", "Coherencia", "Resiliencia", "Equilibrio"]
+      },
+      {
+        id: "valiente",
+        name: "Valiente",
+        tertiaryEmotions: ["Audaz", "Decidido", "Determinado", "Intrépido", "Osado", "Valiente"]
       }
     ]
   },
