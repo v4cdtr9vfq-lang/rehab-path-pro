@@ -345,7 +345,7 @@ export default function Gratitude() {
                     <div className="flex items-center gap-2 mb-4">
                       <CalendarIcon className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm font-medium text-muted-foreground">
-                        {entry.date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                        {format(entry.date, "EEEE, d 'de' MMM. 'de' yyyy", { locale: es }).replace(/^\w/, (c) => c.toUpperCase())}
                       </span>
                     </div>
                     <ul className="space-y-2">
