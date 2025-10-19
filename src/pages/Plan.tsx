@@ -788,7 +788,7 @@ export default function Plan() {
             <p className="text-foreground font-semibold">
               {goal.text}
             </p>
-            <p className={`text-sm ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'} mt-[15px]`}>
+            <p className={`text-sm ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'} mt-1`}>
               {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
             </p>
           </div>
