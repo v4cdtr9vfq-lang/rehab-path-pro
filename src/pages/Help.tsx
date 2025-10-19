@@ -170,7 +170,7 @@ export default function Help() {
                     >
                       {faq.question}
                     </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground">
+                    <AccordionContent className="text-muted-foreground pl-4">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -188,7 +188,7 @@ export default function Help() {
                     >
                       {faq.question}
                     </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground">
+                    <AccordionContent className="text-muted-foreground pl-4">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
