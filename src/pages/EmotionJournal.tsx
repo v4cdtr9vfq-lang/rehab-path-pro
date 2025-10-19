@@ -146,6 +146,11 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Aprensivo", "Asustado", "Atemorizado", "Aterrorizado", "Cauteloso", "Desconfiado", "En pánico", "Petrificado", "Preocupado", "Presentimiento", "Sospechoso", "Temor"]
       },
       {
+        id: "preocupado",
+        name: "Preocupado",
+        tertiaryEmotions: []
+      },
+      {
         id: "tenso",
         name: "Tenso",
         tertiaryEmotions: ["Abrumado", "Angustiado", "Ansioso", "Consternado", "Estresado", "Inquieto", "Irritable", "Nervioso"]
