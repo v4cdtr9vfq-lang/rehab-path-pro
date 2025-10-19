@@ -742,9 +742,7 @@ export default function Plan() {
               {goal.link ? (
                 <a 
                   href={goal.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="font-semibold text-foreground text-sm hover:text-primary underline decoration-dotted"
+                  className="font-semibold text-foreground text-sm hover:text-primary"
                   onClick={(e) => e.stopPropagation()}
                 >
                   {goal.text}
@@ -806,9 +804,7 @@ export default function Plan() {
             {goal.link ? (
               <a 
                 href={goal.link} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="font-semibold text-foreground text-sm md:text-base hover:text-primary underline decoration-dotted"
+                className="font-semibold text-foreground text-sm md:text-base hover:text-primary"
                 onClick={(e) => e.stopPropagation()}
               >
                 {goal.text}
