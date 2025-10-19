@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Check, Pencil, Trash2, Calendar as CalendarIcon } from "lucide-react";
+import { Check, Pencil, Trash2, Calendar as CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -285,7 +285,10 @@ export default function EmotionJournal() {
   const [editingEntry, setEditingEntry] = useState<string | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
+  const [currentPage, setCurrentPage] = useState(1);
   const { toast } = useToast();
+  
+  const ENTRIES_PER_PAGE = 6;
 
   useEffect(() => {
     loadSavedEntries();
@@ -584,6 +587,17 @@ export default function EmotionJournal() {
       })
     : savedEntries;
 
+  // Pagination
+  const totalPages = Math.ceil(filteredEntries.length / ENTRIES_PER_PAGE);
+  const startIndex = (currentPage - 1) * ENTRIES_PER_PAGE;
+  const endIndex = startIndex + ENTRIES_PER_PAGE;
+  const currentEntries = filteredEntries.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterDate]);
+
   return (
     <div className="space-y-[30px] animate-fade-in">
       <Card className="p-8 bg-card border-border">
@@ -775,7 +789,7 @@ export default function EmotionJournal() {
           
           <div className="space-y-4">
             {filteredEntries.length > 0 ? (
-              filteredEntries.map((entry) => (
+              currentEntries.map((entry) => (
               <Card key={entry.id} className="p-6 bg-card border-border">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-2 text-muted-foreground">
@@ -856,6 +870,35 @@ export default function EmotionJournal() {
               </Card>
             )}
           </div>
+          
+          {/* Pagination Controls */}
+          {filteredEntries.length > ENTRIES_PER_PAGE && (
+            <div className="flex items-center justify-center gap-2 mt-6">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                className="h-9 w-9 p-0"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              
+              <span className="text-sm text-muted-foreground px-4">
+                Página {currentPage} de {totalPages}
+              </span>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+                className="h-9 w-9 p-0"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
         </div>
       )}
 
