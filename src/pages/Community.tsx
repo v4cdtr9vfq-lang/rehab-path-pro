@@ -227,7 +227,7 @@ export default function Community() {
           {!isMobile && (
             <div className="grid grid-cols-[minmax(180px,1fr)_180px_100px_120px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
               <div className="pl-[55px]">Nombre:</div>
-              <div className="flex gap-1">
+              <div className="flex gap-1 -ml-[60px]">
                 <div className="w-[60px] text-center">Años:</div>
                 <div className="w-[60px] text-center">Meses:</div>
                 <div className="w-[60px] text-center">Días:</div>
@@ -325,7 +325,7 @@ export default function Community() {
                   </div>
 
                   {/* Years, Months, Days */}
-                  <div className="flex gap-1 items-center justify-start">
+                  <div className="flex gap-1 items-center justify-start -ml-[60px]">
                     <div className="font-bold text-lg w-[60px] text-center">
                       {user.years.toString().padStart(2, "0")}
                     </div>
