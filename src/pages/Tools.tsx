@@ -44,7 +44,7 @@ export default function Tools() {
               <AlertCircle className="h-6 w-6 text-destructive" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-foreground mb-2">¿En crisis?</h3>
+              <h3 className="font-semibold text-foreground mb-2 text-xl">¿En crisis?</h3>
               <p className="text-sm text-foreground/80 mb-4">
                 Si estás en peligro inmediato o experimentando una crisis, por favor busca ayuda inmediatamente.
               </p>
