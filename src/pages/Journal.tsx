@@ -353,9 +353,9 @@ export default function Journal() {
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredEntries.length / ENTRIES_PER_PAGE);
-  const indexOfLastEntry = currentPage * ENTRIES_PER_PAGE;
-  const indexOfFirstEntry = indexOfLastEntry - ENTRIES_PER_PAGE;
-  const currentEntries = filteredEntries.slice(indexOfFirstEntry, indexOfLastEntry);
+  const startIndex = (currentPage - 1) * ENTRIES_PER_PAGE;
+  const endIndex = startIndex + ENTRIES_PER_PAGE;
+  const currentEntries = filteredEntries.slice(startIndex, endIndex);
 
   // Reset to page 1 when search term changes
   useEffect(() => {
