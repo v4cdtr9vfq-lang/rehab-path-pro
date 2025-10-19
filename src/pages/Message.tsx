@@ -8,6 +8,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 interface Quote {
   text: string;
@@ -265,7 +267,7 @@ export default function Message() {
             </Button>
           </div>
           <p className="text-sm text-muted-foreground">
-            {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            {format(new Date(), "EEEE, d 'de' MMM. 'de' yyyy", { locale: es }).replace(/^\w/, (c) => c.toUpperCase())}
           </p>
         </CardHeader>
         <CardContent>
