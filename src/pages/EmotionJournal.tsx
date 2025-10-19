@@ -112,6 +112,11 @@ const emotionCategories: PrimaryCategory[] = [
         id: "vulnerable",
         name: "Vulnerable",
         tertiaryEmotions: ["Cauteloso", "Frágil", "Indefenso", "Inseguro", "Reservado", "Sensible", "Tembloroso"]
+      },
+      {
+        id: "desconectado",
+        name: "Desconectado",
+        tertiaryEmotions: ["Aburrido", "Adormecido", "Alejado", "Alienado", "Apático", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído"]
       }
     ]
   },
@@ -236,11 +241,6 @@ const emotionCategories: PrimaryCategory[] = [
         id: "cansado_sub",
         name: "Cansado",
         tertiaryEmotions: []
-      },
-      {
-        id: "desconectado",
-        name: "Desconectado",
-        tertiaryEmotions: ["Aburrido", "Adormecido", "Alejado", "Alienado", "Apático", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído"]
       },
       {
         id: "dolor",
