@@ -127,6 +127,15 @@ export default function Community() {
             rehabilitationType: profile.rehabilitation_type || 'otros',
             realMedalsCount
           });
+
+          // Establecer filtro por defecto basado en el tipo de rehabilitación del usuario
+          // Solo si no hay un filtro guardado previamente
+          const savedFilter = localStorage.getItem('community-filter');
+          if (!savedFilter && profile.rehabilitation_type) {
+            setSelectedFilter(profile.rehabilitation_type);
+          } else if (savedFilter) {
+            setSelectedFilter(savedFilter);
+          }
           
           console.log('Usuario cargado:', {
             name: profile.full_name || user.user_metadata?.full_name || 'Javier',
@@ -134,7 +143,8 @@ export default function Community() {
             months, 
             days,
             totalDays,
-            medalsCount: realMedalsCount
+            medalsCount: realMedalsCount,
+            rehabilitationType: profile.rehabilitation_type
           });
         }
       } catch (error) {
@@ -146,6 +156,12 @@ export default function Community() {
 
     fetchUserData();
   }, [isAvailableForHelp]);
+
+  // Guardar filtro seleccionado en localStorage
+  const handleFilterChange = (value: string) => {
+    setSelectedFilter(value);
+    localStorage.setItem('community-filter', value);
+  };
 
   // Solo mostrar el widget cuando tenga TODAS las medallas (4 medallas) en la base de datos
   const hasAllMedals = currentUser ? (currentUser as any).realMedalsCount >= 4 : false;
@@ -211,7 +227,7 @@ export default function Community() {
             <CardTitle className="flex items-center gap-2">
               Tiempo limpio:
             </CardTitle>
-            <Select value={selectedFilter} onValueChange={setSelectedFilter}>
+            <Select value={selectedFilter} onValueChange={handleFilterChange}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue />
               </SelectTrigger>
