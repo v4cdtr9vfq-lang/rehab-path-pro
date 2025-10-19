@@ -195,7 +195,7 @@ export default function Home() {
       }).eq('id', goal.originalId).eq('user_id', user.id);
       toast({
         title: "Meta actualizada",
-        description: wasCompleted ? "Meta marcada como pendiente." : "¡Meta completada!."
+        description: wasCompleted ? "Meta marcada como pendiente." : "¡Meta completada!"
       });
     } catch (error: any) {
       console.error('Error in toggleGoal:', error);
