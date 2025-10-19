@@ -494,7 +494,7 @@ export default function Journal() {
                         year: 'numeric', 
                         month: 'short', 
                         day: 'numeric' 
-                      }).replace(/^\w/, c => c.toUpperCase())}
+                      }).replace(/^\w/, c => c.toUpperCase()).replace(/\sde\s(\w)/, (match, p1) => ` de ${p1.toUpperCase()}`)}
                     </p>
                   </div>
                   <div className="flex gap-2">
