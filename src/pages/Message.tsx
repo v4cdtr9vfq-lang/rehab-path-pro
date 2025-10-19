@@ -253,8 +253,7 @@ export default function Message() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-2xl">✨</span>
-              <CardTitle className="text-2xl">Frase del día</CardTitle>
+              <CardTitle className="text-2xl">Frase del día:</CardTitle>
             </div>
             <Button
               variant="ghost"
