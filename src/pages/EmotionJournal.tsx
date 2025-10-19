@@ -107,11 +107,6 @@ const emotionCategories: PrimaryCategory[] = [
         id: "fatigado",
         name: "Fatigado",
         tertiaryEmotions: ["Agotado", "Apático", "Cansado", "Exhausto", "Fatigado", "Letárgico", "Quemado", "Somnoliento"]
-      },
-      {
-        id: "incomodo",
-        name: "Incómodo",
-        tertiaryEmotions: ["Incómodo", "Inquieto", "Intranquilo", "Molesto", "Nervioso"]
       }
     ]
   },
@@ -226,6 +221,11 @@ const emotionCategories: PrimaryCategory[] = [
         id: "dolor",
         name: "Dolor",
         tertiaryEmotions: ["Afligido", "Agonía", "Angustiado", "Arrepentido", "Desconsolado", "Devastado", "Duelo", "Herido", "Miserable", "Remordido", "Solo"]
+      },
+      {
+        id: "incomodo",
+        name: "Incómodo",
+        tertiaryEmotions: ["Incómodo", "Inquieto", "Intranquilo", "Molesto", "Nervioso"]
       },
       {
         id: "verguenza",
