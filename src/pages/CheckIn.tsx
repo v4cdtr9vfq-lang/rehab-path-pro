@@ -52,6 +52,7 @@ export default function CheckIn() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userValues, setUserValues] = useState<string[]>([]);
   const [showRelapseDialog, setShowRelapseDialog] = useState(false);
+  const [relapseConfirmed, setRelapseConfirmed] = useState(false);
 
   useEffect(() => {
     const loadExistingCheckIn = async () => {
@@ -106,6 +107,37 @@ export default function CheckIn() {
     // Show relapse dialog if question 1 is answered "no"
     if (questionId === 1 && answer === "no") {
       setShowRelapseDialog(true);
+      setRelapseConfirmed(false);
+    }
+  };
+
+  const handleConfirmRelapse = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Reset abstinence counter
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          abstinence_start_date: new Date().toISOString()
+        })
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      setRelapseConfirmed(true);
+      
+      toast({
+        title: "Contador reseteado",
+        description: "Tu contador de días ha sido actualizado",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo resetear el contador",
+        variant: "destructive",
+      });
     }
   };
 
@@ -470,7 +502,12 @@ export default function CheckIn() {
         </CardContent>
       </Card>
 
-      <AlertDialog open={showRelapseDialog} onOpenChange={setShowRelapseDialog}>
+      <AlertDialog open={showRelapseDialog} onOpenChange={(open) => {
+        setShowRelapseDialog(open);
+        if (!open) {
+          setRelapseConfirmed(false);
+        }
+      }}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Nada de culpa. ¡Seguimos!</AlertDialogTitle>
@@ -479,10 +516,18 @@ export default function CheckIn() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cerrar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleRelapseInventory}>
-              Inventario
-            </AlertDialogAction>
+            {!relapseConfirmed ? (
+              <AlertDialogAction onClick={handleConfirmRelapse}>
+                Confirmar
+              </AlertDialogAction>
+            ) : (
+              <>
+                <AlertDialogCancel>Cerrar</AlertDialogCancel>
+                <AlertDialogAction onClick={handleRelapseInventory}>
+                  Inventario
+                </AlertDialogAction>
+              </>
+            )}
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
