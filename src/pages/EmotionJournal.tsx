@@ -112,7 +112,7 @@ const emotionCategories: PrimaryCategory[] = [
   },
   {
     id: "conectado",
-    name: "Conectado",
+    name: "Seguro",
     secondaryEmotions: [
       {
         id: "abierto",
