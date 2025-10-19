@@ -327,7 +327,9 @@ export default function CheckIn() {
             <span className="text-xl">👀</span>
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            {format(new Date(), "EEEE, d MMM. yyyy", { locale: es }).replace(/^\w/, (c) => c.toUpperCase())}
+            {format(new Date(), "EEEE, d MMM. yyyy", { locale: es })
+              .replace(/^\w/, (c) => c.toUpperCase())
+              .replace(/\b([a-z]{3})\./i, (match) => match.charAt(0).toUpperCase() + match.slice(1))}
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
