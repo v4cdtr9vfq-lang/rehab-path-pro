@@ -10,56 +10,42 @@ interface OnboardingStep {
   title: string;
   description: string;
   targetSelector?: string;
-  position: "top" | "bottom" | "left" | "right" | "center";
 }
 
 const steps: OnboardingStep[] = [
   {
     id: "welcome",
     title: "¡Bienvenido a rehabp.org! 🎉",
-    description: "Esta es tu herramienta personal de apoyo en tu proceso de rehabilitación. Te mostraré rápidamente cómo funciona.",
-    position: "center"
+    description: "Esta es tu herramienta personal de apoyo en tu proceso de rehabilitación. Te mostraré rápidamente cómo funciona."
   },
   {
     id: "abstinence-counter",
     title: "Tu contador de libertad",
     description: "Aquí verás cuánto tiempo llevas en tu proceso. Este contador es tu motivación diaria y celebra cada logro.",
-    targetSelector: ".abstinence-counter",
-    position: "bottom"
+    targetSelector: ".abstinence-counter"
   },
   {
     id: "daily-progress",
     title: "Progreso diario",
     description: "Aquí puedes ver tu avance del día: check-in completado, metas logradas y tu recordatorio personal.",
-    targetSelector: "[data-tour='daily-progress']",
-    position: "top"
+    targetSelector: "[data-tour='daily-progress']"
   },
   {
     id: "goals",
     title: "Metas de hoy",
     description: "Estas son tus metas diarias. Márcalas como completadas y construye tu rutina de recuperación paso a paso.",
-    targetSelector: "[data-tour='goals-section']",
-    position: "top"
+    targetSelector: "[data-tour='goals-section']"
   },
   {
     id: "tools",
     title: "Accesos directos",
     description: "Aquí encontrarás herramientas rápidas: tu diario, registro de emociones, agradecimientos y plan de emergencia.",
-    targetSelector: "[data-tour='quick-tools']",
-    position: "top"
-  },
-  {
-    id: "sidebar",
-    title: "Menú de navegación",
-    description: "Usa este menú para explorar todas las secciones: chat de apoyo, herramientas, progreso, comunidad y más.",
-    targetSelector: ".sidebar-nav",
-    position: "right"
+    targetSelector: "[data-tour='quick-tools']"
   },
   {
     id: "complete",
     title: "¡Listo para empezar! 🚀",
-    description: "Ya conoces lo básico. Recuerda: cada día cuenta, cada paso importa. ¡Estamos aquí para apoyarte!",
-    position: "center"
+    description: "Ya conoces lo básico. Recuerda: cada día cuenta, cada paso importa. ¡Estamos aquí para apoyarte!"
   }
 ];
 
@@ -67,21 +53,42 @@ export function OnboardingTour() {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const [highlightedElement, setHighlightedElement] = useState<HTMLElement | null>(null);
+  const [highlightRect, setHighlightRect] = useState<DOMRect | null>(null);
 
   useEffect(() => {
     checkOnboardingStatus();
   }, []);
 
   useEffect(() => {
-    if (isVisible && steps[currentStep].targetSelector) {
-      const element = document.querySelector(steps[currentStep].targetSelector!) as HTMLElement;
-      if (element) {
-        setHighlightedElement(element);
-        element.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    } else {
-      setHighlightedElement(null);
+    if (isVisible) {
+      const updateHighlight = () => {
+        const selector = steps[currentStep].targetSelector;
+        if (selector) {
+          const element = document.querySelector(selector) as HTMLElement;
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            setHighlightRect(rect);
+            // Scroll smoothly to element
+            element.scrollIntoView({ behavior: "smooth", block: "center" });
+          } else {
+            setHighlightRect(null);
+          }
+        } else {
+          setHighlightRect(null);
+        }
+      };
+
+      // Initial update
+      setTimeout(updateHighlight, 100);
+
+      // Update on scroll/resize
+      window.addEventListener("scroll", updateHighlight, true);
+      window.addEventListener("resize", updateHighlight);
+
+      return () => {
+        window.removeEventListener("scroll", updateHighlight, true);
+        window.removeEventListener("resize", updateHighlight);
+      };
     }
   }, [currentStep, isVisible]);
 
@@ -143,78 +150,104 @@ export function OnboardingTour() {
     }
   };
 
-  const getCardPosition = () => {
-    const step = steps[currentStep];
-    
-    if (step.position === "center" || !highlightedElement) {
+  const getCardStyle = (): React.CSSProperties => {
+    // Always center on mobile
+    if (window.innerWidth < 768) {
       return {
-        position: "fixed" as const,
-        top: "50%",
+        position: "fixed",
+        bottom: "20px",
         left: "50%",
-        transform: "translate(-50%, -50%)",
-        zIndex: 10001
+        transform: "translateX(-50%)",
+        maxWidth: "calc(100vw - 32px)",
+        width: "100%"
       };
     }
 
-    const rect = highlightedElement.getBoundingClientRect();
-    const cardWidth = 400;
-    const cardHeight = 200;
-    const spacing = 20;
-
-    let style: React.CSSProperties = {
-      position: "fixed" as const,
-      zIndex: 10001
-    };
-
-    switch (step.position) {
-      case "top":
-        style.bottom = `${window.innerHeight - rect.top + spacing}px`;
-        style.left = `${Math.min(Math.max(rect.left + rect.width / 2 - cardWidth / 2, 20), window.innerWidth - cardWidth - 20)}px`;
-        break;
-      case "bottom":
-        style.top = `${rect.bottom + spacing}px`;
-        style.left = `${Math.min(Math.max(rect.left + rect.width / 2 - cardWidth / 2, 20), window.innerWidth - cardWidth - 20)}px`;
-        break;
-      case "left":
-        style.right = `${window.innerWidth - rect.left + spacing}px`;
-        style.top = `${Math.min(Math.max(rect.top + rect.height / 2 - cardHeight / 2, 20), window.innerHeight - cardHeight - 20)}px`;
-        break;
-      case "right":
-        style.left = `${rect.right + spacing}px`;
-        style.top = `${Math.min(Math.max(rect.top + rect.height / 2 - cardHeight / 2, 20), window.innerHeight - cardHeight - 20)}px`;
-        break;
+    // Center if no target or first/last step
+    if (!highlightRect || !steps[currentStep].targetSelector) {
+      return {
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        maxWidth: "440px",
+        width: "90vw"
+      };
     }
 
-    return style;
+    // Position next to highlighted element on desktop
+    const spacing = 24;
+    const cardWidth = 440;
+    
+    // Try to position below the element first
+    if (highlightRect.bottom + spacing + 300 < window.innerHeight) {
+      return {
+        position: "fixed",
+        top: `${highlightRect.bottom + spacing}px`,
+        left: `${Math.max(20, Math.min(highlightRect.left + highlightRect.width / 2 - cardWidth / 2, window.innerWidth - cardWidth - 20))}px`,
+        maxWidth: `${cardWidth}px`,
+        width: "90vw"
+      };
+    }
+    
+    // Otherwise position above
+    return {
+      position: "fixed",
+      bottom: `${window.innerHeight - highlightRect.top + spacing}px`,
+      left: `${Math.max(20, Math.min(highlightRect.left + highlightRect.width / 2 - cardWidth / 2, window.innerWidth - cardWidth - 20))}px`,
+      maxWidth: `${cardWidth}px`,
+      width: "90vw"
+    };
   };
 
   if (!isVisible) return null;
 
   return (
     <>
-      {/* Overlay */}
-      <div className="fixed inset-0 bg-black/60 z-[10000] animate-fade-in" />
-      
-      {/* Highlight spotlight */}
-      {highlightedElement && (
-        <div
-          className="fixed z-[10000] pointer-events-none animate-fade-in"
-          style={{
-            top: highlightedElement.offsetTop - 8,
-            left: highlightedElement.offsetLeft - 8,
-            width: highlightedElement.offsetWidth + 16,
-            height: highlightedElement.offsetHeight + 16,
-            boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 255, 255, 0.3)",
-            borderRadius: "16px",
-            transition: "all 0.3s ease"
-          }}
-        />
-      )}
+      {/* Overlay with cutout for highlighted element */}
+      <div className="fixed inset-0 z-[10000] pointer-events-none">
+        <svg width="100%" height="100%" className="absolute inset-0">
+          <defs>
+            <mask id="spotlight-mask">
+              <rect width="100%" height="100%" fill="white" />
+              {highlightRect && (
+                <rect
+                  x={highlightRect.left - 8}
+                  y={highlightRect.top - 8}
+                  width={highlightRect.width + 16}
+                  height={highlightRect.height + 16}
+                  rx="12"
+                  fill="black"
+                />
+              )}
+            </mask>
+          </defs>
+          <rect
+            width="100%"
+            height="100%"
+            fill="rgba(0, 0, 0, 0.7)"
+            mask="url(#spotlight-mask)"
+          />
+        </svg>
+        
+        {/* Highlight border */}
+        {highlightRect && (
+          <div
+            className="absolute border-4 border-white rounded-xl shadow-2xl transition-all duration-300 pointer-events-none"
+            style={{
+              top: highlightRect.top - 8,
+              left: highlightRect.left - 8,
+              width: highlightRect.width + 16,
+              height: highlightRect.height + 16
+            }}
+          />
+        )}
+      </div>
 
       {/* Tour Card */}
       <Card 
-        className="w-[90vw] max-w-md animate-scale-in"
-        style={getCardPosition()}
+        className="animate-scale-in z-[10001]"
+        style={getCardStyle()}
       >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
