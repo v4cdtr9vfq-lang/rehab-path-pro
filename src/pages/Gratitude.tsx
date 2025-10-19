@@ -436,7 +436,7 @@ export default function Gratitude() {
 
       {/* Quick Tools */}
       <div className="mt-12">
-        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">Accesos directos:</h2>
+        <h2 className="text-xl font-bold mb-4 text-foreground pl-[35px]">Accesos directos:</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
           <Link to="/journal">
             <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-sidebar-border h-full">
