@@ -154,6 +154,16 @@ const emotionCategories: PrimaryCategory[] = [
         id: "frustracion",
         name: "Frustrado",
         tertiaryEmotions: ["Impotente"]
+      },
+      {
+        id: "inquieto",
+        name: "Inquieto",
+        tertiaryEmotions: ["Agitación", "Agitado", "Alarmado", "Alterado", "Conmocionado", "Desconcertado", "Inquieto", "Perturbado", "Preocupado", "Sobresaltado", "Sorprendido", "Turbulento"]
+      },
+      {
+        id: "molesto",
+        name: "Molesto",
+        tertiaryEmotions: ["Agravado", "Consternado", "Descontento", "Disgustado", "Exasperado", "Frustrado", "Impaciente", "Irritado", "Molesto"]
       }
     ]
   },
@@ -165,16 +175,6 @@ const emotionCategories: PrimaryCategory[] = [
         id: "asustado",
         name: "Asustado",
         tertiaryEmotions: ["Aprensivo", "Asustado", "Atemorizado", "Aterrorizado", "Cauteloso", "Desconfiado", "En pánico", "Petrificado", "Preocupado", "Presentimiento", "Sospechoso", "Temor"]
-      },
-      {
-        id: "inquieto",
-        name: "Inquieto",
-        tertiaryEmotions: ["Agitación", "Agitado", "Alarmado", "Alterado", "Conmocionado", "Desconcertado", "Inquieto", "Perturbado", "Preocupado", "Sobresaltado", "Sorprendido", "Turbulento"]
-      },
-      {
-        id: "molesto",
-        name: "Molesto",
-        tertiaryEmotions: ["Agravado", "Consternado", "Descontento", "Disgustado", "Exasperado", "Frustrado", "Impaciente", "Irritado", "Molesto"]
       },
       {
         id: "tenso",
