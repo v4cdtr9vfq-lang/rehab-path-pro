@@ -696,7 +696,8 @@ export default function EmotionJournal() {
   const filteredEntries = filterDate
     ? savedEntries.filter(entry => {
         const entryDate = new Date(entry.entry_date);
-        return entryDate.toDateString() === filterDate.toDateString();
+        const filterDateStr = `${filterDate.getFullYear()}-${String(filterDate.getMonth() + 1).padStart(2, '0')}-${String(filterDate.getDate()).padStart(2, '0')}`;
+        return entry.entry_date === filterDateStr;
       })
     : savedEntries;
 

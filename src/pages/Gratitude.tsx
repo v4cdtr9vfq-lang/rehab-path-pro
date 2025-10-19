@@ -192,7 +192,11 @@ export default function Gratitude() {
   // Filter entries by date if a filter date is selected
   const pastEntries = entries.filter(e => e.date.toDateString() !== new Date().toDateString());
   const filteredPastEntries = filterDate
-    ? pastEntries.filter(entry => entry.date.toDateString() === filterDate.toDateString())
+    ? pastEntries.filter(entry => {
+        const filterDateStr = `${filterDate.getFullYear()}-${String(filterDate.getMonth() + 1).padStart(2, '0')}-${String(filterDate.getDate()).padStart(2, '0')}`;
+        const entryDateStr = `${entry.date.getFullYear()}-${String(entry.date.getMonth() + 1).padStart(2, '0')}-${String(entry.date.getDate()).padStart(2, '0')}`;
+        return entryDateStr === filterDateStr;
+      })
     : pastEntries;
 
   return (
