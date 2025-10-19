@@ -44,7 +44,23 @@ interface EmotionStats {
   count: number;
 }
 
-const COLORS = ['#00d084', '#ff6b35', '#004aad', '#b300b3', '#ff1493', '#ffd700', '#00ced1'];
+const COLORS = [
+  '#00d084',  // Verde esmeralda
+  '#ff6b35',  // Naranja rojizo
+  '#004aad',  // Azul marino
+  '#b300b3',  // Magenta
+  '#ff1493',  // Rosa fucsia
+  '#ffd700',  // Dorado
+  '#00ced1',  // Turquesa
+  '#8b4513',  // Marrón
+  '#32cd32',  // Verde lima
+  '#ff4500',  // Rojo anaranjado
+  '#4169e1',  // Azul real
+  '#9370db',  // Púrpura medio
+  '#ff69b4',  // Rosa caliente
+  '#daa520',  // Vara de oro
+  '#20b2aa'   // Verde mar claro
+];
 
 const emotionCategories: PrimaryCategory[] = [
   {
