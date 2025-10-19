@@ -333,7 +333,7 @@ export default function CheckIn() {
         <CardContent className="space-y-6">
           {questions.map((question) => (
             <div key={question.id} className="space-y-3">
-              <Label className="text-base font-medium text-foreground">
+              <Label className="text-base font-medium text-foreground pl-4">
                 {question.id}. {question.text}
               </Label>
               
@@ -365,7 +365,7 @@ export default function CheckIn() {
                   {/* Show trigger description field if question 2 answered "yes" */}
                   {question.id === 2 && answers[2] === "yes" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-                      <Label htmlFor="trigger-description" className="text-sm font-medium text-foreground">
+                      <Label htmlFor="trigger-description" className="text-sm font-medium text-foreground pl-4">
                         Describe la situación sin juzgar:
                       </Label>
                       <Textarea
@@ -384,7 +384,7 @@ export default function CheckIn() {
                   {/* Show resentment description field if question 4 answered "yes" */}
                   {question.id === 4 && answers[4] === "yes" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-                      <Label htmlFor="resentment-description" className="text-sm font-medium text-foreground">
+                      <Label htmlFor="resentment-description" className="text-sm font-medium text-foreground pl-4">
                         Describe tu resentimiento:
                       </Label>
                       <Textarea
@@ -400,7 +400,7 @@ export default function CheckIn() {
                   {/* Show values description field if question 7 answered "no" */}
                   {question.id === 7 && answers[7] === "no" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-                      <Label htmlFor="values-description" className="text-sm font-medium text-foreground">
+                      <Label htmlFor="values-description" className="text-sm font-medium text-foreground pl-4">
                         Describe la situación:
                       </Label>
                       <Textarea
@@ -428,7 +428,7 @@ export default function CheckIn() {
                   {/* Show limiting description field if question 8 answered "yes" */}
                   {question.id === 8 && answers[8] === "yes" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-                      <Label htmlFor="limiting-description" className="text-sm font-medium text-foreground">
+                      <Label htmlFor="limiting-description" className="text-sm font-medium text-foreground pl-4">
                         ¿Qué obstáculos hay que superar?
                       </Label>
                       <Textarea
