@@ -631,6 +631,9 @@ export default function Values() {
 
         <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
           <CardContent className="p-6 space-y-4">
+            <p className="text-foreground/80 mb-4">
+              Selecciona con qué valor has conectado hoy:
+            </p>
             {values.filter(v => v.value_type === 'primary').length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 No tienes valores primarios aún. Añade hasta 3 valores fundamentales.
@@ -703,6 +706,9 @@ export default function Values() {
 
         <Card className="border-sky-blue/20">
           <CardContent className="p-6 space-y-4">
+            <p className="text-foreground/80 mb-4">
+              Selecciona con qué valor has conectado hoy:
+            </p>
             {values.filter(v => v.value_type === 'secondary').length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 No tienes valores secundarios aún. Añade hasta 6 valores de apoyo.
