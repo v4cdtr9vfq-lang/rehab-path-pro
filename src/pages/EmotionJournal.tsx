@@ -182,6 +182,11 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Absorto", "Alerta", "Curioso", "Encantado", "Estimulado", "Fascinado", "Interesado", "Intrigado", "Involucrado"]
       },
       {
+        id: "seguro",
+        name: "Conectado",
+        tertiaryEmotions: ["Aceptación", "Calma", "Confianza", "Feliz", "Intimidad", "Pertenencia", "Previsibilidad", "Tranquilidad"]
+      },
+      {
         id: "confiado",
         name: "Confiado",
         tertiaryEmotions: ["Abierto", "Empoderado", "Orgulloso", "Protegido", "Seguro"]
@@ -238,14 +243,14 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Agotado", "Apático", "Cansado", "Exhausto", "Fatigado", "Letárgico", "Quemado", "Somnoliento"]
       },
       {
-        id: "rechazo",
-        name: "Rechazo",
-        tertiaryEmotions: ["Animosidad", "Desagrado", "Desprecio", "Disgustado", "Horrorizado", "Hostil", "Odio", "Repulsado"]
-      },
-      {
         id: "triste",
         name: "Infeliz",
         tertiaryEmotions: ["Abatido", "Decepcionado", "Deprimido", "Desalentado", "Desanimado", "Descorazonado", "Desdichado", "Desesperado", "Desolado", "Infeliz", "Melancólico", "Sin esperanza", "Sombrío"]
+      },
+      {
+        id: "rechazo",
+        name: "Rechazo",
+        tertiaryEmotions: ["Animosidad", "Desagrado", "Desprecio", "Disgustado", "Horrorizado", "Hostil", "Odio", "Repulsado"]
       }
     ]
   }
