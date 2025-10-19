@@ -737,12 +737,13 @@ export default function EmotionJournal() {
               layout="horizontal"
               align="center"
               wrapperStyle={{ 
-                paddingTop: '10px',
-                fontSize: '15px',
-                maxHeight: '150px',
-                overflowY: 'auto'
+                paddingTop: '20px',
+                fontSize: '16px',
+                maxHeight: '180px',
+                overflowY: 'auto',
+                lineHeight: '1.8'
               }}
-              iconSize={12}
+              iconSize={14}
               formatter={(value) => value}
             />
           </PieChart>
