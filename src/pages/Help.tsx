@@ -161,7 +161,7 @@ export default function Help() {
             </TabsList>
 
             <TabsContent value="popular" className="mt-6">
-              <Accordion type="single" collapsible className="w-full">
+              <Accordion type="single" collapsible className="w-full" defaultValue={filteredFaqs[0]?.id}>
                 {filteredFaqs.map((faq) => (
                   <AccordionItem key={faq.id} value={faq.id}>
                     <AccordionTrigger 
@@ -179,7 +179,7 @@ export default function Help() {
             </TabsContent>
 
             <TabsContent value="recent" className="mt-6">
-              <Accordion type="single" collapsible className="w-full">
+              <Accordion type="single" collapsible className="w-full" defaultValue={filteredFaqs[0]?.id}>
                 {filteredFaqs.map((faq) => (
                   <AccordionItem key={faq.id} value={faq.id}>
                     <AccordionTrigger 
