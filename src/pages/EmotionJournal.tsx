@@ -715,7 +715,7 @@ export default function EmotionJournal() {
             <Pie
               data={data}
               cx="50%"
-              cy="35%"
+              cy="45%"
               innerRadius={50}
               outerRadius={80}
               paddingAngle={2}
