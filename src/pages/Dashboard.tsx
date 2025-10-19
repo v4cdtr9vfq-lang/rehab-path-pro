@@ -930,25 +930,6 @@ export default function Home() {
         </CardContent>
       </Card>
 
-      {/* Quick Tools */}
-      <div data-tour="quick-tools">
-        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">Accesos directos:</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
-          {quickTools.map(tool => {
-          return <Link key={tool.label} to={tool.path}>
-                <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-sidebar-border h-full">
-                  <CardContent className="p-5 text-center space-y-3">
-                    <div className={`mx-auto w-12 h-12 rounded-2xl flex items-center justify-center ${tool.color}`} style={{ backgroundColor: '#d5def7' }}>
-                      <span className="text-2xl">{tool.emoji}</span>
-                    </div>
-                    <p className="font-semibold text-foreground text-sm leading-tight">{tool.label}</p>
-                  </CardContent>
-                </Card>
-              </Link>;
-        })}
-        </div>
-      </div>
-
       {/* Daily Motivational Message */}
       <Card className="border-sidebar-border relative">
         <Button
@@ -971,6 +952,25 @@ export default function Home() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Quick Tools */}
+      <div data-tour="quick-tools">
+        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">Accesos directos:</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
+          {quickTools.map(tool => {
+          return <Link key={tool.label} to={tool.path}>
+                <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-sidebar-border h-full">
+                  <CardContent className="p-5 text-center space-y-3">
+                    <div className={`mx-auto w-12 h-12 rounded-2xl flex items-center justify-center ${tool.color}`} style={{ backgroundColor: '#d5def7' }}>
+                      <span className="text-2xl">{tool.emoji}</span>
+                    </div>
+                    <p className="font-semibold text-foreground text-sm leading-tight">{tool.label}</p>
+                  </CardContent>
+                </Card>
+              </Link>;
+        })}
+        </div>
+      </div>
 
       {/* Medal Unlock Popup */}
       <AlertDialog open={showMedalPopup} onOpenChange={setShowMedalPopup}>
