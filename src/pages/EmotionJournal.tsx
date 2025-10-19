@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Pencil, Trash2, Calendar as CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -10,6 +10,8 @@ import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHea
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 
 interface TertiaryEmotion {
   name: string;
@@ -35,6 +37,13 @@ interface SavedEmotionEntry {
   entry_date: string;
   created_at: string;
 }
+
+interface EmotionStats {
+  name: string;
+  count: number;
+}
+
+const COLORS = ['#22c55e', '#f97316', '#3b82f6', '#a855f7', '#ec4899', '#eab308', '#14b8a6'];
 
 const emotionCategories: PrimaryCategory[] = [
   {
@@ -286,12 +295,16 @@ export default function EmotionJournal() {
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
   const [currentPage, setCurrentPage] = useState(1);
+  const [todayStats, setTodayStats] = useState<EmotionStats[]>([]);
+  const [weekStats, setWeekStats] = useState<EmotionStats[]>([]);
+  const [monthStats, setMonthStats] = useState<EmotionStats[]>([]);
   const { toast } = useToast();
   
   const ENTRIES_PER_PAGE = 6;
 
   useEffect(() => {
     loadSavedEntries();
+    fetchStats();
   }, []);
 
   const loadSavedEntries = async () => {
@@ -310,6 +323,85 @@ export default function EmotionJournal() {
     } catch (error) {
       console.error('Error loading entries:', error);
     }
+  };
+
+  const fetchStats = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Fetch stats for today
+      const today = new Date().toISOString().split('T')[0];
+      await fetchStatsForPeriod(user.id, today, today, setTodayStats);
+
+      // Fetch stats for this week (last 7 days)
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 6);
+      const weekAgoStr = weekAgo.toISOString().split('T')[0];
+      await fetchStatsForPeriod(user.id, weekAgoStr, today, setWeekStats);
+
+      // Fetch stats for this month
+      const monthStart = new Date();
+      monthStart.setDate(1);
+      const monthStartStr = monthStart.toISOString().split('T')[0];
+      await fetchStatsForPeriod(user.id, monthStartStr, today, setMonthStats);
+    } catch (error: any) {
+      console.error('Error fetching stats:', error);
+    }
+  };
+
+  const fetchStatsForPeriod = async (
+    userId: string,
+    startDate: string,
+    endDate: string,
+    setStat: (stats: EmotionStats[]) => void
+  ) => {
+    const { data, error } = await (supabase as any)
+      .from('emotion_journal')
+      .select('primary_emotion, secondary_emotions, tertiary_emotions')
+      .eq('user_id', userId)
+      .gte('entry_date', startDate)
+      .lte('entry_date', endDate);
+
+    if (error) {
+      console.error('Error fetching period stats:', error);
+      return;
+    }
+
+    // Count occurrences of each emotion
+    const countMap = new Map<string, number>();
+    
+    (data || []).forEach((entry: any) => {
+      // Count primary emotions
+      if (entry.primary_emotion) {
+        const primaries = entry.primary_emotion.split(", ");
+        primaries.forEach((emotion: string) => {
+          const trimmed = emotion.trim();
+          countMap.set(trimmed, (countMap.get(trimmed) || 0) + 1);
+        });
+      }
+      
+      // Count secondary emotions
+      if (entry.secondary_emotions) {
+        entry.secondary_emotions.forEach((emotion: string) => {
+          countMap.set(emotion, (countMap.get(emotion) || 0) + 1);
+        });
+      }
+      
+      // Count tertiary emotions
+      if (entry.tertiary_emotions) {
+        entry.tertiary_emotions.forEach((emotion: string) => {
+          countMap.set(emotion, (countMap.get(emotion) || 0) + 1);
+        });
+      }
+    });
+
+    const stats: EmotionStats[] = Array.from(countMap.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10); // Top 10 emotions
+
+    setStat(stats);
   };
 
   const togglePrimary = (categoryId: string) => {
@@ -426,6 +518,7 @@ export default function EmotionJournal() {
       setSelectedSecondary([]);
       setSelectedTertiary([]);
       await loadSavedEntries();
+      await fetchStats();
     } catch (error) {
       console.error('Error saving emotions:', error);
       toast({
@@ -523,6 +616,7 @@ export default function EmotionJournal() {
       setSelectedSecondary([]);
       setSelectedTertiary([]);
       await loadSavedEntries();
+      await fetchStats();
     } catch (error) {
       console.error('Error updating entry:', error);
       toast({
@@ -551,6 +645,7 @@ export default function EmotionJournal() {
       });
 
       await loadSavedEntries();
+      await fetchStats();
     } catch (error) {
       console.error('Error deleting entry:', error);
       toast({
@@ -597,6 +692,53 @@ export default function EmotionJournal() {
   useEffect(() => {
     setCurrentPage(1);
   }, [filterDate]);
+
+  const renderDonutChart = (data: EmotionStats[]) => {
+    if (data.length === 0) {
+      return (
+        <div className="flex items-center justify-center h-[300px] text-muted-foreground">
+          No hay datos para este período
+        </div>
+      );
+    }
+
+    const total = data.reduce((sum, item) => sum + item.count, 0);
+
+    return (
+      <div className="w-full px-4">
+        <ResponsiveContainer width="100%" height={320}>
+          <PieChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="45%"
+              innerRadius={40}
+              outerRadius={70}
+              paddingAngle={2}
+              dataKey="count"
+              label={(entry) => `${((entry.count / total) * 100).toFixed(1)}%`}
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip 
+              formatter={(value: number, name: string) => {
+                const percentage = ((value / total) * 100).toFixed(1);
+                return [`${percentage}% (${value} veces)`, name];
+              }}
+            />
+            <Legend 
+              verticalAlign="bottom" 
+              height={40}
+              wrapperStyle={{ paddingTop: '20px' }}
+              formatter={(value) => value}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+    );
+  };
 
   return (
     <div className="space-y-[30px] animate-fade-in">
@@ -740,6 +882,35 @@ export default function EmotionJournal() {
           </div>
         )}
       </Card>
+
+      {/* Statistics Widget */}
+      {savedEntries.length > 0 && (
+        <Card className="border-sky-blue/20">
+          <CardHeader>
+            <CardTitle className="text-2xl">
+              Estadísticas
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="today" className="w-full">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="today">Hoy</TabsTrigger>
+                <TabsTrigger value="week">Esta semana</TabsTrigger>
+                <TabsTrigger value="month">Este mes</TabsTrigger>
+              </TabsList>
+              <TabsContent value="today" className="mt-6">
+                {renderDonutChart(todayStats)}
+              </TabsContent>
+              <TabsContent value="week" className="mt-6">
+                {renderDonutChart(weekStats)}
+              </TabsContent>
+              <TabsContent value="month" className="mt-6">
+                {renderDonutChart(monthStats)}
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Emotion Log Widget */}
       {savedEntries.length > 0 && (
