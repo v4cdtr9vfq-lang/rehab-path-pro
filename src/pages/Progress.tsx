@@ -458,8 +458,8 @@ export default function ProgressPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             {currentTab === 'daily' && 'Progreso hoy:'}
-            {currentTab === 'week' && 'Progreso semanal'}
-            {currentTab === 'month' && 'Progreso mensual'}
+            {currentTab === 'week' && 'Progreso semanal:'}
+            {currentTab === 'month' && 'Progreso mensual:'}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -530,7 +530,7 @@ export default function ProgressPage() {
           <Card className="border-sidebar-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                Progreso semanal
+                Progreso semanal:
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -549,7 +549,7 @@ export default function ProgressPage() {
           <Card className="border-sidebar-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                Progreso mensual
+                Progreso mensual:
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
