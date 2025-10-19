@@ -432,6 +432,45 @@ export default function Plan() {
       }
     }));
   };
+
+  const resetToDefaultGoals = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "Debes iniciar sesión.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Call the RPC function to reset goals and abstinence
+      const { error } = await supabase.rpc('reset_goals_and_abstinence', {
+        p_user_id: user.id
+      });
+
+      if (error) throw error;
+
+      // Refresh the goals
+      await fetchGoals();
+
+      // Trigger abstinence date update event
+      window.dispatchEvent(new Event('abstinenceDateUpdated'));
+
+      toast({
+        title: "Metas reseteadas",
+        description: "Se han cargado las metas predefinidas y se ha reseteado tu fecha de abstinencia."
+      });
+    } catch (error: any) {
+      console.error('Error resetting goals:', error);
+      toast({
+        title: "Error",
+        description: "No se pudieron resetear las metas.",
+        variant: "destructive"
+      });
+    }
+  };
   const toggleGoal = async (sectionKey: keyof typeof sections, goalId: string) => {
     try {
       const goal = sections[sectionKey].goals.find(g => g.id === goalId);
@@ -1316,6 +1355,31 @@ export default function Plan() {
             </CardContent>
           )}
         </Card>
+
+        {/* Reset to Default Goals */}
+        <div className="flex justify-center mt-8">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" className="text-muted-foreground hover:text-destructive">
+                Volver a cargar todas las metas predefinidas al inicio
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Esta acción eliminará todas tus metas actuales y completaciones, y las reemplazará con las metas predefinidas. También se reseteará tu fecha de inicio de abstinencia a hoy. Esta acción no se puede deshacer.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction onClick={resetToDefaultGoals} className="bg-destructive hover:bg-destructive/90">
+                  Confirmar reseteo
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </div>
     </div>;
 }
