@@ -591,20 +591,6 @@ export default function Values() {
         </div>
       )}
 
-      <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            Lo que más importa
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="-mt-5">
-          <p className="text-foreground/80">
-            Tus valores son los principios que guían tu camino de recuperación. Selecciona los valores en los que quieres enfocarte hoy, 
-            y te recordaremos honrarlos durante el día.
-          </p>
-        </CardContent>
-      </Card>
-
       {/* Valores Primarios Widget */}
       <div>
         <div className="flex justify-between items-center mb-3 pl-[35px]">
@@ -784,6 +770,21 @@ export default function Values() {
               {renderDonutChart(monthStats)}
             </TabsContent>
           </Tabs>
+        </CardContent>
+      </Card>
+
+      {/* Lo que más importa Widget */}
+      <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            Lo que más importa
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="-mt-5">
+          <p className="text-foreground/80">
+            Tus valores son los principios que guían tu camino de recuperación. Selecciona los valores en los que quieres enfocarte hoy, 
+            y te recordaremos honrarlos durante el día.
+          </p>
         </CardContent>
       </Card>
 
