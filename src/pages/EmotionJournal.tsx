@@ -218,8 +218,8 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: []
       },
       {
-        id: "abatido",
-        name: "Abatido",
+        id: "desanimado",
+        name: "Desanimado",
         tertiaryEmotions: []
       },
       {
@@ -250,7 +250,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "triste",
         name: "Infeliz",
-        tertiaryEmotions: ["Decepcionado", "Deprimido", "Desalentado", "Desanimado", "Descorazonado", "Desdichado", "Desesperado", "Desolado", "Infeliz", "Melancólico", "Sin esperanza", "Sombrío"]
+        tertiaryEmotions: ["Abatido", "Decepcionado", "Deprimido", "Desalentado", "Descorazonado", "Desdichado", "Desesperado", "Desolado", "Infeliz", "Melancólico", "Sin esperanza", "Sombrío"]
       },
       {
         id: "rechazo",
