@@ -249,7 +249,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "desanimado",
         name: "Desanimado",
-        tertiaryEmotions: []
+        tertiaryEmotions: ["Pereza", "Decepción", "Abatimiento"]
       },
       {
         id: "agotado",
