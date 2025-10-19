@@ -154,24 +154,15 @@ export default function CheckIn() {
         .insert({
           user_id: user.id,
           entry_date: today,
-          title: "Inventario de una recaída",
+          title: "Inventario de la recaída",
           content: "",
           tags: ["recaída", "inventario"]
         });
 
       if (journalError) throw journalError;
 
-      // Reset abstinence counter
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update({
-          abstinence_start_date: new Date().toISOString()
-        })
-        .eq('user_id', user.id);
-
-      if (profileError) throw profileError;
-
       setShowRelapseDialog(false);
+      setRelapseConfirmed(false);
       navigate('/journal');
     } catch (error: any) {
       toast({
@@ -522,7 +513,12 @@ export default function CheckIn() {
               </AlertDialogAction>
             ) : (
               <>
-                <AlertDialogCancel>Cerrar</AlertDialogCancel>
+                <AlertDialogCancel onClick={() => {
+                  setShowRelapseDialog(false);
+                  setRelapseConfirmed(false);
+                }}>
+                  Cancelar
+                </AlertDialogCancel>
                 <AlertDialogAction onClick={handleRelapseInventory}>
                   Inventario
                 </AlertDialogAction>
