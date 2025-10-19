@@ -135,11 +135,6 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Agitación", "Agitado", "Alarmado", "Alterado", "Conmocionado", "Desconcertado", "Inquieto", "Perturbado", "Preocupado", "Sobresaltado", "Sorprendido", "Turbulento"]
       },
       {
-        id: "verguenza",
-        name: "Vergüenza",
-        tertiaryEmotions: []
-      },
-      {
         id: "vulnerable",
         name: "Vulnerable",
         tertiaryEmotions: ["Cauteloso", "Frágil", "Indefenso", "Inseguro", "Reservado", "Sensible", "Tembloroso"]
