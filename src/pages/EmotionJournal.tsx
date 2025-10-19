@@ -38,27 +38,6 @@ interface SavedEmotionEntry {
 
 const emotionCategories: PrimaryCategory[] = [
   {
-    id: "solo",
-    name: "Aislado",
-    secondaryEmotions: [
-      {
-        id: "abandono",
-        name: "Abandono",
-        tertiaryEmotions: []
-      },
-      {
-        id: "rechazo",
-        name: "Rechazo",
-        tertiaryEmotions: ["Animosidad", "Desagrado", "Desprecio", "Disgustado", "Horrorizado", "Hostil", "Odio", "Repulsado"]
-      },
-      {
-        id: "triste",
-        name: "Triste",
-        tertiaryEmotions: ["Abatido", "Decepcionado", "Deprimido", "Desalentado", "Desanimado", "Descorazonado", "Desdichado", "Desesperado", "Desolado", "Infeliz", "Melancólico", "Sin esperanza", "Sombrío"]
-      }
-    ]
-  },
-  {
     id: "alegre",
     name: "Alegre",
     secondaryEmotions: [
@@ -224,6 +203,11 @@ const emotionCategories: PrimaryCategory[] = [
     name: "Triste",
     secondaryEmotions: [
       {
+        id: "abandono",
+        name: "Abandono",
+        tertiaryEmotions: []
+      },
+      {
         id: "agotado",
         name: "Agotado",
         tertiaryEmotions: []
@@ -237,6 +221,16 @@ const emotionCategories: PrimaryCategory[] = [
         id: "desconectado",
         name: "Desconectado",
         tertiaryEmotions: ["Aburrido", "Adormecido", "Alejado", "Alienado", "Apático", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído"]
+      },
+      {
+        id: "rechazo",
+        name: "Rechazo",
+        tertiaryEmotions: ["Animosidad", "Desagrado", "Desprecio", "Disgustado", "Horrorizado", "Hostil", "Odio", "Repulsado"]
+      },
+      {
+        id: "triste",
+        name: "Triste",
+        tertiaryEmotions: ["Abatido", "Decepcionado", "Deprimido", "Desalentado", "Desanimado", "Descorazonado", "Desdichado", "Desesperado", "Desolado", "Infeliz", "Melancólico", "Sin esperanza", "Sombrío"]
       }
     ]
   }
