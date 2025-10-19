@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CommunityUser {
   id: string;
@@ -68,32 +69,72 @@ const REHABILITATION_TYPES = [
 export default function Community() {
   const isMobile = useIsMobile();
   const [isAvailableForHelp, setIsAvailableForHelp] = useState(false);
-  const [userMedals, setUserMedals] = useState<string[]>([]);
+  const [currentUser, setCurrentUser] = useState<CommunityUser | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>("todos");
+  const [loading, setLoading] = useState(true);
 
-  // Calcular las medallas del usuario actual basado en días de sobriedad
-  // Este valor debería venir del backend en una implementación real
-  const calculateUserMedals = () => {
-    // Placeholder - en una implementación real obtendríamos esto del backend
-    const sobrietyDays = 45; // Ejemplo
-    const medals = [];
-    
-    if (sobrietyDays >= 180) medals.push("🏆");
-    if (sobrietyDays >= 90) medals.push("🥇");
-    if (sobrietyDays >= 40) medals.push("🥈");
-    if (sobrietyDays >= 0) medals.push("🥉");
-    
-    setUserMedals(medals);
-  };
-
+  // Obtener datos reales del usuario
   useEffect(() => {
-    calculateUserMedals();
-  }, []);
+    const fetchUserData = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
 
-  const hasMinimumMedalsForHelp = userMedals.length >= 3; // Necesita al menos 3 medallas (90+ días)
+        // Obtener perfil y fecha de abstinencia
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name, abstinence_start_date')
+          .eq('user_id', user.id)
+          .single();
+
+        if (profile?.abstinence_start_date) {
+          const absDate = new Date(profile.abstinence_start_date);
+          const today = new Date();
+          const diffTime = Math.abs(today.getTime() - absDate.getTime());
+          const totalDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+          
+          // Calcular años y días restantes
+          const years = Math.floor(totalDays / 365);
+          const remainingDays = totalDays % 365;
+
+          // Obtener medallas del usuario
+          const { data: medals } = await supabase
+            .from('medals')
+            .select('medal_type')
+            .eq('user_id', user.id);
+
+          const userMedals = getMedalsByTime(years, remainingDays);
+
+          setCurrentUser({
+            id: user.id,
+            name: profile.full_name || 'Usuario',
+            avatar: '',
+            years,
+            days: remainingDays,
+            medals: userMedals,
+            availableForHelp: isAvailableForHelp
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [isAvailableForHelp]);
+
+  // Solo mostrar el widget cuando tenga TODAS las medallas (4 medallas)
+  const hasAllMedals = currentUser ? currentUser.medals.length >= 4 : false;
+
+  // Combinar usuario actual con usuarios mock y ordenar
+  const allUsers = currentUser 
+    ? [...mockUsers, currentUser]
+    : mockUsers;
 
   // Sort users by time: years descending, then days descending
-  const sortedUsers = [...mockUsers]
+  const sortedUsers = allUsers
     .filter((user) => {
       if (selectedFilter === "todos") return true;
       // Filter by rehabilitation type (in real implementation, this would come from user data)
@@ -139,8 +180,8 @@ export default function Community() {
 
   return (
     <div className="container mx-auto px-4 py-2 max-w-6xl">
-      {/* Availability Toggle - Solo para usuarios con 3+ medallas */}
-      {hasMinimumMedalsForHelp && (
+      {/* Availability Toggle - Solo para usuarios con TODAS las medallas (4) */}
+      {hasAllMedals && (
         <Card className="mb-[30px] border-primary/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -149,7 +190,7 @@ export default function Community() {
                   Disponible para asistencia
                 </Label>
                 <p className="text-sm text-muted-foreground">
-                  Indica si estás disponible para ayudar a otros miembros de la comunidad
+                  Has desbloqueado todas las medallas. Indica si estás disponible para ayudar a otros miembros de la comunidad.
                 </p>
               </div>
               <Switch
@@ -204,14 +245,18 @@ export default function Community() {
               const months = Math.floor(user.days / 30);
               const remainingDays = user.days % 30;
               const totalDays = user.years * 365 + user.days;
-              const canShowAvailability = totalDays >= 90; // Necesita 90+ días (3+ medallas)
+              const userHasAllMedals = getMedalsByTime(user.years, user.days).length >= 4;
+              const canShowAvailability = userHasAllMedals; // Solo mostrar si tiene todas las medallas
+              const isCurrentUser = currentUser && user.id === currentUser.id;
               
               if (isMobile) {
                 return (
                   <div
                     key={user.id}
                     className={`p-3 rounded-xl transition-colors ${
-                      user.availableForHelp
+                      isCurrentUser
+                        ? "bg-primary/10 border-2 border-primary"
+                        : user.availableForHelp
                         ? "bg-success/10 border border-success/30"
                         : "bg-muted/30"
                     }`}
@@ -263,7 +308,9 @@ export default function Community() {
                 <div
                   key={user.id}
                   className={`grid grid-cols-[auto_auto_100px_120px] gap-3 items-center p-4 rounded-xl transition-colors ${
-                    user.availableForHelp
+                    isCurrentUser
+                      ? "bg-primary/10 border-2 border-primary"
+                      : user.availableForHelp
                       ? "bg-success/10 border border-success/30"
                       : "bg-muted/30"
                   }`}
