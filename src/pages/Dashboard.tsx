@@ -1,4 +1,5 @@
 import { AbstinenceCounter } from "@/components/AbstinenceCounter";
+import { OnboardingTour } from "@/components/OnboardingTour";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -725,11 +726,16 @@ export default function Home() {
   }
 
   return <div className="container mx-auto px-[15px] md:px-0 pt-4 md:pt-0 md:-mt-[3px] pb-8 space-y-[35px] animate-in fade-in duration-500">
+      {/* Onboarding Tour */}
+      <OnboardingTour />
+      
       {/* Header - Abstinence Counter */}
-      <AbstinenceCounter startDate={startDate} />
+      <div className="abstinence-counter">
+        <AbstinenceCounter startDate={startDate} />
+      </div>
 
       {/* Daily Progress Panel */}
-      <Card className="border-sidebar-border md:-mt-[3px]">
+      <Card className="border-sidebar-border md:-mt-[3px]" data-tour="daily-progress">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Progreso diario:</CardTitle>
         </CardHeader>
@@ -797,7 +803,7 @@ export default function Home() {
       </Card>
 
       {/* Active Goals Summary */}
-      <Card className="border-sidebar-border md:-mt-[3px]">
+      <Card className="border-sidebar-border md:-mt-[3px]" data-tour="goals-section">
         <CardHeader className="flex flex-row items-center justify-between gap-2 pb-[25px]">
           <CardTitle className="text-2xl font-bold">Metas de hoy:</CardTitle>
           <div className="flex gap-2">
@@ -926,7 +932,7 @@ export default function Home() {
       </Card>
 
       {/* Quick Tools */}
-      <div>
+      <div data-tour="quick-tools">
         <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">Accesos directos:</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
           {quickTools.map(tool => {
