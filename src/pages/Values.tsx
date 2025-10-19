@@ -748,8 +748,7 @@ export default function Values() {
       {/* Statistics Widget */}
       <Card className="border-sky-blue/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            <TrendingUp className="h-6 w-6 text-sky-blue" />
+          <CardTitle className="text-2xl">
             Estadísticas
           </CardTitle>
         </CardHeader>
