@@ -183,13 +183,11 @@ export default function Auth() {
         <Card className="border-border/50">
           <CardHeader>
             <CardTitle>{isForgotPassword ? "Recuperar contraseña" : isLogin ? "Iniciar sesión" : "Registrarse"}</CardTitle>
-            <CardDescription>
-              {isForgotPassword
-                ? "Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña"
-                : isLogin 
-                  ? "Ingresa tus credenciales para continuar:" 
-                  : "Completa el formulario para crear tu cuenta"}
-            </CardDescription>
+            {!isLogin && !isForgotPassword && (
+              <CardDescription>
+                Completa el formulario para crear tu cuenta
+              </CardDescription>
+            )}
           </CardHeader>
           <CardContent>
             {isForgotPassword ? (
@@ -264,13 +262,13 @@ export default function Auth() {
                   </div>
 
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between pl-4">
+                  <div className="flex items-center justify-between pl-4">
                       <Label htmlFor="password">Contraseña</Label>
                       {isLogin && (
                         <button
                           type="button"
                           onClick={() => setIsForgotPassword(true)}
-                          className="text-xs text-primary hover:underline"
+                          className="text-xs text-primary hover:underline pr-4"
                           disabled={loading}
                         >
                           ¿Olvidaste tu contraseña?
