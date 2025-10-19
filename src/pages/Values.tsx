@@ -593,7 +593,7 @@ export default function Values() {
 
       {/* Valores Primarios Widget */}
       <div>
-        <div className="flex justify-between items-center mb-3 pl-[35px]">
+        <div className="flex justify-between items-center mb-0 pl-[35px]">
           <h2 className="text-2xl font-semibold text-foreground">Valores primarios - Máximo 3</h2>
           <Dialog open={isPrimaryDialogOpen} onOpenChange={setIsPrimaryDialogOpen}>
             <DialogTrigger asChild>
@@ -669,7 +669,7 @@ export default function Values() {
 
       {/* Valores Secundarios Widget */}
       <div>
-        <div className="flex justify-between items-center mb-3 pl-[35px]">
+        <div className="flex justify-between items-center mb-0 pl-[35px]">
           <h2 className="text-2xl font-semibold text-foreground">Valores secundarios - Máximo 6</h2>
           <Dialog open={isSecondaryDialogOpen} onOpenChange={setIsSecondaryDialogOpen}>
             <DialogTrigger asChild>
