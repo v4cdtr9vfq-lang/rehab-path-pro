@@ -150,7 +150,7 @@ export default function Help() {
       {/* FAQs Section */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-2xl">Preguntas Frecuentes</CardTitle>
+          <CardTitle className="text-2xl pl-4">Preguntas Frecuentes</CardTitle>
           <HelpCircle className="h-6 w-6 text-red-500" />
         </CardHeader>
         <CardContent className="space-y-4">
@@ -166,7 +166,7 @@ export default function Help() {
                   <AccordionItem key={faq.id} value={faq.id}>
                     <AccordionTrigger 
                       onClick={() => incrementViewCount(faq.id)}
-                      className="text-left hover:text-primary"
+                      className="text-left hover:text-primary pl-4"
                     >
                       {faq.question}
                     </AccordionTrigger>
@@ -184,7 +184,7 @@ export default function Help() {
                   <AccordionItem key={faq.id} value={faq.id}>
                     <AccordionTrigger 
                       onClick={() => incrementViewCount(faq.id)}
-                      className="text-left hover:text-primary"
+                      className="text-left hover:text-primary pl-4"
                     >
                       {faq.question}
                     </AccordionTrigger>
@@ -202,10 +202,10 @@ export default function Help() {
       {/* Ask a Question Section */}
       <Card>
         <CardHeader className="pb-0">
-          <CardTitle className="text-xl">¿No encuentras lo que buscas?</CardTitle>
+          <CardTitle className="text-xl pl-4">¿No encuentras lo que buscas?</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 pt-[15px]">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground pl-4">
             Envía tu pregunta y nuestros administradores te responderán lo antes posible.
           </p>
           <Textarea
