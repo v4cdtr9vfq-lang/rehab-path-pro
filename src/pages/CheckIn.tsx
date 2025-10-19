@@ -558,9 +558,9 @@ export default function CheckIn() {
               Inventario
             </AlertDialogAction>
             {!relapseConfirmed && (
-              <AlertDialogAction onClick={handleConfirmRelapse} className="bg-primary">
+              <Button onClick={handleConfirmRelapse} className="bg-primary">
                 Confirmar
-              </AlertDialogAction>
+              </Button>
             )}
             <AlertDialogCancel onClick={() => {
               setShowRelapseDialog(false);
