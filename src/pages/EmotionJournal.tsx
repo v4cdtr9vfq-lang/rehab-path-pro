@@ -12,6 +12,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { Link } from "react-router-dom";
 
 interface TertiaryEmotion {
   name: string;
@@ -1099,6 +1100,53 @@ export default function EmotionJournal() {
           </CardContent>
         </Card>
       )}
+
+      {/* Quick Tools */}
+      <div className="mt-12">
+        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">Accesos directos:</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
+          <Link to="/journal">
+            <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-sidebar-border h-full">
+              <CardContent className="p-5 text-center space-y-3">
+                <div className="mx-auto w-12 h-12 rounded-2xl flex items-center justify-center text-primary" style={{ backgroundColor: '#d5def7' }}>
+                  <span className="text-2xl">📔</span>
+                </div>
+                <p className="font-semibold text-foreground text-sm leading-tight">Diario</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to="/emotion-journal">
+            <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-sidebar-border h-full">
+              <CardContent className="p-5 text-center space-y-3">
+                <div className="mx-auto w-12 h-12 rounded-2xl flex items-center justify-center text-primary" style={{ backgroundColor: '#d5def7' }}>
+                  <span className="text-2xl">😊</span>
+                </div>
+                <p className="font-semibold text-foreground text-sm leading-tight">Diario de emociones</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to="/gratitude">
+            <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-sidebar-border h-full">
+              <CardContent className="p-5 text-center space-y-3">
+                <div className="mx-auto w-12 h-12 rounded-2xl flex items-center justify-center text-accent" style={{ backgroundColor: '#d5def7' }}>
+                  <span className="text-2xl">🙏</span>
+                </div>
+                <p className="font-semibold text-foreground text-sm leading-tight">Agradecimiento</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to="/tools">
+            <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-sidebar-border h-full">
+              <CardContent className="p-5 text-center space-y-3">
+                <div className="mx-auto w-12 h-12 rounded-2xl flex items-center justify-center text-destructive" style={{ backgroundColor: '#d5def7' }}>
+                  <span className="text-2xl">🚨</span>
+                </div>
+                <p className="font-semibold text-foreground text-sm leading-tight">Plan de emergencia</p>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
+      </div>
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
