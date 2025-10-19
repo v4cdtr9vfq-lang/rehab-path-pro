@@ -258,6 +258,48 @@ export default function CheckIn() {
         }
       }
 
+      // If answered "yes" to resentment question and has description, save as journal entry
+      if (answers[4] === "yes" && resentmentDescription.trim()) {
+        // Check if entry already exists
+        const { data: existingEntry } = await supabase
+          .from('journal_entries')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('entry_date', today)
+          .eq('title', "Resentimientos")
+          .maybeSingle();
+
+        if (existingEntry) {
+          // Update existing entry
+          const { error: journalError } = await supabase
+            .from('journal_entries')
+            .update({
+              content: resentmentDescription.trim(),
+              tags: ["resentimientos", "check-in"]
+            })
+            .eq('id', existingEntry.id);
+
+          if (journalError) {
+            console.error("Error updating journal entry:", journalError);
+          }
+        } else {
+          // Insert new entry
+          const { error: journalError } = await supabase
+            .from('journal_entries')
+            .insert({
+              user_id: user.id,
+              entry_date: today,
+              title: "Resentimientos",
+              content: resentmentDescription.trim(),
+              tags: ["resentimientos", "check-in"]
+            });
+
+          if (journalError) {
+            console.error("Error inserting journal entry:", journalError);
+          }
+        }
+      }
+
       // If answered "no" to values question and has description, save as journal entry
       if (answers[7] === "no" && valuesDescription.trim()) {
         // Check if entry already exists
@@ -396,6 +438,9 @@ export default function CheckIn() {
                         onChange={(e) => setResentmentDescription(e.target.value)}
                         className="min-h-[100px]"
                       />
+                      <p className="text-xs text-muted-foreground">
+                        Esta descripción se guardará automáticamente como entrada en tu diario con el título "Resentimientos"
+                      </p>
                     </div>
                   )}
 
