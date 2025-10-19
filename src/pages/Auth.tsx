@@ -248,7 +248,7 @@ export default function Auth() {
                   )}
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="pl-4">Email</Label>
+                    <Label htmlFor="email" className="pl-4">Email:</Label>
                     <Input
                       id="email"
                       type="email"
@@ -263,7 +263,7 @@ export default function Auth() {
 
                   <div className="space-y-2 pb-[35px]">
                     <div className="flex items-center justify-between pl-4">
-                      <Label htmlFor="password">Contraseña</Label>
+                      <Label htmlFor="password">Contraseña:</Label>
                       {isLogin && (
                         <button
                           type="button"
