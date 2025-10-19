@@ -417,11 +417,13 @@ export default function Gratitude() {
       )}
 
       <div>
-        <h2 className="text-2xl font-bold text-foreground mb-3 flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-foreground mb-3 flex items-center justify-between">
           <span className="pl-6 md:pl-[35px]">Por qué es tan importante</span>
-          <span className="-ml-[30px]">🙏</span>
-          <span>🙏</span>
-          <span>🙏</span>
+          <span className="flex gap-2 pr-6">
+            <span>🙏</span>
+            <span>🙏</span>
+            <span>🙏</span>
+          </span>
         </h2>
         <Card className="border-border bg-gradient-to-br from-sky-blue/5 to-transparent">
           <CardContent className="pt-6">
