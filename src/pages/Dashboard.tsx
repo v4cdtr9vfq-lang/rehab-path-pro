@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CheckCircle2, Clock, Circle, Star, GripVertical, PartyPopper } from "lucide-react";
+import { CheckCircle2, Clock, Circle, Star, GripVertical, PartyPopper, Plus } from "lucide-react";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -827,9 +827,8 @@ export default function Home() {
             <div className="text-center py-8">
               <p className="text-muted-foreground mb-4">No tienes metas activas aún</p>
               <Link to="/plan">
-                <Button className="rounded-xl">
-                  <span className="mr-2">🎯</span>
-                  Añadir meta
+                <Button size="icon" className="rounded-full h-12 w-12">
+                  <Plus className="h-6 w-6" />
                 </Button>
               </Link>
             </div>
