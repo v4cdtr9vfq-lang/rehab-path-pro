@@ -298,7 +298,7 @@ export default function Auth() {
                     disabled={loading}
                     size="lg"
                   >
-                    {loading ? "Procesando..." : isLogin ? "Iniciar sesión:" : "Crear cuenta"}
+                    {loading ? "Procesando..." : isLogin ? "Iniciar sesión" : "Crear cuenta"}
                   </Button>
                 </form>
 
