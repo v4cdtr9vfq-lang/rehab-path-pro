@@ -42,6 +42,7 @@ interface Goal {
   target_date?: string;
   periodic_type?: string;
   order_index?: number;
+  link?: string;
 }
 interface ExpandedGoal extends Goal {
   originalId: string;
@@ -98,11 +99,13 @@ export default function Plan() {
     target_date?: Date;
     periodic_type?: string;
     description?: string;
+    link?: string;
   }>({
     text: "",
     type: "today",
     remaining: 1,
-    description: ""
+    description: "",
+    link: ""
   });
   const [editingGoal, setEditingGoal] = useState<any>(null);
 
@@ -538,7 +541,8 @@ export default function Plan() {
         completed: false,
         target_date: newGoal.target_date ? format(newGoal.target_date, 'yyyy-MM-dd') : null,
         periodic_type: newGoal.periodic_type || null,
-        description: newGoal.description || null
+        description: newGoal.description || null,
+        link: newGoal.link || null
       }).select().single();
       if (error) throw error;
       if (goal) {
@@ -555,7 +559,8 @@ export default function Plan() {
         remaining: 1,
         target_date: undefined,
         periodic_type: undefined,
-        description: ""
+        description: "",
+        link: ""
       });
     } catch (error: any) {
       toast({
@@ -644,6 +649,11 @@ export default function Plan() {
         updateData.instructions = editingGoal.instructions || null;
       }
       
+      // Add link if provided
+      if (editingGoal.link !== undefined) {
+        updateData.link = editingGoal.link || null;
+      }
+      
       const {
         error
       } = await supabase.from('goals').update(updateData).eq('id', editingGoal.id);
@@ -729,7 +739,19 @@ export default function Plan() {
               {displayCompleted ? <CheckCircle2 className="h-5 w-5 text-green-500" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
             </button>
             <div>
-              <p className="font-semibold text-foreground text-sm">{goal.text}</p>
+              {goal.link ? (
+                <a 
+                  href={goal.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="font-semibold text-foreground text-sm hover:text-primary underline decoration-dotted"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {goal.text}
+                </a>
+              ) : (
+                <p className="font-semibold text-foreground text-sm">{goal.text}</p>
+              )}
               <p className={`text-xs ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
                 {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
               </p>
@@ -781,7 +803,19 @@ export default function Plan() {
             <GripVertical className="h-5 w-5 text-muted-foreground" />
           </button>
           <div>
-            <p className="font-semibold text-foreground text-sm md:text-base">{goal.text}</p>
+            {goal.link ? (
+              <a 
+                href={goal.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="font-semibold text-foreground text-sm md:text-base hover:text-primary underline decoration-dotted"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {goal.text}
+              </a>
+            ) : (
+              <p className="font-semibold text-foreground text-sm md:text-base">{goal.text}</p>
+            )}
             <p className={`text-xs md:text-sm ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
               {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
             </p>
@@ -1007,6 +1041,21 @@ export default function Plan() {
                   />
                 </div>
                 
+                <div className="space-y-2">
+                  <Label htmlFor="goal-link">Link (opcional)</Label>
+                  <Input 
+                    id="goal-link" 
+                    type="url"
+                    placeholder="https://..." 
+                    value={newGoal.link || ""} 
+                    onChange={e => setNewGoal(prev => ({
+                      ...prev,
+                      link: e.target.value
+                    }))}
+                  />
+                  <p className="text-xs text-muted-foreground">El nombre de la meta será clickeable si añades un link</p>
+                </div>
+                
                 {newGoal.type === 'onetime' && <div className="space-y-2">
                     <Label>Fecha objetivo</Label>
                     <Popover>
@@ -1148,6 +1197,21 @@ export default function Plan() {
                 rows={3}
                 className="resize-none"
               />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="edit-goal-link">Link (opcional)</Label>
+              <Input 
+                id="edit-goal-link" 
+                type="url"
+                placeholder="https://..." 
+                value={editingGoal?.link || ""} 
+                onChange={e => setEditingGoal(prev => ({
+                  ...prev,
+                  link: e.target.value
+                }))}
+              />
+              <p className="text-xs text-muted-foreground">El nombre de la meta será clickeable si añades un link</p>
             </div>
             <Button onClick={updateGoal} className="w-full">
               Guardar cambios
