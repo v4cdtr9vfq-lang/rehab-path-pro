@@ -26,6 +26,7 @@ const REHABILITATION_TYPES = [
   { id: 'narcoticos', label: 'Narcóticos' },
   { id: 'pornografia', label: 'Pornografía' },
   { id: 'redes_sociales', label: 'Redes Sociales' },
+  { id: 'tecnologia', label: 'Tecnología' },
   { id: 'trabajo', label: 'Trabajo' },
   { id: 'videojuegos', label: 'Videojuegos' },
   { id: 'otros', label: 'Otros' },
