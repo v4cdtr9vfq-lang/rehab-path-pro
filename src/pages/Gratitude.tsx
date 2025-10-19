@@ -417,7 +417,7 @@ export default function Gratitude() {
       )}
 
       <div>
-        <h2 className="text-2xl font-bold text-foreground mb-3 pl-[35px] flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-foreground mb-3 pl-[5px] md:pl-[35px] flex items-center gap-2">
           Por qué es tan importante
           <span>🙏</span>
           <span>🙏</span>
