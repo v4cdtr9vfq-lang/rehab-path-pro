@@ -295,9 +295,9 @@ export default function EmotionJournal() {
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
   const [currentPage, setCurrentPage] = useState(1);
-  const [todayStats, setTodayStats] = useState<EmotionStats[]>([]);
   const [weekStats, setWeekStats] = useState<EmotionStats[]>([]);
   const [monthStats, setMonthStats] = useState<EmotionStats[]>([]);
+  const [quarterStats, setQuarterStats] = useState<EmotionStats[]>([]);
   const { toast } = useToast();
   
   const ENTRIES_PER_PAGE = 6;
@@ -330,9 +330,7 @@ export default function EmotionJournal() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Fetch stats for today
       const today = new Date().toISOString().split('T')[0];
-      await fetchStatsForPeriod(user.id, today, today, setTodayStats);
 
       // Fetch stats for this week (last 7 days)
       const weekAgo = new Date();
@@ -345,6 +343,12 @@ export default function EmotionJournal() {
       monthStart.setDate(1);
       const monthStartStr = monthStart.toISOString().split('T')[0];
       await fetchStatsForPeriod(user.id, monthStartStr, today, setMonthStats);
+
+      // Fetch stats for this quarter (last 90 days)
+      const quarterAgo = new Date();
+      quarterAgo.setDate(quarterAgo.getDate() - 89);
+      const quarterAgoStr = quarterAgo.toISOString().split('T')[0];
+      await fetchStatsForPeriod(user.id, quarterAgoStr, today, setQuarterStats);
     } catch (error: any) {
       console.error('Error fetching stats:', error);
     }
@@ -883,35 +887,6 @@ export default function EmotionJournal() {
         )}
       </Card>
 
-      {/* Statistics Widget */}
-      {savedEntries.length > 0 && (
-        <Card className="border-sky-blue/20">
-          <CardHeader>
-            <CardTitle className="text-2xl">
-              Estadísticas
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="today" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="today">Hoy</TabsTrigger>
-                <TabsTrigger value="week">Esta semana</TabsTrigger>
-                <TabsTrigger value="month">Este mes</TabsTrigger>
-              </TabsList>
-              <TabsContent value="today" className="mt-6">
-                {renderDonutChart(todayStats)}
-              </TabsContent>
-              <TabsContent value="week" className="mt-6">
-                {renderDonutChart(weekStats)}
-              </TabsContent>
-              <TabsContent value="month" className="mt-6">
-                {renderDonutChart(monthStats)}
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
-      )}
-
       {/* Emotion Log Widget */}
       {savedEntries.length > 0 && (
         <div>
@@ -1071,6 +1046,35 @@ export default function EmotionJournal() {
             </div>
           )}
         </div>
+      )}
+
+      {/* Statistics Widget */}
+      {savedEntries.length > 0 && (
+        <Card className="border-sky-blue/20">
+          <CardHeader>
+            <CardTitle className="text-2xl">
+              Estadísticas
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="week" className="w-full">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="week">Esta semana</TabsTrigger>
+                <TabsTrigger value="month">Este mes</TabsTrigger>
+                <TabsTrigger value="quarter">Trimestre</TabsTrigger>
+              </TabsList>
+              <TabsContent value="week" className="mt-6">
+                {renderDonutChart(weekStats)}
+              </TabsContent>
+              <TabsContent value="month" className="mt-6">
+                {renderDonutChart(monthStats)}
+              </TabsContent>
+              <TabsContent value="quarter" className="mt-6">
+                {renderDonutChart(quarterStats)}
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
       )}
 
       {/* Delete Confirmation Dialog */}
