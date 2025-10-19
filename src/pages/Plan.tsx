@@ -723,88 +723,27 @@ export default function Plan() {
     
     if (isMobile) {
       return (
-        <div className="p-3 rounded-xl bg-muted/50 border border-border/50 relative">
-          <div className="flex items-start gap-2 mb-2">
+        <div className="flex items-center justify-between p-3 rounded-xl bg-muted/50 border border-sidebar-border">
+          <div className="flex items-center gap-2 flex-1">
             <button onClick={isClickable ? () => toggleGoal(sectionKey, goal.id) : undefined} className={`flex-shrink-0 ${!isClickable ? 'cursor-default' : ''}`} disabled={!isClickable}>
               {displayCompleted ? <CheckCircle2 className="h-5 w-5 text-green-500" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
             </button>
-            <div className="flex-1">
-              <p className="text-foreground font-semibold text-sm leading-tight">
-                {goal.text}
+            <div>
+              <p className="font-semibold text-foreground text-sm">{goal.text}</p>
+              <p className={`text-xs ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
+                {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
               </p>
             </div>
           </div>
-          <div className="flex items-center justify-between mt-[15px]">
-            <p className={`text-xs ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
-              {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
-            </p>
-            {goal.instanceIndex === 0 && (
-              <div className="flex items-center gap-1">
-                <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => openEditDialog(goal, sectionKey)}>
-                  <Pencil className="h-3.5 w-3.5" />
-                </Button>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive flex-shrink-0">
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>¿Eliminar meta?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Esta acción no se puede deshacer. La meta será eliminada permanentemente.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => deleteGoal(sectionKey, goal.originalId)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                        Eliminar
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div ref={setNodeRef} style={style} className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
-        <div className="flex items-center gap-3 flex-1">
-          <button onClick={isClickable ? () => toggleGoal(sectionKey, goal.id) : undefined} className={`flex-shrink-0 ${!isClickable ? 'cursor-default' : ''}`} disabled={!isClickable}>
-            {displayCompleted ? <CheckCircle2 className="h-6 w-6 text-green-500" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
-          </button>
-          <button 
-            {...attributes} 
-            {...listeners} 
-            className="flex-shrink-0 cursor-grab active:cursor-grabbing touch-none"
-          >
-            <GripVertical className="h-5 w-5 text-muted-foreground" />
-          </button>
-          <div className="flex-1">
-            <p className="text-foreground font-semibold">
-              {goal.text}
-            </p>
-            <p className={`text-sm ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'} mt-1`}>
-              {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2 self-center">
-          {goal.instanceIndex === 0 && <>
-              <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 font-medium flex-shrink-0 ${displayCompleted ? 'border-green-500 text-green-500' : 'border-primary/30 text-primary'}`}>
-                {sections[sectionKey].goals.filter(g => g.originalId === goal.originalId).length}
-              </div>
-              <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={() => openEditDialog(goal, sectionKey)}>
-                <Pencil className="h-4 w-4" />
+          {goal.instanceIndex === 0 && (
+            <div className="flex items-center gap-1">
+              <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => openEditDialog(goal, sectionKey)}>
+                <Pencil className="h-3.5 w-3.5" />
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive flex-shrink-0">
-                    <Trash2 className="h-4 w-4" />
+                  <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive flex-shrink-0">
+                    <Trash2 className="h-3.5 w-3.5" />
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -822,8 +761,63 @@ export default function Plan() {
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-            </>}
+            </div>
+          )}
         </div>
+      );
+    }
+
+    return (
+      <div ref={setNodeRef} style={style} className="flex items-center justify-between p-3 md:p-4 rounded-xl bg-muted/50 border border-sidebar-border">
+        <div className="flex items-center gap-2 md:gap-3 flex-1">
+          <button onClick={isClickable ? () => toggleGoal(sectionKey, goal.id) : undefined} className={`flex-shrink-0 ${!isClickable ? 'cursor-default' : ''}`} disabled={!isClickable}>
+            {displayCompleted ? <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6 text-green-500" /> : <Circle className="h-5 w-5 md:h-6 md:w-6 text-muted-foreground" />}
+          </button>
+          <button 
+            {...attributes} 
+            {...listeners} 
+            className="hidden md:flex flex-shrink-0 cursor-grab active:cursor-grabbing touch-none"
+          >
+            <GripVertical className="h-5 w-5 text-muted-foreground" />
+          </button>
+          <div>
+            <p className="font-semibold text-foreground text-sm md:text-base">{goal.text}</p>
+            <p className={`text-xs md:text-sm ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
+              {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+            </p>
+          </div>
+        </div>
+        {goal.instanceIndex === 0 && (
+          <div className="flex items-center gap-2">
+            <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 font-medium flex-shrink-0 ${displayCompleted ? 'border-green-500 text-green-500' : 'border-primary/30 text-primary'}`}>
+              {sections[sectionKey].goals.filter(g => g.originalId === goal.originalId).length}
+            </div>
+            <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={() => openEditDialog(goal, sectionKey)}>
+              <Pencil className="h-4 w-4" />
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive flex-shrink-0">
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>¿Eliminar meta?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Esta acción no se puede deshacer. La meta será eliminada permanentemente.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => deleteGoal(sectionKey, goal.originalId)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    Eliminar
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        )}
       </div>
     );
   };
