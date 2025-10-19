@@ -636,19 +636,19 @@ export default function Home() {
 
   // Quick tools - configurable
   const quickTools = [{
-    emoji: "🫁",
-    label: "Respiración guiada",
-    path: "/tools",
-    color: "text-primary"
-  }, {
     emoji: "📔",
     label: "Diario",
     path: "/journal",
     color: "text-primary"
   }, {
-    emoji: "📞",
-    label: "Mi red de apoyo",
-    path: "/support-network",
+    emoji: "😊",
+    label: "Diario de emociones",
+    path: "/emotion-journal",
+    color: "text-primary"
+  }, {
+    emoji: "🙏",
+    label: "Agradecimiento",
+    path: "/gratitude",
     color: "text-accent"
   }, {
     emoji: "🚨",
@@ -905,7 +905,7 @@ export default function Home() {
 
       {/* Quick Tools */}
       <div>
-        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">Herramientas rápidas:</h2>
+        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">Accesos directos:</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
           {quickTools.map(tool => {
           return <Link key={tool.label} to={tool.path}>
