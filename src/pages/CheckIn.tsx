@@ -46,6 +46,7 @@ export default function CheckIn() {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [triggerDescription, setTriggerDescription] = useState("");
+  const [resentmentDescription, setResentmentDescription] = useState("");
   const [valuesDescription, setValuesDescription] = useState("");
   const [limitingDescription, setLimitingDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,6 +71,10 @@ export default function CheckIn() {
         // Load trigger description if exists
         if ((checkIn.answers as any).trigger_description) {
           setTriggerDescription((checkIn.answers as any).trigger_description);
+        }
+        // Load resentment description if exists
+        if ((checkIn.answers as any).resentment_description) {
+          setResentmentDescription((checkIn.answers as any).resentment_description);
         }
         // Load values description if exists
         if ((checkIn.answers as any).values_description) {
@@ -169,6 +174,7 @@ export default function CheckIn() {
       const answersWithDescriptions = {
         ...finalAnswers,
         trigger_description: triggerDescription,
+        resentment_description: resentmentDescription,
         values_description: valuesDescription,
         limiting_description: limitingDescription
       };
@@ -349,6 +355,22 @@ export default function CheckIn() {
                       <p className="text-xs text-muted-foreground">
                         Esta descripción se guardará automáticamente como entrada en tu diario con el título "Gatillos emocionales"
                       </p>
+                    </div>
+                  )}
+
+                  {/* Show resentment description field if question 4 answered "yes" */}
+                  {question.id === 4 && answers[4] === "yes" && (
+                    <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <Label htmlFor="resentment-description" className="text-sm font-medium text-foreground">
+                        Describe tu resentimiento:
+                      </Label>
+                      <Textarea
+                        id="resentment-description"
+                        placeholder="¿Qué situación o persona causó este resentimiento? ¿Cómo te afectó?"
+                        value={resentmentDescription}
+                        onChange={(e) => setResentmentDescription(e.target.value)}
+                        className="min-h-[100px]"
+                      />
                     </div>
                   )}
 
