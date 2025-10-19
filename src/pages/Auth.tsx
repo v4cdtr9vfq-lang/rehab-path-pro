@@ -294,7 +294,7 @@ export default function Auth() {
 
                   <Button
                     type="submit"
-                    className="w-full rounded-xl"
+                    className="w-full rounded-xl text-left pl-4"
                     disabled={loading}
                     size="lg"
                   >
