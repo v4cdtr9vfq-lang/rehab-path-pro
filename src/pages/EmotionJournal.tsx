@@ -135,7 +135,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "desconectado",
         name: "Desconectado",
-        tertiaryEmotions: ["Aburrido", "Adormecido", "Alejado", "Alienado", "Apático", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído"]
+        tertiaryEmotions: ["Aburrido", "Adormecido", "Alejado", "Alienado", "Apático", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído", "Vacío"]
       }
     ]
   },
