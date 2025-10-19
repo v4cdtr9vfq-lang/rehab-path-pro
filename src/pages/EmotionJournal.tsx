@@ -709,15 +709,15 @@ export default function EmotionJournal() {
     const total = data.reduce((sum, item) => sum + item.count, 0);
 
     return (
-      <div className="w-full px-4">
-        <ResponsiveContainer width="100%" height={320}>
-          <PieChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
+      <div className="w-full">
+        <ResponsiveContainer width="100%" height={400} className="lg:h-[320px]">
+          <PieChart>
             <Pie
               data={data}
               cx="50%"
-              cy="45%"
-              innerRadius={40}
-              outerRadius={70}
+              cy="35%"
+              innerRadius={50}
+              outerRadius={80}
               paddingAngle={2}
               dataKey="count"
               label={(entry) => `${((entry.count / total) * 100).toFixed(1)}%`}
@@ -733,9 +733,16 @@ export default function EmotionJournal() {
               }}
             />
             <Legend 
-              verticalAlign="bottom" 
-              height={40}
-              wrapperStyle={{ paddingTop: '20px' }}
+              verticalAlign="bottom"
+              layout="horizontal"
+              align="center"
+              wrapperStyle={{ 
+                paddingTop: '10px',
+                fontSize: '12px',
+                maxHeight: '150px',
+                overflowY: 'auto'
+              }}
+              iconSize={10}
               formatter={(value) => value}
             />
           </PieChart>
