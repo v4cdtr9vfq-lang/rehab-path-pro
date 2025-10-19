@@ -232,7 +232,7 @@ export default function Help() {
               Enviar de forma anónima
             </Label>
           </div>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-xs text-muted-foreground pl-4">
             {userQuestion.length}/500 caracteres
           </div>
         </CardContent>
