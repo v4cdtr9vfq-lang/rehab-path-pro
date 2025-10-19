@@ -19,6 +19,7 @@ interface CommunityUser {
   name: string;
   avatar: string;
   years: number;
+  months: number;
   days: number;
   medals: string[];
   availableForHelp: boolean;
@@ -26,31 +27,31 @@ interface CommunityUser {
 }
 
 const mockUsers: CommunityUser[] = [
-  { id: "1", name: "Carlos Martínez", avatar: "", years: 5, days: 127, medals: ["🏆", "⭐", "💎"], availableForHelp: true },
-  { id: "2", name: "Ana García", avatar: "", years: 4, days: 289, medals: ["🏆", "⭐", "💎", "🎯"], availableForHelp: true },
-  { id: "3", name: "Luis Hernández", avatar: "", years: 3, days: 45, medals: ["🏆", "⭐"], availableForHelp: false },
-  { id: "4", name: "María López", avatar: "", years: 3, days: 12, medals: ["🏆", "⭐", "💎"], availableForHelp: true },
-  { id: "5", name: "Pedro Sánchez", avatar: "", years: 2, days: 354, medals: ["🏆", "⭐"], availableForHelp: false },
-  { id: "6", name: "Laura Rodríguez", avatar: "", years: 2, days: 201, medals: ["🏆", "⭐", "💎", "🎯"], availableForHelp: true },
-  { id: "7", name: "José Fernández", avatar: "", years: 2, days: 87, medals: ["🏆"], availableForHelp: false },
-  { id: "8", name: "Carmen Díaz", avatar: "", years: 1, days: 312, medals: ["🏆", "⭐", "💎"], availableForHelp: true },
-  { id: "9", name: "Antonio Ruiz", avatar: "", years: 1, days: 267, medals: ["🏆", "⭐"], availableForHelp: true },
-  { id: "10", name: "Isabel Torres", avatar: "", years: 1, days: 198, medals: ["🏆"], availableForHelp: false },
-  { id: "11", name: "Miguel Ramírez", avatar: "", years: 1, days: 154, medals: ["🏆", "⭐"], availableForHelp: true },
-  { id: "12", name: "Rosa Jiménez", avatar: "", years: 1, days: 89, medals: ["🏆"], availableForHelp: false },
-  { id: "13", name: "Francisco Moreno", avatar: "", years: 1, days: 45, medals: ["🏆", "⭐"], availableForHelp: true },
-  { id: "14", name: "Pilar Álvarez", avatar: "", years: 0, days: 321, medals: ["⭐"], availableForHelp: false },
-  { id: "15", name: "David Romero", avatar: "", years: 0, days: 289, medals: ["⭐", "💎"], availableForHelp: true },
-  { id: "16", name: "Teresa Navarro", avatar: "", years: 0, days: 234, medals: ["⭐"], availableForHelp: true },
-  { id: "17", name: "Javier Gil", avatar: "", years: 0, days: 187, medals: ["⭐"], availableForHelp: false },
-  { id: "18", name: "Elena Castro", avatar: "", years: 0, days: 156, medals: ["⭐", "💎"], availableForHelp: true },
-  { id: "19", name: "Manuel Ortiz", avatar: "", years: 0, days: 123, medals: ["⭐"], availableForHelp: false },
-  { id: "20", name: "Lucía Rubio", avatar: "", years: 0, days: 98, medals: [], availableForHelp: true },
-  { id: "21", name: "Sergio Molina", avatar: "", years: 0, days: 76, medals: ["⭐"], availableForHelp: true },
-  { id: "22", name: "Marta Delgado", avatar: "", years: 0, days: 54, medals: [], availableForHelp: false },
-  { id: "23", name: "Raúl Serrano", avatar: "", years: 0, days: 32, medals: [], availableForHelp: true },
-  { id: "24", name: "Patricia Vega", avatar: "", years: 0, days: 21, medals: [], availableForHelp: false },
-  { id: "25", name: "Alberto Méndez", avatar: "", years: 0, days: 14, medals: [], availableForHelp: true },
+  { id: "1", name: "Carlos Martínez", avatar: "", years: 5, months: 4, days: 7, medals: ["🏆", "⭐", "💎"], availableForHelp: true },
+  { id: "2", name: "Ana García", avatar: "", years: 4, months: 9, days: 19, medals: ["🏆", "⭐", "💎", "🎯"], availableForHelp: true },
+  { id: "3", name: "Luis Hernández", avatar: "", years: 3, months: 1, days: 15, medals: ["🏆", "⭐"], availableForHelp: false },
+  { id: "4", name: "María López", avatar: "", years: 3, months: 0, days: 12, medals: ["🏆", "⭐", "💎"], availableForHelp: true },
+  { id: "5", name: "Pedro Sánchez", avatar: "", years: 2, months: 11, days: 24, medals: ["🏆", "⭐"], availableForHelp: false },
+  { id: "6", name: "Laura Rodríguez", avatar: "", years: 2, months: 6, days: 21, medals: ["🏆", "⭐", "💎", "🎯"], availableForHelp: true },
+  { id: "7", name: "José Fernández", avatar: "", years: 2, months: 2, days: 27, medals: ["🏆"], availableForHelp: false },
+  { id: "8", name: "Carmen Díaz", avatar: "", years: 1, months: 10, days: 12, medals: ["🏆", "⭐", "💎"], availableForHelp: true },
+  { id: "9", name: "Antonio Ruiz", avatar: "", years: 1, months: 8, days: 27, medals: ["🏆", "⭐"], availableForHelp: true },
+  { id: "10", name: "Isabel Torres", avatar: "", years: 1, months: 6, days: 18, medals: ["🏆"], availableForHelp: false },
+  { id: "11", name: "Miguel Ramírez", avatar: "", years: 1, months: 5, days: 4, medals: ["🏆", "⭐"], availableForHelp: true },
+  { id: "12", name: "Rosa Jiménez", avatar: "", years: 1, months: 2, days: 29, medals: ["🏆"], availableForHelp: false },
+  { id: "13", name: "Francisco Moreno", avatar: "", years: 1, months: 1, days: 15, medals: ["🏆", "⭐"], availableForHelp: true },
+  { id: "14", name: "Pilar Álvarez", avatar: "", years: 0, months: 10, days: 21, medals: ["⭐"], availableForHelp: false },
+  { id: "15", name: "David Romero", avatar: "", years: 0, months: 9, days: 19, medals: ["⭐", "💎"], availableForHelp: true },
+  { id: "16", name: "Teresa Navarro", avatar: "", years: 0, months: 7, days: 24, medals: ["⭐"], availableForHelp: true },
+  { id: "17", name: "Javier Gil", avatar: "", years: 0, months: 6, days: 7, medals: ["⭐"], availableForHelp: false },
+  { id: "18", name: "Elena Castro", avatar: "", years: 0, months: 5, days: 6, medals: ["⭐", "💎"], availableForHelp: true },
+  { id: "19", name: "Manuel Ortiz", avatar: "", years: 0, months: 4, days: 3, medals: ["⭐"], availableForHelp: false },
+  { id: "20", name: "Lucía Rubio", avatar: "", years: 0, months: 3, days: 8, medals: [], availableForHelp: true },
+  { id: "21", name: "Sergio Molina", avatar: "", years: 0, months: 2, days: 16, medals: ["⭐"], availableForHelp: true },
+  { id: "22", name: "Marta Delgado", avatar: "", years: 0, months: 1, days: 24, medals: [], availableForHelp: false },
+  { id: "23", name: "Raúl Serrano", avatar: "", years: 0, months: 1, days: 2, medals: [], availableForHelp: true },
+  { id: "24", name: "Patricia Vega", avatar: "", years: 0, months: 0, days: 21, medals: [], availableForHelp: false },
+  { id: "25", name: "Alberto Méndez", avatar: "", years: 0, months: 0, days: 14, medals: [], availableForHelp: true },
 ];
 
 const REHABILITATION_TYPES = [
@@ -79,7 +80,10 @@ export default function Community() {
     const fetchUserData = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
+        if (!user) {
+          setLoading(false);
+          return;
+        }
 
         // Obtener perfil y fecha de abstinencia
         const { data: profile } = await supabase
@@ -91,12 +95,16 @@ export default function Community() {
         if (profile?.abstinence_start_date) {
           const absDate = new Date(profile.abstinence_start_date);
           const today = new Date();
-          const diffTime = Math.abs(today.getTime() - absDate.getTime());
+          
+          // Calcular días totales correctamente
+          const diffTime = today.getTime() - absDate.getTime();
           const totalDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
           
-          // Calcular años y días restantes
+          // Calcular años, meses y días
           const years = Math.floor(totalDays / 365);
-          const remainingDays = totalDays % 365;
+          const daysAfterYears = totalDays % 365;
+          const months = Math.floor(daysAfterYears / 30);
+          const days = daysAfterYears % 30;
 
           // Obtener medallas reales del usuario desde la base de datos
           const { data: medals } = await supabase
@@ -104,8 +112,6 @@ export default function Community() {
             .select('medal_type')
             .eq('user_id', user.id);
 
-          // Convertir las medallas de la DB al formato de emojis
-          const userMedals = getMedalsByTime(years, remainingDays);
           const realMedalsCount = medals?.length || 0;
 
           setCurrentUser({
@@ -113,10 +119,20 @@ export default function Community() {
             name: profile.full_name || user.user_metadata?.full_name || 'Javier',
             avatar: '',
             years,
-            days: remainingDays,
-            medals: userMedals,
+            months,
+            days,
+            medals: getMedalsByTime(totalDays),
             availableForHelp: isAvailableForHelp,
-            realMedalsCount // Guardamos el conteo real de medallas
+            realMedalsCount
+          });
+          
+          console.log('Usuario cargado:', {
+            name: profile.full_name || user.user_metadata?.full_name || 'Javier',
+            years,
+            months, 
+            days,
+            totalDays,
+            medalsCount: realMedalsCount
           });
         }
       } catch (error) {
@@ -137,18 +153,22 @@ export default function Community() {
     ? [...mockUsers, currentUser]
     : mockUsers;
 
-  // Sort users by time: years descending, then days descending
+  // Sort users by time: years descending, then months, then days
   const sortedUsers = allUsers
     .filter((user) => {
       if (selectedFilter === "todos") return true;
-      // Filter by rehabilitation type (in real implementation, this would come from user data)
-      // For now, we'll show all users when filtering
       return true;
     })
     .sort((a, b) => {
+      // Sort by years first
       if (a.years !== b.years) {
         return b.years - a.years;
       }
+      // Then by months
+      if (a.months !== b.months) {
+        return b.months - a.months;
+      }
+      // Finally by days
       return b.days - a.days;
     });
 
@@ -157,22 +177,19 @@ export default function Community() {
     return name.charAt(0).toUpperCase();
   };
 
-  const getMedalsByTime = (years: number, days: number) => {
-    const totalDays = years * 365 + days;
+  const getMedalsByTime = (totalDays: number) => {
     const medals = [];
     
     // Medallas basadas en días totales
-    if (totalDays >= 180) medals.push("🏆"); // Libertad
-    if (totalDays >= 90) medals.push("🥇"); // Recuperación
+    if (totalDays >= 180) medals.push("🏆"); // Libertad (6 meses)
+    if (totalDays >= 90) medals.push("🥇"); // Recuperación (3 meses)
     if (totalDays >= 40) medals.push("🥈"); // Constancia
     medals.push("🥉"); // Valor (siempre)
     
     return medals;
   };
 
-  const getAvatarColor = (years: number, days: number) => {
-    const totalDays = years * 365 + days;
-    
+  const getAvatarColor = (totalDays: number) => {
     // Verde para medallas de oro (90+) y copa (180+)
     if (totalDays >= 90) return { className: "bg-success/20 text-success" };
     // Amarillo específico para medalla de plata (40+)
@@ -222,12 +239,9 @@ export default function Community() {
 
           <div className="space-y-3">
             {sortedUsers.map((user) => {
-              // Calcular meses y días restantes
-              const months = Math.floor(user.days / 30);
-              const remainingDays = user.days % 30;
-              const totalDays = user.years * 365 + user.days;
-              const userHasAllMedals = getMedalsByTime(user.years, user.days).length >= 4;
-              const canShowAvailability = userHasAllMedals; // Solo mostrar si tiene todas las medallas
+              const totalDays = user.years * 365 + user.months * 30 + user.days;
+              const userHasAllMedals = getMedalsByTime(totalDays).length >= 4;
+              const canShowAvailability = userHasAllMedals;
               const isCurrentUser = currentUser && user.id === currentUser.id;
               
               if (isMobile) {
@@ -248,8 +262,8 @@ export default function Community() {
                         <Avatar className="h-8 w-8 flex-shrink-0">
                           <AvatarImage src={user.avatar} />
                           <AvatarFallback 
-                            className={`${getAvatarColor(user.years, user.days).className} font-semibold text-xs`}
-                            style={getAvatarColor(user.years, user.days).style}
+                            className={`${getAvatarColor(totalDays).className} font-semibold text-xs`}
+                            style={getAvatarColor(totalDays).style}
                           >
                             {getInitials(user.name)}
                           </AvatarFallback>
@@ -268,13 +282,13 @@ export default function Community() {
                       <div className="flex gap-1 items-center text-sm">
                         <span className="font-bold">{user.years.toString().padStart(2, "0")}</span>
                         <span className="text-muted-foreground text-xs">A.</span>
-                        <span className="font-bold">{months.toString().padStart(2, "0")}</span>
+                        <span className="font-bold">{user.months.toString().padStart(2, "0")}</span>
                         <span className="text-muted-foreground text-xs">M.</span>
-                        <span className="font-bold">{remainingDays.toString().padStart(2, "0")}</span>
+                        <span className="font-bold">{user.days.toString().padStart(2, "0")}</span>
                         <span className="text-muted-foreground text-xs">D.</span>
                       </div>
                       <div className="flex gap-1">
-                        {getMedalsByTime(user.years, user.days).map((medal, idx) => (
+                        {getMedalsByTime(totalDays).map((medal, idx) => (
                           <span key={idx} className="text-base">
                             {medal}
                           </span>
@@ -296,13 +310,13 @@ export default function Community() {
                       : "bg-muted/30"
                   }`}
                 >
-                  {/* Avatar and Name - grouped with smaller gap */}
+                  {/* Avatar and Name */}
                   <div className="flex items-center gap-[15px]">
                     <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src={user.avatar} />
                       <AvatarFallback 
-                        className={`${getAvatarColor(user.years, user.days).className} font-semibold`}
-                        style={getAvatarColor(user.years, user.days).style}
+                        className={`${getAvatarColor(totalDays).className} font-semibold`}
+                        style={getAvatarColor(totalDays).style}
                       >
                         {getInitials(user.name)}
                       </AvatarFallback>
@@ -310,21 +324,16 @@ export default function Community() {
                     <h3 className="font-semibold truncate">{user.name.split(" ")[0]}</h3>
                   </div>
 
-                  {/* Years, Months, Days - grouped with smaller gap */}
+                  {/* Years, Months, Days */}
                   <div className="flex gap-1 items-center -ml-[5px]">
-                    {/* Years */}
                     <div className="font-bold text-lg w-[60px] text-left">
                       {user.years.toString().padStart(2, "0")}
                     </div>
-
-                    {/* Months */}
                     <div className="font-bold text-lg w-[60px] text-left">
-                      {months.toString().padStart(2, "0")}
+                      {user.months.toString().padStart(2, "0")}
                     </div>
-
-                    {/* Days */}
                     <div className="font-bold text-lg w-[60px] text-left">
-                      {remainingDays.toString().padStart(2, "0")}
+                      {user.days.toString().padStart(2, "0")}
                     </div>
                   </div>
 
@@ -339,7 +348,7 @@ export default function Community() {
 
                   {/* Medals */}
                   <div className="flex gap-1 justify-start">
-                    {getMedalsByTime(user.years, user.days).map((medal, idx) => (
+                    {getMedalsByTime(totalDays).map((medal, idx) => (
                       <span key={idx} className="text-xl">
                         {medal}
                       </span>
