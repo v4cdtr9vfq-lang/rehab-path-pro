@@ -151,52 +151,64 @@ export function OnboardingTour() {
   };
 
   const getCardStyle = (): React.CSSProperties => {
-    // Always center on mobile
-    if (window.innerWidth < 768) {
+    const isMobile = window.innerWidth < 768;
+    const padding = 20;
+    
+    // En móvil, SIEMPRE abajo y centrado
+    if (isMobile) {
       return {
         position: "fixed",
-        bottom: "20px",
+        bottom: `${padding}px`,
         left: "50%",
         transform: "translateX(-50%)",
-        maxWidth: "calc(100vw - 32px)",
-        width: "100%"
+        width: `calc(100vw - ${padding * 2}px)`,
+        maxWidth: "400px"
       };
     }
 
-    // Center if no target or first/last step
-    if (!highlightRect || !steps[currentStep].targetSelector) {
+    // En desktop, SIEMPRE centrado si no hay target o es primer/último paso
+    if (!highlightRect || currentStep === 0 || currentStep === steps.length - 1) {
       return {
         position: "fixed",
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        maxWidth: "440px",
-        width: "90vw"
+        width: "440px",
+        maxWidth: `calc(100vw - ${padding * 2}px)`
       };
     }
 
-    // Position next to highlighted element on desktop
-    const spacing = 24;
+    // En desktop con target, calcular posición pero GARANTIZAR que esté visible
     const cardWidth = 440;
-    
-    // Try to position below the element first
-    if (highlightRect.bottom + spacing + 300 < window.innerHeight) {
-      return {
-        position: "fixed",
-        top: `${highlightRect.bottom + spacing}px`,
-        left: `${Math.max(20, Math.min(highlightRect.left + highlightRect.width / 2 - cardWidth / 2, window.innerWidth - cardWidth - 20))}px`,
-        maxWidth: `${cardWidth}px`,
-        width: "90vw"
-      };
+    const cardHeight = 300; // altura estimada
+    const spacing = 20;
+
+    // Calcular posición preferida (abajo del elemento)
+    let top = highlightRect.bottom + spacing;
+    let left = highlightRect.left + highlightRect.width / 2 - cardWidth / 2;
+
+    // Si no cabe abajo, ponerlo arriba
+    if (top + cardHeight > window.innerHeight - padding) {
+      top = highlightRect.top - cardHeight - spacing;
     }
-    
-    // Otherwise position above
+
+    // Si TODAVÍA no cabe arriba, centrarlo verticalmente
+    if (top < padding) {
+      top = (window.innerHeight - cardHeight) / 2;
+    }
+
+    // Asegurar que left esté dentro del viewport
+    left = Math.max(padding, Math.min(left, window.innerWidth - cardWidth - padding));
+
+    // Limitar top para que SIEMPRE esté visible
+    top = Math.max(padding, Math.min(top, window.innerHeight - cardHeight - padding));
+
     return {
       position: "fixed",
-      bottom: `${window.innerHeight - highlightRect.top + spacing}px`,
-      left: `${Math.max(20, Math.min(highlightRect.left + highlightRect.width / 2 - cardWidth / 2, window.innerWidth - cardWidth - 20))}px`,
-      maxWidth: `${cardWidth}px`,
-      width: "90vw"
+      top: `${top}px`,
+      left: `${left}px`,
+      width: `${cardWidth}px`,
+      maxWidth: `calc(100vw - ${padding * 2}px)`
     };
   };
 
