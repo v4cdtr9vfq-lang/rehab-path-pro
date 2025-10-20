@@ -51,9 +51,9 @@ export default function Values() {
   const [isPrimaryDialogOpen, setIsPrimaryDialogOpen] = useState(false);
   const [isSecondaryDialogOpen, setIsSecondaryDialogOpen] = useState(false);
   const [newValueName, setNewValueName] = useState("");
-  const [todayStats, setTodayStats] = useState<ValueStats[]>([]);
   const [weekStats, setWeekStats] = useState<ValueStats[]>([]);
   const [monthStats, setMonthStats] = useState<ValueStats[]>([]);
+  const [quarterStats, setQuarterStats] = useState<ValueStats[]>([]);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [hasUnsavedOrder, setHasUnsavedOrder] = useState(false);
   const [originalValuesOrder, setOriginalValuesOrder] = useState<Value[]>([]);
@@ -188,9 +188,7 @@ export default function Values() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Fetch stats for today
       const today = new Date().toISOString().split('T')[0];
-      await fetchStatsForPeriod(user.id, today, today, setTodayStats);
 
       // Fetch stats for this week (last 7 days)
       const weekAgo = new Date();
@@ -203,6 +201,12 @@ export default function Values() {
       monthStart.setDate(1);
       const monthStartStr = monthStart.toISOString().split('T')[0];
       await fetchStatsForPeriod(user.id, monthStartStr, today, setMonthStats);
+
+      // Fetch stats for this quarter (last 90 days)
+      const quarterAgo = new Date();
+      quarterAgo.setDate(quarterAgo.getDate() - 89);
+      const quarterAgoStr = quarterAgo.toISOString().split('T')[0];
+      await fetchStatsForPeriod(user.id, quarterAgoStr, today, setQuarterStats);
     } catch (error: any) {
       console.error('Error fetching stats:', error);
     }
@@ -761,20 +765,20 @@ export default function Values() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="today" className="w-full">
+          <Tabs defaultValue="week" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="today">Hoy</TabsTrigger>
               <TabsTrigger value="week">Esta semana</TabsTrigger>
               <TabsTrigger value="month">Este mes</TabsTrigger>
+              <TabsTrigger value="quarter">Trimestre</TabsTrigger>
             </TabsList>
-            <TabsContent value="today" className="mt-6">
-              {renderDonutChart(todayStats)}
-            </TabsContent>
             <TabsContent value="week" className="mt-6">
               {renderDonutChart(weekStats)}
             </TabsContent>
             <TabsContent value="month" className="mt-6">
               {renderDonutChart(monthStats)}
+            </TabsContent>
+            <TabsContent value="quarter" className="mt-6">
+              {renderDonutChart(quarterStats)}
             </TabsContent>
           </Tabs>
         </CardContent>
