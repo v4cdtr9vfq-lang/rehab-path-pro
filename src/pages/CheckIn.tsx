@@ -480,7 +480,7 @@ export default function CheckIn() {
                       </Label>
                       <Textarea
                         id="limiting-description"
-                        placeholder="Describe de forma clara tus obstáculos: creencias falsas, limitaciones materiales, físicas o emocionales, acumulación de tensión y negatividad"
+                        placeholder="Describe de forma concreta los obstáculos a superar"
                         value={limitingDescription}
                         onChange={(e) => setLimitingDescription(e.target.value)}
                         className="min-h-[100px]"
