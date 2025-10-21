@@ -245,7 +245,7 @@ export default function Community() {
         <CardContent>
           {/* Header Legend */}
           {!isMobile && (
-            <div className="grid grid-cols-[minmax(180px,1fr)_180px_100px_120px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
+            <div className="grid grid-cols-[minmax(180px,1fr)_180px_90px_140px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
               <div className="pl-[55px]">Nombre:</div>
               <div className="flex gap-1 -ml-[60px]">
                 <div className="w-[60px] text-center">Años:</div>
@@ -322,7 +322,7 @@ export default function Community() {
               return (
                 <div
                   key={user.id}
-                  className={`grid grid-cols-[minmax(180px,1fr)_180px_100px_120px] gap-3 items-center p-4 rounded-xl transition-colors ${
+                  className={`grid grid-cols-[minmax(180px,1fr)_180px_90px_140px] gap-3 items-center p-4 rounded-xl transition-colors ${
                     isCurrentUser
                       ? "bg-primary/10 border border-primary"
                       : user.availableForHelp && canShowAvailability
@@ -360,16 +360,16 @@ export default function Community() {
                   {/* Availability Badge */}
                   <div className="flex justify-center">
                     {user.availableForHelp && canShowAvailability && (
-                      <Badge variant="secondary" className="bg-success/20 text-success border-success/30">
+                      <Badge variant="secondary" className="bg-success/20 text-success border-success/30 text-xs px-2">
                         Disponible
                       </Badge>
                     )}
                   </div>
 
                   {/* Medals */}
-                  <div className="flex gap-1 justify-start">
+                  <div className="flex gap-0.5 justify-start pl-0">
                     {getMedalsByTime(totalDays).map((medal, idx) => (
-                      <span key={idx} className="text-xl">
+                      <span key={idx} className="text-lg">
                         {medal}
                       </span>
                     ))}
