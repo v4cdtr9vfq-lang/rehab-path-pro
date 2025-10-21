@@ -333,7 +333,10 @@ export default function DirectChat() {
               <div className="flex-1">
                 <h3 className="font-semibold">{otherUserName}</h3>
                 <p className="text-sm text-muted-foreground flex items-center gap-1.5">
-                  <div className={`w-3 h-3 rounded-full ${isOtherUserOnline ? 'bg-green-500' : 'bg-red-500'}`} />
+                  <div 
+                    className={`w-3 h-3 rounded-full flex-shrink-0 ${isOtherUserOnline ? 'bg-green-500' : 'bg-red-500'}`}
+                    style={{ aspectRatio: '1', minWidth: '12px', minHeight: '12px' }}
+                  />
                   {isOtherUserOnline ? 'En línea' : 'Desconectado.'}
                 </p>
               </div>

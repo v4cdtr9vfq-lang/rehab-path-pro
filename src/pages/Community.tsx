@@ -364,7 +364,8 @@ export default function Community() {
                       {user.availableForHelp && canShowAvailability && (
                         <div className="flex items-center gap-2">
                           <div 
-                            className={`w-3 h-3 rounded-full ${onlineUsers.has(user.id) ? 'bg-green-500' : 'bg-red-500'}`}
+                            className={`w-3 h-3 rounded-full flex-shrink-0 ${onlineUsers.has(user.id) ? 'bg-green-500' : 'bg-red-500'}`}
+                            style={{ aspectRatio: '1', minWidth: '12px', minHeight: '12px' }}
                             title={onlineUsers.has(user.id) ? 'En línea' : 'Desconectado'}
                           />
                           <Badge 
@@ -445,7 +446,8 @@ export default function Community() {
                     {user.availableForHelp && canShowAvailability && (
                       <>
                         <div 
-                          className={`w-3 h-3 rounded-full ${onlineUsers.has(user.id) ? 'bg-green-500' : 'bg-red-500'}`}
+                          className={`w-3 h-3 rounded-full flex-shrink-0 ${onlineUsers.has(user.id) ? 'bg-green-500' : 'bg-red-500'}`}
+                          style={{ aspectRatio: '1', minWidth: '12px', minHeight: '12px' }}
                           title={onlineUsers.has(user.id) ? 'En línea' : 'Desconectado'}
                         />
                         <Badge 
