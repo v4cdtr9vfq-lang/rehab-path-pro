@@ -143,7 +143,7 @@ const SleepQuality = () => {
   };
 
   return (
-    <div className="container max-w-4xl mx-auto py-8 px-4">
+    <div className="container max-w-4xl mx-auto px-4 pt-4 md:pt-0 md:-mt-[3px]">
       <h1 className="text-2xl font-bold mb-6">Estadísticas de Calidad de Sueño</h1>
 
       <Card>
