@@ -995,18 +995,18 @@ export default function Home() {
           <CardTitle className="text-2xl font-bold">Mis medallas:</CardTitle>
         </CardHeader>
         <CardContent className="pt-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             {medalConfig.map(medal => {
               const status = getMedalStatus(medal.type, medal.requiredDays);
               return (
-                <Card key={medal.type} className="border-sidebar-border h-full">
-                  <CardContent className="p-4 md:p-6 flex items-center gap-3 md:gap-4">
-                    <div className={`w-16 md:w-20 h-16 md:h-20 rounded-2xl flex items-center justify-center flex-shrink-0 ${status.opacity} transition-opacity duration-300`} style={{ backgroundColor: 'hsl(var(--medal-bg))' }}>
-                      <span className="text-3xl md:text-4xl">{medal.emoji}</span>
+                <Card key={medal.type} className="border-sidebar-border">
+                  <CardContent className="p-3 md:p-4 flex items-center gap-3 min-w-0">
+                    <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center flex-shrink-0 ${status.opacity} transition-opacity duration-300`} style={{ backgroundColor: 'hsl(var(--medal-bg))' }}>
+                      <span className="text-2xl md:text-3xl">{medal.emoji}</span>
                     </div>
-                    <div className="flex-1">
-                      <p className="font-bold text-foreground text-base md:text-lg mb-0.5">{medal.name}</p>
-                      <p className={`text-sm ${status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-foreground text-sm md:text-base mb-0.5 truncate">{medal.name}</p>
+                      <p className={`text-xs md:text-sm ${status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
                         {status.isUnlocked 
                           ? '¡Conseguido!' 
                           : `+${status.progress} / ${medal.requiredDays} días.`
