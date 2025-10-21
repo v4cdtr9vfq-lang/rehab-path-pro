@@ -116,6 +116,58 @@ const emotionCategories: PrimaryCategory[] = [
     ]
   },
   {
+    id: "asco",
+    name: "Asco",
+    secondaryEmotions: [
+      {
+        id: "repugnancia",
+        name: "Repugnancia",
+        tertiaryEmotions: ["Náusea", "Repelente", "Repulsión"]
+      },
+      {
+        id: "aversion",
+        name: "Aversión",
+        tertiaryEmotions: ["Desagrado", "Desdén", "Desprecio"]
+      },
+      {
+        id: "disgusto",
+        name: "Disgusto",
+        tertiaryEmotions: ["Descontento", "Insatisfacción", "Molestia"]
+      },
+      {
+        id: "rechazo_asco",
+        name: "Rechazo",
+        tertiaryEmotions: ["Exclusión", "Negación", "Repudio"]
+      }
+    ]
+  },
+  {
+    id: "sorpresa",
+    name: "Sorpresa",
+    secondaryEmotions: [
+      {
+        id: "asombrado",
+        name: "Asombrado",
+        tertiaryEmotions: ["Boquiabierto", "Estupefacto", "Pasmado"]
+      },
+      {
+        id: "impactado",
+        name: "Impactado",
+        tertiaryEmotions: ["Conmocionado", "Impresionado", "Sacudido"]
+      },
+      {
+        id: "desconcertado_sorpresa",
+        name: "Desconcertado",
+        tertiaryEmotions: ["Atónito", "Confundido", "Perplejo"]
+      },
+      {
+        id: "maravillado",
+        name: "Maravillado",
+        tertiaryEmotions: ["Admirado", "Encantado", "Fascinado"]
+      }
+    ]
+  },
+  {
     id: "vulnerable",
     name: "Inseguro",
     secondaryEmotions: [
