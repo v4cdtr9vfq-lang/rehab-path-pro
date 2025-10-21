@@ -245,15 +245,15 @@ export default function Community() {
         <CardContent>
           {/* Header Legend */}
           {!isMobile && (
-            <div className="grid grid-cols-[minmax(180px,1fr)_180px_90px_140px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
+            <div className="grid grid-cols-[minmax(180px,1fr)_180px_90px_130px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
               <div className="pl-[55px]">Nombre:</div>
               <div className="flex gap-1 -ml-[60px]">
                 <div className="w-[60px] text-center">Años:</div>
                 <div className="w-[60px] text-center">Meses:</div>
                 <div className="w-[60px] text-center">Días:</div>
               </div>
-              <div className="text-right pr-[15px]"></div>
-              <div className="text-right pr-[15px]">Medallas:</div>
+              <div className="text-right"></div>
+              <div className="text-right">Medallas:</div>
             </div>
           )}
 
@@ -322,7 +322,7 @@ export default function Community() {
               return (
                 <div
                   key={user.id}
-                  className={`grid grid-cols-[minmax(180px,1fr)_180px_90px_140px] gap-3 items-center p-4 rounded-xl transition-colors ${
+                  className={`grid grid-cols-[minmax(180px,1fr)_180px_90px_130px] gap-3 items-center p-4 rounded-xl transition-colors ${
                     isCurrentUser
                       ? "bg-primary/10 border border-primary"
                       : user.availableForHelp && canShowAvailability
@@ -358,7 +358,7 @@ export default function Community() {
                   </div>
 
                   {/* Availability Badge */}
-                  <div className="flex justify-end pr-[15px]">
+                  <div className="flex justify-end">
                     {user.availableForHelp && canShowAvailability && (
                       <Badge variant="secondary" className="bg-success/20 text-success border-success/30 text-xs px-2">
                         Disponible
@@ -367,9 +367,9 @@ export default function Community() {
                   </div>
 
                   {/* Medals */}
-                  <div className="flex gap-0.5 justify-end pr-[15px]">
+                  <div className="flex gap-1 justify-end items-center">
                     {getMedalsByTime(totalDays).map((medal, idx) => (
-                      <span key={idx} className="text-lg">
+                      <span key={idx} className="text-base">
                         {medal}
                       </span>
                     ))}
