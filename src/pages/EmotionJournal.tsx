@@ -105,25 +105,9 @@ const emotionCategories: PrimaryCategory[] = [
     ]
   },
   {
-    id: "confundido",
-    name: "Confundido",
-    secondaryEmotions: [
-      {
-        id: "desorientado",
-        name: "Desorientado",
-        tertiaryEmotions: ["Aturdido", "Desconcertado", "Perdido", "Perplejo"]
-      }
-    ]
-  },
-  {
     id: "asco",
     name: "Asco",
     secondaryEmotions: [
-      {
-        id: "repugnancia",
-        name: "Repugnancia",
-        tertiaryEmotions: ["Náusea", "Repelente", "Repulsión"]
-      },
       {
         id: "aversion",
         name: "Aversión",
@@ -138,32 +122,22 @@ const emotionCategories: PrimaryCategory[] = [
         id: "rechazo_asco",
         name: "Rechazo",
         tertiaryEmotions: ["Exclusión", "Negación", "Repudio"]
+      },
+      {
+        id: "repugnancia",
+        name: "Repugnancia",
+        tertiaryEmotions: ["Náusea", "Repelente", "Repulsión"]
       }
     ]
   },
   {
-    id: "sorpresa",
-    name: "Sorpresa",
+    id: "confundido",
+    name: "Confundido",
     secondaryEmotions: [
       {
-        id: "asombrado",
-        name: "Asombrado",
-        tertiaryEmotions: ["Boquiabierto", "Estupefacto", "Pasmado"]
-      },
-      {
-        id: "impactado",
-        name: "Impactado",
-        tertiaryEmotions: ["Conmocionado", "Impresionado", "Sacudido"]
-      },
-      {
-        id: "desconcertado_sorpresa",
-        name: "Desconcertado",
-        tertiaryEmotions: ["Atónito", "Confundido", "Perplejo"]
-      },
-      {
-        id: "maravillado",
-        name: "Maravillado",
-        tertiaryEmotions: ["Admirado", "Encantado", "Fascinado"]
+        id: "desorientado",
+        name: "Desorientado",
+        tertiaryEmotions: ["Aturdido", "Desconcertado", "Perdido", "Perplejo"]
       }
     ]
   },
@@ -290,14 +264,14 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Absorto", "Alerta", "Curioso", "Encantado", "Estimulado", "Fascinado", "Interesado", "Intrigado", "Involucrado"]
       },
       {
-        id: "confiado",
-        name: "Confiado",
-        tertiaryEmotions: ["Abierto", "Empoderado", "Orgulloso", "Protegido", "Seguro"]
-      },
-      {
         id: "seguro",
         name: "Conectado",
         tertiaryEmotions: ["Aceptación", "Calma", "Confianza", "Feliz", "Intimidad", "Pertenencia", "Previsibilidad", "Tranquilidad"]
+      },
+      {
+        id: "confiado",
+        name: "Confiado",
+        tertiaryEmotions: ["Abierto", "Empoderado", "Orgulloso", "Protegido", "Seguro"]
       },
       {
         id: "despreocupado",
@@ -318,6 +292,32 @@ const emotionCategories: PrimaryCategory[] = [
         id: "valiente",
         name: "Valiente",
         tertiaryEmotions: ["Audaz", "Decidido", "Determinado", "Intrépido", "Osado", "Valiente"]
+      }
+    ]
+  },
+  {
+    id: "sorpresa",
+    name: "Sorpresa",
+    secondaryEmotions: [
+      {
+        id: "asombrado",
+        name: "Asombrado",
+        tertiaryEmotions: ["Boquiabierto", "Estupefacto", "Pasmado"]
+      },
+      {
+        id: "desconcertado_sorpresa",
+        name: "Desconcertado",
+        tertiaryEmotions: ["Atónito", "Confundido", "Perplejo"]
+      },
+      {
+        id: "impactado",
+        name: "Impactado",
+        tertiaryEmotions: ["Conmocionado", "Impresionado", "Sacudido"]
+      },
+      {
+        id: "maravillado",
+        name: "Maravillado",
+        tertiaryEmotions: ["Admirado", "Encantado", "Fascinado"]
       }
     ]
   },
