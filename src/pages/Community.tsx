@@ -252,8 +252,8 @@ export default function Community() {
                 <div className="w-[60px] text-center">Meses:</div>
                 <div className="w-[60px] text-center">Días:</div>
               </div>
-              <div className="text-center"></div>
-              <div className="text-left pl-0 pr-[55px]">Medallas:</div>
+              <div className="text-right pr-[15px]"></div>
+              <div className="text-right pr-[15px]">Medallas:</div>
             </div>
           )}
 
@@ -358,7 +358,7 @@ export default function Community() {
                   </div>
 
                   {/* Availability Badge */}
-                  <div className="flex justify-center">
+                  <div className="flex justify-end pr-[15px]">
                     {user.availableForHelp && canShowAvailability && (
                       <Badge variant="secondary" className="bg-success/20 text-success border-success/30 text-xs px-2">
                         Disponible
@@ -367,7 +367,7 @@ export default function Community() {
                   </div>
 
                   {/* Medals */}
-                  <div className="flex gap-0.5 justify-start pl-0 pr-[55px]">
+                  <div className="flex gap-0.5 justify-end pr-[15px]">
                     {getMedalsByTime(totalDays).map((medal, idx) => (
                       <span key={idx} className="text-lg">
                         {medal}
