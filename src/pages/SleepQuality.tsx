@@ -96,6 +96,15 @@ const SleepQuality = () => {
     }));
   };
 
+  const CustomDot = (props: any) => {
+    const { cx, cy, payload } = props;
+    const color = payload.calidad <= 5 ? '#ef4444' : '#22c55e'; // red-500 : green-500
+    
+    return (
+      <circle cx={cx} cy={cy} r={5} fill={color} />
+    );
+  };
+
   const renderChart = (data: SleepEntry[]) => {
     if (data.length === 0) {
       return (
@@ -125,7 +134,7 @@ const SleepQuality = () => {
               dataKey="calidad" 
               stroke="hsl(var(--primary))" 
               strokeWidth={2}
-              dot={{ fill: "hsl(var(--primary))" }}
+              dot={<CustomDot />}
             />
           </LineChart>
         </ResponsiveContainer>
