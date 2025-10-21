@@ -951,9 +951,17 @@ export default function Home() {
 
       {/* Sleep Quality Widget */}
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold">Calidad de mi sueño:</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold">Calidad de mi sueño:</h2>
+          <span 
+            onClick={() => navigate('/sleep-quality')}
+            className="text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+          >
+            Ver estadísticas
+          </span>
+        </div>
         <Card className="border-sidebar-border">
-          <CardContent className="p-6 space-y-4">
+          <CardContent className="p-6">
             <div className="flex flex-wrap gap-2 justify-center">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score) => (
                 <button
@@ -973,13 +981,6 @@ export default function Home() {
                 </button>
               ))}
             </div>
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => navigate('/sleep-quality')}
-            >
-              Ver estadísticas
-            </Button>
           </CardContent>
         </Card>
       </div>
