@@ -352,8 +352,8 @@ export default function Community() {
                     {/* Top row: Avatar, Name, and Badge */}
                     <div className="flex items-center justify-between mb-2">
                       <div 
-                        className="flex items-center gap-2 cursor-pointer hover:opacity-80"
-                        onClick={() => openDirectChat(user.id, user.name)}
+                        className={`flex items-center gap-2 ${!isCurrentUser ? 'cursor-pointer hover:opacity-80' : ''}`}
+                        onClick={() => !isCurrentUser && openDirectChat(user.id, user.name)}
                       >
                         <Avatar className="h-8 w-8 flex-shrink-0">
                           <AvatarImage src={user.avatar} />
@@ -375,8 +375,8 @@ export default function Community() {
                           />
                           <Badge 
                             variant="secondary" 
-                            className="flex-shrink-0 bg-success/20 text-success border-success/30 text-xs px-2 py-0 cursor-pointer hover:bg-success/30"
-                            onClick={() => openDirectChat(user.id, user.name)}
+                            className={`flex-shrink-0 bg-success/20 text-success border-success/30 text-xs px-2 py-0 ${!isCurrentUser ? 'cursor-pointer hover:bg-success/30' : 'cursor-default'}`}
+                            onClick={() => !isCurrentUser && openDirectChat(user.id, user.name)}
                           >
                             Disponible
                           </Badge>
@@ -419,8 +419,8 @@ export default function Community() {
                 >
                   {/* Avatar and Name */}
                   <div 
-                    className="flex items-center gap-[15px] min-w-0 cursor-pointer hover:opacity-80"
-                    onClick={() => openDirectChat(user.id, user.name)}
+                    className={`flex items-center gap-[15px] min-w-0 ${!isCurrentUser ? 'cursor-pointer hover:opacity-80' : ''}`}
+                    onClick={() => !isCurrentUser && openDirectChat(user.id, user.name)}
                   >
                     <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src={user.avatar} />
@@ -457,8 +457,8 @@ export default function Community() {
                         />
                         <Badge 
                           variant="secondary" 
-                          className="bg-success/20 text-success border-success/30 text-xs px-2 whitespace-nowrap cursor-pointer hover:bg-success/30"
-                          onClick={() => openDirectChat(user.id, user.name)}
+                          className={`bg-success/20 text-success border-success/30 text-xs px-2 whitespace-nowrap ${!isCurrentUser ? 'cursor-pointer hover:bg-success/30' : 'cursor-default'}`}
+                          onClick={() => !isCurrentUser && openDirectChat(user.id, user.name)}
                         >
                           Disponible
                         </Badge>
