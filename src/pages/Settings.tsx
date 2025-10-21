@@ -485,7 +485,7 @@ export default function Settings() {
               <Label htmlFor="rehab-type">Tipo de rehabilitación</Label>
               <div className="flex gap-2">
                 <Select value={rehabilitationType} onValueChange={setRehabilitationType}>
-                  <SelectTrigger id="rehab-type">
+                  <SelectTrigger id="rehab-type" className="pr-[10px]">
                     <SelectValue placeholder="Selecciona una opción" />
                   </SelectTrigger>
                   <SelectContent>
