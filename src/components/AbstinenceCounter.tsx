@@ -41,15 +41,15 @@ export function AbstinenceCounter({
       <div className="grid grid-cols-3 gap-6 md:gap-8">
         <div className="flex flex-col">
           <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight text-right">{count.years}</div>
-          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium text-right">Años:</div>
+          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium text-right pr-[3px]">Años:</div>
         </div>
         <div className="flex flex-col">
           <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight text-right">{count.months}</div>
-          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium text-right">Meses:</div>
+          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium text-right pr-[3px]">Meses:</div>
         </div>
         <div className="flex flex-col">
           <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight text-right">{count.days}</div>
-          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium text-right">Días:</div>
+          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium text-right pr-[3px]">Días:</div>
         </div>
       </div>
     </div>;
