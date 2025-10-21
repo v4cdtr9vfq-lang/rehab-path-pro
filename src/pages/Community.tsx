@@ -321,7 +321,7 @@ export default function Community() {
                 <div className="w-[60px] text-center">Días:</div>
               </div>
               <div className="text-right"></div>
-              <div className="text-right">Medallas:</div>
+              <div className="text-left">Medallas:</div>
             </div>
           )}
 
@@ -366,7 +366,7 @@ export default function Community() {
                           <div 
                             className={`w-3 h-3 rounded-full flex-shrink-0 ${onlineUsers.has(user.id) ? 'bg-green-500' : 'bg-red-500'}`}
                             style={{ aspectRatio: '1', minWidth: '12px', minHeight: '12px' }}
-                            title={onlineUsers.has(user.id) ? 'En línea' : 'Desconectado'}
+                            title={onlineUsers.has(user.id) ? 'En línea.' : 'Desconectado.'}
                           />
                           <Badge 
                             variant="secondary" 
@@ -448,7 +448,7 @@ export default function Community() {
                         <div 
                           className={`w-3 h-3 rounded-full flex-shrink-0 ${onlineUsers.has(user.id) ? 'bg-green-500' : 'bg-red-500'}`}
                           style={{ aspectRatio: '1', minWidth: '12px', minHeight: '12px' }}
-                          title={onlineUsers.has(user.id) ? 'En línea' : 'Desconectado'}
+                          title={onlineUsers.has(user.id) ? 'En línea.' : 'Desconectado.'}
                         />
                         <Badge 
                           variant="secondary" 
@@ -462,7 +462,7 @@ export default function Community() {
                   </div>
 
                   {/* Medals */}
-                  <div className="flex gap-0.5 justify-end items-center">
+                  <div className="flex gap-0.5 justify-start items-center">
                     {getMedalsByTime(totalDays).map((medal, idx) => (
                       <span key={idx} className="text-lg flex-shrink-0">
                         {medal}
