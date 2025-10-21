@@ -995,7 +995,7 @@ export default function EmotionJournal() {
                 <Button
                   variant="outline"
                   className={cn(
-                    "justify-start text-left font-normal",
+                    "justify-start text-left font-normal pl-[15px]",
                     !filterDate && "text-muted-foreground"
                   )}
                 >
@@ -1012,7 +1012,7 @@ export default function EmotionJournal() {
                   className={cn("p-3 pointer-events-auto")}
                 />
                 {filterDate && (
-                  <div className="p-3 border-t">
+                  <div className="p-3 pb-6 border-t">
                     <Button
                       variant="ghost"
                       className="w-full"
