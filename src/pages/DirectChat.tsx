@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Send, ArrowLeft, UserCheck, UserX } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -27,6 +29,7 @@ interface Message {
   receiver_id: string;
   message: string;
   created_at: string;
+  sender_name?: string;
 }
 
 export default function DirectChat() {
@@ -44,6 +47,7 @@ export default function DirectChat() {
   const [showEndDialog, setShowEndDialog] = useState(false);
   const [isOtherUserOnline, setIsOtherUserOnline] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const channelRef = useRef<any>(null);
 
@@ -173,12 +177,19 @@ export default function DirectChat() {
 
     setIsSending(true);
     try {
+      // Determinar el nombre a mostrar
+      let displayName = currentUserName;
+      if (isAnonymous) {
+        displayName = "Anónimo";
+      }
+
       const { error } = await supabase
         .from('direct_messages')
         .insert({
           sender_id: currentUserId,
           receiver_id: otherUserId,
           message: newMessage.trim(),
+          sender_name: displayName,
         });
 
       if (error) throw error;
@@ -191,6 +202,7 @@ export default function DirectChat() {
           receiver_id: otherUserId,
           message: newMessage.trim(),
           created_at: new Date().toISOString(),
+          sender_name: displayName,
         },
       ]);
       setNewMessage("");
@@ -347,10 +359,15 @@ export default function DirectChat() {
                         <div className={`flex gap-2 max-w-[70%] ${isOwn ? "flex-row-reverse" : "flex-row"}`}>
                           <Avatar className="h-8 w-8 shrink-0">
                             <AvatarFallback className={`text-xs ${isOwn ? 'bg-primary/20 text-primary' : 'bg-muted'}`}>
-                              {getInitials(isOwn ? currentUserName : otherUserName)}
+                              {getInitials(msg.sender_name || (isOwn ? currentUserName : otherUserName))}
                             </AvatarFallback>
                           </Avatar>
                           <div>
+                            {!isOwn && msg.sender_name && (
+                              <p className="text-xs text-muted-foreground mb-1">
+                                {msg.sender_name}
+                              </p>
+                            )}
                             <div
                               className={`rounded-lg p-3 ${
                                 isOwn
@@ -378,6 +395,17 @@ export default function DirectChat() {
 
             {/* Input area */}
             <div className="shrink-0 p-4 border-t space-y-3">
+              <div className="flex items-center gap-2 pb-2">
+                <Switch
+                  id="anonymous-mode"
+                  checked={isAnonymous}
+                  onCheckedChange={setIsAnonymous}
+                />
+                <Label htmlFor="anonymous-mode" className="text-sm cursor-pointer">
+                  Marcar como anónimo
+                </Label>
+              </div>
+              
               <form onSubmit={sendMessage} className="flex gap-2">
                 <Input
                   placeholder="Escribe un mensaje..."

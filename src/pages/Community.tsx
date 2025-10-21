@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 import {
   Select,
   SelectContent,
@@ -74,6 +75,7 @@ const REHABILITATION_TYPES = [
 export default function Community() {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [isAvailableForHelp, setIsAvailableForHelp] = useState(false);
   const [currentUser, setCurrentUser] = useState<CommunityUser | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>("todos");
@@ -269,6 +271,18 @@ export default function Community() {
   };
 
   const openDirectChat = (userId: string, userName: string) => {
+    // Verificar si es un usuario mock (ID no es UUID)
+    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId);
+    
+    if (!isUUID) {
+      toast({
+        title: "Usuario no disponible",
+        description: "Este usuario aún no está registrado en el sistema. Solo puedes chatear con usuarios reales.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     navigate(`/direct-chat?userId=${userId}&userName=${encodeURIComponent(userName)}`);
   };
 
