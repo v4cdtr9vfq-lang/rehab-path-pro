@@ -25,6 +25,7 @@ import Settings from "./pages/Settings";
 import TrialEnded from "./pages/TrialEnded";
 import SupportNetwork from "./pages/SupportNetwork";
 import Help from "./pages/Help";
+import SleepQuality from "./pages/SleepQuality";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -143,6 +144,13 @@ const App = () => (
             <ProtectedRoute>
               <Layout>
                 <Help />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/sleep-quality" element={
+            <ProtectedRoute>
+              <Layout>
+                <SleepQuality />
               </Layout>
             </ProtectedRoute>
           } />

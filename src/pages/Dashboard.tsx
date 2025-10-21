@@ -5,9 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CheckCircle2, Clock, Circle, Star, GripVertical, PartyPopper, Plus } from "lucide-react";
+import { CheckCircle2, Clock, Circle, Star, GripVertical, PartyPopper, Plus, Moon } from "lucide-react";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -33,6 +33,7 @@ export default function Home() {
   const {
     toast
   } = useToast();
+  const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [loading, setLoading] = useState(true);
@@ -50,6 +51,7 @@ export default function Home() {
   const [sobrietyDays, setSobrietyDays] = useState(0);
   const [hasUnsavedOrder, setHasUnsavedOrder] = useState(false);
   const [originalGoalsOrder, setOriginalGoalsOrder] = useState<any[]>([]);
+  const [sleepQuality, setSleepQuality] = useState<number | null>(null);
   const allQuotes = [{
     text: "Siempre es lo simple lo que produce lo maravilloso.",
     author: "Amelia Barr"
@@ -323,6 +325,19 @@ export default function Home() {
         setTotalGoals(1);
         setActiveGoals([]);
       }
+
+      // Fetch today's sleep quality
+      const { data: sleepData } = await supabase
+        .from('sleep_quality')
+        .select('quality_score')
+        .eq('user_id', user.id)
+        .eq('entry_date', today)
+        .maybeSingle();
+      
+      if (sleepData) {
+        setSleepQuality(sleepData.quality_score);
+      }
+
       setLoading(false);
     };
     fetchData();
@@ -637,6 +652,42 @@ export default function Home() {
     };
   };
 
+  // Handle sleep quality selection
+  const handleSleepQuality = async (score: number) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const today = new Date().toISOString().split('T')[0];
+
+      // Try to update existing entry, if not exists, insert
+      const { error: upsertError } = await supabase
+        .from('sleep_quality')
+        .upsert({
+          user_id: user.id,
+          entry_date: today,
+          quality_score: score
+        }, {
+          onConflict: 'user_id,entry_date'
+        });
+
+      if (upsertError) throw upsertError;
+
+      setSleepQuality(score);
+      toast({
+        title: "Registrado",
+        description: `Calidad de sueño: ${score}/10`,
+      });
+    } catch (error: any) {
+      console.error('Error saving sleep quality:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo guardar la calidad de sueño",
+        variant: "destructive",
+      });
+    }
+  };
+
   // Quick tools - configurable
   const quickTools = [{
     emoji: "📔",
@@ -895,6 +946,51 @@ export default function Home() {
               )}
             </>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Sleep Quality Widget */}
+      <Card className="border-sidebar-border md:-mt-[3px]">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-2xl font-bold flex items-center gap-2">
+            <Moon className="h-6 w-6" />
+            Calidad de mi sueño
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex flex-wrap gap-2 justify-center">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score) => (
+              <button
+                key={score}
+                onClick={() => handleSleepQuality(score)}
+                className={`
+                  h-12 w-12 rounded-full font-bold text-sm transition-all
+                  ${sleepQuality === score 
+                    ? 'ring-2 ring-offset-2 ring-foreground scale-110' 
+                    : 'hover:scale-105'
+                  }
+                  ${score <= 5 
+                    ? 'bg-red-500 text-white hover:bg-red-600' 
+                    : 'bg-green-500 text-white hover:bg-green-600'
+                  }
+                `}
+              >
+                {score}
+              </button>
+            ))}
+          </div>
+          {sleepQuality && (
+            <p className="text-center text-sm text-muted-foreground">
+              Registrado: {sleepQuality}/10
+            </p>
+          )}
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => navigate('/sleep-quality')}
+          >
+            Ver estadísticas
+          </Button>
         </CardContent>
       </Card>
 

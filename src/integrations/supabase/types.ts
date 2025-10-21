@@ -429,6 +429,33 @@ export type Database = {
         }
         Relationships: []
       }
+      sleep_quality: {
+        Row: {
+          created_at: string
+          entry_date: string
+          id: string
+          quality_score: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          entry_date?: string
+          id?: string
+          quality_score: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          entry_date?: string
+          id?: string
+          quality_score?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       support_contacts: {
         Row: {
           created_at: string
