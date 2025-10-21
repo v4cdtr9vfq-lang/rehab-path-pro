@@ -124,7 +124,7 @@ export default function RehabilitationTypeDialog() {
               Liberación de:
             </p>
             <Select value={selectedType} onValueChange={setSelectedType}>
-              <SelectTrigger className="w-full pl-[27px]">
+              <SelectTrigger className="w-full pl-[17px]">
                 <SelectValue placeholder="Selecciona una opción" />
               </SelectTrigger>
               <SelectContent>
