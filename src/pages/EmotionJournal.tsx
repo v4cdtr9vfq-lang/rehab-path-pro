@@ -230,7 +230,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "agradecido",
         name: "Agradecido",
-        tertiaryEmotions: ["Alegría suave", "Asombro", "Calidez", "Generosidad", "Reconocimiento"]
+        tertiaryEmotions: ["Asombro", "Calidez", "Reconocimiento"]
       },
       {
         id: "comprometido",
