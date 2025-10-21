@@ -362,7 +362,7 @@ export default function Community() {
                         <h3 className="font-semibold text-sm truncate">{user.name.split(" ")[0]}</h3>
                       </div>
                       {user.availableForHelp && canShowAvailability && (
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-shrink-0">
                           <div 
                             className={`w-3 h-3 rounded-full flex-shrink-0 ${onlineUsers.has(user.id) ? 'bg-green-500' : 'bg-red-500'}`}
                             style={{ aspectRatio: '1', minWidth: '12px', minHeight: '12px' }}
@@ -442,7 +442,7 @@ export default function Community() {
                     </div>
                   </div>
 
-                  <div className="flex justify-end items-center gap-2 overflow-hidden">
+                  <div className="flex justify-end items-center gap-2">
                     {user.availableForHelp && canShowAvailability && (
                       <>
                         <div 
@@ -462,7 +462,7 @@ export default function Community() {
                   </div>
 
                   {/* Medals */}
-                  <div className="flex gap-0.5 justify-end items-center overflow-hidden">
+                  <div className="flex gap-0.5 justify-end items-center">
                     {getMedalsByTime(totalDays).map((medal, idx) => (
                       <span key={idx} className="text-lg flex-shrink-0">
                         {medal}
