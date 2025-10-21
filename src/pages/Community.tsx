@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
+import DirectChatDialog from "@/components/DirectChatDialog";
 
 interface CommunityUser {
   id: string;
@@ -76,6 +77,8 @@ export default function Community() {
   const [currentUser, setCurrentUser] = useState<CommunityUser | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>("todos");
   const [loading, setLoading] = useState(true);
+  const [chatDialogOpen, setChatDialogOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<{ id: string; name: string } | null>(null);
 
   // Obtener datos reales del usuario
   useEffect(() => {
@@ -219,7 +222,8 @@ export default function Community() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-2 max-w-6xl">
+    <>
+      <div className="container mx-auto px-4 py-2 max-w-6xl">
 
       {/* Community Ranking */}
       <Card className="mb-[30px]">
@@ -291,7 +295,14 @@ export default function Community() {
                         <h3 className="font-semibold text-sm truncate">{user.name.split(" ")[0]}</h3>
                       </div>
                       {user.availableForHelp && canShowAvailability && (
-                        <Badge variant="secondary" className="flex-shrink-0 bg-success/20 text-success border-success/30 text-xs px-2 py-0">
+                        <Badge 
+                          variant="secondary" 
+                          className="flex-shrink-0 bg-success/20 text-success border-success/30 text-xs px-2 py-0 cursor-pointer hover:bg-success/30"
+                          onClick={() => {
+                            setSelectedUser({ id: user.id, name: user.name });
+                            setChatDialogOpen(true);
+                          }}
+                        >
                           Disponible
                         </Badge>
                       )}
@@ -360,7 +371,14 @@ export default function Community() {
                   {/* Availability Badge */}
                   <div className="flex justify-end overflow-hidden">
                     {user.availableForHelp && canShowAvailability && (
-                      <Badge variant="secondary" className="bg-success/20 text-success border-success/30 text-xs px-2 whitespace-nowrap">
+                      <Badge 
+                        variant="secondary" 
+                        className="bg-success/20 text-success border-success/30 text-xs px-2 whitespace-nowrap cursor-pointer hover:bg-success/30"
+                        onClick={() => {
+                          setSelectedUser({ id: user.id, name: user.name });
+                          setChatDialogOpen(true);
+                        }}
+                      >
                         Disponible
                       </Badge>
                     )}
@@ -403,6 +421,17 @@ export default function Community() {
           </CardContent>
         </Card>
       )}
-    </div>
+      </div>
+
+      {/* Direct Chat Dialog */}
+      {selectedUser && (
+        <DirectChatDialog
+          open={chatDialogOpen}
+          onOpenChange={setChatDialogOpen}
+          otherUserId={selectedUser.id}
+          otherUserName={selectedUser.name}
+        />
+      )}
+    </>
   );
 }

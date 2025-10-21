@@ -26,6 +26,8 @@ import { Label } from "@/components/ui/label";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import MentorshipsView from "@/components/MentorshipsView";
 
 interface ChatMessage {
   id: string;
@@ -459,7 +461,18 @@ export default function Chat() {
   
   return (
     <div className="h-[calc(100vh-8rem+85px)] flex flex-col animate-in fade-in duration-500 -mt-[10px]">
-      <Card className="flex-1 flex flex-col border-border overflow-hidden min-h-0">
+      <Tabs defaultValue="rooms" className="flex-1 flex flex-col">
+        <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
+          <TabsTrigger value="rooms" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+            Salas
+          </TabsTrigger>
+          <TabsTrigger value="mentorships" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+            Mentorías
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="rooms" className="flex-1 flex flex-col mt-0 min-h-0">
+          <Card className="flex-1 flex flex-col border-border overflow-hidden min-h-0">
         <div className="bg-muted/30 border-b shrink-0">
           <div className="px-4 pb-3 pt-3">
             <Select value={currentRoom} onValueChange={(value) => {
@@ -730,8 +743,21 @@ export default function Chat() {
               </Label>
             </div>
           )}
-        </form>
-      </Card>
+          </form>
+        </Card>
+        </TabsContent>
+
+        <TabsContent value="mentorships" className="flex-1 mt-0 min-h-0 overflow-hidden">
+          <Card className="h-full flex flex-col border-border overflow-hidden">
+            <div className="bg-muted/30 border-b px-4 py-3 shrink-0">
+              <h2 className="font-semibold">Mis Mentorías</h2>
+            </div>
+            <div className="flex-1 overflow-auto">
+              <MentorshipsView />
+            </div>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
