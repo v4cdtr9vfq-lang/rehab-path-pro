@@ -1061,9 +1061,16 @@ export default function EmotionJournal() {
                   {entry.primary_emotion && (
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground mb-2">Me he sentido:</h3>
-                      <span className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm font-medium">
-                        {entry.primary_emotion}
-                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {entry.primary_emotion.split(", ").sort().map((emotion, idx) => (
+                          <span
+                            key={idx}
+                            className="px-3 py-1 rounded-full bg-green-600/20 text-green-600 text-sm font-medium"
+                          >
+                            {emotion.trim()}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   )}
 
