@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { Layout } from "./components/Layout";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ScrollToTop } from "./components/ScrollToTop";
 import { SubscriptionProvider } from "./contexts/SubscriptionContext";
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
@@ -36,6 +37,7 @@ const App = () => (
       <TooltipProvider>
         <SubscriptionProvider>
         <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Landing />} />
