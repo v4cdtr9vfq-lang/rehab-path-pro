@@ -322,7 +322,7 @@ export default function DirectChat() {
                 <h3 className="font-semibold">{otherUserName}</h3>
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <span className={`inline-block w-2 h-2 rounded-full shrink-0 ${isOtherUserOnline ? 'bg-green-500' : 'bg-red-500'}`} />
-                  {isOtherUserOnline ? 'En línea' : 'Desconectado'}
+                  {isOtherUserOnline ? 'En línea' : 'Desconectado.'}
                 </p>
               </div>
             </div>
@@ -383,10 +383,10 @@ export default function DirectChat() {
                   placeholder="Escribe un mensaje..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  className="flex-1"
+                  className="flex-1 h-10"
                   disabled={isSending}
                 />
-                <Button type="submit" size="icon" disabled={isSending || !newMessage.trim()}>
+                <Button type="submit" size="icon" disabled={isSending || !newMessage.trim()} className="h-10 w-10">
                   <Send className="h-4 w-4" />
                 </Button>
               </form>
