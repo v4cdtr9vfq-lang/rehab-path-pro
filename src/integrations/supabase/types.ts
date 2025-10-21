@@ -408,6 +408,7 @@ export type Database = {
       profiles: {
         Row: {
           abstinence_start_date: string | null
+          available_for_help: boolean
           created_at: string
           full_name: string | null
           id: string
@@ -418,6 +419,7 @@ export type Database = {
         }
         Insert: {
           abstinence_start_date?: string | null
+          available_for_help?: boolean
           created_at?: string
           full_name?: string | null
           id?: string
@@ -428,6 +430,7 @@ export type Database = {
         }
         Update: {
           abstinence_start_date?: string | null
+          available_for_help?: boolean
           created_at?: string
           full_name?: string | null
           id?: string

@@ -142,9 +142,14 @@ export default function Community() {
         // Obtener perfil y fecha de abstinencia
         const { data: profile } = await supabase
           .from('profiles')
-          .select('full_name, abstinence_start_date, rehabilitation_type')
+          .select('full_name, abstinence_start_date, rehabilitation_type, available_for_help')
           .eq('user_id', user.id)
           .single();
+
+        // Cargar preferencia de disponibilidad
+        if (profile?.available_for_help !== undefined) {
+          setIsAvailableForHelp(profile.available_for_help);
+        }
 
         if (profile?.abstinence_start_date) {
           const absDate = new Date(profile.abstinence_start_date);
@@ -492,7 +497,34 @@ export default function Community() {
               <Switch
                 id="available-help"
                 checked={isAvailableForHelp}
-                onCheckedChange={setIsAvailableForHelp}
+                onCheckedChange={async (checked) => {
+                  setIsAvailableForHelp(checked);
+                  
+                  // Guardar en la base de datos
+                  const { data: { user } } = await supabase.auth.getUser();
+                  if (user) {
+                    const { error } = await supabase
+                      .from('profiles')
+                      .update({ available_for_help: checked })
+                      .eq('user_id', user.id);
+                    
+                    if (error) {
+                      console.error('Error saving availability preference:', error);
+                      toast({
+                        title: "Error",
+                        description: "No se pudo guardar tu preferencia de disponibilidad",
+                        variant: "destructive",
+                      });
+                    } else {
+                      toast({
+                        title: checked ? "Disponible" : "No disponible",
+                        description: checked 
+                          ? "Ahora estás disponible para ayudar a otros miembros"
+                          : "Ya no estás disponible para asistencia",
+                      });
+                    }
+                  }
+                }}
               />
             </div>
           </CardContent>
