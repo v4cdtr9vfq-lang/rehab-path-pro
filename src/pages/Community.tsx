@@ -309,7 +309,7 @@ export default function Community() {
                       </div>
                       <div className="flex gap-1">
                         {getMedalsByTime(totalDays).map((medal, idx) => (
-                          <span key={idx} className="text-base">
+                          <span key={idx} className="text-2xl">
                             {medal}
                           </span>
                         ))}
@@ -322,7 +322,7 @@ export default function Community() {
               return (
                 <div
                   key={user.id}
-                  className={`grid grid-cols-[minmax(180px,1fr)_180px_90px_110px] gap-3 items-center p-4 rounded-xl transition-colors overflow-hidden ${
+                  className={`grid grid-cols-[minmax(180px,1fr)_180px_90px_110px] gap-1 items-center p-4 rounded-xl transition-colors overflow-hidden ${
                     isCurrentUser
                       ? "bg-primary/10 border border-primary"
                       : user.availableForHelp && canShowAvailability
@@ -369,7 +369,7 @@ export default function Community() {
                   {/* Medals */}
                   <div className="flex gap-0.5 justify-end items-center overflow-hidden">
                     {getMedalsByTime(totalDays).map((medal, idx) => (
-                      <span key={idx} className="text-sm flex-shrink-0">
+                      <span key={idx} className="text-2xl flex-shrink-0">
                         {medal}
                       </span>
                     ))}
