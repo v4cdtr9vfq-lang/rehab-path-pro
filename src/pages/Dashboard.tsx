@@ -951,7 +951,7 @@ export default function Home() {
 
       {/* Sleep Quality Widget */}
       <div>
-        <div className="flex flex-row items-center justify-between gap-2 pb-[25px]">
+        <div className="flex flex-row items-center justify-between gap-2 pb-[25px] pl-5">
           <h2 className="text-2xl font-bold">Calidad de mi sueño:</h2>
           <Button 
             variant="ghost" 
