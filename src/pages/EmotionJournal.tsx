@@ -383,7 +383,7 @@ export default function EmotionJournal() {
   const [quarterStats, setQuarterStats] = useState<EmotionStats[]>([]);
   const { toast } = useToast();
   
-  const ENTRIES_PER_PAGE = 6;
+  const ENTRIES_PER_PAGE = 3;
 
   useEffect(() => {
     loadSavedEntries();
