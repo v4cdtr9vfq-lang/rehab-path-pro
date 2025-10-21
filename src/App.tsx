@@ -22,6 +22,7 @@ import Tools from "./pages/Tools";
 import Message from "./pages/Message";
 import Chat from "./pages/Chat";
 import Community from "./pages/Community";
+import DirectChat from "./pages/DirectChat";
 import Settings from "./pages/Settings";
 import TrialEnded from "./pages/TrialEnded";
 import SupportNetwork from "./pages/SupportNetwork";
@@ -125,6 +126,13 @@ const App = () => (
             <ProtectedRoute>
               <Layout>
                 <Community />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/direct-chat" element={
+            <ProtectedRoute>
+              <Layout>
+                <DirectChat />
               </Layout>
             </ProtectedRoute>
           } />

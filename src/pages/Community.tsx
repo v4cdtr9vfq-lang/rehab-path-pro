@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +14,6 @@ import {
 } from "@/components/ui/select";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
-import DirectChatDialog from "@/components/DirectChatDialog";
 
 interface CommunityUser {
   id: string;
@@ -73,12 +73,59 @@ const REHABILITATION_TYPES = [
 
 export default function Community() {
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   const [isAvailableForHelp, setIsAvailableForHelp] = useState(false);
   const [currentUser, setCurrentUser] = useState<CommunityUser | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>("todos");
   const [loading, setLoading] = useState(true);
-  const [chatDialogOpen, setChatDialogOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<{ id: string; name: string } | null>(null);
+  const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());
+  const channelRef = useRef<any>(null);
+
+  // Set up presence tracking for all users
+  useEffect(() => {
+    const channel = supabase.channel('community-presence', {
+      config: {
+        presence: {
+          key: 'community',
+        },
+      },
+    });
+
+    channel
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.presenceState();
+        const online = new Set<string>();
+        Object.values(state).forEach((presences: any) => {
+          if (Array.isArray(presences)) {
+            presences.forEach((presence: any) => {
+              if (presence?.user_id) {
+                online.add(presence.user_id);
+              }
+            });
+          }
+        });
+        setOnlineUsers(online);
+      })
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            await channel.track({
+              user_id: user.id,
+              online_at: new Date().toISOString(),
+            });
+          }
+        }
+      });
+
+    channelRef.current = channel;
+
+    return () => {
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+      }
+    };
+  }, []);
 
   // Obtener datos reales del usuario
   useEffect(() => {
@@ -221,9 +268,12 @@ export default function Community() {
     return { className: "bg-orange-500/20 text-orange-600" };
   };
 
+  const openDirectChat = (userId: string, userName: string) => {
+    navigate(`/direct-chat?userId=${userId}&userName=${encodeURIComponent(userName)}`);
+  };
+
   return (
-    <>
-      <div className="container mx-auto px-4 py-2 max-w-6xl">
+    <div className="container mx-auto px-4 py-2 max-w-6xl">
 
       {/* Community Ranking */}
       <Card className="mb-[30px]">
@@ -282,7 +332,10 @@ export default function Community() {
                   >
                     {/* Top row: Avatar, Name, and Badge */}
                     <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
+                      <div 
+                        className="flex items-center gap-2 cursor-pointer hover:opacity-80"
+                        onClick={() => openDirectChat(user.id, user.name)}
+                      >
                         <Avatar className="h-8 w-8 flex-shrink-0">
                           <AvatarImage src={user.avatar} />
                           <AvatarFallback 
@@ -295,16 +348,19 @@ export default function Community() {
                         <h3 className="font-semibold text-sm truncate">{user.name.split(" ")[0]}</h3>
                       </div>
                       {user.availableForHelp && canShowAvailability && (
-                        <Badge 
-                          variant="secondary" 
-                          className="flex-shrink-0 bg-success/20 text-success border-success/30 text-xs px-2 py-0 cursor-pointer hover:bg-success/30"
-                          onClick={() => {
-                            setSelectedUser({ id: user.id, name: user.name });
-                            setChatDialogOpen(true);
-                          }}
-                        >
-                          Disponible
-                        </Badge>
+                        <div className="flex items-center gap-2">
+                          <span 
+                            className={`inline-block w-2.5 h-2.5 rounded-full ${onlineUsers.has(user.id) ? 'bg-green-500' : 'bg-red-500'}`}
+                            title={onlineUsers.has(user.id) ? 'En línea' : 'Desconectado'}
+                          />
+                          <Badge 
+                            variant="secondary" 
+                            className="flex-shrink-0 bg-success/20 text-success border-success/30 text-xs px-2 py-0 cursor-pointer hover:bg-success/30"
+                            onClick={() => openDirectChat(user.id, user.name)}
+                          >
+                            Disponible
+                          </Badge>
+                        </div>
                       )}
                     </div>
 
@@ -342,7 +398,10 @@ export default function Community() {
                   }`}
                 >
                   {/* Avatar and Name */}
-                  <div className="flex items-center gap-[15px] min-w-0">
+                  <div 
+                    className="flex items-center gap-[15px] min-w-0 cursor-pointer hover:opacity-80"
+                    onClick={() => openDirectChat(user.id, user.name)}
+                  >
                     <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src={user.avatar} />
                       <AvatarFallback 
@@ -369,18 +428,21 @@ export default function Community() {
                   </div>
 
                   {/* Availability Badge */}
-                  <div className="flex justify-end overflow-hidden">
+                  <div className="flex justify-end items-center gap-2 overflow-hidden">
                     {user.availableForHelp && canShowAvailability && (
-                      <Badge 
-                        variant="secondary" 
-                        className="bg-success/20 text-success border-success/30 text-xs px-2 whitespace-nowrap cursor-pointer hover:bg-success/30"
-                        onClick={() => {
-                          setSelectedUser({ id: user.id, name: user.name });
-                          setChatDialogOpen(true);
-                        }}
-                      >
-                        Disponible
-                      </Badge>
+                      <>
+                        <span 
+                          className={`inline-block w-2.5 h-2.5 rounded-full ${onlineUsers.has(user.id) ? 'bg-green-500' : 'bg-red-500'}`}
+                          title={onlineUsers.has(user.id) ? 'En línea' : 'Desconectado'}
+                        />
+                        <Badge 
+                          variant="secondary" 
+                          className="bg-success/20 text-success border-success/30 text-xs px-2 whitespace-nowrap cursor-pointer hover:bg-success/30"
+                          onClick={() => openDirectChat(user.id, user.name)}
+                        >
+                          Disponible
+                        </Badge>
+                      </>
                     )}
                   </div>
 
@@ -421,17 +483,6 @@ export default function Community() {
           </CardContent>
         </Card>
       )}
-      </div>
-
-      {/* Direct Chat Dialog */}
-      {selectedUser && (
-        <DirectChatDialog
-          open={chatDialogOpen}
-          onOpenChange={setChatDialogOpen}
-          otherUserId={selectedUser.id}
-          otherUserName={selectedUser.name}
-        />
-      )}
-    </>
+    </div>
   );
 }
