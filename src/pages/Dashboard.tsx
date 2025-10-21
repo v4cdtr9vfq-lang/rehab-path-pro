@@ -950,40 +950,40 @@ export default function Home() {
       </Card>
 
       {/* Sleep Quality Widget */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Calidad de mi sueño:</h2>
-          <span 
+      <Card className="border-sidebar-border md:-mt-[3px]">
+        <CardHeader className="flex flex-row items-center justify-between gap-2 pb-[25px]">
+          <CardTitle className="text-2xl font-bold">Calidad de mi sueño:</CardTitle>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-primary"
             onClick={() => navigate('/sleep-quality')}
-            className="text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
           >
             Ver estadísticas
-          </span>
-        </div>
-        <Card className="border-sidebar-border">
-          <CardContent className="p-6">
-            <div className="flex flex-wrap gap-2 justify-center">
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score) => (
-                <button
-                  key={score}
-                  onClick={() => handleSleepQuality(score)}
-                  className={`
-                    h-12 w-12 rounded-full font-bold text-sm transition-all border-2
-                    ${sleepQuality === score 
-                      ? score <= 5
-                        ? 'bg-red-500 text-white border-red-500'
-                        : 'bg-green-500 text-white border-green-500'
-                      : 'border-muted-foreground/30 text-foreground hover:border-foreground/50'
-                    }
-                  `}
-                >
-                  {score}
-                </button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+          </Button>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-2 justify-center">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score) => (
+              <button
+                key={score}
+                onClick={() => handleSleepQuality(score)}
+                className={`
+                  h-12 w-12 rounded-full font-bold text-sm transition-all border-2
+                  ${sleepQuality === score 
+                    ? score <= 5
+                      ? 'bg-red-500 text-white border-red-500'
+                      : 'bg-green-500 text-white border-green-500'
+                    : 'border-muted-foreground/30 text-foreground hover:border-foreground/50'
+                  }
+                `}
+              >
+                {score}
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Medals Widget */}
       <Card className="border-sidebar-border md:-mt-[3px]">
