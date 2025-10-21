@@ -321,7 +321,7 @@ export default function DirectChat() {
               <div className="flex-1">
                 <h3 className="font-semibold">{otherUserName}</h3>
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
-                  <span className={`inline-block w-2 h-2 rounded-full ${isOtherUserOnline ? 'bg-green-500' : 'bg-red-500'}`} />
+                  <span className={`inline-block w-2 h-2 rounded-full shrink-0 ${isOtherUserOnline ? 'bg-green-500' : 'bg-red-500'}`} />
                   {isOtherUserOnline ? 'En línea' : 'Desconectado'}
                 </p>
               </div>
