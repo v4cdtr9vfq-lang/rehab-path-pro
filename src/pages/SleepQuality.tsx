@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   LineChart,
@@ -22,7 +19,6 @@ interface SleepEntry {
 }
 
 const SleepQuality = () => {
-  const navigate = useNavigate();
   const { toast } = useToast();
   const [weekData, setWeekData] = useState<SleepEntry[]>([]);
   const [monthData, setMonthData] = useState<SleepEntry[]>([]);
@@ -139,22 +135,10 @@ const SleepQuality = () => {
 
   return (
     <div className="container max-w-4xl mx-auto py-8 px-4">
-      <Button
-        variant="ghost"
-        onClick={() => navigate("/dashboard")}
-        className="mb-6"
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Volver al Dashboard
-      </Button>
+      <h1 className="text-2xl font-bold mb-6">Estadísticas de Calidad de Sueño</h1>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            🌙 Estadísticas de Calidad de Sueño
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <Tabs defaultValue="week" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="week">Esta semana</TabsTrigger>
