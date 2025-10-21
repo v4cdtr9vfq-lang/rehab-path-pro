@@ -253,7 +253,7 @@ export default function Community() {
                 <div className="w-[60px] text-center">Días:</div>
               </div>
               <div className="text-center"></div>
-              <div className="text-left pl-0">Medallas:</div>
+              <div className="text-left pl-0 pr-[55px]">Medallas:</div>
             </div>
           )}
 
@@ -367,7 +367,7 @@ export default function Community() {
                   </div>
 
                   {/* Medals */}
-                  <div className="flex gap-0.5 justify-start pl-0">
+                  <div className="flex gap-0.5 justify-start pl-0 pr-[55px]">
                     {getMedalsByTime(totalDays).map((medal, idx) => (
                       <span key={idx} className="text-lg">
                         {medal}
