@@ -320,7 +320,7 @@ export default function Community() {
                       </div>
                       <div className="flex gap-1">
                         {getMedalsByTime(totalDays).map((medal, idx) => (
-                          <span key={idx} className="text-2xl">
+                          <span key={idx} className="text-base">
                             {medal}
                           </span>
                         ))}
@@ -387,7 +387,7 @@ export default function Community() {
                   {/* Medals */}
                   <div className="flex gap-0.5 justify-end items-center overflow-hidden">
                     {getMedalsByTime(totalDays).map((medal, idx) => (
-                      <span key={idx} className="text-2xl flex-shrink-0">
+                      <span key={idx} className="text-base flex-shrink-0">
                         {medal}
                       </span>
                     ))}
