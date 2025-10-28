@@ -1098,11 +1098,11 @@ export default function Settings() {
                             <Button
                               variant="outline"
                               className={cn(
-                                "w-full justify-start text-left font-normal",
+                                "w-full h-10 justify-start text-left font-normal px-3",
                                 !dateValue && "text-muted-foreground"
                               )}
                             >
-                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
                               {dateValue ? (
                                 format(new Date(dateValue), "PPP", { locale: es })
                               ) : (
