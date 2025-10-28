@@ -388,25 +388,32 @@ export default function Plan() {
           goals.length = 0;
           goals.push(...orderedGoals);
         }
-        const alwaysGoals = goals.filter(g => g.goal_type === 'always');
-        const todayGoals = goals.filter(g => g.goal_type === 'today');
-        const weekGoals = goals.filter(g => g.goal_type === 'week');
-        const monthGoals = goals.filter(g => g.goal_type === 'month');
-        const periodicGoals = goals.filter(g => g.goal_type === 'periodic');
+        
+        // CRITICAL: Maintain the order_index order when grouping goals by section
+        // Filter goals that should appear in each section while preserving order
+        const todayRelevantGoals = goals.filter(g => 
+          g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic' || g.goal_type === 'onetime'
+        );
+        const weekRelevantGoals = goals.filter(g => 
+          g.goal_type === 'week' || g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic' || g.goal_type === 'onetime'
+        );
+        const monthRelevantGoals = goals.filter(g => 
+          g.goal_type === 'month' || g.goal_type === 'week' || g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic' || g.goal_type === 'onetime'
+        );
         const onetimeGoals = goals.filter(g => g.goal_type === 'onetime');
         
         const groupedGoals = {
           today: {
             open: sections.today.open,
-            goals: await expandGoals([...todayGoals, ...periodicGoals, ...alwaysGoals, ...onetimeGoals], 'today')
+            goals: await expandGoals(todayRelevantGoals, 'today')
           },
           week: {
             open: sections.week.open,
-            goals: await expandGoals([...weekGoals, ...periodicGoals, ...todayGoals, ...alwaysGoals, ...onetimeGoals], 'week')
+            goals: await expandGoals(weekRelevantGoals, 'week')
           },
           month: {
             open: sections.month.open,
-            goals: await expandGoals([...monthGoals, ...periodicGoals, ...weekGoals, ...todayGoals, ...alwaysGoals, ...onetimeGoals], 'month')
+            goals: await expandGoals(monthRelevantGoals, 'month')
           },
           onetime: {
             open: sections.onetime.open,
