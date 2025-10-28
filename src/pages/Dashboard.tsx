@@ -793,7 +793,7 @@ export default function Home() {
                   : "text-muted-foreground"
               }`}
             >
-              {goal.status === "completed" ? "¡Completado!" : goal.period}
+              {goal.status === "completed" ? "¡Completado!" : "Pendiente"}
             </p>
           </div>
         </div>
