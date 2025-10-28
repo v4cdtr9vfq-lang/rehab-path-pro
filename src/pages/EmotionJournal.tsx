@@ -148,12 +148,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "desconectado",
         name: "Desconectado",
-        tertiaryEmotions: ["Aburrido", "Adormecido", "Alejado", "Alienado", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído", "Vacío"]
-      },
-      {
-        id: "desconfiado",
-        name: "Desconfiado",
-        tertiaryEmotions: []
+        tertiaryEmotions: ["Adormecido", "Alejado", "Alienado", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído", "Vacío"]
       },
       {
         id: "impaciente",
@@ -173,7 +168,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "vulnerable",
         name: "Vulnerable",
-        tertiaryEmotions: ["Frágil", "Indefenso", "Inseguro", "Reservado", "Sensible", "Tembloroso"]
+        tertiaryEmotions: ["Frágil", "Indefenso", "Reservado", "Sensible", "Tembloroso"]
       }
     ]
   },
@@ -181,11 +176,6 @@ const emotionCategories: PrimaryCategory[] = [
     id: "irritado",
     name: "Irritado",
     secondaryEmotions: [
-      {
-        id: "aburrido",
-        name: "Aburrido",
-        tertiaryEmotions: ["Impaciencia", "Indiferencia"]
-      },
       {
         id: "deseo",
         name: "Deseo",
@@ -220,7 +210,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "tenso",
         name: "Tenso",
-        tertiaryEmotions: ["Abrumado", "Ansioso", "Consternado", "Estresado", "Irritable", "Nervioso"]
+        tertiaryEmotions: ["Abrumado", "Consternado", "Estresado", "Irritable", "Nervioso"]
       }
     ]
   },
@@ -251,12 +241,12 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "comprometido",
         name: "Comprometido",
-        tertiaryEmotions: ["Absorto", "Alerta", "Curioso", "Encantado", "Estimulado", "Interesado", "Intrigado", "Involucrado"]
+        tertiaryEmotions: ["Absorto", "Alerta", "Curioso", "Estimulado", "Interesado", "Intrigado", "Involucrado"]
       },
       {
         id: "seguro",
         name: "Conectado",
-        tertiaryEmotions: ["Aceptación", "Calma", "Confianza", "Feliz", "Intimidad", "Pertenencia", "Previsibilidad"]
+        tertiaryEmotions: ["Aceptación", "Confianza", "Feliz", "Intimidad", "Pertenencia", "Previsibilidad"]
       },
       {
         id: "confiado",
@@ -276,7 +266,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "pacifico",
         name: "Pacífico",
-        tertiaryEmotions: ["Aliviado", "Calmado", "Centrado", "Cómodo", "Confiado", "Contento", "Despejado", "Ecuánime", "Quieto", "Realizado", "Relajado", "Satisfecho", "Sereno", "Tranquilo"]
+        tertiaryEmotions: ["Aliviado", "Calmado", "Centrado", "Cómodo", "Contento", "Despejado", "Ecuánime", "Quieto", "Realizado", "Relajado", "Sereno"]
       },
       {
         id: "valiente",
@@ -297,7 +287,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "desconcertado_sorpresa",
         name: "Desconcertado",
-        tertiaryEmotions: ["Atónito", "Confundido", "Perplejo"]
+        tertiaryEmotions: ["Atónito", "Perplejo"]
       },
       {
         id: "impactado",
@@ -333,7 +323,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "desanimado",
         name: "Desanimado",
-        tertiaryEmotions: ["Abatimiento", "Decepción", "Pereza"]
+        tertiaryEmotions: ["Abatimiento", "Pereza"]
       },
       {
         id: "dolor",
@@ -343,17 +333,17 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "fatigado",
         name: "Fatigado",
-        tertiaryEmotions: ["Apático", "Exhausto", "Fatigado", "Letárgico", "Quemado", "Somnoliento"]
+        tertiaryEmotions: ["Apático", "Exhausto", "Letárgico", "Quemado", "Somnoliento"]
       },
       {
         id: "triste",
         name: "Infeliz",
-        tertiaryEmotions: ["Abatido", "Decepcionado", "Deprimido", "Desalentado", "Descorazonado", "Desdichado", "Desolado", "Infeliz", "Melancólico", "Sin esperanza", "Sombrío"]
+        tertiaryEmotions: ["Deprimido", "Desalentado", "Descorazonado", "Desdichado", "Desolado", "Melancólico", "Sin esperanza", "Sombrío"]
       },
       {
         id: "rechazo",
         name: "Rechazo",
-        tertiaryEmotions: ["Animosidad", "Desprecio", "Horrorizado", "Hostil", "Odio", "Repulsado"]
+        tertiaryEmotions: ["Animosidad", "Horrorizado", "Hostil", "Odio", "Repulsado"]
       }
     ]
   }
