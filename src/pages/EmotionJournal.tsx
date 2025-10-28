@@ -331,6 +331,11 @@ const emotionCategories: PrimaryCategory[] = [
         tertiaryEmotions: ["Deprimido", "Desalentado", "Descorazonado", "Desdichado", "Desolado", "Melancólico", "Sin esperanza", "Sombrío"]
       },
       {
+        id: "melancolia",
+        name: "Melancolía",
+        tertiaryEmotions: []
+      },
+      {
         id: "soledad",
         name: "Soledad",
         tertiaryEmotions: []
