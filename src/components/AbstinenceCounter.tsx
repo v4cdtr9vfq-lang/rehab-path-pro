@@ -119,11 +119,11 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
     <>
       <div className="rounded-3xl p-8 md:p-12 bg-card border border-sidebar-border relative">
         {/* Circles in top right corner */}
-        <div className="absolute top-4 right-4 flex items-center gap-2">
+        <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
           {addictions.length === 0 ? (
             // Show default "1" circle when no addictions
             <button
-              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground cursor-default"
             >
               1
             </button>
@@ -132,8 +132,13 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
             addictions.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setSelectedIndex(index)}
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log("Clicking addiction", index + 1, "current:", selectedIndex);
+                  setSelectedIndex(index);
+                }}
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all cursor-pointer ${
                   selectedIndex === index
                     ? "bg-primary text-primary-foreground"
                     : "bg-background border-2 border-primary text-primary-foreground hover:bg-primary"
@@ -146,7 +151,7 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
           {addictions.length < 3 && (
             <button
               onClick={handleAddAddiction}
-              className="w-8 h-8 rounded-full flex items-center justify-center bg-background border-2 border-primary hover:bg-primary transition-all"
+              className="w-8 h-8 rounded-full flex items-center justify-center bg-background border-2 border-primary hover:bg-primary transition-all cursor-pointer"
             >
               <Plus className="h-4 w-4 text-primary-foreground" />
             </button>
