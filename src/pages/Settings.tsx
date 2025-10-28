@@ -39,6 +39,13 @@ interface Reminder {
   notificationType: "email" | "popup";
 }
 
+interface Addiction {
+  id: string;
+  addiction_type: string;
+  start_date: string;
+  is_active: boolean;
+}
+
 export default function Settings() {
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -80,11 +87,14 @@ export default function Settings() {
     time: "",
     notificationType: "popup" as "email" | "popup"
   });
+  const [addictions, setAddictions] = useState<Addiction[]>([]);
+  const [editingAddictions, setEditingAddictions] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     loadAbstinenceDate();
     loadUserProfile();
     calculateTrialDays();
+    loadAddictions();
     
     const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "true") {
@@ -118,6 +128,89 @@ export default function Settings() {
       }
     } catch (error) {
       console.error('Error loading abstinence date:', error);
+    }
+  };
+
+  const loadAddictions = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('addictions')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('is_active', true)
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+      setAddictions(data || []);
+    } catch (error) {
+      console.error('Error loading addictions:', error);
+    }
+  };
+
+  const handleUpdateAddictionDate = async (addictionId: string, newDate: string) => {
+    if (!newDate) {
+      toast({
+        title: "Error",
+        description: "Por favor selecciona una fecha válida.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const dateObj = new Date(newDate + 'T00:00:00');
+      
+      const { error } = await supabase
+        .from('addictions')
+        .update({ start_date: dateObj.toISOString() })
+        .eq('id', addictionId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Fecha actualizada",
+        description: "La fecha de la adicción ha sido actualizada.",
+      });
+
+      loadAddictions();
+      setEditingAddictions(prev => {
+        const newState = { ...prev };
+        delete newState[addictionId];
+        return newState;
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo actualizar la fecha.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDeleteAddiction = async (addictionId: string) => {
+    try {
+      const { error } = await supabase
+        .from('addictions')
+        .delete()
+        .eq('id', addictionId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Adicción eliminada",
+        description: "La adicción ha sido eliminada correctamente.",
+      });
+
+      loadAddictions();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo eliminar la adicción.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -773,8 +866,9 @@ export default function Settings() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
+          {/* Old abstinence date */}
           <div className="space-y-4">
-            <Label htmlFor="start-date">Fecha de inicio de abstinencia</Label>
+            <Label htmlFor="start-date">Fecha de inicio de abstinencia (legado)</Label>
             <div className="flex gap-2">
               <Input 
                 id="start-date" 
@@ -790,8 +884,85 @@ export default function Settings() {
               </Button>
             </div>
             <p className="text-sm text-muted-foreground">
-              Esta fecha se usará para calcular tu tiempo de abstinencia en el dashboard
+              Esta fecha se usará si no tienes adicciones registradas
             </p>
+          </div>
+
+          {/* List of addictions */}
+          <div className="border-t pt-4 space-y-4">
+            <div className="flex items-center justify-between">
+              <Label>Mis adicciones</Label>
+              <span className="text-sm text-muted-foreground">{addictions.length}/3</span>
+            </div>
+            
+            {addictions.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-4">
+                No tienes adicciones registradas. Añade una desde el dashboard.
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {addictions.map((addiction, index) => {
+                  const dateValue = editingAddictions[addiction.id] || 
+                    new Date(addiction.start_date).toISOString().split('T')[0];
+                  
+                  return (
+                    <div key={addiction.id} className="flex items-center gap-2 p-3 rounded-lg border bg-card">
+                      <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground">
+                        {index + 1}
+                      </span>
+                      <div className="flex-1 space-y-2">
+                        <p className="font-medium">{addiction.addiction_type}</p>
+                        <div className="flex gap-2">
+                          <Input 
+                            type="date" 
+                            value={dateValue}
+                            onChange={(e) => setEditingAddictions(prev => ({
+                              ...prev,
+                              [addiction.id]: e.target.value
+                            }))}
+                            className="text-sm"
+                          />
+                          <Button 
+                            size="sm"
+                            onClick={() => handleUpdateAddictionDate(addiction.id, dateValue)}
+                          >
+                            Guardar
+                          </Button>
+                        </div>
+                      </div>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-destructive hover:text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>¿Eliminar adicción?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Esta acción eliminará permanentemente "{addiction.addiction_type}" y su historial. No se puede deshacer.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDeleteAddiction(addiction.id)}
+                              className="bg-destructive hover:bg-destructive/90"
+                            >
+                              Eliminar
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           <div className="flex items-center justify-between">
