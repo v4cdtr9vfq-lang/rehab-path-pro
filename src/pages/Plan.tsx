@@ -949,43 +949,36 @@ export default function Plan() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Get all unique goals from all sections (by originalId)
-      const allUniqueGoals = new Map<string, ExpandedGoal>();
-      Object.keys(sections).forEach(key => {
-        const sectionKey = key as keyof typeof sections;
-        sections[sectionKey].goals
-          .filter(g => g.instanceIndex === 0)
-          .forEach(goal => {
-            if (!allUniqueGoals.has(goal.originalId)) {
-              allUniqueGoals.set(goal.originalId, goal);
-            }
-          });
-      });
-
-      // Update order_index for each goal based on current position
-      const updates: Array<{ id: string; order_index: number }> = [];
-      let index = 0;
+      // Collect all unique goals in order of appearance (avoiding duplicates)
+      const seenGoalIds = new Set<string>();
+      const orderedGoalIds: string[] = [];
       
       // Process sections in order: today, week, month, onetime
       ['today', 'week', 'month', 'onetime'].forEach(key => {
         const sectionKey = key as keyof typeof sections;
         sections[sectionKey].goals
-          .filter(g => g.instanceIndex === 0)
+          .filter(g => g.instanceIndex === 0) // Only process first instance of each goal
           .forEach(goal => {
-            updates.push({
-              id: goal.originalId,
-              order_index: index++
-            });
+            // Only add if not already seen (to avoid duplicates across sections)
+            if (!seenGoalIds.has(goal.originalId)) {
+              seenGoalIds.add(goal.originalId);
+              orderedGoalIds.push(goal.originalId);
+            }
           });
       });
 
-      // Save to database
-      for (const update of updates) {
-        await supabase
+      console.log('Saving goal order:', orderedGoalIds);
+
+      // Update order_index for each goal in a single transaction-like batch
+      const updates = orderedGoalIds.map((goalId, index) => 
+        supabase
           .from('goals')
-          .update({ order_index: update.order_index })
-          .eq('id', update.id);
-      }
+          .update({ order_index: index })
+          .eq('id', goalId)
+          .eq('user_id', user.id)
+      );
+
+      await Promise.all(updates);
 
       setHasUnsavedOrder(false);
       setOriginalSectionsOrder(null);
