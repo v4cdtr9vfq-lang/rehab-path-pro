@@ -128,7 +128,7 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
               1
             </button>
           ) : (
-            // Show all addiction circles
+            // Show all addiction circles with hover effect
             addictions.map((_, index) => (
               <button
                 key={index}
@@ -136,7 +136,7 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
                   selectedIndex === index
                     ? "bg-destructive text-white"
-                    : "bg-background border-2 border-destructive text-destructive hover:bg-destructive/10"
+                    : "bg-background border-2 border-destructive text-white hover:bg-destructive hover:text-white"
                 }`}
               >
                 {index + 1}

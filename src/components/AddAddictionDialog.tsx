@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
@@ -41,21 +41,25 @@ export function AddAddictionDialog({ open, onOpenChange, onAdd }: AddAddictionDi
         <DialogHeader>
           <DialogTitle>¿De qué quieres rehabilitarte?</DialogTitle>
           <DialogDescription>
-            Añade una nueva adicción para trackear tu recuperación
+            Añade una nueva adicción para trackear tu recuperación:
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="addiction">Tipo de adicción</Label>
-            <Input
-              id="addiction"
-              placeholder="Ej: Alcohol, Tabaco, etc."
-              value={addictionType}
-              onChange={(e) => setAddictionType(e.target.value)}
-            />
+            <Label htmlFor="addiction">Tipo de dependencia:</Label>
+            <Select value={addictionType} onValueChange={setAddictionType}>
+              <SelectTrigger id="addiction">
+                <SelectValue placeholder="Selecciona un tipo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Adicción 1">Adicción 1</SelectItem>
+                <SelectItem value="Adicción 2">Adicción 2</SelectItem>
+                <SelectItem value="Adicción 3">Adicción 3</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
-            <Label>Fecha de inicio de recuperación</Label>
+            <Label>Fecha de inicio de recuperación:</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -76,6 +80,7 @@ export function AddAddictionDialog({ open, onOpenChange, onAdd }: AddAddictionDi
                   onSelect={(date) => date && setStartDate(date)}
                   initialFocus
                   locale={es}
+                  className={cn("p-3 pointer-events-auto")}
                 />
               </PopoverContent>
             </Popover>
