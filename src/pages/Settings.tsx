@@ -152,6 +152,7 @@ export default function Settings() {
         .order('created_at', { ascending: true });
 
       if (error) throw error;
+      console.log('Adicciones cargadas en Settings:', data);
       setAddictions(data || []);
     } catch (error) {
       console.error('Error loading addictions:', error);
@@ -1060,7 +1061,8 @@ export default function Settings() {
                   </Button>
                 </div>
               ) : (
-                addictions.map((addiction, index) => {
+                <>
+                  {addictions.map((addiction, index) => {
                   const dateValue = editingAddictions[addiction.id] || 
                     new Date(addiction.start_date).toISOString().split('T')[0];
                   const typeValue = editingAddictionTypes[addiction.id] || addiction.addiction_type;
@@ -1164,7 +1166,8 @@ export default function Settings() {
                       </AlertDialog>
                     </div>
                   );
-                })
+                  })}
+                </>
               )}
             </div>
           </div>
