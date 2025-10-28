@@ -18,31 +18,26 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
     days: 0
   });
 
-  // Reset selectedIndex if it's out of bounds
+  // Calculate time based on selected addiction
   useEffect(() => {
-    if (selectedIndex >= addictions.length && addictions.length > 0) {
-      setSelectedIndex(addictions.length - 1);
-    }
-  }, [addictions.length, selectedIndex]);
-
-  const getCurrentStartDate = (): Date | null => {
-    if (addictions.length > 0 && addictions[selectedIndex]) {
-      return new Date(addictions[selectedIndex].start_date);
-    }
-    return startDate || null;
-  };
-
-  useEffect(() => {
-    const currentStartDate = getCurrentStartDate();
-    if (!currentStartDate) {
-      setCount({ years: 0, months: 0, days: 0 });
-      return;
-    }
-    
     const calculateTime = () => {
+      let dateToUse: Date | null = null;
+      
+      // Use the selected addiction's date if available
+      if (addictions.length > 0 && addictions[selectedIndex]) {
+        dateToUse = new Date(addictions[selectedIndex].start_date);
+      } else if (startDate) {
+        dateToUse = startDate;
+      }
+      
+      if (!dateToUse) {
+        setCount({ years: 0, months: 0, days: 0 });
+        return;
+      }
+      
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const start = new Date(currentStartDate.getFullYear(), currentStartDate.getMonth(), currentStartDate.getDate());
+      const start = new Date(dateToUse.getFullYear(), dateToUse.getMonth(), dateToUse.getDate());
       
       const diff = today.getTime() - start.getTime();
       const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -58,7 +53,14 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
     calculateTime();
     const interval = setInterval(calculateTime, 1000 * 60 * 60);
     return () => clearInterval(interval);
-  }, [addictions.length, selectedIndex, startDate?.getTime()]);
+  }, [addictions, selectedIndex, startDate]);
+
+  // Reset selectedIndex if out of bounds
+  useEffect(() => {
+    if (addictions.length > 0 && selectedIndex >= addictions.length) {
+      setSelectedIndex(0);
+    }
+  }, [addictions.length, selectedIndex]);
 
   const handleAddAddiction = () => {
     if (!canAddMore) {
@@ -73,7 +75,11 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
     setShowAddDialog(false);
   };
 
-  const currentAddiction = addictions[selectedIndex];
+  const handleCircleClick = (index: number) => {
+    console.log("Clicking circle:", index, "Current:", selectedIndex);
+    setSelectedIndex(index);
+  };
+
   return (
     <>
       <div className="rounded-3xl p-8 md:p-12 bg-card border border-sidebar-border relative">
@@ -81,23 +87,19 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
         <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
           {addictions.length === 0 ? (
             // Show default "1" circle when no addictions
-            <button
-              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground cursor-default"
-            >
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground">
               1
-            </button>
+            </div>
           ) : (
-            // Show all addiction circles with hover effect
-            addictions.map((_, index) => (
+            // Show all addiction circles with click handler
+            addictions.map((addiction, index) => (
               <button
-                key={index}
-                onClick={() => {
-                  setSelectedIndex(index);
-                }}
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all cursor-pointer ${
+                key={addiction.id}
+                onClick={() => handleCircleClick(index)}
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
                   selectedIndex === index
                     ? "bg-primary text-primary-foreground"
-                    : "bg-background border-2 border-primary text-primary-foreground hover:bg-primary"
+                    : "bg-background border-2 border-primary text-foreground hover:bg-primary/20"
                 }`}
               >
                 {index + 1}
@@ -107,15 +109,17 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
           {addictions.length < 3 && (
             <button
               onClick={handleAddAddiction}
-              className="w-8 h-8 rounded-full flex items-center justify-center bg-background border-2 border-primary hover:bg-primary transition-all cursor-pointer"
+              className="w-8 h-8 rounded-full flex items-center justify-center bg-background border-2 border-primary hover:bg-primary/20 transition-all"
             >
-              <Plus className="h-4 w-4 text-primary-foreground" />
+              <Plus className="h-4 w-4 text-foreground" />
             </button>
           )}
         </div>
         
         <p className="text-foreground text-2xl font-bold mb-8 text-left">
-          Tiempo de recuperación:
+          {addictions.length > 0 && addictions[selectedIndex]
+            ? `${addictions[selectedIndex].addiction_type} - Tiempo de recuperación:`
+            : "Tiempo de recuperación:"}
         </p>
 
         <div className="flex items-center justify-center gap-4 md:gap-6">
