@@ -329,7 +329,7 @@ export default function Gratitude() {
 
           {(!todayEntry || todayEntry.items.length === 0) && (
             <div className="text-center py-3 text-muted-foreground">
-              <p>Aún no has añadido nada a tu lista de hoy</p>
+              <p>Aún no has añadido nada a tu lista de hoy.</p>
             </div>
           )}
         </CardContent>
