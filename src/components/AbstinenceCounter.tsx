@@ -123,7 +123,7 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
           {addictions.length === 0 ? (
             // Show default "1" circle when no addictions
             <button
-              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-destructive text-white"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground"
             >
               1
             </button>
@@ -135,8 +135,8 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
                 onClick={() => setSelectedIndex(index)}
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
                   selectedIndex === index
-                    ? "bg-destructive text-white"
-                    : "bg-background border-2 border-destructive text-white hover:bg-destructive hover:text-white"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-background border-2 border-primary text-primary-foreground hover:bg-primary"
                 }`}
               >
                 {index + 1}
@@ -146,20 +146,15 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
           {addictions.length < 3 && (
             <button
               onClick={handleAddAddiction}
-              className="w-8 h-8 rounded-full flex items-center justify-center bg-background border-2 border-destructive hover:bg-destructive/10 transition-all"
+              className="w-8 h-8 rounded-full flex items-center justify-center bg-background border-2 border-primary hover:bg-primary transition-all"
             >
-              <Plus className="h-4 w-4 text-destructive" />
+              <Plus className="h-4 w-4 text-primary-foreground" />
             </button>
           )}
         </div>
         
         <p className="text-foreground text-2xl font-bold mb-8 text-left">
-          Tiempo de recuperación:{" "}
-          {currentAddiction && (
-            <span className="text-lg font-normal text-muted-foreground">
-              {currentAddiction.addiction_type}
-            </span>
-          )}
+          Tiempo de recuperación:
         </p>
 
         <div className="flex items-center justify-center gap-4 md:gap-6">
