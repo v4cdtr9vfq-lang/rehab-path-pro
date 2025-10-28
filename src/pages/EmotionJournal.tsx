@@ -174,7 +174,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "enojado",
         name: "Enojado",
-        tertiaryEmotions: ["Enfurecido", "Furioso", "Indignado", "Iracundo", "Lívido", "Resentido", "Ultrajado"]
+        tertiaryEmotions: ["Enfurecido", "Furioso", "Indignado", "Iracundo", "Resentido", "Ultrajado"]
       },
       {
         id: "frustracion",
