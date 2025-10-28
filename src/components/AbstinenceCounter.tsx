@@ -30,30 +30,31 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
 
   useEffect(() => {
     const currentStartDate = getCurrentStartDate();
-    if (currentStartDate) {
-      const calculateTime = () => {
-        const now = new Date();
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const start = new Date(currentStartDate.getFullYear(), currentStartDate.getMonth(), currentStartDate.getDate());
-        
-        const diff = today.getTime() - start.getTime();
-        const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
-        
-        const years = Math.floor(totalDays / 365);
-        const daysAfterYears = totalDays % 365;
-        const months = Math.floor(daysAfterYears / 30);
-        const days = daysAfterYears % 30;
-        
-        setCount({
-          years,
-          months,
-          days
-        });
-      };
-      calculateTime();
-      const interval = setInterval(calculateTime, 1000 * 60 * 60);
-      return () => clearInterval(interval);
-    }
+    if (!currentStartDate) return;
+    
+    const calculateTime = () => {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const start = new Date(currentStartDate.getFullYear(), currentStartDate.getMonth(), currentStartDate.getDate());
+      
+      const diff = today.getTime() - start.getTime();
+      const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+      
+      const years = Math.floor(totalDays / 365);
+      const daysAfterYears = totalDays % 365;
+      const months = Math.floor(daysAfterYears / 30);
+      const days = daysAfterYears % 30;
+      
+      setCount({
+        years,
+        months,
+        days
+      });
+    };
+    
+    calculateTime();
+    const interval = setInterval(calculateTime, 1000 * 60 * 60);
+    return () => clearInterval(interval);
   }, [addictions, selectedIndex, startDate]);
 
   const fetchAddictions = async () => {
@@ -132,10 +133,7 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
             addictions.map((_, index) => (
               <button
                 key={index}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  console.log("Clicking addiction", index + 1, "current:", selectedIndex);
+                onClick={() => {
                   setSelectedIndex(index);
                 }}
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all cursor-pointer ${
