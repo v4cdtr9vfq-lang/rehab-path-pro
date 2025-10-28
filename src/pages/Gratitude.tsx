@@ -190,6 +190,13 @@ export default function Gratitude() {
       });
 
       await loadEntries();
+      
+      // Ensure we always have at least 3 empty fields
+      const minFields = 3;
+      if (newItems.length < minFields) {
+        const fieldsToAdd = minFields - newItems.length;
+        setNewItems([...newItems, ...Array(fieldsToAdd).fill("")]);
+      }
     } catch (error) {
       console.error('Error deleting entry:', error);
       toast({
