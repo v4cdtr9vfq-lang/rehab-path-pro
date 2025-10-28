@@ -29,10 +29,10 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
   }, []);
 
   useEffect(() => {
-    const currentStartDate = getCurrentStartDate();
-    if (!currentStartDate) return;
-    
     const calculateTime = () => {
+      const currentStartDate = getCurrentStartDate();
+      if (!currentStartDate) return;
+      
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       const start = new Date(currentStartDate.getFullYear(), currentStartDate.getMonth(), currentStartDate.getDate());
