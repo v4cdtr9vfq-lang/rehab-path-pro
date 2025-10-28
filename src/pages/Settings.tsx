@@ -1081,7 +1081,9 @@ export default function Settings() {
                           }))}
                         >
                           <SelectTrigger className="w-full">
-                            <SelectValue />
+                            <SelectValue>
+                              {REHABILITATION_TYPES.find(t => t.id === typeValue)?.label || typeValue}
+                            </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
                             {REHABILITATION_TYPES.map((type) => (
