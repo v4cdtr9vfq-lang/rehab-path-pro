@@ -18,6 +18,10 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
     days: 0
   });
 
+  console.log("🔴 ADDICTIONS COUNT:", addictions.length);
+  console.log("🔴 ADDICTIONS DATA:", addictions);
+  console.log("🔴 SELECTED INDEX:", selectedIndex);
+
   // Calculate time based on selected addiction
   useEffect(() => {
     const calculateTime = () => {
