@@ -902,20 +902,30 @@ export default function Settings() {
         <CardContent className="space-y-6">
           {/* Old abstinence date */}
           <div className="space-y-4">
-            <Label htmlFor="start-date">Fecha de inicio de abstinencia (legado)</Label>
-            <div className="flex gap-2">
-              <Input 
-                id="start-date" 
-                type="date" 
-                value={abstinenceStartDate}
-                onChange={(e) => setAbstinenceStartDate(e.target.value)}
-              />
-              <Button 
-                onClick={handleUpdateAbstinenceDate}
-                disabled={isUpdatingDate}
-              >
-                {isUpdatingDate ? "Actualizando..." : "Guardar"}
-              </Button>
+            <Label>Fecha de inicio de abstinencia (legado)</Label>
+            <div className="flex items-center gap-2 p-3 rounded-lg border bg-card">
+              <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground">
+                1
+              </span>
+              <div className="flex-1 space-y-2">
+                <p className="font-medium">{rehabilitationType || 'Adicción principal'}</p>
+                <div className="flex gap-2">
+                  <Input 
+                    id="start-date" 
+                    type="date" 
+                    value={abstinenceStartDate}
+                    onChange={(e) => setAbstinenceStartDate(e.target.value)}
+                    className="text-sm"
+                  />
+                  <Button 
+                    size="sm"
+                    onClick={handleUpdateAbstinenceDate}
+                    disabled={isUpdatingDate}
+                  >
+                    {isUpdatingDate ? "..." : "Guardar"}
+                  </Button>
+                </div>
+              </div>
             </div>
             <p className="text-sm text-muted-foreground">
               Esta fecha se usará si no tienes adicciones registradas
