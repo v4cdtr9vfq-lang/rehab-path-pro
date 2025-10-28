@@ -7,9 +7,10 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface CounterProps {
   startDate?: Date;
+  onAddictionChange?: (addictionId: string, days: number) => void;
 }
 
-export function AbstinenceCounter({ startDate }: CounterProps) {
+export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps) {
   const { addictions, addAddiction } = useAddictions();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -80,12 +81,17 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
       const days = daysAfterYears % 30;
       
       setCount({ years, months, days });
+      
+      // Notify parent about current addiction
+      if (onAddictionChange) {
+        onAddictionChange(selectedAddiction.id, totalDays);
+      }
     };
     
     calculateTime();
     const interval = setInterval(calculateTime, 1000 * 60 * 60);
     return () => clearInterval(interval);
-  }, [allAddictions, selectedIndex]);
+  }, [allAddictions, selectedIndex, onAddictionChange]);
 
   // Reset selectedIndex if out of bounds
   useEffect(() => {
@@ -109,6 +115,17 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
 
   const handleCircleClick = (index: number) => {
     setSelectedIndex(index);
+    
+    // Notify parent about addiction change
+    if (onAddictionChange && allAddictions[index]) {
+      const selectedAddiction = allAddictions[index];
+      const dateToUse = new Date(selectedAddiction.start_date);
+      const now = new Date();
+      const diff = now.getTime() - dateToUse.getTime();
+      const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+      
+      onAddictionChange(selectedAddiction.id, totalDays);
+    }
   };
 
   const currentAddiction = allAddictions[selectedIndex];

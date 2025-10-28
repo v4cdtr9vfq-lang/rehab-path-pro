@@ -46,6 +46,7 @@ export default function Home() {
   const [isQuoteSaved, setIsQuoteSaved] = useState(false);
   const [savedQuotes, setSavedQuotes] = useState<any[]>([]);
   const [medals, setMedals] = useState<any[]>([]);
+  const [currentAddictionId, setCurrentAddictionId] = useState<string>('original');
   const [showMedalPopup, setShowMedalPopup] = useState(false);
   const [newMedal, setNewMedal] = useState<{type: string, name: string, emoji: string} | null>(null);
   const [sobrietyDays, setSobrietyDays] = useState(0);
@@ -255,18 +256,19 @@ export default function Home() {
         setIsQuoteSaved(saved);
       }
 
-      // Fetch medals
+      // Fetch medals for current addiction
       const { data: userMedals } = await supabase
         .from('medals')
         .select('*')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .eq('addiction_id', currentAddictionId);
       
       if (userMedals) {
         setMedals(userMedals);
       }
 
       // Check and unlock medals based on sobriety days
-      await checkAndUnlockMedals(user.id, diffDays, userMedals || []);
+      await checkAndUnlockMedals(user.id, diffDays, userMedals || [], currentAddictionId);
 
       // Fetch today's check-in
       const today = new Date().toISOString().split('T')[0];
@@ -432,7 +434,7 @@ export default function Home() {
       window.removeEventListener('abstinenceDateUpdated', handleDateUpdate);
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [currentAddictionId]);
 
   // Drag and drop sensors
   const sensors = useSensors(
@@ -584,7 +586,7 @@ export default function Home() {
   };
 
   // Check and unlock medals
-  const checkAndUnlockMedals = async (userId: string, days: number, currentMedals: any[]) => {
+  const checkAndUnlockMedals = async (userId: string, days: number, currentMedals: any[], addictionId: string = 'original') => {
     const medalsToCheck = [
       { type: 'valor', days: 0, name: 'Valor', emoji: '🥉' },
       { type: 'constancia', days: 40, name: 'Constancia', emoji: '🥈' },
@@ -602,6 +604,7 @@ export default function Home() {
           .insert({
             user_id: userId,
             medal_type: medal.type,
+            addiction_id: addictionId,
             popup_shown: false
           })
           .select()
@@ -776,13 +779,39 @@ export default function Home() {
     );
   }
 
+  // Handle addiction change from counter
+  const handleAddictionChange = async (addictionId: string, days: number) => {
+    setCurrentAddictionId(addictionId);
+    setSobrietyDays(days);
+    
+    // Load medals for this addiction
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { data: userMedals } = await supabase
+      .from('medals')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('addiction_id', addictionId);
+    
+    if (userMedals) {
+      setMedals(userMedals);
+    }
+
+    // Check and unlock medals for this addiction
+    await checkAndUnlockMedals(user.id, days, userMedals || [], addictionId);
+  };
+
   return <div className="container mx-auto px-[15px] md:px-0 pt-4 md:pt-0 md:-mt-[3px] pb-8 space-y-[35px] animate-in fade-in duration-500">
       {/* Onboarding Tour */}
       <OnboardingTour />
       
       {/* Header - Abstinence Counter */}
       <div className="abstinence-counter">
-        <AbstinenceCounter startDate={startDate} />
+        <AbstinenceCounter 
+          startDate={startDate} 
+          onAddictionChange={handleAddictionChange}
+        />
       </div>
 
       {/* Daily Progress Panel */}

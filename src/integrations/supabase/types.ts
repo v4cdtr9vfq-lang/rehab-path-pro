@@ -348,6 +348,7 @@ export type Database = {
       }
       medals: {
         Row: {
+          addiction_id: string | null
           created_at: string
           id: string
           medal_type: string
@@ -356,6 +357,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          addiction_id?: string | null
           created_at?: string
           id?: string
           medal_type: string
@@ -364,6 +366,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          addiction_id?: string | null
           created_at?: string
           id?: string
           medal_type?: string
