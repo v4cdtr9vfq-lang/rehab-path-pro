@@ -215,7 +215,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "asustado",
         name: "Asustado",
-        tertiaryEmotions: ["Aprensivo", "Asustado", "Atemorizado", "Aterrorizado", "Cauteloso", "Desconfiado", "En pánico", "Petrificado", "Preocupado", "Presentimiento", "Sospechoso", "Temor"]
+        tertiaryEmotions: ["Aprensivo", "Atemorizado", "Aterrorizado", "Cauteloso", "Desconfiado", "En pánico", "Petrificado", "Preocupado", "Presentimiento", "Sospechoso", "Temor"]
       },
       {
         id: "tenso",
