@@ -477,7 +477,7 @@ export default function Chat() {
 
         <TabsContent value="rooms" className="flex-1 flex flex-col mt-0 min-h-0">
           <Card className="flex-1 flex flex-col border-border overflow-hidden min-h-0 mt-[15px]">
-        <div className="bg-muted/30 border-b shrink-0">
+        <div className="bg-muted/30 shrink-0">
           <div className="px-4 pb-3 pt-3">
             <Select value={currentRoom} onValueChange={(value) => {
               setCurrentRoom(value);
