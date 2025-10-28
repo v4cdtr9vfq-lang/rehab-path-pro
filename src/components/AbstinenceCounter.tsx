@@ -18,6 +18,17 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
     days: 0
   });
 
+  console.log("🔥 ADDICTIONS LENGTH:", addictions.length);
+  console.log("🔥 ADDICTIONS ARRAY:", addictions);
+  console.log("🔥 SELECTED INDEX:", selectedIndex);
+
+  // Reset selectedIndex if it's out of bounds
+  useEffect(() => {
+    if (selectedIndex >= addictions.length && addictions.length > 0) {
+      setSelectedIndex(addictions.length - 1);
+    }
+  }, [addictions.length, selectedIndex]);
+
   const getCurrentStartDate = (): Date | null => {
     if (addictions.length > 0 && addictions[selectedIndex]) {
       return new Date(addictions[selectedIndex].start_date);
