@@ -812,7 +812,7 @@ export default function EmotionJournal() {
         <div className="space-y-8">
           {/* Primary Categories */}
           <div>
-            <h2 className="text-lg lg:text-xl font-bold text-foreground mb-[24px]">¿Cómo te sientes aquí y ahora?</h2>
+            <h2 className="text-lg lg:text-xl font-bold text-foreground mb-[24px]">¿Qué sientes aquí y ahora?</h2>
             <div className="flex flex-col lg:flex-row items-start lg:flex-wrap gap-3">
               {emotionCategories.map((category) => {
                 const isSelected = selectedPrimary.includes(category.id);
