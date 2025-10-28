@@ -40,13 +40,13 @@ export function AbstinenceCounter({
       <p className="text-foreground text-2xl font-bold mb-8 text-left">Soy libre desde hace:</p>
       <div className="flex items-center justify-center gap-4 md:gap-6">
         <div className="text-8xl md:text-9xl font-bold text-foreground tracking-tight">
-          {count.years}<span className="text-5xl md:text-6xl ml-2">A</span>
+          {count.years}<span className="ml-2">A</span>
         </div>
         <div className="text-8xl md:text-9xl font-bold text-foreground tracking-tight">
-          {count.months}<span className="text-5xl md:text-6xl ml-2">M</span>
+          {count.months}<span className="ml-2">M</span>
         </div>
         <div className="text-8xl md:text-9xl font-bold text-foreground tracking-tight">
-          {count.days}<span className="text-5xl md:text-6xl ml-2">D</span>
+          {count.days}<span className="ml-2">D</span>
         </div>
       </div>
     </div>;
