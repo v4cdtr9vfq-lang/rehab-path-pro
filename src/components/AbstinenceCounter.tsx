@@ -148,9 +148,7 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
         </div>
         
         <p className="text-foreground text-2xl font-bold mb-8 text-left">
-          {currentAddiction
-            ? `${currentAddiction.addiction_type} - Tiempo de recuperación:`
-            : "Tiempo de recuperación:"}
+          Tiempo de recuperación:
         </p>
 
         <div className="flex items-center justify-center gap-4 md:gap-6">
