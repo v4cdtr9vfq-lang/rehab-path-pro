@@ -914,8 +914,12 @@ export default function Settings() {
                     id="start-date" 
                     type="date" 
                     value={abstinenceStartDate}
-                    onChange={(e) => setAbstinenceStartDate(e.target.value)}
-                    className="text-sm"
+                    onChange={(e) => {
+                      console.log('Cambiando fecha legado:', e.target.value);
+                      setAbstinenceStartDate(e.target.value);
+                    }}
+                    className="text-sm flex-1"
+                    disabled={false}
                   />
                   <Button 
                     size="sm"
@@ -981,11 +985,15 @@ export default function Settings() {
                           <Input 
                             type="date" 
                             value={dateValue}
-                            onChange={(e) => setEditingAddictions(prev => ({
-                              ...prev,
-                              [addiction.id]: e.target.value
-                            }))}
-                            className="text-sm"
+                            onChange={(e) => {
+                              console.log('Cambiando fecha adicción:', addiction.id, e.target.value);
+                              setEditingAddictions(prev => ({
+                                ...prev,
+                                [addiction.id]: e.target.value
+                              }));
+                            }}
+                            className="text-sm flex-1"
+                            disabled={false}
                           />
                           <Button 
                             size="sm"
