@@ -1098,7 +1098,7 @@ export default function Settings() {
                             <Button
                               variant="outline"
                               className={cn(
-                                "w-full h-10 justify-start text-left font-normal px-3",
+                                "flex h-10 w-full items-center justify-start rounded-md border border-input bg-background px-3 py-2 text-sm font-normal text-left ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
                                 !dateValue && "text-muted-foreground"
                               )}
                             >
