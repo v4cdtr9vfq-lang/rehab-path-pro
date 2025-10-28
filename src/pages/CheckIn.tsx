@@ -150,6 +150,8 @@ export default function CheckIn() {
 
       setUserAddictions(allAddictions);
       
+      console.log('Adicciones cargadas:', allAddictions);
+      
       // Pre-select first addiction if available
       if (allAddictions.length > 0) {
         setSelectedRelapseAddiction(allAddictions[0].id);
@@ -642,17 +644,22 @@ export default function CheckIn() {
                 value={selectedRelapseAddiction}
                 onValueChange={setSelectedRelapseAddiction}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Selecciona una adicción" />
                 </SelectTrigger>
-                <SelectContent>
-                  {userAddictions.map((addiction, index) => (
-                    <SelectItem key={addiction.id} value={addiction.id}>
-                      {index + 1}. {addiction.name}
-                    </SelectItem>
-                  ))}
+                <SelectContent className="bg-background">
+                  {userAddictions.length === 0 ? (
+                    <SelectItem value="none" disabled>No hay adicciones registradas</SelectItem>
+                  ) : (
+                    userAddictions.map((addiction, index) => (
+                      <SelectItem key={addiction.id} value={addiction.id}>
+                        {index + 1}. {addiction.name}
+                      </SelectItem>
+                    ))
+                  )}
                 </SelectContent>
               </Select>
+              <p className="text-xs text-muted-foreground">Total de adicciones: {userAddictions.length}</p>
             </div>
           </div>
 
