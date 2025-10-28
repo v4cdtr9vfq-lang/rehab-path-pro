@@ -978,8 +978,8 @@ export default function Settings() {
             
             <div className="space-y-3">
               {/* Main addiction (legado) */}
-              <div className="flex items-center gap-2 p-3 rounded-lg border bg-card">
-                <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground">
+              <div className="flex items-start gap-2 p-3 rounded-lg border bg-card">
+                <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground mt-0.5">
                   1
                 </span>
                 <div className="flex-1 space-y-2">
@@ -987,7 +987,7 @@ export default function Settings() {
                     value={rehabilitationType}
                     onValueChange={setRehabilitationType}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full h-10">
                       <SelectValue placeholder="Selecciona una adicción" />
                     </SelectTrigger>
                     <SelectContent>
