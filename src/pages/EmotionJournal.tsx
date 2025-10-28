@@ -723,10 +723,27 @@ export default function EmotionJournal() {
 
       if (error) throw error;
 
+      // Check if any optional responses were saved
+      const hasOptionalResponses = 
+        (situationTrigger && situationDescription.trim()) ||
+        (personTrigger && personDescription.trim()) ||
+        (thoughtTrigger && thoughtDescription.trim()) ||
+        (beliefTrigger && beliefDescription.trim());
+
       toast({
         title: "Guardado",
         description: "Tus emociones han sido registradas exitosamente"
       });
+
+      // Show additional toast if optional responses were saved
+      if (hasOptionalResponses) {
+        setTimeout(() => {
+          toast({
+            title: "✓ Respuesta guardada",
+            description: "Tu respuesta se ha grabado como una entrada en tu diario"
+          });
+        }, 500);
+      }
 
       setSelectedPrimary([]);
       setSelectedSecondary([]);
@@ -1225,6 +1242,8 @@ export default function EmotionJournal() {
         {/* Additional Questions */}
         {selectedPrimary.length > 0 && (
           <div className="space-y-6 mt-8 pt-6 border-t">
+            <h2 className="text-2xl font-bold text-foreground mb-6">Preguntas opcionales:</h2>
+            
             {/* Situation Question */}
             <div className="space-y-3">
               <h3 className="text-lg font-semibold text-foreground">
