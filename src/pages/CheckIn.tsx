@@ -45,7 +45,7 @@ const questions: Question[] = [
   { id: 2, text: "¿Encontré alguna situación que me alterara hoy?", type: "yesno" },
   { id: 3, text: "Hoy lo más importante recordarme es:", type: "text" },
   { id: 4, text: "¿Sentí resentimiento hoy?", type: "yesno" },
-  { id: 5, text: "¿Estube en contacto con mis sentimientos hoy?", type: "yesno" },
+  { id: 5, text: "¿Estuve en contacto con mis sentimientos hoy?", type: "yesno" },
   { id: 6, text: "¿Me aislé hoy?", type: "yesno" },
   { id: 7, text: "¿Seguí mis valores diarios?", type: "yesno" },
   { id: 8, text: "¿Has hecho algo que crees que te limita en lugar de expandirte?", type: "yesno" },
