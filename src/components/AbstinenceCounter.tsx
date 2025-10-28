@@ -143,6 +143,11 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
   return (
     <>
       <div className="rounded-3xl p-8 md:p-12 bg-card border border-sidebar-border relative">
+        {/* Title in top left corner */}
+        <p className="absolute top-4 left-4 text-foreground text-lg font-bold">
+          Tiempo limpio:
+        </p>
+
         {/* Circles in top right corner */}
         <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
           {allAddictions.length === 0 ? (
@@ -173,19 +178,15 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
             </button>
           )}
         </div>
-        
-        <p className="text-foreground text-2xl font-bold mb-8 text-left">
-          Tiempo limpio:
-        </p>
 
-        <div className="flex items-center justify-center gap-4 md:gap-6">
-          <div className="text-7xl md:text-8xl font-bold text-foreground tracking-tight">
+        <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 mt-8">
+          <div className="text-4xl sm:text-6xl md:text-8xl font-bold text-foreground tracking-tight">
             {count.years}<span className="ml-1">A</span>
           </div>
-          <div className="text-7xl md:text-8xl font-bold text-foreground tracking-tight">
+          <div className="text-4xl sm:text-6xl md:text-8xl font-bold text-foreground tracking-tight">
             {count.months}<span className="ml-1">M</span>
           </div>
-          <div className="text-7xl md:text-8xl font-bold text-foreground tracking-tight">
+          <div className="text-4xl sm:text-6xl md:text-8xl font-bold text-foreground tracking-tight">
             {count.days}<span className="ml-1">D</span>
           </div>
         </div>
