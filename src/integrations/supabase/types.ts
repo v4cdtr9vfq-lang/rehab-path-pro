@@ -137,8 +137,12 @@ export type Database = {
           entry_date: string
           id: string
           main_emotion: string | null
+          person_description: string | null
+          person_trigger: boolean | null
           primary_emotion: string | null
           secondary_emotions: string[] | null
+          situation_description: string | null
+          situation_trigger: boolean | null
           sub_emotions: string[] | null
           tertiary_emotions: string[] | null
           updated_at: string
@@ -149,8 +153,12 @@ export type Database = {
           entry_date?: string
           id?: string
           main_emotion?: string | null
+          person_description?: string | null
+          person_trigger?: boolean | null
           primary_emotion?: string | null
           secondary_emotions?: string[] | null
+          situation_description?: string | null
+          situation_trigger?: boolean | null
           sub_emotions?: string[] | null
           tertiary_emotions?: string[] | null
           updated_at?: string
@@ -161,8 +169,12 @@ export type Database = {
           entry_date?: string
           id?: string
           main_emotion?: string | null
+          person_description?: string | null
+          person_trigger?: boolean | null
           primary_emotion?: string | null
           secondary_emotions?: string[] | null
+          situation_description?: string | null
+          situation_trigger?: boolean | null
           sub_emotions?: string[] | null
           tertiary_emotions?: string[] | null
           updated_at?: string

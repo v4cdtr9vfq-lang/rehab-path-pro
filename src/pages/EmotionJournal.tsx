@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 import { Check, Pencil, Trash2, Calendar as CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -37,6 +38,10 @@ interface SavedEmotionEntry {
   tertiary_emotions: string[];
   entry_date: string;
   created_at: string;
+  situation_trigger: boolean;
+  situation_description: string | null;
+  person_trigger: boolean;
+  person_description: string | null;
 }
 
 interface EmotionStats {
@@ -352,6 +357,10 @@ export default function EmotionJournal() {
   const [selectedPrimary, setSelectedPrimary] = useState<string[]>([]);
   const [selectedSecondary, setSelectedSecondary] = useState<string[]>([]);
   const [selectedTertiary, setSelectedTertiary] = useState<string[]>([]);
+  const [situationTrigger, setSituationTrigger] = useState<boolean | null>(null);
+  const [situationDescription, setSituationDescription] = useState("");
+  const [personTrigger, setPersonTrigger] = useState<boolean | null>(null);
+  const [personDescription, setPersonDescription] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [savedEntries, setSavedEntries] = useState<SavedEmotionEntry[]>([]);
   const [editingEntry, setEditingEntry] = useState<string | null>(null);
@@ -571,7 +580,11 @@ export default function EmotionJournal() {
           primary_emotion: primaryNames,
           secondary_emotions: secondaryNames,
           tertiary_emotions: selectedTertiary,
-          entry_date: new Date().toISOString().split('T')[0]
+          entry_date: new Date().toISOString().split('T')[0],
+          situation_trigger: situationTrigger || false,
+          situation_description: situationTrigger ? situationDescription : null,
+          person_trigger: personTrigger || false,
+          person_description: personTrigger ? personDescription : null
         });
 
       if (error) throw error;
@@ -584,6 +597,10 @@ export default function EmotionJournal() {
       setSelectedPrimary([]);
       setSelectedSecondary([]);
       setSelectedTertiary([]);
+      setSituationTrigger(null);
+      setSituationDescription("");
+      setPersonTrigger(null);
+      setPersonDescription("");
       await loadSavedEntries();
       await fetchStats();
     } catch (error) {
@@ -626,6 +643,10 @@ export default function EmotionJournal() {
     
     setSelectedSecondary(secondaryIds);
     setSelectedTertiary(entry.tertiary_emotions);
+    setSituationTrigger(entry.situation_trigger);
+    setSituationDescription(entry.situation_description || "");
+    setPersonTrigger(entry.person_trigger);
+    setPersonDescription(entry.person_description || "");
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -667,7 +688,11 @@ export default function EmotionJournal() {
         .update({
           primary_emotion: primaryNames,
           secondary_emotions: secondaryNames,
-          tertiary_emotions: selectedTertiary
+          tertiary_emotions: selectedTertiary,
+          situation_trigger: situationTrigger || false,
+          situation_description: situationTrigger ? situationDescription : null,
+          person_trigger: personTrigger || false,
+          person_description: personTrigger ? personDescription : null
         })
         .eq('id', editingEntry);
 
@@ -682,6 +707,10 @@ export default function EmotionJournal() {
       setSelectedPrimary([]);
       setSelectedSecondary([]);
       setSelectedTertiary([]);
+      setSituationTrigger(null);
+      setSituationDescription("");
+      setPersonTrigger(null);
+      setPersonDescription("");
       await loadSavedEntries();
       await fetchStats();
     } catch (error) {
@@ -728,6 +757,10 @@ export default function EmotionJournal() {
     setSelectedPrimary([]);
     setSelectedSecondary([]);
     setSelectedTertiary([]);
+    setSituationTrigger(null);
+    setSituationDescription("");
+    setPersonTrigger(null);
+    setPersonDescription("");
   };
 
   // Get all selected categories
@@ -938,6 +971,89 @@ export default function EmotionJournal() {
             </div>
           )}
         </div>
+
+        {/* Additional Questions */}
+        {selectedPrimary.length > 0 && (
+          <div className="space-y-6 mt-8 pt-6 border-t">
+            {/* Situation Question */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-foreground">
+                ¿Hay alguna situación que te haya hecho conectar con estos sentimientos?
+              </h3>
+              <div className="flex gap-3">
+                <Button
+                  variant={situationTrigger === true ? "default" : "outline"}
+                  onClick={() => {
+                    setSituationTrigger(true);
+                    if (situationTrigger !== true) setSituationDescription("");
+                  }}
+                  className="rounded-full px-6"
+                >
+                  Sí
+                </Button>
+                <Button
+                  variant={situationTrigger === false ? "default" : "outline"}
+                  onClick={() => {
+                    setSituationTrigger(false);
+                    setSituationDescription("");
+                  }}
+                  className="rounded-full px-6"
+                >
+                  No
+                </Button>
+              </div>
+              {situationTrigger === true && (
+                <div className="space-y-2">
+                  <Textarea
+                    value={situationDescription}
+                    onChange={(e) => setSituationDescription(e.target.value)}
+                    placeholder="Describe la situación..."
+                    className="min-h-[100px] resize-none"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Person Question */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-foreground">
+                ¿Hay alguna persona que te haga conectar con estas emociones?
+              </h3>
+              <div className="flex gap-3">
+                <Button
+                  variant={personTrigger === true ? "default" : "outline"}
+                  onClick={() => {
+                    setPersonTrigger(true);
+                    if (personTrigger !== true) setPersonDescription("");
+                  }}
+                  className="rounded-full px-6"
+                >
+                  Sí
+                </Button>
+                <Button
+                  variant={personTrigger === false ? "default" : "outline"}
+                  onClick={() => {
+                    setPersonTrigger(false);
+                    setPersonDescription("");
+                  }}
+                  className="rounded-full px-6"
+                >
+                  No
+                </Button>
+              </div>
+              {personTrigger === true && (
+                <div className="space-y-2">
+                  <Textarea
+                    value={personDescription}
+                    onChange={(e) => setPersonDescription(e.target.value)}
+                    placeholder="Describe cómo te hace sentir esta persona..."
+                    className="min-h-[100px] resize-none"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Save/Update Button */}
         {selectedPrimary.length > 0 && (
