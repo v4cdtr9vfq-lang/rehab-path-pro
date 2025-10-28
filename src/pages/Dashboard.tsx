@@ -483,11 +483,33 @@ export default function Home() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Get unique original goal IDs in the new order
-      const uniqueGoalIds = Array.from(new Set(activeGoals.map(g => g.originalId)));
+      // Fetch ALL goals from the database to maintain global order
+      const { data: allGoals, error: fetchError } = await supabase
+        .from('goals')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('order_index', { ascending: true });
+
+      if (fetchError) throw fetchError;
+      if (!allGoals) return;
+
+      // Get unique original goal IDs from currently displayed goals in new order
+      const reorderedTodayGoalIds = Array.from(new Set(activeGoals.map(g => g.originalId)));
       
-      // Update order_index for each unique goal
-      const updates = uniqueGoalIds.map((goalId, index) => 
+      // Create a map of goal IDs that are being displayed today
+      const todayGoalsSet = new Set(reorderedTodayGoalIds);
+      
+      // Separate goals into those displayed today and those not displayed today
+      const goalsNotDisplayedToday = allGoals.filter(g => !todayGoalsSet.has(g.id));
+      
+      // Build new order: first the reordered today goals, then the rest
+      const newOrderedGoalIds = [
+        ...reorderedTodayGoalIds,
+        ...goalsNotDisplayedToday.map(g => g.id)
+      ];
+      
+      // Update order_index for all goals
+      const updates = newOrderedGoalIds.map((goalId, index) => 
         supabase
           .from('goals')
           .update({ order_index: index })
