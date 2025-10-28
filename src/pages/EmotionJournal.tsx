@@ -753,11 +753,16 @@ export default function EmotionJournal() {
   // Get all selected categories
   const selectedCategories = emotionCategories.filter(c => selectedPrimary.includes(c.id));
   
-  // Get all secondary emotions from selected categories
-  const allSecondaryEmotions = selectedCategories.flatMap(cat => cat.secondaryEmotions);
+  // Get all secondary emotions from selected categories with their primary category info
+  const allSecondaryEmotionsWithParent = selectedCategories.flatMap(cat => 
+    cat.secondaryEmotions.map(emotion => ({
+      ...emotion,
+      primaryCategory: cat.name
+    }))
+  );
   
   // Get selected secondary emotions data (sorted alphabetically)
-  const selectedSecondaryData = allSecondaryEmotions
+  const selectedSecondaryData = allSecondaryEmotionsWithParent
     .filter(e => selectedSecondary.includes(e.id))
     .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -921,7 +926,7 @@ export default function EmotionJournal() {
               <div className="flex flex-col gap-6">
                 {selectedSecondaryData.map((emotion) => (
                   <div key={emotion.id}>
-                    <h3 className="text-lg font-medium text-green-600 mb-3">{emotion.name}</h3>
+                    <h3 className="text-lg font-medium text-green-600 mb-3">{emotion.primaryCategory} - {emotion.name}</h3>
                     <div className="flex flex-col lg:flex-row items-start lg:flex-wrap gap-3">
                       {emotion.tertiaryEmotions.map((tertiaryEmotion) => {
                         const isSelected = selectedTertiary.includes(tertiaryEmotion);
