@@ -850,10 +850,39 @@ export default function EmotionJournal() {
     
     setSelectedSecondary(secondaryIds);
     setSelectedTertiary(entry.tertiary_emotions);
-    setSituationTrigger(entry.situation_trigger);
-    setSituationDescription(entry.situation_description || "");
-    setPersonTrigger(entry.person_trigger);
-    setPersonDescription(entry.person_description || "");
+    
+    // Load optional responses from arrays
+    if (entry.situations && entry.situations.length > 0) {
+      setSituationTrigger(true);
+      setSituationDescription(entry.situations[0].description);
+    } else {
+      setSituationTrigger(null);
+      setSituationDescription("");
+    }
+    
+    if (entry.persons && entry.persons.length > 0) {
+      setPersonTrigger(true);
+      setPersonDescription(entry.persons[0].description);
+    } else {
+      setPersonTrigger(null);
+      setPersonDescription("");
+    }
+    
+    if (entry.thoughts && entry.thoughts.length > 0) {
+      setThoughtTrigger(true);
+      setThoughtDescription(entry.thoughts[0].description);
+    } else {
+      setThoughtTrigger(null);
+      setThoughtDescription("");
+    }
+    
+    if (entry.beliefs && entry.beliefs.length > 0) {
+      setBeliefTrigger(true);
+      setBeliefDescription(entry.beliefs[0].description);
+    } else {
+      setBeliefTrigger(null);
+      setBeliefDescription("");
+    }
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
