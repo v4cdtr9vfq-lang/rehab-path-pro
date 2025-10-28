@@ -1103,7 +1103,7 @@ export default function EmotionJournal() {
                     setSituationTrigger(true);
                     if (situationTrigger !== true) setSituationDescription("");
                   }}
-                  className="rounded-full px-6"
+                  className={`rounded-full px-6 ${situationTrigger === true ? "bg-success text-success-foreground hover:bg-success/90" : ""}`}
                 >
                   Sí
                 </Button>
@@ -1142,7 +1142,7 @@ export default function EmotionJournal() {
                     setPersonTrigger(true);
                     if (personTrigger !== true) setPersonDescription("");
                   }}
-                  className="rounded-full px-6"
+                  className={`rounded-full px-6 ${personTrigger === true ? "bg-success text-success-foreground hover:bg-success/90" : ""}`}
                 >
                   Sí
                 </Button>
