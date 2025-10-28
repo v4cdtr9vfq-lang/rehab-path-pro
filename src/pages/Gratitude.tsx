@@ -110,9 +110,8 @@ export default function Gratitude() {
           description: "Tu entrada de gratitud ha sido guardada"
         });
 
-        // Clear only this field
-        const updatedItems = [...newItems];
-        updatedItems[index] = "";
+        // Remove this field from the array
+        const updatedItems = newItems.filter((_, i) => i !== index);
         setNewItems(updatedItems);
         
         await loadEntries();
@@ -248,7 +247,7 @@ export default function Gratitude() {
                   size="sm"
                   disabled={!item.trim()}
                 >
-                  <Check className="h-4 w-4" />
+                  <Plus className="h-4 w-4" />
                 </Button>
               </div>
             ))}
