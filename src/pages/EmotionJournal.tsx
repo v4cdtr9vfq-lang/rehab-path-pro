@@ -42,6 +42,10 @@ interface SavedEmotionEntry {
   situation_description: string | null;
   person_trigger: boolean;
   person_description: string | null;
+  situations?: any[];
+  persons?: any[];
+  thoughts?: any[];
+  beliefs?: any[];
 }
 
 interface EmotionStats {
@@ -407,7 +411,51 @@ export default function EmotionJournal() {
         .order('entry_date', { ascending: false });
 
       if (error) throw error;
-      setSavedEntries(data || []);
+
+      // Load all optional responses
+      const { data: situationsData } = await (supabase as any)
+        .from('sensitive_situations')
+        .select('*')
+        .eq('user_id', user.id);
+
+      const { data: personsData } = await (supabase as any)
+        .from('activating_persons')
+        .select('*')
+        .eq('user_id', user.id);
+
+      const { data: thoughtsData } = await (supabase as any)
+        .from('automatic_thoughts')
+        .select('*')
+        .eq('user_id', user.id);
+
+      const { data: beliefsData } = await (supabase as any)
+        .from('false_beliefs')
+        .select('*')
+        .eq('user_id', user.id);
+
+      // Attach optional responses to each entry based on date and emotion reference
+      const entriesWithResponses = (data || []).map((entry: any) => {
+        const entryDate = entry.entry_date;
+        const emotionRef = entry.primary_emotion;
+
+        return {
+          ...entry,
+          situations: (situationsData || []).filter((s: any) => 
+            s.entry_date === entryDate && s.emotion_reference === emotionRef
+          ),
+          persons: (personsData || []).filter((p: any) => 
+            p.entry_date === entryDate && p.emotion_reference === emotionRef
+          ),
+          thoughts: (thoughtsData || []).filter((t: any) => 
+            t.entry_date === entryDate && t.emotion_reference === emotionRef
+          ),
+          beliefs: (beliefsData || []).filter((b: any) => 
+            b.entry_date === entryDate && b.emotion_reference === emotionRef
+          )
+        };
+      });
+
+      setSavedEntries(entriesWithResponses);
     } catch (error) {
       console.error('Error loading entries:', error);
     }
@@ -1549,6 +1597,50 @@ export default function EmotionJournal() {
                           >
                             {emotion}
                           </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Optional Responses Section */}
+                  {(entry.situations?.length > 0 || entry.persons?.length > 0 || entry.thoughts?.length > 0 || entry.beliefs?.length > 0) && (
+                    <div className="mt-6 pt-4 border-t border-border">
+                      <h3 className="text-sm font-semibold text-muted-foreground mb-3">Respuestas opcionales:</h3>
+                      <div className="space-y-3">
+                        {entry.situations?.map((situation: any) => (
+                          <div key={situation.id} className="bg-muted/30 p-3 rounded-lg">
+                            <p className="text-xs font-medium text-muted-foreground mb-1">
+                              ¿Hay alguna situación que te haya hecho conectar con estos sentimientos?
+                            </p>
+                            <p className="text-sm text-foreground">{situation.description}</p>
+                          </div>
+                        ))}
+                        
+                        {entry.persons?.map((person: any) => (
+                          <div key={person.id} className="bg-muted/30 p-3 rounded-lg">
+                            <p className="text-xs font-medium text-muted-foreground mb-1">
+                              ¿Hay alguna persona que te haga conectar con estas emociones?
+                            </p>
+                            <p className="text-sm text-foreground">{person.description}</p>
+                          </div>
+                        ))}
+                        
+                        {entry.thoughts?.map((thought: any) => (
+                          <div key={thought.id} className="bg-muted/30 p-3 rounded-lg">
+                            <p className="text-xs font-medium text-muted-foreground mb-1">
+                              ¿Hay algún pensamiento automático asociado a estos sentimientos?
+                            </p>
+                            <p className="text-sm text-foreground">{thought.description}</p>
+                          </div>
+                        ))}
+                        
+                        {entry.beliefs?.map((belief: any) => (
+                          <div key={belief.id} className="bg-muted/30 p-3 rounded-lg">
+                            <p className="text-xs font-medium text-muted-foreground mb-1">
+                              ¿Hay alguna creencia falsa asociada a estos sentimientos?
+                            </p>
+                            <p className="text-sm text-foreground">{belief.description}</p>
+                          </div>
                         ))}
                       </div>
                     </div>
