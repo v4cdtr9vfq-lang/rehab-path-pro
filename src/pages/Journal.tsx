@@ -576,7 +576,7 @@ export default function Journal() {
         </Card>
       )}
 
-      <div className="space-y-[35px]">
+      <div className="space-y-[20px]">
         {!isLoading && entries.length > 0 && (
           <h2 className="text-2xl font-semibold text-foreground pl-6">Entradas recientes:</h2>
         )}
