@@ -204,6 +204,8 @@ export default function Gratitude() {
     e.date.toDateString() === new Date().toDateString()
   );
 
+  const todayCount = todayEntry?.items.length || 0;
+
   // Filter entries by date if a filter date is selected
   const pastEntries = entries.filter(e => e.date.toDateString() !== new Date().toDateString());
   const filteredPastEntries = filterDate
@@ -231,7 +233,7 @@ export default function Gratitude() {
             {newItems.map((item, index) => (
               <div key={index} className="flex gap-2">
                 <Input
-                  placeholder={`Agradecimiento ${index + 1}`}
+                  placeholder={`Agradecimiento ${todayCount + index + 1}`}
                   value={item}
                   onChange={(e) => updateNewItem(index, e.target.value)}
                   className="flex-1"
