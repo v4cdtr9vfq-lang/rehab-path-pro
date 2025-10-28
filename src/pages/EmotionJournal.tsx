@@ -260,7 +260,7 @@ const emotionCategories: PrimaryCategory[] = [
       },
       {
         id: "pacifico",
-        name: "Pacífico",
+        name: "Paz",
         tertiaryEmotions: ["Aliviado", "Calmado", "Centrado", "Cómodo", "Contento", "Despejado", "Ecuánime", "Quieto", "Realizado", "Relajado", "Sereno"]
       },
       {
