@@ -38,18 +38,15 @@ export function AbstinenceCounter({
   }, [startDate]);
   return <div className="rounded-3xl p-8 md:p-12 bg-card border border-sidebar-border">
       <p className="text-foreground text-2xl font-bold mb-8 text-left">Soy libre desde hace:</p>
-      <div className="grid grid-cols-3 gap-6 md:gap-8">
-        <div className="flex flex-col">
-          <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight text-right">{count.years}</div>
-          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium text-right pr-[3px]">Años:</div>
+      <div className="flex items-center justify-center gap-4 md:gap-6">
+        <div className="text-8xl md:text-9xl font-bold text-foreground tracking-tight">
+          {count.years}<span className="text-5xl md:text-6xl ml-2">A</span>
         </div>
-        <div className="flex flex-col">
-          <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight text-right">{count.months}</div>
-          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium text-right pr-[3px]">Meses:</div>
+        <div className="text-8xl md:text-9xl font-bold text-foreground tracking-tight">
+          {count.months}<span className="text-5xl md:text-6xl ml-2">M</span>
         </div>
-        <div className="flex flex-col">
-          <div className="text-7xl md:text-8xl font-bold text-foreground mb-3 tracking-tight text-right">{count.days}</div>
-          <div className="text-sm uppercase tracking-widest text-muted-foreground font-medium text-right pr-[3px]">Días:</div>
+        <div className="text-8xl md:text-9xl font-bold text-foreground tracking-tight">
+          {count.days}<span className="text-5xl md:text-6xl ml-2">D</span>
         </div>
       </div>
     </div>;
