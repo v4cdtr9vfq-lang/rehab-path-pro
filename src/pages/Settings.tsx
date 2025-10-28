@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Bell, Plus, Mail, BellRing, Trash2, Check } from "lucide-react";
+import { Bell, Plus, Mail, BellRing, Trash2, Check, CalendarIcon } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -14,6 +14,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AddAddictionDialog } from "@/components/AddAddictionDialog";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -909,26 +914,48 @@ export default function Settings() {
               </span>
               <div className="flex-1 space-y-2">
                 <p className="font-medium">{rehabilitationType || 'Adicción principal'}</p>
-                <div className="flex gap-2">
-                  <Input 
-                    id="start-date" 
-                    type="date" 
-                    value={abstinenceStartDate}
-                    onChange={(e) => {
-                      console.log('Cambiando fecha legado:', e.target.value);
-                      setAbstinenceStartDate(e.target.value);
-                    }}
-                    className="text-sm flex-1"
-                    disabled={false}
-                  />
-                  <Button 
-                    size="sm"
-                    onClick={handleUpdateAbstinenceDate}
-                    disabled={isUpdatingDate}
-                  >
-                    {isUpdatingDate ? "..." : "Guardar"}
-                  </Button>
-                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !abstinenceStartDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {abstinenceStartDate ? (
+                        format(new Date(abstinenceStartDate), "PPP", { locale: es })
+                      ) : (
+                        <span>Seleccionar fecha</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={abstinenceStartDate ? new Date(abstinenceStartDate) : undefined}
+                      onSelect={(date) => {
+                        if (date) {
+                          const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+                            .toISOString()
+                            .split('T')[0];
+                          setAbstinenceStartDate(localDate);
+                        }
+                      }}
+                      initialFocus
+                      className="pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
+                <Button 
+                  size="sm"
+                  onClick={handleUpdateAbstinenceDate}
+                  disabled={isUpdatingDate}
+                  className="w-full mt-2"
+                >
+                  {isUpdatingDate ? "..." : "Guardar"}
+                </Button>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -981,27 +1008,50 @@ export default function Settings() {
                       </span>
                       <div className="flex-1 space-y-2">
                         <p className="font-medium">{addiction.addiction_type}</p>
-                        <div className="flex gap-2">
-                          <Input 
-                            type="date" 
-                            value={dateValue}
-                            onChange={(e) => {
-                              console.log('Cambiando fecha adicción:', addiction.id, e.target.value);
-                              setEditingAddictions(prev => ({
-                                ...prev,
-                                [addiction.id]: e.target.value
-                              }));
-                            }}
-                            className="text-sm flex-1"
-                            disabled={false}
-                          />
-                          <Button 
-                            size="sm"
-                            onClick={() => handleUpdateAddictionDate(addiction.id, dateValue)}
-                          >
-                            Guardar
-                          </Button>
-                        </div>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !dateValue && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {dateValue ? (
+                                format(new Date(dateValue), "PPP", { locale: es })
+                              ) : (
+                                <span>Seleccionar fecha</span>
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={dateValue ? new Date(dateValue) : undefined}
+                              onSelect={(date) => {
+                                if (date) {
+                                  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+                                    .toISOString()
+                                    .split('T')[0];
+                                  setEditingAddictions(prev => ({
+                                    ...prev,
+                                    [addiction.id]: localDate
+                                  }));
+                                }
+                              }}
+                              initialFocus
+                              className="pointer-events-auto"
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <Button 
+                          size="sm"
+                          onClick={() => handleUpdateAddictionDate(addiction.id, dateValue)}
+                          className="w-full mt-2"
+                        >
+                          Guardar
+                        </Button>
                       </div>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
