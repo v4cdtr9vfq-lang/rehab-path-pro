@@ -46,10 +46,8 @@ export function AddAddictionDialog({ open, onOpenChange, onAdd, existingAddictio
     "Trabajo"
   ];
 
-  // Filter out already selected addictions
-  const availableOptions = allOptions.filter(
-    option => !existingAddictions.includes(option.toLowerCase())
-  );
+  // Show all options without filtering
+  const availableOptions = allOptions;
 
   const handleSubmit = () => {
     if (addictionType.trim()) {
