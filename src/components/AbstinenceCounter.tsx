@@ -90,6 +90,30 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
     setShowAddDialog(true);
   };
 
+  const handleAddSubmit = async (addictionType: string, startDate: Date) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from("addictions")
+        .insert({
+          user_id: user.id,
+          addiction_type: addictionType,
+          start_date: startDate.toISOString(),
+          is_active: true,
+        });
+
+      if (error) throw error;
+      
+      toast.success("Adicción añadida correctamente");
+      fetchAddictions();
+    } catch (error) {
+      console.error("Error adding addiction:", error);
+      toast.error("No se pudo añadir la adicción");
+    }
+  };
+
   const currentAddiction = addictions[selectedIndex];
   return (
     <>
@@ -145,8 +169,7 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
       <AddAddictionDialog
         open={showAddDialog}
         onOpenChange={setShowAddDialog}
-        onAddictionAdded={fetchAddictions}
-        currentCount={addictions.length}
+        onAdd={handleAddSubmit}
       />
     </>
   );
