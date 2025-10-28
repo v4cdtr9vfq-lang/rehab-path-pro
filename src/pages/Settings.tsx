@@ -72,6 +72,9 @@ export default function Settings() {
   const [isUpdatingRehabType, setIsUpdatingRehabType] = useState(false);
 
   const REHABILITATION_TYPES = [
+    { id: 'adiccion_1', label: 'Adicción 1' },
+    { id: 'adiccion_2', label: 'Adicción 2' },
+    { id: 'adiccion_3', label: 'Adicción 3' },
     { id: 'azucar', label: 'Azúcar' },
     { id: 'codependencia', label: 'Codependencia' },
     { id: 'comida', label: 'Comida' },
