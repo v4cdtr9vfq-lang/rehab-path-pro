@@ -629,17 +629,17 @@ export default function CheckIn() {
           setRelapseConfirmed(false);
         }
       }}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Nada de culpa. ¡Seguimos!</AlertDialogTitle>
-            <AlertDialogDescription>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader className="text-left">
+            <AlertDialogTitle className="text-left">Nada de culpa. ¡Seguimos!</AlertDialogTitle>
+            <AlertDialogDescription className="text-left">
               Las recaídas son parte del proceso. Lo importante es aprender de ellas.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>¿En qué adicción has tenido la recaída?</Label>
+              <Label className="text-left">¿En qué adicción has tenido la recaída?</Label>
               <Select
                 value={selectedRelapseAddiction}
                 onValueChange={setSelectedRelapseAddiction}
@@ -663,19 +663,19 @@ export default function CheckIn() {
             </div>
           </div>
 
-          <AlertDialogFooter className="flex-col sm:flex-row gap-2">
-            <AlertDialogAction onClick={handleRelapseInventory} className="bg-secondary">
+          <AlertDialogFooter className="flex-col sm:flex-col gap-2 items-stretch">
+            <AlertDialogAction onClick={handleRelapseInventory} className="bg-secondary w-full">
               Inventario
             </AlertDialogAction>
             {!relapseConfirmed && (
-              <Button onClick={handleConfirmRelapse} className="bg-primary">
+              <Button onClick={handleConfirmRelapse} className="bg-primary w-full">
                 Confirmar
               </Button>
             )}
             <AlertDialogCancel onClick={() => {
               setShowRelapseDialog(false);
               setRelapseConfirmed(false);
-            }}>
+            }} className="w-full">
               Cerrar
             </AlertDialogCancel>
           </AlertDialogFooter>
