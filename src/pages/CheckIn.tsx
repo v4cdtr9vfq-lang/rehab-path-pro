@@ -11,6 +11,13 @@ import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -25,6 +32,12 @@ interface Question {
   id: number;
   text: string;
   type: "yesno" | "text" | "scale";
+}
+
+interface UserAddiction {
+  id: string;
+  name: string;
+  isOriginal: boolean;
 }
 
 const questions: Question[] = [
@@ -53,6 +66,8 @@ export default function CheckIn() {
   const [userValues, setUserValues] = useState<string[]>([]);
   const [showRelapseDialog, setShowRelapseDialog] = useState(false);
   const [relapseConfirmed, setRelapseConfirmed] = useState(false);
+  const [userAddictions, setUserAddictions] = useState<UserAddiction[]>([]);
+  const [selectedRelapseAddiction, setSelectedRelapseAddiction] = useState<string>("");
 
   useEffect(() => {
     const loadExistingCheckIn = async () => {
@@ -96,6 +111,49 @@ export default function CheckIn() {
       if (values) {
         setUserValues(values.map(v => v.name));
       }
+
+      // Load user addictions
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('rehabilitation_type')
+        .eq('user_id', user.id)
+        .single();
+
+      const { data: addictions } = await supabase
+        .from('addictions')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('is_active', true)
+        .order('created_at', { ascending: true });
+
+      const allAddictions: UserAddiction[] = [];
+      
+      // Add original addiction from profile
+      if (profile?.rehabilitation_type) {
+        allAddictions.push({
+          id: 'original',
+          name: profile.rehabilitation_type,
+          isOriginal: true
+        });
+      }
+
+      // Add additional addictions
+      if (addictions) {
+        addictions.forEach(addiction => {
+          allAddictions.push({
+            id: addiction.id,
+            name: addiction.addiction_type,
+            isOriginal: false
+          });
+        });
+      }
+
+      setUserAddictions(allAddictions);
+      
+      // Pre-select first addiction if available
+      if (allAddictions.length > 0) {
+        setSelectedRelapseAddiction(allAddictions[0].id);
+      }
     };
 
     loadExistingCheckIn();
@@ -116,21 +174,44 @@ export default function CheckIn() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Reset abstinence counter
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          abstinence_start_date: new Date().toISOString()
-        })
-        .eq('user_id', user.id);
+      if (!selectedRelapseAddiction) {
+        toast({
+          title: "Error",
+          description: "Selecciona una adicción",
+          variant: "destructive",
+        });
+        return;
+      }
 
-      if (error) throw error;
+      // Reset the selected addiction's counter
+      if (selectedRelapseAddiction === 'original') {
+        // Reset original addiction in profiles
+        const { error } = await supabase
+          .from('profiles')
+          .update({
+            abstinence_start_date: new Date().toISOString()
+          })
+          .eq('user_id', user.id);
+
+        if (error) throw error;
+      } else {
+        // Reset additional addiction's start date
+        const { error } = await supabase
+          .from('addictions')
+          .update({
+            start_date: new Date().toISOString()
+          })
+          .eq('id', selectedRelapseAddiction)
+          .eq('user_id', user.id);
+
+        if (error) throw error;
+      }
 
       setRelapseConfirmed(true);
       
       toast({
         title: "Contador reseteado",
-        description: "Tu contador de días ha sido actualizado",
+        description: "El contador de esta adicción ha sido actualizado",
       });
     } catch (error: any) {
       toast({
@@ -553,6 +634,28 @@ export default function CheckIn() {
               Las recaídas son parte del proceso. Lo importante es aprender de ellas.
             </AlertDialogDescription>
           </AlertDialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>¿En qué adicción has tenido la recaída?</Label>
+              <Select
+                value={selectedRelapseAddiction}
+                onValueChange={setSelectedRelapseAddiction}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona una adicción" />
+                </SelectTrigger>
+                <SelectContent>
+                  {userAddictions.map((addiction, index) => (
+                    <SelectItem key={addiction.id} value={addiction.id}>
+                      {index + 1}. {addiction.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
           <AlertDialogFooter className="flex-col sm:flex-row gap-2">
             <AlertDialogAction onClick={handleRelapseInventory} className="bg-secondary">
               Inventario
