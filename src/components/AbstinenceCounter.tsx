@@ -18,10 +18,6 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
     days: 0
   });
 
-  console.log("🔥 ADDICTIONS LENGTH:", addictions.length);
-  console.log("🔥 ADDICTIONS ARRAY:", addictions);
-  console.log("🔥 SELECTED INDEX:", selectedIndex);
-
   // Reset selectedIndex if it's out of bounds
   useEffect(() => {
     if (selectedIndex >= addictions.length && addictions.length > 0) {
@@ -74,6 +70,7 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
 
   const handleAddSubmit = (addictionType: string, startDate: Date) => {
     addAddiction({ addictionType, startDate });
+    setShowAddDialog(false);
   };
 
   const currentAddiction = addictions[selectedIndex];

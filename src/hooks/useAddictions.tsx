@@ -34,6 +34,8 @@ export function useAddictions() {
     },
     staleTime: 0,
     gcTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 
   const addAddiction = useMutation({

@@ -31,7 +31,6 @@ export function AddAddictionDialog({ open, onOpenChange, onAdd }: AddAddictionDi
       onAdd(addictionType, startDate);
       setAddictionType("");
       setStartDate(new Date());
-      onOpenChange(false);
     }
   };
 
