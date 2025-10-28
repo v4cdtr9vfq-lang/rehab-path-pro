@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      addictions: {
+        Row: {
+          addiction_type: string
+          created_at: string
+          id: string
+          is_active: boolean
+          start_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          addiction_type: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          start_date?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          addiction_type?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          start_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           created_at: string
