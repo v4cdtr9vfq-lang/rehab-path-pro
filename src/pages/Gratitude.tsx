@@ -27,7 +27,7 @@ interface GratitudeEntry {
 
 export default function Gratitude() {
   const [entries, setEntries] = useState<GratitudeEntry[]>([]);
-  const [newItem, setNewItem] = useState("");
+  const [newItems, setNewItems] = useState<string[]>(["", "", ""]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
   const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
@@ -81,8 +81,9 @@ export default function Gratitude() {
     }
   };
 
-  const addGratitudeItem = async () => {
-    if (newItem.trim()) {
+  const addGratitudeItem = async (index: number) => {
+    const itemText = newItems[index];
+    if (itemText.trim()) {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
@@ -98,7 +99,7 @@ export default function Gratitude() {
           .from('gratitude_entries')
           .insert({
             user_id: user.id,
-            text: newItem,
+            text: itemText,
             entry_date: new Date().toISOString().split('T')[0]
           });
 
@@ -109,7 +110,11 @@ export default function Gratitude() {
           description: "Tu entrada de gratitud ha sido guardada"
         });
 
-        setNewItem("");
+        // Clear only this field
+        const updatedItems = [...newItems];
+        updatedItems[index] = "";
+        setNewItems(updatedItems);
+        
         await loadEntries();
       } catch (error) {
         console.error('Error adding entry:', error);
@@ -120,6 +125,16 @@ export default function Gratitude() {
         });
       }
     }
+  };
+
+  const addNewField = () => {
+    setNewItems([...newItems, ""]);
+  };
+
+  const updateNewItem = (index: number, value: string) => {
+    const updatedItems = [...newItems];
+    updatedItems[index] = value;
+    setNewItems(updatedItems);
   };
 
   const startEditing = (id: string, text: string) => {
@@ -214,15 +229,32 @@ export default function Gratitude() {
           </CardHeader>
           <CardContent className="space-y-4">
           <div className="space-y-3">
-            <Textarea
-              placeholder="¿Por qué estás agradecido hoy y cómo te hace sentir?"
-              value={newItem}
-              onChange={(e) => setNewItem(e.target.value)}
-              className="min-h-[100px] text-base"
-            />
-            <Button onClick={addGratitudeItem} className="w-full gap-2">
+            {newItems.map((item, index) => (
+              <div key={index} className="flex gap-2">
+                <Input
+                  placeholder={`Agradecimiento ${index + 1}`}
+                  value={item}
+                  onChange={(e) => updateNewItem(index, e.target.value)}
+                  className="flex-1"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      addGratitudeItem(index);
+                    }
+                  }}
+                />
+                <Button 
+                  onClick={() => addGratitudeItem(index)} 
+                  size="sm"
+                  disabled={!item.trim()}
+                >
+                  <Check className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button onClick={addNewField} variant="outline" className="w-full gap-2">
               <Plus className="h-4 w-4" />
-              Añadir
+              Añadir otro agradecimiento
             </Button>
           </div>
 
