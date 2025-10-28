@@ -81,17 +81,27 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
       const days = daysAfterYears % 30;
       
       setCount({ years, months, days });
-      
-      // Notify parent about current addiction
-      if (onAddictionChange) {
-        onAddictionChange(selectedAddiction.id, totalDays);
-      }
     };
     
     calculateTime();
     const interval = setInterval(calculateTime, 1000 * 60 * 60);
     return () => clearInterval(interval);
-  }, [allAddictions, selectedIndex, onAddictionChange]);
+  }, [allAddictions, selectedIndex]);
+
+  // Notify parent when addiction changes or component mounts
+  useEffect(() => {
+    if (allAddictions.length === 0 || !allAddictions[selectedIndex]) return;
+    
+    const selectedAddiction = allAddictions[selectedIndex];
+    const dateToUse = new Date(selectedAddiction.start_date);
+    const now = new Date();
+    const diff = now.getTime() - dateToUse.getTime();
+    const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+    
+    if (onAddictionChange) {
+      onAddictionChange(selectedAddiction.id, totalDays);
+    }
+  }, [allAddictions.length, selectedIndex]);
 
   // Reset selectedIndex if out of bounds
   useEffect(() => {
