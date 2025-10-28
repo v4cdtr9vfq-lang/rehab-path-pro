@@ -20,11 +20,36 @@ interface AddAddictionDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onAdd: (addictionType: string, startDate: Date) => void;
+  existingAddictions?: string[];
 }
 
-export function AddAddictionDialog({ open, onOpenChange, onAdd }: AddAddictionDialogProps) {
+export function AddAddictionDialog({ open, onOpenChange, onAdd, existingAddictions = [] }: AddAddictionDialogProps) {
   const [addictionType, setAddictionType] = useState("");
   const [startDate, setStartDate] = useState<Date>(new Date());
+
+  const allOptions = [
+    "Adicción 1",
+    "Adicción 2",
+    "Adicción 3",
+    "Alcohol",
+    "Narcóticos",
+    "Cocaína",
+    "Cannabis",
+    "Tabaco",
+    "Juego",
+    "Comida",
+    "Compras",
+    "Sexo",
+    "Pornografía",
+    "Internet",
+    "Videojuegos",
+    "Trabajo"
+  ];
+
+  // Filter out already selected addictions
+  const availableOptions = allOptions.filter(
+    option => !existingAddictions.includes(option.toLowerCase())
+  );
 
   const handleSubmit = () => {
     if (addictionType.trim()) {
@@ -51,22 +76,11 @@ export function AddAddictionDialog({ open, onOpenChange, onAdd }: AddAddictionDi
                 <SelectValue placeholder="Selecciona un tipo" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Adicción 1">Adicción 1</SelectItem>
-                <SelectItem value="Adicción 2">Adicción 2</SelectItem>
-                <SelectItem value="Adicción 3">Adicción 3</SelectItem>
-                <SelectItem value="Alcohol">Alcohol</SelectItem>
-                <SelectItem value="Narcóticos">Narcóticos</SelectItem>
-                <SelectItem value="Cocaína">Cocaína</SelectItem>
-                <SelectItem value="Cannabis">Cannabis</SelectItem>
-                <SelectItem value="Tabaco">Tabaco</SelectItem>
-                <SelectItem value="Juego">Juego</SelectItem>
-                <SelectItem value="Comida">Comida</SelectItem>
-                <SelectItem value="Compras">Compras</SelectItem>
-                <SelectItem value="Sexo">Sexo</SelectItem>
-                <SelectItem value="Pornografía">Pornografía</SelectItem>
-                <SelectItem value="Internet">Internet</SelectItem>
-                <SelectItem value="Videojuegos">Videojuegos</SelectItem>
-                <SelectItem value="Trabajo">Trabajo</SelectItem>
+                {availableOptions.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

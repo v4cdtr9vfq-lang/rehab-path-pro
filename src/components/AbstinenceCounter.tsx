@@ -168,6 +168,10 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
         open={showAddDialog}
         onOpenChange={setShowAddDialog}
         onAdd={handleAddSubmit}
+        existingAddictions={[
+          ...(rehabilitationType ? [rehabilitationType.toLowerCase()] : []),
+          ...addictions.map(a => a.addiction_type.toLowerCase())
+        ]}
       />
     </>
   );
