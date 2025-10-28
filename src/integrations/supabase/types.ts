@@ -74,6 +74,36 @@ export type Database = {
         }
         Relationships: []
       }
+      automatic_thoughts: {
+        Row: {
+          created_at: string
+          description: string
+          emotion_reference: string | null
+          entry_date: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          emotion_reference?: string | null
+          entry_date?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          emotion_reference?: string | null
+          entry_date?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           created_at: string
@@ -207,6 +237,36 @@ export type Database = {
           situation_trigger?: boolean | null
           sub_emotions?: string[] | null
           tertiary_emotions?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      false_beliefs: {
+        Row: {
+          created_at: string
+          description: string
+          emotion_reference: string | null
+          entry_date: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          emotion_reference?: string | null
+          entry_date?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          emotion_reference?: string | null
+          entry_date?: string
+          id?: string
           updated_at?: string
           user_id?: string
         }

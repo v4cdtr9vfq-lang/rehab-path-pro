@@ -374,6 +374,14 @@ export default function EmotionJournal() {
   const [persons, setPersons] = useState<any[]>([]);
   const [deleteSituationId, setDeleteSituationId] = useState<string | null>(null);
   const [deletePersonId, setDeletePersonId] = useState<string | null>(null);
+  const [thoughtTrigger, setThoughtTrigger] = useState<boolean | null>(null);
+  const [thoughtDescription, setThoughtDescription] = useState("");
+  const [beliefTrigger, setBeliefTrigger] = useState<boolean | null>(null);
+  const [beliefDescription, setBeliefDescription] = useState("");
+  const [thoughts, setThoughts] = useState<any[]>([]);
+  const [beliefs, setBeliefs] = useState<any[]>([]);
+  const [deleteThoughtId, setDeleteThoughtId] = useState<string | null>(null);
+  const [deleteBeliefId, setDeleteBeliefId] = useState<string | null>(null);
   const { toast } = useToast();
   
   const ENTRIES_PER_PAGE = 3;
@@ -382,6 +390,8 @@ export default function EmotionJournal() {
     loadSavedEntries();
     loadSituations();
     loadPersons();
+    loadThoughts();
+    loadBeliefs();
     fetchStats();
   }, []);
 
@@ -436,6 +446,42 @@ export default function EmotionJournal() {
       setPersons(data || []);
     } catch (error) {
       console.error('Error loading persons:', error);
+    }
+  };
+
+  const loadThoughts = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await (supabase as any)
+        .from('automatic_thoughts')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('entry_date', { ascending: false });
+
+      if (error) throw error;
+      setThoughts(data || []);
+    } catch (error) {
+      console.error('Error loading thoughts:', error);
+    }
+  };
+
+  const loadBeliefs = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await (supabase as any)
+        .from('false_beliefs')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('entry_date', { ascending: false });
+
+      if (error) throw error;
+      setBeliefs(data || []);
+    } catch (error) {
+      console.error('Error loading beliefs:', error);
     }
   };
 
@@ -651,6 +697,30 @@ export default function EmotionJournal() {
           });
       }
 
+      // Save thought if provided
+      if (thoughtTrigger && thoughtDescription.trim()) {
+        await (supabase as any)
+          .from('automatic_thoughts')
+          .insert({
+            user_id: user.id,
+            description: thoughtDescription.trim(),
+            emotion_reference: primaryNames,
+            entry_date: new Date().toISOString().split('T')[0]
+          });
+      }
+
+      // Save belief if provided
+      if (beliefTrigger && beliefDescription.trim()) {
+        await (supabase as any)
+          .from('false_beliefs')
+          .insert({
+            user_id: user.id,
+            description: beliefDescription.trim(),
+            emotion_reference: primaryNames,
+            entry_date: new Date().toISOString().split('T')[0]
+          });
+      }
+
       if (error) throw error;
 
       toast({
@@ -665,7 +735,15 @@ export default function EmotionJournal() {
       setSituationDescription("");
       setPersonTrigger(null);
       setPersonDescription("");
+      setThoughtTrigger(null);
+      setThoughtDescription("");
+      setBeliefTrigger(null);
+      setBeliefDescription("");
       await loadSavedEntries();
+      await loadSituations();
+      await loadPersons();
+      await loadThoughts();
+      await loadBeliefs();
       await fetchStats();
     } catch (error) {
       console.error('Error saving emotions:', error);
@@ -868,6 +946,58 @@ export default function EmotionJournal() {
     }
   };
 
+  const handleDeleteThought = async (thoughtId: string) => {
+    setDeleteThoughtId(null);
+    try {
+      const { error } = await (supabase as any)
+        .from('automatic_thoughts')
+        .delete()
+        .eq('id', thoughtId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Eliminado",
+        description: "El pensamiento ha sido eliminado."
+      });
+
+      await loadThoughts();
+    } catch (error) {
+      console.error('Error deleting thought:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar el pensamiento.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeleteBelief = async (beliefId: string) => {
+    setDeleteBeliefId(null);
+    try {
+      const { error } = await (supabase as any)
+        .from('false_beliefs')
+        .delete()
+        .eq('id', beliefId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Eliminado",
+        description: "La creencia ha sido eliminada."
+      });
+
+      await loadBeliefs();
+    } catch (error) {
+      console.error('Error deleting belief:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar la creencia.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleCancelEdit = () => {
     setEditingEntry(null);
     setSelectedPrimary([]);
@@ -877,6 +1007,10 @@ export default function EmotionJournal() {
     setSituationDescription("");
     setPersonTrigger(null);
     setPersonDescription("");
+    setThoughtTrigger(null);
+    setThoughtDescription("");
+    setBeliefTrigger(null);
+    setBeliefDescription("");
   };
 
   // Get all selected categories
@@ -1163,6 +1297,84 @@ export default function EmotionJournal() {
                     value={personDescription}
                     onChange={(e) => setPersonDescription(e.target.value)}
                     placeholder="Describe cómo te hace sentir esta persona..."
+                    className="min-h-[100px] resize-none"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Thought Question */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-foreground">
+                ¿Hay algún pensamiento automático asociado a estos sentimientos?
+              </h3>
+              <div className="flex gap-3">
+                <Button
+                  variant={thoughtTrigger === true ? "default" : "outline"}
+                  onClick={() => {
+                    setThoughtTrigger(true);
+                    if (thoughtTrigger !== true) setThoughtDescription("");
+                  }}
+                  className={`rounded-full px-6 ${thoughtTrigger === true ? "bg-success text-success-foreground hover:bg-success/90" : ""}`}
+                >
+                  Sí
+                </Button>
+                <Button
+                  variant={thoughtTrigger === false ? "default" : "outline"}
+                  onClick={() => {
+                    setThoughtTrigger(false);
+                    setThoughtDescription("");
+                  }}
+                  className="rounded-full px-6"
+                >
+                  No
+                </Button>
+              </div>
+              {thoughtTrigger === true && (
+                <div className="space-y-2">
+                  <Textarea
+                    value={thoughtDescription}
+                    onChange={(e) => setThoughtDescription(e.target.value)}
+                    placeholder="Describe el pensamiento automático..."
+                    className="min-h-[100px] resize-none"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Belief Question */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-foreground">
+                ¿Hay alguna creencia falsa asociada a estos sentimientos?
+              </h3>
+              <div className="flex gap-3">
+                <Button
+                  variant={beliefTrigger === true ? "default" : "outline"}
+                  onClick={() => {
+                    setBeliefTrigger(true);
+                    if (beliefTrigger !== true) setBeliefDescription("");
+                  }}
+                  className={`rounded-full px-6 ${beliefTrigger === true ? "bg-success text-success-foreground hover:bg-success/90" : ""}`}
+                >
+                  Sí
+                </Button>
+                <Button
+                  variant={beliefTrigger === false ? "default" : "outline"}
+                  onClick={() => {
+                    setBeliefTrigger(false);
+                    setBeliefDescription("");
+                  }}
+                  className="rounded-full px-6"
+                >
+                  No
+                </Button>
+              </div>
+              {beliefTrigger === true && (
+                <div className="space-y-2">
+                  <Textarea
+                    value={beliefDescription}
+                    onChange={(e) => setBeliefDescription(e.target.value)}
+                    placeholder="Describe la creencia falsa..."
                     className="min-h-[100px] resize-none"
                   />
                 </div>
@@ -1527,6 +1739,90 @@ export default function EmotionJournal() {
         </div>
       )}
 
+      {/* Automatic Thoughts Widget */}
+      {thoughts.length > 0 && (
+        <div>
+          <h2 className="text-lg lg:text-xl font-bold text-foreground pl-[10px] lg:pl-8 mb-3">
+            Pensamientos automáticos
+          </h2>
+          <div className="space-y-4">
+            {thoughts.map((thought) => (
+              <Card key={thought.id} className="p-6 bg-card border-border">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <CalendarIcon className="h-4 w-4" />
+                    <span className="text-sm font-medium">
+                      {format(new Date(thought.created_at), "d 'de' MMMM, yyyy", { locale: es })}
+                    </span>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setDeleteThoughtId(thought.id)}
+                    className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="space-y-3 px-2">
+                  {thought.emotion_reference && (
+                    <div className="mb-2">
+                      <span className="text-xs text-muted-foreground">Relacionado con: </span>
+                      <span className="text-xs font-medium text-green-600">{thought.emotion_reference}</span>
+                    </div>
+                  )}
+                  <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
+                    {thought.description}
+                  </p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* False Beliefs Widget */}
+      {beliefs.length > 0 && (
+        <div>
+          <h2 className="text-lg lg:text-xl font-bold text-foreground pl-[10px] lg:pl-8 mb-3">
+            Creencias falsas
+          </h2>
+          <div className="space-y-4">
+            {beliefs.map((belief) => (
+              <Card key={belief.id} className="p-6 bg-card border-border">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <CalendarIcon className="h-4 w-4" />
+                    <span className="text-sm font-medium">
+                      {format(new Date(belief.created_at), "d 'de' MMMM, yyyy", { locale: es })}
+                    </span>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setDeleteBeliefId(belief.id)}
+                    className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="space-y-3 px-2">
+                  {belief.emotion_reference && (
+                    <div className="mb-2">
+                      <span className="text-xs text-muted-foreground">Relacionado con: </span>
+                      <span className="text-xs font-medium text-green-600">{belief.emotion_reference}</span>
+                    </div>
+                  )}
+                  <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
+                    {belief.description}
+                  </p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
         <AlertDialogContent>
@@ -1581,6 +1877,46 @@ export default function EmotionJournal() {
               Cancelar
             </Button>
             <Button variant="destructive" onClick={() => deletePersonId && handleDeletePerson(deletePersonId)}>
+              Sí
+            </Button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete Thought Confirmation Dialog */}
+      <AlertDialog open={!!deleteThoughtId} onOpenChange={(open) => !open && setDeleteThoughtId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que quieres eliminar este pensamiento? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setDeleteThoughtId(null)}>
+              Cancelar
+            </Button>
+            <Button variant="destructive" onClick={() => deleteThoughtId && handleDeleteThought(deleteThoughtId)}>
+              Sí
+            </Button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete Belief Confirmation Dialog */}
+      <AlertDialog open={!!deleteBeliefId} onOpenChange={(open) => !open && setDeleteBeliefId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que quieres eliminar esta creencia? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setDeleteBeliefId(null)}>
+              Cancelar
+            </Button>
+            <Button variant="destructive" onClick={() => deleteBeliefId && handleDeleteBelief(deleteBeliefId)}>
               Sí
             </Button>
           </div>
