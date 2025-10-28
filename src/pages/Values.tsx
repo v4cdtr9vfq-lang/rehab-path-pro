@@ -57,6 +57,8 @@ export default function Values() {
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [hasUnsavedOrder, setHasUnsavedOrder] = useState(false);
   const [originalValuesOrder, setOriginalValuesOrder] = useState<Value[]>([]);
+  const [editingValueId, setEditingValueId] = useState<string | null>(null);
+  const [editValueName, setEditValueName] = useState("");
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -391,6 +393,47 @@ export default function Values() {
     }
   };
 
+  const handleEditValue = (value: Value) => {
+    setEditingValueId(value.id);
+    setEditValueName(value.name);
+  };
+
+  const handleUpdateValue = async (id: string) => {
+    if (!editValueName.trim()) {
+      toast({
+        title: "Error",
+        description: "El nombre no puede estar vacío",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('values')
+        .update({ name: editValueName.trim() })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setValues(prev => prev.map(v => v.id === id ? { ...v, name: editValueName.trim() } : v));
+      setOriginalValuesOrder(prev => prev.map(v => v.id === id ? { ...v, name: editValueName.trim() } : v));
+      setEditingValueId(null);
+      setEditValueName("");
+
+      toast({
+        title: "Actualizado",
+        description: "El valor ha sido actualizado exitosamente",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar el valor",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleDragEnd = (event: DragEndEvent, type: 'primary' | 'secondary') => {
     const { active, over } = event;
 
@@ -512,9 +555,25 @@ export default function Values() {
     value: Value;
     onToggle: () => void;
     onDelete: () => void;
+    onEdit: () => void;
+    isEditing: boolean;
+    editName: string;
+    onEditNameChange: (name: string) => void;
+    onSaveEdit: () => void;
+    onCancelEdit: () => void;
   }
 
-  const SortableValueItem = ({ value, onToggle, onDelete }: SortableValueItemProps) => {
+  const SortableValueItem = ({ 
+    value, 
+    onToggle, 
+    onDelete, 
+    onEdit,
+    isEditing,
+    editName,
+    onEditNameChange,
+    onSaveEdit,
+    onCancelEdit
+  }: SortableValueItemProps) => {
     const {
       attributes,
       listeners,
@@ -559,22 +618,61 @@ export default function Values() {
             <GripVertical className="h-5 w-5 text-muted-foreground" />
           </div>
         )}
-        <span className={`text-lg text-foreground flex-1 ${value.value_type === 'primary' ? 'font-semibold' : ''}`}>
-          {value.name}
-        </span>
-        {value.selected && (
+        {isEditing ? (
+          <Input
+            value={editName}
+            onChange={(e) => onEditNameChange(e.target.value)}
+            className="flex-1"
+            autoFocus
+          />
+        ) : (
+          <span className={`text-lg text-foreground flex-1 ${value.value_type === 'primary' ? 'font-semibold' : ''}`}>
+            {value.name}
+          </span>
+        )}
+        {value.selected && !isEditing && (
           <span className="text-xs bg-green-500 text-white px-3 py-1 rounded-full">
             Activo Hoy
           </span>
         )}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onDelete}
-          className="h-8 w-8 text-muted-foreground hover:text-destructive"
-        >
-          <X className="h-4 w-4" />
-        </Button>
+        {isEditing ? (
+          <>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onSaveEdit}
+              className="text-success hover:text-success"
+            >
+              Guardar
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onCancelEdit}
+            >
+              Cancelar
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onEdit}
+              className="h-8 w-8 text-muted-foreground"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onDelete}
+              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </>
+        )}
       </div>
     );
   };
@@ -661,6 +759,15 @@ export default function Values() {
                         value={value}
                         onToggle={() => toggleValue(value.id)}
                         onDelete={() => setDeleteConfirmId(value.id)}
+                        onEdit={() => handleEditValue(value)}
+                        isEditing={editingValueId === value.id}
+                        editName={editValueName}
+                        onEditNameChange={setEditValueName}
+                        onSaveEdit={() => handleUpdateValue(value.id)}
+                        onCancelEdit={() => {
+                          setEditingValueId(null);
+                          setEditValueName("");
+                        }}
                       />
                     ))}
                   </div>
@@ -737,6 +844,15 @@ export default function Values() {
                         value={value}
                         onToggle={() => toggleValue(value.id)}
                         onDelete={() => setDeleteConfirmId(value.id)}
+                        onEdit={() => handleEditValue(value)}
+                        isEditing={editingValueId === value.id}
+                        editName={editValueName}
+                        onEditNameChange={setEditValueName}
+                        onSaveEdit={() => handleUpdateValue(value.id)}
+                        onCancelEdit={() => {
+                          setEditingValueId(null);
+                          setEditValueName("");
+                        }}
                       />
                     ))}
                   </div>
