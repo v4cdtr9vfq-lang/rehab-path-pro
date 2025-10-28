@@ -1058,7 +1058,9 @@ export default function Home() {
                       <p className={`text-xs md:text-sm break-words ${status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
                         {status.isUnlocked 
                           ? '¡Conseguido!' 
-                          : `+${status.progress} / ${medal.requiredDays} días.`
+                          : medal.requiredDays === 0
+                            ? 'Preconcedida'
+                            : `+${status.progress} / ${medal.requiredDays} días.`
                         }
                       </p>
                     </div>
