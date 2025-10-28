@@ -1206,6 +1206,30 @@ export default function EmotionJournal() {
                       </div>
                     </div>
                   )}
+
+                  {/* Situation Trigger */}
+                  {entry.situation_trigger && entry.situation_description && (
+                    <div className="mt-4 pt-4 border-t">
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">
+                        Situación que generó estos sentimientos:
+                      </h3>
+                      <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
+                        {entry.situation_description}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Person Trigger */}
+                  {entry.person_trigger && entry.person_description && (
+                    <div className="mt-4 pt-4 border-t">
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">
+                        Persona que generó estas emociones:
+                      </h3>
+                      <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
+                        {entry.person_description}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </Card>
             ))
