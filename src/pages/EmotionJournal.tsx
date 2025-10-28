@@ -374,36 +374,16 @@ export default function EmotionJournal() {
   const [weekStats, setWeekStats] = useState<EmotionStats[]>([]);
   const [monthStats, setMonthStats] = useState<EmotionStats[]>([]);
   const [quarterStats, setQuarterStats] = useState<EmotionStats[]>([]);
-  const [situations, setSituations] = useState<any[]>([]);
-  const [persons, setPersons] = useState<any[]>([]);
-  const [deleteSituationId, setDeleteSituationId] = useState<string | null>(null);
-  const [deletePersonId, setDeletePersonId] = useState<string | null>(null);
   const [thoughtTrigger, setThoughtTrigger] = useState<boolean | null>(null);
   const [thoughtDescription, setThoughtDescription] = useState("");
   const [beliefTrigger, setBeliefTrigger] = useState<boolean | null>(null);
   const [beliefDescription, setBeliefDescription] = useState("");
-  const [thoughts, setThoughts] = useState<any[]>([]);
-  const [beliefs, setBeliefs] = useState<any[]>([]);
-  const [deleteThoughtId, setDeleteThoughtId] = useState<string | null>(null);
-  const [deleteBeliefId, setDeleteBeliefId] = useState<string | null>(null);
-  const [editingSituationId, setEditingSituationId] = useState<string | null>(null);
-  const [editingPersonId, setEditingPersonId] = useState<string | null>(null);
-  const [editingThoughtId, setEditingThoughtId] = useState<string | null>(null);
-  const [editingBeliefId, setEditingBeliefId] = useState<string | null>(null);
-  const [editSituationText, setEditSituationText] = useState("");
-  const [editPersonText, setEditPersonText] = useState("");
-  const [editThoughtText, setEditThoughtText] = useState("");
-  const [editBeliefText, setEditBeliefText] = useState("");
   const { toast } = useToast();
   
   const ENTRIES_PER_PAGE = 3;
 
   useEffect(() => {
     loadSavedEntries();
-    loadSituations();
-    loadPersons();
-    loadThoughts();
-    loadBeliefs();
     fetchStats();
   }, []);
 
@@ -420,124 +400,9 @@ export default function EmotionJournal() {
 
       if (error) throw error;
 
-      // Load all optional responses
-      const { data: situationsData } = await (supabase as any)
-        .from('sensitive_situations')
-        .select('*')
-        .eq('user_id', user.id);
-
-      const { data: personsData } = await (supabase as any)
-        .from('activating_persons')
-        .select('*')
-        .eq('user_id', user.id);
-
-      const { data: thoughtsData } = await (supabase as any)
-        .from('automatic_thoughts')
-        .select('*')
-        .eq('user_id', user.id);
-
-      const { data: beliefsData } = await (supabase as any)
-        .from('false_beliefs')
-        .select('*')
-        .eq('user_id', user.id);
-
-      // Attach optional responses to each entry based on date and emotion reference
-      const entriesWithResponses = (data || []).map((entry: any) => {
-        const entryDate = entry.entry_date;
-        const emotionRef = entry.primary_emotion;
-
-        return {
-          ...entry,
-          situations: (situationsData || []).filter((s: any) => 
-            s.entry_date === entryDate && s.emotion_reference === emotionRef
-          ),
-          persons: (personsData || []).filter((p: any) => 
-            p.entry_date === entryDate && p.emotion_reference === emotionRef
-          ),
-          thoughts: (thoughtsData || []).filter((t: any) => 
-            t.entry_date === entryDate && t.emotion_reference === emotionRef
-          ),
-          beliefs: (beliefsData || []).filter((b: any) => 
-            b.entry_date === entryDate && b.emotion_reference === emotionRef
-          )
-        };
-      });
-
-      setSavedEntries(entriesWithResponses);
+      setSavedEntries(data || []);
     } catch (error) {
       console.error('Error loading entries:', error);
-    }
-  };
-
-  const loadSituations = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await (supabase as any)
-        .from('sensitive_situations')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('entry_date', { ascending: false });
-
-      if (error) throw error;
-      setSituations(data || []);
-    } catch (error) {
-      console.error('Error loading situations:', error);
-    }
-  };
-
-  const loadPersons = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await (supabase as any)
-        .from('activating_persons')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('entry_date', { ascending: false });
-
-      if (error) throw error;
-      setPersons(data || []);
-    } catch (error) {
-      console.error('Error loading persons:', error);
-    }
-  };
-
-  const loadThoughts = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await (supabase as any)
-        .from('automatic_thoughts')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('entry_date', { ascending: false });
-
-      if (error) throw error;
-      setThoughts(data || []);
-    } catch (error) {
-      console.error('Error loading thoughts:', error);
-    }
-  };
-
-  const loadBeliefs = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await (supabase as any)
-        .from('false_beliefs')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('entry_date', { ascending: false });
-
-      if (error) throw error;
-      setBeliefs(data || []);
-    } catch (error) {
-      console.error('Error loading beliefs:', error);
     }
   };
 
@@ -729,50 +594,54 @@ export default function EmotionJournal() {
 
       if (error) throw error;
 
-      // Save situation if provided
+      // Save situation as journal entry if provided
       if (situationTrigger && situationDescription.trim()) {
         await (supabase as any)
-          .from('sensitive_situations')
+          .from('journal_entries')
           .insert({
             user_id: user.id,
-            description: situationDescription.trim(),
-            emotion_reference: primaryNames,
+            title: 'Situaciones límite',
+            content: situationDescription.trim(),
+            tags: ['emociones', primaryNames],
             entry_date: new Date().toISOString().split('T')[0]
           });
       }
 
-      // Save person if provided
+      // Save person as journal entry if provided
       if (personTrigger && personDescription.trim()) {
         await (supabase as any)
-          .from('activating_persons')
+          .from('journal_entries')
           .insert({
             user_id: user.id,
-            description: personDescription.trim(),
-            emotion_reference: primaryNames,
+            title: 'Personas que me activan',
+            content: personDescription.trim(),
+            tags: ['emociones', primaryNames],
             entry_date: new Date().toISOString().split('T')[0]
           });
       }
 
-      // Save thought if provided
+      // Save thought as journal entry if provided
       if (thoughtTrigger && thoughtDescription.trim()) {
         await (supabase as any)
-          .from('automatic_thoughts')
+          .from('journal_entries')
           .insert({
             user_id: user.id,
-            description: thoughtDescription.trim(),
-            emotion_reference: primaryNames,
+            title: 'Pensamientos automáticos',
+            content: thoughtDescription.trim(),
+            tags: ['emociones', primaryNames],
             entry_date: new Date().toISOString().split('T')[0]
           });
       }
 
-      // Save belief if provided
+      // Save belief as journal entry if provided
       if (beliefTrigger && beliefDescription.trim()) {
         await (supabase as any)
-          .from('false_beliefs')
+          .from('journal_entries')
           .insert({
             user_id: user.id,
-            description: beliefDescription.trim(),
-            emotion_reference: primaryNames,
+            title: 'Creencias falsas',
+            content: beliefDescription.trim(),
+            tags: ['emociones', primaryNames],
             entry_date: new Date().toISOString().split('T')[0]
           });
       }
@@ -813,10 +682,6 @@ export default function EmotionJournal() {
       setBeliefTrigger(null);
       setBeliefDescription("");
       await loadSavedEntries();
-      await loadSituations();
-      await loadPersons();
-      await loadThoughts();
-      await loadBeliefs();
       await fetchStats();
     } catch (error) {
       console.error('Error saving emotions:', error);
@@ -859,38 +724,15 @@ export default function EmotionJournal() {
     setSelectedSecondary(secondaryIds);
     setSelectedTertiary(entry.tertiary_emotions);
     
-    // Load optional responses from arrays
-    if (entry.situations && entry.situations.length > 0) {
-      setSituationTrigger(true);
-      setSituationDescription(entry.situations[0].description);
-    } else {
-      setSituationTrigger(null);
-      setSituationDescription("");
-    }
-    
-    if (entry.persons && entry.persons.length > 0) {
-      setPersonTrigger(true);
-      setPersonDescription(entry.persons[0].description);
-    } else {
-      setPersonTrigger(null);
-      setPersonDescription("");
-    }
-    
-    if (entry.thoughts && entry.thoughts.length > 0) {
-      setThoughtTrigger(true);
-      setThoughtDescription(entry.thoughts[0].description);
-    } else {
-      setThoughtTrigger(null);
-      setThoughtDescription("");
-    }
-    
-    if (entry.beliefs && entry.beliefs.length > 0) {
-      setBeliefTrigger(true);
-      setBeliefDescription(entry.beliefs[0].description);
-    } else {
-      setBeliefTrigger(null);
-      setBeliefDescription("");
-    }
+    // Reset optional responses
+    setSituationTrigger(null);
+    setSituationDescription("");
+    setPersonTrigger(null);
+    setPersonDescription("");
+    setThoughtTrigger(null);
+    setThoughtDescription("");
+    setBeliefTrigger(null);
+    setBeliefDescription("");
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -932,11 +774,7 @@ export default function EmotionJournal() {
         .update({
           primary_emotion: primaryNames,
           secondary_emotions: secondaryNames,
-          tertiary_emotions: selectedTertiary,
-          situation_trigger: situationTrigger || false,
-          situation_description: situationTrigger ? situationDescription : null,
-          person_trigger: personTrigger || false,
-          person_description: personTrigger ? personDescription : null
+          tertiary_emotions: selectedTertiary
         })
         .eq('id', editingEntry);
 
@@ -955,6 +793,10 @@ export default function EmotionJournal() {
       setSituationDescription("");
       setPersonTrigger(null);
       setPersonDescription("");
+      setThoughtTrigger(null);
+      setThoughtDescription("");
+      setBeliefTrigger(null);
+      setBeliefDescription("");
       await loadSavedEntries();
       await fetchStats();
     } catch (error) {
@@ -991,280 +833,6 @@ export default function EmotionJournal() {
       toast({
         title: "Error",
         description: "No se pudo eliminar la entrada.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleDeleteSituation = async (situationId: string) => {
-    setDeleteSituationId(null);
-    try {
-      const { error } = await (supabase as any)
-        .from('sensitive_situations')
-        .delete()
-        .eq('id', situationId);
-
-      if (error) throw error;
-
-      toast({
-        title: "Eliminado",
-        description: "La situación ha sido eliminada."
-      });
-
-      await loadSituations();
-    } catch (error) {
-      console.error('Error deleting situation:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo eliminar la situación.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleDeletePerson = async (personId: string) => {
-    setDeletePersonId(null);
-    try {
-      const { error } = await (supabase as any)
-        .from('activating_persons')
-        .delete()
-        .eq('id', personId);
-
-      if (error) throw error;
-
-      toast({
-        title: "Eliminado",
-        description: "La persona ha sido eliminada."
-      });
-
-      await loadPersons();
-    } catch (error) {
-      console.error('Error deleting person:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo eliminar la persona.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleDeleteThought = async (thoughtId: string) => {
-    setDeleteThoughtId(null);
-    try {
-      const { error } = await (supabase as any)
-        .from('automatic_thoughts')
-        .delete()
-        .eq('id', thoughtId);
-
-      if (error) throw error;
-
-      toast({
-        title: "Eliminado",
-        description: "El pensamiento ha sido eliminado."
-      });
-
-      await loadThoughts();
-    } catch (error) {
-      console.error('Error deleting thought:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo eliminar el pensamiento.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleDeleteBelief = async (beliefId: string) => {
-    setDeleteBeliefId(null);
-    try {
-      const { error } = await (supabase as any)
-        .from('false_beliefs')
-        .delete()
-        .eq('id', beliefId);
-
-      if (error) throw error;
-
-      toast({
-        title: "Eliminado",
-        description: "La creencia ha sido eliminada."
-      });
-
-      await loadBeliefs();
-    } catch (error) {
-      console.error('Error deleting belief:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo eliminar la creencia.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  // Edit handlers
-  const handleEditSituation = (situation: any) => {
-    setEditingSituationId(situation.id);
-    setEditSituationText(situation.description);
-  };
-
-  const handleEditPerson = (person: any) => {
-    setEditingPersonId(person.id);
-    setEditPersonText(person.description);
-  };
-
-  const handleEditThought = (thought: any) => {
-    setEditingThoughtId(thought.id);
-    setEditThoughtText(thought.description);
-  };
-
-  const handleEditBelief = (belief: any) => {
-    setEditingBeliefId(belief.id);
-    setEditBeliefText(belief.description);
-  };
-
-  // Update handlers
-  const handleUpdateSituation = async (situationId: string) => {
-    if (!editSituationText.trim()) {
-      toast({
-        title: "Error",
-        description: "La descripción no puede estar vacía.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      const { error } = await (supabase as any)
-        .from('sensitive_situations')
-        .update({ description: editSituationText.trim() })
-        .eq('id', situationId);
-
-      if (error) throw error;
-
-      toast({
-        title: "Actualizado",
-        description: "La situación ha sido actualizada."
-      });
-
-      setEditingSituationId(null);
-      setEditSituationText("");
-      await loadSituations();
-      await loadSavedEntries();
-    } catch (error) {
-      console.error('Error updating situation:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo actualizar la situación.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleUpdatePerson = async (personId: string) => {
-    if (!editPersonText.trim()) {
-      toast({
-        title: "Error",
-        description: "La descripción no puede estar vacía.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      const { error } = await (supabase as any)
-        .from('activating_persons')
-        .update({ description: editPersonText.trim() })
-        .eq('id', personId);
-
-      if (error) throw error;
-
-      toast({
-        title: "Actualizado",
-        description: "La persona ha sido actualizada."
-      });
-
-      setEditingPersonId(null);
-      setEditPersonText("");
-      await loadPersons();
-      await loadSavedEntries();
-    } catch (error) {
-      console.error('Error updating person:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo actualizar la persona.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleUpdateThought = async (thoughtId: string) => {
-    if (!editThoughtText.trim()) {
-      toast({
-        title: "Error",
-        description: "La descripción no puede estar vacía.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      const { error } = await (supabase as any)
-        .from('automatic_thoughts')
-        .update({ description: editThoughtText.trim() })
-        .eq('id', thoughtId);
-
-      if (error) throw error;
-
-      toast({
-        title: "Actualizado",
-        description: "El pensamiento ha sido actualizado."
-      });
-
-      setEditingThoughtId(null);
-      setEditThoughtText("");
-      await loadThoughts();
-      await loadSavedEntries();
-    } catch (error) {
-      console.error('Error updating thought:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo actualizar el pensamiento.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleUpdateBelief = async (beliefId: string) => {
-    if (!editBeliefText.trim()) {
-      toast({
-        title: "Error",
-        description: "La descripción no puede estar vacía.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      const { error } = await (supabase as any)
-        .from('false_beliefs')
-        .update({ description: editBeliefText.trim() })
-        .eq('id', beliefId);
-
-      if (error) throw error;
-
-      toast({
-        title: "Actualizado",
-        description: "La creencia ha sido actualizada."
-      });
-
-      setEditingBeliefId(null);
-      setEditBeliefText("");
-      await loadBeliefs();
-      await loadSavedEntries();
-    } catch (error) {
-      console.error('Error updating belief:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo actualizar la creencia.",
         variant: "destructive"
       });
     }
@@ -1973,350 +1541,6 @@ export default function EmotionJournal() {
         </div>
       </div>
 
-      {/* Sensitive Situations Widget */}
-      {situations.length > 0 && (
-        <div>
-          <h2 className="text-lg lg:text-xl font-bold text-foreground pl-[10px] lg:pl-8 mb-3">
-            Situaciones sensibles
-          </h2>
-          <div className="space-y-4">
-            {situations.map((situation) => (
-              <Card key={situation.id} className="p-6 bg-card border-border">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <CalendarIcon className="h-4 w-4" />
-                    <span className="text-sm font-medium">
-                      {format(new Date(situation.created_at), "d 'de' MMMM, yyyy", { locale: es })}
-                    </span>
-                  </div>
-                  <div className="flex gap-2">
-                    {editingSituationId === situation.id ? (
-                      <>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleUpdateSituation(situation.id)}
-                          className="h-8 px-3 text-success hover:text-success"
-                        >
-                          Guardar
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {
-                            setEditingSituationId(null);
-                            setEditSituationText("");
-                          }}
-                          className="h-8 px-3"
-                        >
-                          Cancelar
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleEditSituation(situation)}
-                          className="h-8 w-8 p-0"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => setDeleteSituationId(situation.id)}
-                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div className="space-y-3 px-2">
-                  {situation.emotion_reference && (
-                    <div className="mb-2">
-                      <span className="text-xs text-muted-foreground">Relacionado con: </span>
-                      <span className="text-xs font-medium text-green-600">{situation.emotion_reference}</span>
-                    </div>
-                  )}
-                  {editingSituationId === situation.id ? (
-                    <Textarea
-                      value={editSituationText}
-                      onChange={(e) => setEditSituationText(e.target.value)}
-                      className="min-h-[100px] resize-none"
-                    />
-                  ) : (
-                    <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
-                      {situation.description}
-                    </p>
-                  )}
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Activating Persons Widget */}
-      {persons.length > 0 && (
-        <div>
-          <h2 className="text-lg lg:text-xl font-bold text-foreground pl-[10px] lg:pl-8 mb-3">
-            Personas que me activan
-          </h2>
-          <div className="space-y-4">
-            {persons.map((person) => (
-              <Card key={person.id} className="p-6 bg-card border-border">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <CalendarIcon className="h-4 w-4" />
-                    <span className="text-sm font-medium">
-                      {format(new Date(person.created_at), "d 'de' MMMM, yyyy", { locale: es })}
-                    </span>
-                  </div>
-                  <div className="flex gap-2">
-                    {editingPersonId === person.id ? (
-                      <>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleUpdatePerson(person.id)}
-                          className="h-8 px-3 text-success hover:text-success"
-                        >
-                          Guardar
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {
-                            setEditingPersonId(null);
-                            setEditPersonText("");
-                          }}
-                          className="h-8 px-3"
-                        >
-                          Cancelar
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleEditPerson(person)}
-                          className="h-8 w-8 p-0"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => setDeletePersonId(person.id)}
-                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div className="space-y-3 px-2">
-                  {person.emotion_reference && (
-                    <div className="mb-2">
-                      <span className="text-xs text-muted-foreground">Relacionado con: </span>
-                      <span className="text-xs font-medium text-green-600">{person.emotion_reference}</span>
-                    </div>
-                  )}
-                  {editingPersonId === person.id ? (
-                    <Textarea
-                      value={editPersonText}
-                      onChange={(e) => setEditPersonText(e.target.value)}
-                      className="min-h-[100px] resize-none"
-                    />
-                  ) : (
-                    <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
-                      {person.description}
-                    </p>
-                  )}
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Automatic Thoughts Widget */}
-      {thoughts.length > 0 && (
-        <div>
-          <h2 className="text-lg lg:text-xl font-bold text-foreground pl-[10px] lg:pl-8 mb-3">
-            Pensamientos automáticos
-          </h2>
-          <div className="space-y-4">
-            {thoughts.map((thought) => (
-              <Card key={thought.id} className="p-6 bg-card border-border">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <CalendarIcon className="h-4 w-4" />
-                    <span className="text-sm font-medium">
-                      {format(new Date(thought.created_at), "d 'de' MMMM, yyyy", { locale: es })}
-                    </span>
-                  </div>
-                  <div className="flex gap-2">
-                    {editingThoughtId === thought.id ? (
-                      <>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleUpdateThought(thought.id)}
-                          className="h-8 px-3 text-success hover:text-success"
-                        >
-                          Guardar
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {
-                            setEditingThoughtId(null);
-                            setEditThoughtText("");
-                          }}
-                          className="h-8 px-3"
-                        >
-                          Cancelar
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleEditThought(thought)}
-                          className="h-8 w-8 p-0"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => setDeleteThoughtId(thought.id)}
-                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div className="space-y-3 px-2">
-                  {thought.emotion_reference && (
-                    <div className="mb-2">
-                      <span className="text-xs text-muted-foreground">Relacionado con: </span>
-                      <span className="text-xs font-medium text-green-600">{thought.emotion_reference}</span>
-                    </div>
-                  )}
-                  {editingThoughtId === thought.id ? (
-                    <Textarea
-                      value={editThoughtText}
-                      onChange={(e) => setEditThoughtText(e.target.value)}
-                      className="min-h-[100px] resize-none"
-                    />
-                  ) : (
-                    <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
-                      {thought.description}
-                    </p>
-                  )}
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* False Beliefs Widget */}
-      {beliefs.length > 0 && (
-        <div>
-          <h2 className="text-lg lg:text-xl font-bold text-foreground pl-[10px] lg:pl-8 mb-3">
-            Creencias falsas
-          </h2>
-          <div className="space-y-4">
-            {beliefs.map((belief) => (
-              <Card key={belief.id} className="p-6 bg-card border-border">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <CalendarIcon className="h-4 w-4" />
-                    <span className="text-sm font-medium">
-                      {format(new Date(belief.created_at), "d 'de' MMMM, yyyy", { locale: es })}
-                    </span>
-                  </div>
-                  <div className="flex gap-2">
-                    {editingBeliefId === belief.id ? (
-                      <>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleUpdateBelief(belief.id)}
-                          className="h-8 px-3 text-success hover:text-success"
-                        >
-                          Guardar
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {
-                            setEditingBeliefId(null);
-                            setEditBeliefText("");
-                          }}
-                          className="h-8 px-3"
-                        >
-                          Cancelar
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleEditBelief(belief)}
-                          className="h-8 w-8 p-0"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => setDeleteBeliefId(belief.id)}
-                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div className="space-y-3 px-2">
-                  {belief.emotion_reference && (
-                    <div className="mb-2">
-                      <span className="text-xs text-muted-foreground">Relacionado con: </span>
-                      <span className="text-xs font-medium text-green-600">{belief.emotion_reference}</span>
-                    </div>
-                  )}
-                  {editingBeliefId === belief.id ? (
-                    <Textarea
-                      value={editBeliefText}
-                      onChange={(e) => setEditBeliefText(e.target.value)}
-                      className="min-h-[100px] resize-none"
-                    />
-                  ) : (
-                    <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
-                      {belief.description}
-                    </p>
-                  )}
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
         <AlertDialogContent>
@@ -2331,86 +1555,6 @@ export default function EmotionJournal() {
               Cancelar
             </Button>
             <Button variant="destructive" onClick={() => deleteConfirmId && handleDelete(deleteConfirmId)}>
-              Sí
-            </Button>
-          </div>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      {/* Delete Situation Confirmation Dialog */}
-      <AlertDialog open={!!deleteSituationId} onOpenChange={(open) => !open && setDeleteSituationId(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
-            <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar esta situación? Esta acción no se puede deshacer.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={() => setDeleteSituationId(null)}>
-              Cancelar
-            </Button>
-            <Button variant="destructive" onClick={() => deleteSituationId && handleDeleteSituation(deleteSituationId)}>
-              Sí
-            </Button>
-          </div>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      {/* Delete Person Confirmation Dialog */}
-      <AlertDialog open={!!deletePersonId} onOpenChange={(open) => !open && setDeletePersonId(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
-            <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar esta persona? Esta acción no se puede deshacer.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={() => setDeletePersonId(null)}>
-              Cancelar
-            </Button>
-            <Button variant="destructive" onClick={() => deletePersonId && handleDeletePerson(deletePersonId)}>
-              Sí
-            </Button>
-          </div>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      {/* Delete Thought Confirmation Dialog */}
-      <AlertDialog open={!!deleteThoughtId} onOpenChange={(open) => !open && setDeleteThoughtId(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
-            <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar este pensamiento? Esta acción no se puede deshacer.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={() => setDeleteThoughtId(null)}>
-              Cancelar
-            </Button>
-            <Button variant="destructive" onClick={() => deleteThoughtId && handleDeleteThought(deleteThoughtId)}>
-              Sí
-            </Button>
-          </div>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      {/* Delete Belief Confirmation Dialog */}
-      <AlertDialog open={!!deleteBeliefId} onOpenChange={(open) => !open && setDeleteBeliefId(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
-            <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar esta creencia? Esta acción no se puede deshacer.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={() => setDeleteBeliefId(null)}>
-              Cancelar
-            </Button>
-            <Button variant="destructive" onClick={() => deleteBeliefId && handleDeleteBelief(deleteBeliefId)}>
               Sí
             </Button>
           </div>
