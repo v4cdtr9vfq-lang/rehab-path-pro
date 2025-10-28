@@ -1,22 +1,15 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Plus } from "lucide-react";
 import { AddAddictionDialog } from "./AddAddictionDialog";
 import { toast } from "sonner";
-
-interface Addiction {
-  id: string;
-  addiction_type: string;
-  start_date: string;
-  is_active: boolean;
-}
+import { useAddictions } from "@/hooks/useAddictions";
 
 interface CounterProps {
   startDate?: Date;
 }
 
 export function AbstinenceCounter({ startDate }: CounterProps) {
-  const [addictions, setAddictions] = useState<Addiction[]>([]);
+  const { addictions, addAddiction, canAddMore } = useAddictions();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [count, setCount] = useState({
@@ -24,9 +17,6 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
     months: 0,
     days: 0
   });
-  useEffect(() => {
-    fetchAddictions();
-  }, []);
 
   useEffect(() => {
     const calculateTime = () => {
@@ -57,24 +47,6 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
     return () => clearInterval(interval);
   }, [addictions, selectedIndex, startDate]);
 
-  const fetchAddictions = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await supabase
-        .from("addictions")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("is_active", true)
-        .order("created_at", { ascending: true });
-
-      if (error) throw error;
-      setAddictions(data || []);
-    } catch (error) {
-      console.error("Error fetching addictions:", error);
-    }
-  };
 
   const getCurrentStartDate = (): Date | null => {
     if (addictions.length > 0 && addictions[selectedIndex]) {
@@ -84,35 +56,15 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
   };
 
   const handleAddAddiction = () => {
-    if (addictions.length >= 3) {
+    if (!canAddMore) {
       toast.error("Máximo 3 adicciones permitidas");
       return;
     }
     setShowAddDialog(true);
   };
 
-  const handleAddSubmit = async (addictionType: string, startDate: Date) => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { error } = await supabase
-        .from("addictions")
-        .insert({
-          user_id: user.id,
-          addiction_type: addictionType,
-          start_date: startDate.toISOString(),
-          is_active: true,
-        });
-
-      if (error) throw error;
-      
-      toast.success("Adicción añadida correctamente");
-      fetchAddictions();
-    } catch (error) {
-      console.error("Error adding addiction:", error);
-      toast.error("No se pudo añadir la adicción");
-    }
+  const handleAddSubmit = (addictionType: string, startDate: Date) => {
+    addAddiction({ addictionType, startDate });
   };
 
   const currentAddiction = addictions[selectedIndex];
