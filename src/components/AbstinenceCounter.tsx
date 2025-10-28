@@ -118,18 +118,18 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
   return (
     <>
       <div className="rounded-3xl p-8 md:p-12 bg-card border border-sidebar-border relative">
-        <div className="flex items-start justify-between mb-8">
-          <p className="text-foreground text-2xl font-bold text-left">
-            Tiempo de recuperación:{" "}
-            {currentAddiction && (
-              <span className="text-lg font-normal text-muted-foreground">
-                {currentAddiction.addiction_type}
-              </span>
-            )}
-          </p>
-          
-          <div className="flex items-center gap-2">
-            {addictions.map((_, index) => (
+        {/* Circles in top right corner */}
+        <div className="absolute top-4 right-4 flex items-center gap-2">
+          {addictions.length === 0 ? (
+            // Show default "1" circle when no addictions
+            <button
+              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-destructive text-white"
+            >
+              1
+            </button>
+          ) : (
+            // Show all addiction circles
+            addictions.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setSelectedIndex(index)}
@@ -141,17 +141,26 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
               >
                 {index + 1}
               </button>
-            ))}
-            {addictions.length < 3 && (
-              <button
-                onClick={handleAddAddiction}
-                className="w-8 h-8 rounded-full flex items-center justify-center bg-background border-2 border-destructive text-white hover:bg-destructive/10 transition-all"
-              >
-                <Plus className="h-4 w-4 text-destructive" />
-              </button>
-            )}
-          </div>
+            ))
+          )}
+          {addictions.length < 3 && (
+            <button
+              onClick={handleAddAddiction}
+              className="w-8 h-8 rounded-full flex items-center justify-center bg-background border-2 border-destructive hover:bg-destructive/10 transition-all"
+            >
+              <Plus className="h-4 w-4 text-destructive" />
+            </button>
+          )}
         </div>
+        
+        <p className="text-foreground text-2xl font-bold mb-8 text-left">
+          Tiempo de recuperación:{" "}
+          {currentAddiction && (
+            <span className="text-lg font-normal text-muted-foreground">
+              {currentAddiction.addiction_type}
+            </span>
+          )}
+        </p>
 
         <div className="flex items-center justify-center gap-4 md:gap-6">
           <div className="text-7xl md:text-8xl font-bold text-foreground tracking-tight">
