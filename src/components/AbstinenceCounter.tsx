@@ -180,13 +180,13 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
         </div>
 
         <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 mt-8">
-          <div className="text-4xl sm:text-6xl md:text-8xl font-bold text-foreground tracking-tight">
+          <div className="text-[5rem] sm:text-[7rem] md:text-[9rem] font-bold text-foreground tracking-tight leading-none">
             {count.years}<span className="ml-1">A</span>
           </div>
-          <div className="text-4xl sm:text-6xl md:text-8xl font-bold text-foreground tracking-tight">
+          <div className="text-[5rem] sm:text-[7rem] md:text-[9rem] font-bold text-foreground tracking-tight leading-none">
             {count.months}<span className="ml-1">M</span>
           </div>
-          <div className="text-4xl sm:text-6xl md:text-8xl font-bold text-foreground tracking-tight">
+          <div className="text-[5rem] sm:text-[7rem] md:text-[9rem] font-bold text-foreground tracking-tight leading-none">
             {count.days}<span className="ml-1">D</span>
           </div>
         </div>
