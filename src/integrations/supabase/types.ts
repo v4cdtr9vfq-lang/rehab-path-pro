@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      activating_persons: {
+        Row: {
+          created_at: string
+          description: string
+          emotion_reference: string | null
+          entry_date: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          emotion_reference?: string | null
+          entry_date?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          emotion_reference?: string | null
+          entry_date?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       addictions: {
         Row: {
           addiction_type: string
@@ -533,6 +563,36 @@ export type Database = {
           quote_author?: string
           quote_text?: string
           saved_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      sensitive_situations: {
+        Row: {
+          created_at: string
+          description: string
+          emotion_reference: string | null
+          entry_date: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          emotion_reference?: string | null
+          entry_date?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          emotion_reference?: string | null
+          entry_date?: string
+          id?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []

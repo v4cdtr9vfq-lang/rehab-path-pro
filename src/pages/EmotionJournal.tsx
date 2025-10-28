@@ -370,12 +370,18 @@ export default function EmotionJournal() {
   const [weekStats, setWeekStats] = useState<EmotionStats[]>([]);
   const [monthStats, setMonthStats] = useState<EmotionStats[]>([]);
   const [quarterStats, setQuarterStats] = useState<EmotionStats[]>([]);
+  const [situations, setSituations] = useState<any[]>([]);
+  const [persons, setPersons] = useState<any[]>([]);
+  const [deleteSituationId, setDeleteSituationId] = useState<string | null>(null);
+  const [deletePersonId, setDeletePersonId] = useState<string | null>(null);
   const { toast } = useToast();
   
   const ENTRIES_PER_PAGE = 3;
 
   useEffect(() => {
     loadSavedEntries();
+    loadSituations();
+    loadPersons();
     fetchStats();
   }, []);
 
@@ -394,6 +400,42 @@ export default function EmotionJournal() {
       setSavedEntries(data || []);
     } catch (error) {
       console.error('Error loading entries:', error);
+    }
+  };
+
+  const loadSituations = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await (supabase as any)
+        .from('sensitive_situations')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('entry_date', { ascending: false });
+
+      if (error) throw error;
+      setSituations(data || []);
+    } catch (error) {
+      console.error('Error loading situations:', error);
+    }
+  };
+
+  const loadPersons = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await (supabase as any)
+        .from('activating_persons')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('entry_date', { ascending: false });
+
+      if (error) throw error;
+      setPersons(data || []);
+    } catch (error) {
+      console.error('Error loading persons:', error);
     }
   };
 
@@ -580,12 +622,34 @@ export default function EmotionJournal() {
           primary_emotion: primaryNames,
           secondary_emotions: secondaryNames,
           tertiary_emotions: selectedTertiary,
-          entry_date: new Date().toISOString().split('T')[0],
-          situation_trigger: situationTrigger || false,
-          situation_description: situationTrigger ? situationDescription : null,
-          person_trigger: personTrigger || false,
-          person_description: personTrigger ? personDescription : null
+          entry_date: new Date().toISOString().split('T')[0]
         });
+
+      if (error) throw error;
+
+      // Save situation if provided
+      if (situationTrigger && situationDescription.trim()) {
+        await (supabase as any)
+          .from('sensitive_situations')
+          .insert({
+            user_id: user.id,
+            description: situationDescription.trim(),
+            emotion_reference: primaryNames,
+            entry_date: new Date().toISOString().split('T')[0]
+          });
+      }
+
+      // Save person if provided
+      if (personTrigger && personDescription.trim()) {
+        await (supabase as any)
+          .from('activating_persons')
+          .insert({
+            user_id: user.id,
+            description: personDescription.trim(),
+            emotion_reference: primaryNames,
+            entry_date: new Date().toISOString().split('T')[0]
+          });
+      }
 
       if (error) throw error;
 
@@ -747,6 +811,58 @@ export default function EmotionJournal() {
       toast({
         title: "Error",
         description: "No se pudo eliminar la entrada.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeleteSituation = async (situationId: string) => {
+    setDeleteSituationId(null);
+    try {
+      const { error } = await (supabase as any)
+        .from('sensitive_situations')
+        .delete()
+        .eq('id', situationId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Eliminado",
+        description: "La situación ha sido eliminada."
+      });
+
+      await loadSituations();
+    } catch (error) {
+      console.error('Error deleting situation:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar la situación.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeletePerson = async (personId: string) => {
+    setDeletePersonId(null);
+    try {
+      const { error } = await (supabase as any)
+        .from('activating_persons')
+        .delete()
+        .eq('id', personId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Eliminado",
+        description: "La persona ha sido eliminada."
+      });
+
+      await loadPersons();
+    } catch (error) {
+      console.error('Error deleting person:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar la persona.",
         variant: "destructive"
       });
     }
@@ -1206,30 +1322,6 @@ export default function EmotionJournal() {
                       </div>
                     </div>
                   )}
-
-                  {/* Situation Trigger */}
-                  {entry.situation_trigger && entry.situation_description && (
-                    <div className="mt-4 pt-4 border-t">
-                      <h3 className="text-sm font-medium text-muted-foreground mb-2">
-                        Situación que generó estos sentimientos:
-                      </h3>
-                      <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
-                        {entry.situation_description}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Person Trigger */}
-                  {entry.person_trigger && entry.person_description && (
-                    <div className="mt-4 pt-4 border-t">
-                      <h3 className="text-sm font-medium text-muted-foreground mb-2">
-                        Persona que generó estas emociones:
-                      </h3>
-                      <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
-                        {entry.person_description}
-                      </p>
-                    </div>
-                  )}
                 </div>
               </Card>
             ))
@@ -1351,6 +1443,90 @@ export default function EmotionJournal() {
         </div>
       </div>
 
+      {/* Sensitive Situations Widget */}
+      {situations.length > 0 && (
+        <div>
+          <h2 className="text-lg lg:text-xl font-bold text-foreground pl-[10px] lg:pl-8 mb-3">
+            Situaciones sensibles
+          </h2>
+          <div className="space-y-4">
+            {situations.map((situation) => (
+              <Card key={situation.id} className="p-6 bg-card border-border">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <CalendarIcon className="h-4 w-4" />
+                    <span className="text-sm font-medium">
+                      {format(new Date(situation.created_at), "d 'de' MMMM, yyyy", { locale: es })}
+                    </span>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setDeleteSituationId(situation.id)}
+                    className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="space-y-3 px-2">
+                  {situation.emotion_reference && (
+                    <div className="mb-2">
+                      <span className="text-xs text-muted-foreground">Relacionado con: </span>
+                      <span className="text-xs font-medium text-green-600">{situation.emotion_reference}</span>
+                    </div>
+                  )}
+                  <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
+                    {situation.description}
+                  </p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Activating Persons Widget */}
+      {persons.length > 0 && (
+        <div>
+          <h2 className="text-lg lg:text-xl font-bold text-foreground pl-[10px] lg:pl-8 mb-3">
+            Personas que me activan
+          </h2>
+          <div className="space-y-4">
+            {persons.map((person) => (
+              <Card key={person.id} className="p-6 bg-card border-border">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <CalendarIcon className="h-4 w-4" />
+                    <span className="text-sm font-medium">
+                      {format(new Date(person.created_at), "d 'de' MMMM, yyyy", { locale: es })}
+                    </span>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setDeletePersonId(person.id)}
+                    className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="space-y-3 px-2">
+                  {person.emotion_reference && (
+                    <div className="mb-2">
+                      <span className="text-xs text-muted-foreground">Relacionado con: </span>
+                      <span className="text-xs font-medium text-green-600">{person.emotion_reference}</span>
+                    </div>
+                  )}
+                  <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
+                    {person.description}
+                  </p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
         <AlertDialogContent>
@@ -1365,6 +1541,46 @@ export default function EmotionJournal() {
               Cancelar
             </Button>
             <Button variant="destructive" onClick={() => deleteConfirmId && handleDelete(deleteConfirmId)}>
+              Sí
+            </Button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete Situation Confirmation Dialog */}
+      <AlertDialog open={!!deleteSituationId} onOpenChange={(open) => !open && setDeleteSituationId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que quieres eliminar esta situación? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setDeleteSituationId(null)}>
+              Cancelar
+            </Button>
+            <Button variant="destructive" onClick={() => deleteSituationId && handleDeleteSituation(deleteSituationId)}>
+              Sí
+            </Button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete Person Confirmation Dialog */}
+      <AlertDialog open={!!deletePersonId} onOpenChange={(open) => !open && setDeletePersonId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que quieres eliminar esta persona? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setDeletePersonId(null)}>
+              Cancelar
+            </Button>
+            <Button variant="destructive" onClick={() => deletePersonId && handleDeletePerson(deletePersonId)}>
               Sí
             </Button>
           </div>
