@@ -956,87 +956,12 @@ export default function Settings() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Old abstinence date */}
+          {/* List of all addictions including main one */}
           <div className="space-y-4">
-            <Label>Fecha de inicio de abstinencia (legado)</Label>
-            <div className="flex items-center gap-2 p-3 rounded-lg border bg-card">
-              <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground">
-                1
-              </span>
-              <div className="flex-1 space-y-2">
-                <Select
-                  value={rehabilitationType}
-                  onValueChange={setRehabilitationType}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecciona una adicción" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {REHABILITATION_TYPES.map((type) => (
-                      <SelectItem key={type.id} value={type.id}>
-                        {type.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !abstinenceStartDate && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {abstinenceStartDate ? (
-                        format(new Date(abstinenceStartDate), "PPP", { locale: es })
-                      ) : (
-                        <span>Seleccionar fecha</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={abstinenceStartDate ? new Date(abstinenceStartDate) : undefined}
-                      onSelect={(date) => {
-                        if (date) {
-                          const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-                            .toISOString()
-                            .split('T')[0];
-                          setAbstinenceStartDate(localDate);
-                        }
-                      }}
-                      initialFocus
-                      className="pointer-events-auto"
-                    />
-                  </PopoverContent>
-                </Popover>
-                <Button 
-                  size="sm"
-                  onClick={() => {
-                    handleUpdateRehabilitationType();
-                    handleUpdateAbstinenceDate();
-                  }}
-                  disabled={isUpdatingDate || isUpdatingRehabType}
-                  className="w-full mt-2"
-                >
-                  {(isUpdatingDate || isUpdatingRehabType) ? "..." : "Guardar"}
-                </Button>
-              </div>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              Esta fecha se usará si no tienes adicciones registradas
-            </p>
-          </div>
-
-          {/* List of addictions */}
-          <div className="border-t pt-4 space-y-4">
             <div className="flex items-center justify-between">
-              <Label>Otras dependencias</Label>
+              <Label>Mis adicciones</Label>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">{addictions.length}/2</span>
+                <span className="text-sm text-muted-foreground">{addictions.length + 1}/3</span>
                 {addictions.length < 2 && (
                   <Button
                     size="icon"
@@ -1050,22 +975,92 @@ export default function Settings() {
               </div>
             </div>
             
-            {addictions.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-sm text-muted-foreground mb-4">
-                  No tienes adicciones adicionales registradas.
-                </p>
-                <Button
-                  size="icon"
-                  className="rounded-full h-12 w-12"
-                  onClick={() => setShowAddDialog(true)}
-                >
-                  <Plus className="h-6 w-6" />
-                </Button>
+            <div className="space-y-3">
+              {/* Main addiction (legado) */}
+              <div className="flex items-center gap-2 p-3 rounded-lg border bg-card">
+                <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground">
+                  1
+                </span>
+                <div className="flex-1 space-y-2">
+                  <Select
+                    value={rehabilitationType}
+                    onValueChange={setRehabilitationType}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Selecciona una adicción" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {REHABILITATION_TYPES.map((type) => (
+                        <SelectItem key={type.id} value={type.id}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !abstinenceStartDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {abstinenceStartDate ? (
+                          format(new Date(abstinenceStartDate), "PPP", { locale: es })
+                        ) : (
+                          <span>Seleccionar fecha</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={abstinenceStartDate ? new Date(abstinenceStartDate) : undefined}
+                        onSelect={(date) => {
+                          if (date) {
+                            const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+                              .toISOString()
+                              .split('T')[0];
+                            setAbstinenceStartDate(localDate);
+                          }
+                        }}
+                        initialFocus
+                        className="pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <Button 
+                    size="sm"
+                    onClick={() => {
+                      handleUpdateRehabilitationType();
+                      handleUpdateAbstinenceDate();
+                    }}
+                    disabled={isUpdatingDate || isUpdatingRehabType}
+                    className="w-full mt-2"
+                  >
+                    {(isUpdatingDate || isUpdatingRehabType) ? "..." : "Guardar"}
+                  </Button>
+                </div>
               </div>
-            ) : (
-              <div className="space-y-3">
-                {addictions.map((addiction, index) => {
+
+              {/* Additional addictions */}
+              {addictions.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Añade adicciones adicionales (máximo 2)
+                  </p>
+                  <Button
+                    size="icon"
+                    className="rounded-full h-12 w-12"
+                    onClick={() => setShowAddDialog(true)}
+                  >
+                    <Plus className="h-6 w-6" />
+                  </Button>
+                </div>
+              ) : (
+                addictions.map((addiction, index) => {
                   const dateValue = editingAddictions[addiction.id] || 
                     new Date(addiction.start_date).toISOString().split('T')[0];
                   const typeValue = editingAddictionTypes[addiction.id] || addiction.addiction_type;
@@ -1169,9 +1164,9 @@ export default function Settings() {
                       </AlertDialog>
                     </div>
                   );
-                })}
-              </div>
-            )}
+                })
+              )}
+            </div>
           </div>
 
           <div className="flex items-center justify-between">
