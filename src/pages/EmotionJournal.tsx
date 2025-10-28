@@ -542,6 +542,68 @@ export default function EmotionJournal() {
     );
   };
 
+  // Generate hashtags from title and content
+  const generateHashtags = (title: string, content: string, emotionName: string): string[] => {
+    const tags: string[] = [];
+    
+    // Add title-based hashtag (remove spaces, convert to lowercase)
+    const titleTag = title.toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[áàäâ]/g, 'a')
+      .replace(/[éèëê]/g, 'e')
+      .replace(/[íìïî]/g, 'i')
+      .replace(/[óòöô]/g, 'o')
+      .replace(/[úùüû]/g, 'u')
+      .replace(/ñ/g, 'n');
+    tags.push(titleTag);
+    
+    // Always add "emociones"
+    tags.push('emociones');
+    
+    // Add emotion name
+    if (emotionName) {
+      tags.push(emotionName.toLowerCase().replace(/\s+/g, '-'));
+    }
+    
+    // Extract keywords from content (words longer than 4 characters)
+    const stopWords = new Set([
+      'este', 'esta', 'estos', 'estas', 'que', 'para', 'con', 'por', 'como', 
+      'pero', 'porque', 'cuando', 'donde', 'cual', 'quien', 'muy', 'más', 
+      'también', 'hacer', 'sobre', 'sido', 'estar', 'tener', 'puede', 'debe',
+      'desde', 'hasta', 'entre', 'sobre', 'aunque', 'tanto', 'mientras'
+    ]);
+    
+    const words = content.toLowerCase()
+      .replace(/[.,!?;:()\[\]{}"""'']/g, ' ')
+      .split(/\s+/)
+      .filter(word => word.length > 4 && !stopWords.has(word))
+      .map(word => word
+        .replace(/[áàäâ]/g, 'a')
+        .replace(/[éèëê]/g, 'e')
+        .replace(/[íìïî]/g, 'i')
+        .replace(/[óòöô]/g, 'o')
+        .replace(/[úùüû]/g, 'u')
+        .replace(/ñ/g, 'n')
+      );
+    
+    // Count word frequency
+    const wordCount = new Map<string, number>();
+    words.forEach(word => {
+      wordCount.set(word, (wordCount.get(word) || 0) + 1);
+    });
+    
+    // Get top 3 most frequent words
+    const topWords = Array.from(wordCount.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([word]) => word);
+    
+    tags.push(...topWords);
+    
+    // Remove duplicates and limit to 6 tags total
+    return [...new Set(tags)].slice(0, 6);
+  };
+
   const handleSubmit = async () => {
     if (selectedPrimary.length === 0) {
       toast({
@@ -596,52 +658,56 @@ export default function EmotionJournal() {
 
       // Save situation as journal entry if provided
       if (situationTrigger && situationDescription.trim()) {
+        const tags = generateHashtags('Situaciones límite', situationDescription.trim(), primaryNames);
         await (supabase as any)
           .from('journal_entries')
           .insert({
             user_id: user.id,
             title: 'Situaciones límite',
             content: situationDescription.trim(),
-            tags: ['emociones', primaryNames],
+            tags,
             entry_date: new Date().toISOString().split('T')[0]
           });
       }
 
       // Save person as journal entry if provided
       if (personTrigger && personDescription.trim()) {
+        const tags = generateHashtags('Personas que me activan', personDescription.trim(), primaryNames);
         await (supabase as any)
           .from('journal_entries')
           .insert({
             user_id: user.id,
             title: 'Personas que me activan',
             content: personDescription.trim(),
-            tags: ['emociones', primaryNames],
+            tags,
             entry_date: new Date().toISOString().split('T')[0]
           });
       }
 
       // Save thought as journal entry if provided
       if (thoughtTrigger && thoughtDescription.trim()) {
+        const tags = generateHashtags('Pensamientos automáticos', thoughtDescription.trim(), primaryNames);
         await (supabase as any)
           .from('journal_entries')
           .insert({
             user_id: user.id,
             title: 'Pensamientos automáticos',
             content: thoughtDescription.trim(),
-            tags: ['emociones', primaryNames],
+            tags,
             entry_date: new Date().toISOString().split('T')[0]
           });
       }
 
       // Save belief as journal entry if provided
       if (beliefTrigger && beliefDescription.trim()) {
+        const tags = generateHashtags('Creencias falsas', beliefDescription.trim(), primaryNames);
         await (supabase as any)
           .from('journal_entries')
           .insert({
             user_id: user.id,
             title: 'Creencias falsas',
             content: beliefDescription.trim(),
-            tags: ['emociones', primaryNames],
+            tags,
             entry_date: new Date().toISOString().split('T')[0]
           });
       }
