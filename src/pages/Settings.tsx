@@ -95,6 +95,7 @@ export default function Settings() {
   });
   const [addictions, setAddictions] = useState<Addiction[]>([]);
   const [editingAddictions, setEditingAddictions] = useState<{ [key: string]: string }>({});
+  const [editingAddictionTypes, setEditingAddictionTypes] = useState<{ [key: string]: string }>({});
   const [showAddDialog, setShowAddDialog] = useState(false);
 
   useEffect(() => {
@@ -192,6 +193,56 @@ export default function Settings() {
       toast({
         title: "Error",
         description: error.message || "No se pudo actualizar la fecha.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleUpdateAddiction = async (addictionId: string, newDate: string, newType?: string) => {
+    if (!newDate) {
+      toast({
+        title: "Error",
+        description: "Por favor selecciona una fecha válida.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const dateObj = new Date(newDate + 'T00:00:00');
+      const updateData: any = { start_date: dateObj.toISOString() };
+      
+      if (newType) {
+        updateData.addiction_type = newType;
+      }
+      
+      const { error } = await supabase
+        .from('addictions')
+        .update(updateData)
+        .eq('id', addictionId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Adicción actualizada",
+        description: "Los datos de la adicción han sido actualizados.",
+      });
+
+      loadAddictions();
+      setEditingAddictions(prev => {
+        const newState = { ...prev };
+        delete newState[addictionId];
+        return newState;
+      });
+      setEditingAddictionTypes(prev => {
+        const newState = { ...prev };
+        delete newState[addictionId];
+        return newState;
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo actualizar la adicción.",
         variant: "destructive",
       });
     }
@@ -913,7 +964,21 @@ export default function Settings() {
                 1
               </span>
               <div className="flex-1 space-y-2">
-                <p className="font-medium">{rehabilitationType || 'Adicción principal'}</p>
+                <Select
+                  value={rehabilitationType}
+                  onValueChange={setRehabilitationType}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Selecciona una adicción" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {REHABILITATION_TYPES.map((type) => (
+                      <SelectItem key={type.id} value={type.id}>
+                        {type.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -950,11 +1015,14 @@ export default function Settings() {
                 </Popover>
                 <Button 
                   size="sm"
-                  onClick={handleUpdateAbstinenceDate}
-                  disabled={isUpdatingDate}
+                  onClick={() => {
+                    handleUpdateRehabilitationType();
+                    handleUpdateAbstinenceDate();
+                  }}
+                  disabled={isUpdatingDate || isUpdatingRehabType}
                   className="w-full mt-2"
                 >
-                  {isUpdatingDate ? "..." : "Guardar"}
+                  {(isUpdatingDate || isUpdatingRehabType) ? "..." : "Guardar"}
                 </Button>
               </div>
             </div>
@@ -1000,6 +1068,7 @@ export default function Settings() {
                 {addictions.map((addiction, index) => {
                   const dateValue = editingAddictions[addiction.id] || 
                     new Date(addiction.start_date).toISOString().split('T')[0];
+                  const typeValue = editingAddictionTypes[addiction.id] || addiction.addiction_type;
                   
                   return (
                     <div key={addiction.id} className="flex items-center gap-2 p-3 rounded-lg border bg-card">
@@ -1007,7 +1076,24 @@ export default function Settings() {
                         {index + 2}
                       </span>
                       <div className="flex-1 space-y-2">
-                        <p className="font-medium">{addiction.addiction_type}</p>
+                        <Select
+                          value={typeValue}
+                          onValueChange={(value) => setEditingAddictionTypes(prev => ({
+                            ...prev,
+                            [addiction.id]: value
+                          }))}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {REHABILITATION_TYPES.map((type) => (
+                              <SelectItem key={type.id} value={type.id}>
+                                {type.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <Popover>
                           <PopoverTrigger asChild>
                             <Button
@@ -1047,7 +1133,7 @@ export default function Settings() {
                         </Popover>
                         <Button 
                           size="sm"
-                          onClick={() => handleUpdateAddictionDate(addiction.id, dateValue)}
+                          onClick={() => handleUpdateAddiction(addiction.id, dateValue, typeValue)}
                           className="w-full mt-2"
                         >
                           Guardar
