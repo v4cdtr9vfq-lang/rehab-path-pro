@@ -648,7 +648,7 @@ export default function CheckIn() {
                 <SelectContent>
                   {userAddictions.map((addiction, index) => (
                     <SelectItem key={addiction.id} value={addiction.id}>
-                      {addiction.isOriginal ? "Principal" : `Secundaria ${index}`}: {addiction.name}
+                      {index + 1}. {addiction.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
