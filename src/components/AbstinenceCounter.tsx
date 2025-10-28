@@ -3,38 +3,70 @@ import { Plus } from "lucide-react";
 import { AddAddictionDialog } from "./AddAddictionDialog";
 import { toast } from "sonner";
 import { useAddictions } from "@/hooks/useAddictions";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CounterProps {
   startDate?: Date;
 }
 
 export function AbstinenceCounter({ startDate }: CounterProps) {
-  const { addictions, addAddiction, canAddMore } = useAddictions();
+  const { addictions, addAddiction } = useAddictions();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [rehabilitationType, setRehabilitationType] = useState<string | null>(null);
   const [count, setCount] = useState({
     years: 0,
     months: 0,
     days: 0
   });
 
+  // Load rehabilitation type from profile
+  useEffect(() => {
+    const loadRehabType = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('rehabilitation_type')
+        .eq('user_id', user.id)
+        .single();
+
+      if (profile?.rehabilitation_type) {
+        setRehabilitationType(profile.rehabilitation_type);
+      }
+    };
+    loadRehabType();
+  }, []);
+
+  // Combine original addiction with additional ones
+  const allAddictions = [
+    ...(startDate ? [{
+      id: 'original',
+      addiction_type: rehabilitationType || 'Recuperación',
+      start_date: startDate.toISOString(),
+      isOriginal: true
+    }] : []),
+    ...addictions.map(a => ({ ...a, isOriginal: false }))
+  ];
+
+  const canAddMoreAddictions = addictions.length < 2; // Max 3 total (1 original + 2 additional)
+
   // Calculate time based on selected addiction
   useEffect(() => {
     const calculateTime = () => {
-      let dateToUse: Date | null = null;
-      
-      // Use the selected addiction's date if available
-      if (addictions.length > 0 && addictions[selectedIndex]) {
-        dateToUse = new Date(addictions[selectedIndex].start_date);
-      } else if (startDate) {
-        dateToUse = startDate;
-      }
-      
-      if (!dateToUse) {
+      if (allAddictions.length === 0) {
         setCount({ years: 0, months: 0, days: 0 });
         return;
       }
-      
+
+      const selectedAddiction = allAddictions[selectedIndex];
+      if (!selectedAddiction) {
+        setCount({ years: 0, months: 0, days: 0 });
+        return;
+      }
+
+      const dateToUse = new Date(selectedAddiction.start_date);
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       const start = new Date(dateToUse.getFullYear(), dateToUse.getMonth(), dateToUse.getDate());
@@ -53,17 +85,17 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
     calculateTime();
     const interval = setInterval(calculateTime, 1000 * 60 * 60);
     return () => clearInterval(interval);
-  }, [addictions, selectedIndex, startDate]);
+  }, [allAddictions, selectedIndex]);
 
   // Reset selectedIndex if out of bounds
   useEffect(() => {
-    if (addictions.length > 0 && selectedIndex >= addictions.length) {
+    if (selectedIndex >= allAddictions.length && allAddictions.length > 0) {
       setSelectedIndex(0);
     }
-  }, [addictions.length, selectedIndex]);
+  }, [allAddictions.length, selectedIndex]);
 
   const handleAddAddiction = () => {
-    if (!canAddMore) {
+    if (!canAddMoreAddictions) {
       toast.error("Máximo 3 adicciones permitidas");
       return;
     }
@@ -76,23 +108,22 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
   };
 
   const handleCircleClick = (index: number) => {
-    console.log("Clicking circle:", index, "Current:", selectedIndex);
     setSelectedIndex(index);
   };
+
+  const currentAddiction = allAddictions[selectedIndex];
 
   return (
     <>
       <div className="rounded-3xl p-8 md:p-12 bg-card border border-sidebar-border relative">
         {/* Circles in top right corner */}
         <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
-          {addictions.length === 0 ? (
-            // Show default "1" circle when no addictions
+          {allAddictions.length === 0 ? (
             <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground">
               1
             </div>
           ) : (
-            // Show all addiction circles with click handler
-            addictions.map((addiction, index) => (
+            allAddictions.map((addiction, index) => (
               <button
                 key={addiction.id}
                 onClick={() => handleCircleClick(index)}
@@ -106,7 +137,7 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
               </button>
             ))
           )}
-          {addictions.length < 3 && (
+          {canAddMoreAddictions && (
             <button
               onClick={handleAddAddiction}
               className="w-8 h-8 rounded-full flex items-center justify-center bg-background border-2 border-primary hover:bg-primary/20 transition-all"
@@ -117,8 +148,8 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
         </div>
         
         <p className="text-foreground text-2xl font-bold mb-8 text-left">
-          {addictions.length > 0 && addictions[selectedIndex]
-            ? `${addictions[selectedIndex].addiction_type} - Tiempo de recuperación:`
+          {currentAddiction
+            ? `${currentAddiction.addiction_type} - Tiempo de recuperación:`
             : "Tiempo de recuperación:"}
         </p>
 
