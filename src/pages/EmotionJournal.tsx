@@ -90,7 +90,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "inspirado",
         name: "Inspirado",
-        tertiaryEmotions: ["Maravillado"]
+        tertiaryEmotions: []
       },
       {
         id: "pleno",
@@ -103,11 +103,6 @@ const emotionCategories: PrimaryCategory[] = [
     id: "asco",
     name: "Asco",
     secondaryEmotions: [
-      {
-        id: "aversion",
-        name: "Aversión",
-        tertiaryEmotions: ["Desagrado", "Desdén"]
-      },
       {
         id: "disgusto",
         name: "Disgusto",
@@ -231,7 +226,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "afirmacion",
         name: "Afirmación",
-        tertiaryEmotions: ["Certeza", "Convicción", "Firmeza", "Resolución", "Seguridad"]
+        tertiaryEmotions: ["Certeza", "Convicción", "Firmeza", "Resolución"]
       },
       {
         id: "agradecido",
@@ -256,7 +251,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "despreocupado",
         name: "Despreocupado",
-        tertiaryEmotions: ["Optimismo", "Serenidad", "Tranquilidad"]
+        tertiaryEmotions: ["Serenidad", "Tranquilidad"]
       },
       {
         id: "estabilidad",
@@ -283,11 +278,6 @@ const emotionCategories: PrimaryCategory[] = [
         id: "asombrado",
         name: "Asombrado",
         tertiaryEmotions: ["Boquiabierto", "Estupefacto", "Pasmado"]
-      },
-      {
-        id: "desconcertado_sorpresa",
-        name: "Desconcertado",
-        tertiaryEmotions: ["Atónito", "Perplejo"]
       },
       {
         id: "impactado",
@@ -339,11 +329,6 @@ const emotionCategories: PrimaryCategory[] = [
         id: "triste",
         name: "Infeliz",
         tertiaryEmotions: ["Deprimido", "Desalentado", "Descorazonado", "Desdichado", "Desolado", "Melancólico", "Sin esperanza", "Sombrío"]
-      },
-      {
-        id: "rechazo",
-        name: "Rechazo",
-        tertiaryEmotions: ["Animosidad", "Horrorizado", "Hostil", "Odio", "Repulsado"]
       }
     ]
   }
