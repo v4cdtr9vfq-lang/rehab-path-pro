@@ -638,29 +638,29 @@ export default function CheckIn() {
           </AlertDialogHeader>
 
           <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label className="text-left">¿En qué adicción has tenido la recaída?</Label>
-              <Select
-                value={selectedRelapseAddiction}
-                onValueChange={setSelectedRelapseAddiction}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecciona una adicción" />
-                </SelectTrigger>
-                <SelectContent className="bg-background">
-                  {userAddictions.length === 0 ? (
-                    <SelectItem value="none" disabled>No hay adicciones registradas</SelectItem>
-                  ) : (
-                    userAddictions.map((addiction, index) => (
+            {userAddictions.length > 1 ? (
+              <div className="space-y-2">
+                <Label className="text-left">¿En qué adicción has tenido la recaída?</Label>
+                <Select
+                  value={selectedRelapseAddiction}
+                  onValueChange={setSelectedRelapseAddiction}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Selecciona una adicción" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background">
+                    {userAddictions.map((addiction, index) => (
                       <SelectItem key={addiction.id} value={addiction.id}>
                         {index + 1}. {addiction.name}
                       </SelectItem>
-                    ))
-                  )}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">Total de adicciones: {userAddictions.length}</p>
-            </div>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground text-left">Total de adicciones: {userAddictions.length}</p>
+              </div>
+            ) : (
+              <p className="text-xs text-muted-foreground text-left">Total de adicciones: {userAddictions.length}</p>
+            )}
           </div>
 
           <div className="flex flex-col gap-2 w-full -mt-[20px]">
