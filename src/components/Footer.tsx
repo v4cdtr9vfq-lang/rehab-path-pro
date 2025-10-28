@@ -4,7 +4,7 @@ import { Heart, Mail, Info } from "lucide-react";
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-border bg-card/50 backdrop-blur">
-      <div className="container mx-auto px-4 lg:px-8 max-w-6xl pt-12 pb-7">
+      <div className="container mx-auto px-[15px] lg:px-8 max-w-6xl pt-12 pb-7">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About Section */}
           <div className="space-y-4">
