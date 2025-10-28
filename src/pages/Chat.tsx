@@ -464,7 +464,7 @@ export default function Chat() {
   const currentRoomOnline = onlineCountByRoom[currentRoom] || 0;
   
   return (
-    <div className="h-[calc(100vh-8rem+85px)] flex flex-col animate-in fade-in duration-500 -mt-[10px]">
+    <div className="h-[calc(100vh-8rem+85px)] flex flex-col animate-in fade-in duration-500 -mt-[25px]">
       <Tabs defaultValue="rooms" className="flex-1 flex flex-col">
         <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
           <TabsTrigger value="rooms" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
