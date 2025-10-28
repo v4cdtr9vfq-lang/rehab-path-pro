@@ -39,13 +39,13 @@ export function AbstinenceCounter({
   return <div className="rounded-3xl p-8 md:p-12 bg-card border border-sidebar-border">
       <p className="text-foreground text-2xl font-bold mb-8 text-left">Soy libre desde hace:</p>
       <div className="flex items-center justify-center gap-3 md:gap-4">
-        <div className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
+        <div className="text-5xl md:text-6xl font-bold text-foreground tracking-tight">
           {count.years}<span className="ml-1">A</span>
         </div>
-        <div className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
+        <div className="text-5xl md:text-6xl font-bold text-foreground tracking-tight">
           {count.months}<span className="ml-1">M</span>
         </div>
-        <div className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
+        <div className="text-5xl md:text-6xl font-bold text-foreground tracking-tight">
           {count.days}<span className="ml-1">D</span>
         </div>
       </div>
