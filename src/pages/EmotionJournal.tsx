@@ -386,6 +386,14 @@ export default function EmotionJournal() {
   const [beliefs, setBeliefs] = useState<any[]>([]);
   const [deleteThoughtId, setDeleteThoughtId] = useState<string | null>(null);
   const [deleteBeliefId, setDeleteBeliefId] = useState<string | null>(null);
+  const [editingSituationId, setEditingSituationId] = useState<string | null>(null);
+  const [editingPersonId, setEditingPersonId] = useState<string | null>(null);
+  const [editingThoughtId, setEditingThoughtId] = useState<string | null>(null);
+  const [editingBeliefId, setEditingBeliefId] = useState<string | null>(null);
+  const [editSituationText, setEditSituationText] = useState("");
+  const [editPersonText, setEditPersonText] = useState("");
+  const [editThoughtText, setEditThoughtText] = useState("");
+  const [editBeliefText, setEditBeliefText] = useState("");
   const { toast } = useToast();
   
   const ENTRIES_PER_PAGE = 3;
@@ -1087,6 +1095,176 @@ export default function EmotionJournal() {
       toast({
         title: "Error",
         description: "No se pudo eliminar la creencia.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Edit handlers
+  const handleEditSituation = (situation: any) => {
+    setEditingSituationId(situation.id);
+    setEditSituationText(situation.description);
+  };
+
+  const handleEditPerson = (person: any) => {
+    setEditingPersonId(person.id);
+    setEditPersonText(person.description);
+  };
+
+  const handleEditThought = (thought: any) => {
+    setEditingThoughtId(thought.id);
+    setEditThoughtText(thought.description);
+  };
+
+  const handleEditBelief = (belief: any) => {
+    setEditingBeliefId(belief.id);
+    setEditBeliefText(belief.description);
+  };
+
+  // Update handlers
+  const handleUpdateSituation = async (situationId: string) => {
+    if (!editSituationText.trim()) {
+      toast({
+        title: "Error",
+        description: "La descripción no puede estar vacía.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const { error } = await (supabase as any)
+        .from('sensitive_situations')
+        .update({ description: editSituationText.trim() })
+        .eq('id', situationId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Actualizado",
+        description: "La situación ha sido actualizada."
+      });
+
+      setEditingSituationId(null);
+      setEditSituationText("");
+      await loadSituations();
+      await loadSavedEntries();
+    } catch (error) {
+      console.error('Error updating situation:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar la situación.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleUpdatePerson = async (personId: string) => {
+    if (!editPersonText.trim()) {
+      toast({
+        title: "Error",
+        description: "La descripción no puede estar vacía.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const { error } = await (supabase as any)
+        .from('activating_persons')
+        .update({ description: editPersonText.trim() })
+        .eq('id', personId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Actualizado",
+        description: "La persona ha sido actualizada."
+      });
+
+      setEditingPersonId(null);
+      setEditPersonText("");
+      await loadPersons();
+      await loadSavedEntries();
+    } catch (error) {
+      console.error('Error updating person:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar la persona.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleUpdateThought = async (thoughtId: string) => {
+    if (!editThoughtText.trim()) {
+      toast({
+        title: "Error",
+        description: "La descripción no puede estar vacía.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const { error } = await (supabase as any)
+        .from('automatic_thoughts')
+        .update({ description: editThoughtText.trim() })
+        .eq('id', thoughtId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Actualizado",
+        description: "El pensamiento ha sido actualizado."
+      });
+
+      setEditingThoughtId(null);
+      setEditThoughtText("");
+      await loadThoughts();
+      await loadSavedEntries();
+    } catch (error) {
+      console.error('Error updating thought:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar el pensamiento.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleUpdateBelief = async (beliefId: string) => {
+    if (!editBeliefText.trim()) {
+      toast({
+        title: "Error",
+        description: "La descripción no puede estar vacía.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const { error } = await (supabase as any)
+        .from('false_beliefs')
+        .update({ description: editBeliefText.trim() })
+        .eq('id', beliefId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Actualizado",
+        description: "La creencia ha sido actualizada."
+      });
+
+      setEditingBeliefId(null);
+      setEditBeliefText("");
+      await loadBeliefs();
+      await loadSavedEntries();
+    } catch (error) {
+      console.error('Error updating belief:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar la creencia.",
         variant: "destructive"
       });
     }
@@ -1811,14 +1989,50 @@ export default function EmotionJournal() {
                       {format(new Date(situation.created_at), "d 'de' MMMM, yyyy", { locale: es })}
                     </span>
                   </div>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => setDeleteSituationId(situation.id)}
-                    className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex gap-2">
+                    {editingSituationId === situation.id ? (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleUpdateSituation(situation.id)}
+                          className="h-8 px-3 text-success hover:text-success"
+                        >
+                          Guardar
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            setEditingSituationId(null);
+                            setEditSituationText("");
+                          }}
+                          className="h-8 px-3"
+                        >
+                          Cancelar
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleEditSituation(situation)}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setDeleteSituationId(situation.id)}
+                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </>
+                    )}
+                  </div>
                 </div>
                 <div className="space-y-3 px-2">
                   {situation.emotion_reference && (
@@ -1827,9 +2041,17 @@ export default function EmotionJournal() {
                       <span className="text-xs font-medium text-green-600">{situation.emotion_reference}</span>
                     </div>
                   )}
-                  <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
-                    {situation.description}
-                  </p>
+                  {editingSituationId === situation.id ? (
+                    <Textarea
+                      value={editSituationText}
+                      onChange={(e) => setEditSituationText(e.target.value)}
+                      className="min-h-[100px] resize-none"
+                    />
+                  ) : (
+                    <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
+                      {situation.description}
+                    </p>
+                  )}
                 </div>
               </Card>
             ))}
@@ -1853,14 +2075,50 @@ export default function EmotionJournal() {
                       {format(new Date(person.created_at), "d 'de' MMMM, yyyy", { locale: es })}
                     </span>
                   </div>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => setDeletePersonId(person.id)}
-                    className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex gap-2">
+                    {editingPersonId === person.id ? (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleUpdatePerson(person.id)}
+                          className="h-8 px-3 text-success hover:text-success"
+                        >
+                          Guardar
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            setEditingPersonId(null);
+                            setEditPersonText("");
+                          }}
+                          className="h-8 px-3"
+                        >
+                          Cancelar
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleEditPerson(person)}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setDeletePersonId(person.id)}
+                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </>
+                    )}
+                  </div>
                 </div>
                 <div className="space-y-3 px-2">
                   {person.emotion_reference && (
@@ -1869,9 +2127,17 @@ export default function EmotionJournal() {
                       <span className="text-xs font-medium text-green-600">{person.emotion_reference}</span>
                     </div>
                   )}
-                  <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
-                    {person.description}
-                  </p>
+                  {editingPersonId === person.id ? (
+                    <Textarea
+                      value={editPersonText}
+                      onChange={(e) => setEditPersonText(e.target.value)}
+                      className="min-h-[100px] resize-none"
+                    />
+                  ) : (
+                    <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
+                      {person.description}
+                    </p>
+                  )}
                 </div>
               </Card>
             ))}
@@ -1895,14 +2161,50 @@ export default function EmotionJournal() {
                       {format(new Date(thought.created_at), "d 'de' MMMM, yyyy", { locale: es })}
                     </span>
                   </div>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => setDeleteThoughtId(thought.id)}
-                    className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex gap-2">
+                    {editingThoughtId === thought.id ? (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleUpdateThought(thought.id)}
+                          className="h-8 px-3 text-success hover:text-success"
+                        >
+                          Guardar
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            setEditingThoughtId(null);
+                            setEditThoughtText("");
+                          }}
+                          className="h-8 px-3"
+                        >
+                          Cancelar
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleEditThought(thought)}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setDeleteThoughtId(thought.id)}
+                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </>
+                    )}
+                  </div>
                 </div>
                 <div className="space-y-3 px-2">
                   {thought.emotion_reference && (
@@ -1911,9 +2213,17 @@ export default function EmotionJournal() {
                       <span className="text-xs font-medium text-green-600">{thought.emotion_reference}</span>
                     </div>
                   )}
-                  <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
-                    {thought.description}
-                  </p>
+                  {editingThoughtId === thought.id ? (
+                    <Textarea
+                      value={editThoughtText}
+                      onChange={(e) => setEditThoughtText(e.target.value)}
+                      className="min-h-[100px] resize-none"
+                    />
+                  ) : (
+                    <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
+                      {thought.description}
+                    </p>
+                  )}
                 </div>
               </Card>
             ))}
@@ -1937,14 +2247,50 @@ export default function EmotionJournal() {
                       {format(new Date(belief.created_at), "d 'de' MMMM, yyyy", { locale: es })}
                     </span>
                   </div>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => setDeleteBeliefId(belief.id)}
-                    className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex gap-2">
+                    {editingBeliefId === belief.id ? (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleUpdateBelief(belief.id)}
+                          className="h-8 px-3 text-success hover:text-success"
+                        >
+                          Guardar
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            setEditingBeliefId(null);
+                            setEditBeliefText("");
+                          }}
+                          className="h-8 px-3"
+                        >
+                          Cancelar
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleEditBelief(belief)}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setDeleteBeliefId(belief.id)}
+                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </>
+                    )}
+                  </div>
                 </div>
                 <div className="space-y-3 px-2">
                   {belief.emotion_reference && (
@@ -1953,9 +2299,17 @@ export default function EmotionJournal() {
                       <span className="text-xs font-medium text-green-600">{belief.emotion_reference}</span>
                     </div>
                   )}
-                  <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
-                    {belief.description}
-                  </p>
+                  {editingBeliefId === belief.id ? (
+                    <Textarea
+                      value={editBeliefText}
+                      onChange={(e) => setEditBeliefText(e.target.value)}
+                      className="min-h-[100px] resize-none"
+                    />
+                  ) : (
+                    <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">
+                      {belief.description}
+                    </p>
+                  )}
                 </div>
               </Card>
             ))}
