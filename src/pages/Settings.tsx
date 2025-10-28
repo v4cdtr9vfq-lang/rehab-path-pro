@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AddAddictionDialog } from "@/components/AddAddictionDialog";
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -89,6 +90,7 @@ export default function Settings() {
   });
   const [addictions, setAddictions] = useState<Addiction[]>([]);
   const [editingAddictions, setEditingAddictions] = useState<{ [key: string]: string }>({});
+  const [showAddDialog, setShowAddDialog] = useState(false);
 
   useEffect(() => {
     loadAbstinenceDate();
@@ -185,6 +187,38 @@ export default function Settings() {
       toast({
         title: "Error",
         description: error.message || "No se pudo actualizar la fecha.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleAddAddiction = async (addictionType: string, startDate: Date) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('addictions')
+        .insert({
+          user_id: user.id,
+          addiction_type: addictionType,
+          start_date: startDate.toISOString(),
+          is_active: true,
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Adicción añadida",
+        description: "La adicción ha sido registrada correctamente.",
+      });
+
+      loadAddictions();
+      setShowAddDialog(false);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo añadir la adicción.",
         variant: "destructive",
       });
     }
@@ -891,14 +925,35 @@ export default function Settings() {
           {/* List of addictions */}
           <div className="border-t pt-4 space-y-4">
             <div className="flex items-center justify-between">
-              <Label>Mis adicciones</Label>
-              <span className="text-sm text-muted-foreground">{addictions.length}/3</span>
+              <Label>Otras dependencias</Label>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">{addictions.length}/2</span>
+                {addictions.length < 2 && (
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="h-8 w-8"
+                    onClick={() => setShowAddDialog(true)}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
             </div>
             
             {addictions.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-4">
-                No tienes adicciones registradas. Añade una desde el dashboard.
-              </p>
+              <div className="text-center py-8">
+                <p className="text-sm text-muted-foreground mb-4">
+                  No tienes adicciones adicionales registradas.
+                </p>
+                <Button
+                  size="icon"
+                  className="rounded-full h-12 w-12"
+                  onClick={() => setShowAddDialog(true)}
+                >
+                  <Plus className="h-6 w-6" />
+                </Button>
+              </div>
             ) : (
               <div className="space-y-3">
                 {addictions.map((addiction, index) => {
@@ -908,7 +963,7 @@ export default function Settings() {
                   return (
                     <div key={addiction.id} className="flex items-center gap-2 p-3 rounded-lg border bg-card">
                       <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground">
-                        {index + 1}
+                        {index + 2}
                       </span>
                       <div className="flex-1 space-y-2">
                         <p className="font-medium">{addiction.addiction_type}</p>
@@ -1243,6 +1298,16 @@ export default function Settings() {
           </div>
         </CardContent>
       </Card>
+
+      <AddAddictionDialog
+        open={showAddDialog}
+        onOpenChange={setShowAddDialog}
+        onAdd={handleAddAddiction}
+        existingAddictions={[
+          ...(rehabilitationType ? [rehabilitationType.toLowerCase()] : []),
+          ...addictions.map(a => a.addiction_type.toLowerCase())
+        ]}
+      />
     </div>
   );
 }
