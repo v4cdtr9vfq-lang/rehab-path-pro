@@ -663,7 +663,7 @@ export default function CheckIn() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-2 w-full -mt-[35px]">
+          <div className="flex flex-col gap-2 w-full -mt-[20px]">
             <Button onClick={handleRelapseInventory} className="bg-secondary w-full justify-start">
               Inventario
             </Button>
