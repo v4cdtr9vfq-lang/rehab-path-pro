@@ -663,22 +663,22 @@ export default function CheckIn() {
             </div>
           </div>
 
-          <AlertDialogFooter className="flex-col sm:flex-col gap-2 items-stretch">
-            <AlertDialogAction onClick={handleRelapseInventory} className="bg-secondary w-full">
+          <div className="flex flex-col gap-2 w-full mt-4">
+            <Button onClick={handleRelapseInventory} className="bg-secondary w-full justify-start">
               Inventario
-            </AlertDialogAction>
+            </Button>
             {!relapseConfirmed && (
-              <Button onClick={handleConfirmRelapse} className="bg-primary w-full">
+              <Button onClick={handleConfirmRelapse} className="bg-primary w-full justify-start">
                 Confirmar
               </Button>
             )}
-            <AlertDialogCancel onClick={() => {
+            <Button onClick={() => {
               setShowRelapseDialog(false);
               setRelapseConfirmed(false);
-            }} className="w-full">
+            }} variant="outline" className="w-full justify-start">
               Cerrar
-            </AlertDialogCancel>
-          </AlertDialogFooter>
+            </Button>
+          </div>
         </AlertDialogContent>
       </AlertDialog>
     </div>
