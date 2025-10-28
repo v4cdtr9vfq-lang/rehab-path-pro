@@ -333,7 +333,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "melancolia",
         name: "Melancolía",
-        tertiaryEmotions: []
+        tertiaryEmotions: ["Nostalgia", "Resignación"]
       },
       {
         id: "soledad",
