@@ -1148,8 +1148,8 @@ export default function Settings() {
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
                             <Button
-                              variant="ghost"
-                              className="w-full md:hidden text-destructive hover:text-destructive"
+                              variant="outline"
+                              className="w-full md:hidden border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
                             >
                               Borrar
                             </Button>
@@ -1176,9 +1176,9 @@ export default function Settings() {
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button
-                            variant="ghost"
+                            variant="outline"
                             size="icon"
-                            className="hidden md:flex text-destructive hover:text-destructive shrink-0"
+                            className="hidden md:flex border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground shrink-0"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
