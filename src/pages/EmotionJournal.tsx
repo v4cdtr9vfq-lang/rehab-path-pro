@@ -1290,7 +1290,7 @@ export default function EmotionJournal() {
         {/* Additional Questions */}
         {selectedPrimary.length > 0 && (
           <div className="space-y-6 mt-8 pt-6 border-t">
-            <h2 className="text-2xl font-bold text-foreground mb-6">Preguntas opcionales:</h2>
+            <h2 className="text-lg lg:text-xl font-bold text-foreground mb-6">Preguntas opcionales:</h2>
             
             {/* Situation Question */}
             <div className="space-y-3">
