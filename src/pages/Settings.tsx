@@ -987,7 +987,7 @@ export default function Settings() {
             <div className="space-y-3">
               {/* Main addiction (legado) */}
               <div className="flex items-start gap-2 p-3 rounded-lg border bg-card">
-                <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground mt-0.5">
+                <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground shrink-0">
                   1
                 </span>
                 <div className="flex-1 space-y-2">
@@ -1076,82 +1076,111 @@ export default function Settings() {
                   const typeValue = editingAddictionTypes[addiction.id] || addiction.addiction_type;
                   
                   return (
-                    <div key={addiction.id} className="flex items-start gap-2 p-3 rounded-lg border bg-card">
-                      <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground mt-0.5">
-                        {index + 2}
-                      </span>
-                      <div className="flex-1 space-y-2">
-                        <Select
-                          value={typeValue}
-                          onValueChange={(value) => setEditingAddictionTypes(prev => ({
-                            ...prev,
-                            [addiction.id]: value
-                          }))}
-                        >
-                          <SelectTrigger className="w-full h-10">
-                            <SelectValue>
-                              {REHABILITATION_TYPES.find(t => t.id === typeValue)?.label || typeValue}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            {REHABILITATION_TYPES.map((type) => (
-                              <SelectItem key={type.id} value={type.id}>
-                                {type.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              className={cn(
-                                "w-full justify-start text-left font-normal",
-                                !dateValue && "text-muted-foreground"
-                              )}
-                            >
-                              <CalendarIcon className="mr-2 h-4 w-4" />
-                              {dateValue ? (
-                                format(new Date(dateValue), "PPP", { locale: es })
-                              ) : (
-                                <span>Seleccionar fecha</span>
-                              )}
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={dateValue ? new Date(dateValue) : undefined}
-                              onSelect={(date) => {
-                                if (date) {
-                                  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-                                    .toISOString()
-                                    .split('T')[0];
-                                  setEditingAddictions(prev => ({
-                                    ...prev,
-                                    [addiction.id]: localDate
-                                  }));
-                                }
-                              }}
-                              initialFocus
-                              className="pointer-events-auto"
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <Button 
-                          size="sm"
-                          onClick={() => handleUpdateAddiction(addiction.id, dateValue, typeValue)}
-                          className="w-full mt-2"
-                        >
-                          Guardar
-                        </Button>
+                    <div key={addiction.id} className="flex flex-col md:flex-row items-start gap-2 p-3 rounded-lg border bg-card">
+                      <div className="flex items-start gap-2 w-full">
+                        <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-primary-foreground shrink-0">
+                          {index + 2}
+                        </span>
+                        <div className="flex-1 space-y-2">
+                          <Select
+                            value={typeValue}
+                            onValueChange={(value) => setEditingAddictionTypes(prev => ({
+                              ...prev,
+                              [addiction.id]: value
+                            }))}
+                          >
+                            <SelectTrigger className="w-full h-10">
+                              <SelectValue>
+                                {REHABILITATION_TYPES.find(t => t.id === typeValue)?.label || typeValue}
+                              </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                              {REHABILITATION_TYPES.map((type) => (
+                                <SelectItem key={type.id} value={type.id}>
+                                  {type.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                className={cn(
+                                  "w-full justify-start text-left font-normal",
+                                  !dateValue && "text-muted-foreground"
+                                )}
+                              >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {dateValue ? (
+                                  format(new Date(dateValue), "PPP", { locale: es })
+                                ) : (
+                                  <span>Seleccionar fecha</span>
+                                )}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                              <Calendar
+                                mode="single"
+                                selected={dateValue ? new Date(dateValue) : undefined}
+                                onSelect={(date) => {
+                                  if (date) {
+                                    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+                                      .toISOString()
+                                      .split('T')[0];
+                                    setEditingAddictions(prev => ({
+                                      ...prev,
+                                      [addiction.id]: localDate
+                                    }));
+                                  }
+                                }}
+                                initialFocus
+                                className="pointer-events-auto"
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <Button 
+                            size="sm"
+                            onClick={() => handleUpdateAddiction(addiction.id, dateValue, typeValue)}
+                            className="w-full mt-2"
+                          >
+                            Guardar
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                className="w-full md:hidden text-destructive hover:text-destructive"
+                              >
+                                Borrar
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>¿Eliminar adicción?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Esta acción eliminará permanentemente "{addiction.addiction_type}" y su historial. No se puede deshacer.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => handleDeleteAddiction(addiction.id)}
+                                  className="bg-destructive hover:bg-destructive/90"
+                                >
+                                  Eliminar
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
                       </div>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="text-destructive hover:text-destructive"
+                            className="hidden md:flex text-destructive hover:text-destructive shrink-0"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
