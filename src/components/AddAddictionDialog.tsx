@@ -32,18 +32,25 @@ export function AddAddictionDialog({ open, onOpenChange, onAdd, existingAddictio
     "Adicción 2",
     "Adicción 3",
     "Alcohol",
-    "Narcóticos",
-    "Cocaína",
+    "Amor",
+    "Azúcar",
     "Cannabis",
-    "Tabaco",
-    "Juego",
+    "Cocaína",
+    "Codependencia",
     "Comida",
     "Compras",
-    "Sexo",
-    "Pornografía",
+    "Drama",
     "Internet",
-    "Videojuegos",
-    "Trabajo"
+    "Juego",
+    "Medicamentos",
+    "Narcóticos",
+    "Pornografía",
+    "Redes Sociales",
+    "Sexo",
+    "Tabaco",
+    "Tecnología",
+    "Trabajo",
+    "Videojuegos"
   ];
 
   // Show all options without filtering

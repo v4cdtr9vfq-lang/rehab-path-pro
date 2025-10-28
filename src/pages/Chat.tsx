@@ -39,6 +39,7 @@ interface ChatMessage {
 }
 
 const CHAT_ROOMS = [
+  { id: 'amor', label: 'Amor' },
   { id: 'azucar', label: 'Azúcar' },
   { id: 'codependencia', label: 'Codependencia' },
   { id: 'comida', label: 'Comida' },
@@ -48,6 +49,7 @@ const CHAT_ROOMS = [
   { id: 'narcoticos', label: 'Narcóticos' },
   { id: 'pornografia', label: 'Pornografía' },
   { id: 'redes_sociales', label: 'Redes Sociales' },
+  { id: 'sexo', label: 'Sexo' },
   { id: 'tecnologia', label: 'Tecnología' },
   { id: 'trabajo', label: 'Trabajo' },
   { id: 'videojuegos', label: 'Videojuegos' },
@@ -66,6 +68,7 @@ export default function Chat() {
     return savedRoom || 'narcoticos';
   });
   const [onlineCountByRoom, setOnlineCountByRoom] = useState<Record<string, number>>({
+    amor: 0,
     azucar: 0,
     codependencia: 0,
     comida: 0,
@@ -75,6 +78,7 @@ export default function Chat() {
     narcoticos: 0,
     pornografia: 0,
     redes_sociales: 0,
+    sexo: 0,
     tecnologia: 0,
     trabajo: 0,
     videojuegos: 0,
