@@ -40,7 +40,6 @@ export function useAddictions() {
 
   const addAddiction = useMutation({
     mutationFn: async ({ addictionType, startDate }: { addictionType: string; startDate: Date }) => {
-      console.log("🟢 ADDING ADDICTION:", addictionType, startDate);
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user found");
 
@@ -55,15 +54,10 @@ export function useAddictions() {
         .select()
         .single();
 
-      if (error) {
-        console.log("🔴 ERROR ADDING:", error);
-        throw error;
-      }
-      console.log("🟢 ADDICTION ADDED:", data);
+      if (error) throw error;
       return data;
     },
     onSuccess: () => {
-      console.log("🟢 INVALIDATING QUERIES");
       queryClient.invalidateQueries({ queryKey: ["addictions"] });
       toast({
         title: "Adicción añadida",
@@ -71,7 +65,6 @@ export function useAddictions() {
       });
     },
     onError: (error) => {
-      console.log("🔴 ON ERROR:", error);
       toast({
         title: "Error",
         description: "No se pudo añadir la adicción",
