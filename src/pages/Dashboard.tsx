@@ -1055,11 +1055,11 @@ export default function Home() {
                     </div>
                     <div className="flex-1 overflow-hidden pr-2">
                       <p className="font-bold text-foreground text-sm md:text-base mb-0.5 break-words">{medal.name}</p>
-                      <p className={`text-xs md:text-sm break-words ${status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
-                        {status.isUnlocked 
-                          ? '¡Conseguido!' 
-                          : medal.requiredDays === 0
-                            ? 'Preconcedida'
+                      <p className={`text-xs md:text-sm break-words ${medal.requiredDays === 0 || status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
+                        {medal.requiredDays === 0
+                          ? 'Preconcedida'
+                          : status.isUnlocked 
+                            ? '¡Conseguido!' 
                             : `+${status.progress} / ${medal.requiredDays} días.`
                         }
                       </p>
