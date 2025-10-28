@@ -18,11 +18,21 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
     days: 0
   });
 
+  const getCurrentStartDate = (): Date | null => {
+    if (addictions.length > 0 && addictions[selectedIndex]) {
+      return new Date(addictions[selectedIndex].start_date);
+    }
+    return startDate || null;
+  };
+
   useEffect(() => {
+    const currentStartDate = getCurrentStartDate();
+    if (!currentStartDate) {
+      setCount({ years: 0, months: 0, days: 0 });
+      return;
+    }
+    
     const calculateTime = () => {
-      const currentStartDate = getCurrentStartDate();
-      if (!currentStartDate) return;
-      
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       const start = new Date(currentStartDate.getFullYear(), currentStartDate.getMonth(), currentStartDate.getDate());
@@ -35,25 +45,13 @@ export function AbstinenceCounter({ startDate }: CounterProps) {
       const months = Math.floor(daysAfterYears / 30);
       const days = daysAfterYears % 30;
       
-      setCount({
-        years,
-        months,
-        days
-      });
+      setCount({ years, months, days });
     };
     
     calculateTime();
     const interval = setInterval(calculateTime, 1000 * 60 * 60);
     return () => clearInterval(interval);
-  }, [addictions, selectedIndex, startDate]);
-
-
-  const getCurrentStartDate = (): Date | null => {
-    if (addictions.length > 0 && addictions[selectedIndex]) {
-      return new Date(addictions[selectedIndex].start_date);
-    }
-    return startDate || null;
-  };
+  }, [addictions.length, selectedIndex, startDate?.getTime()]);
 
   const handleAddAddiction = () => {
     if (!canAddMore) {
