@@ -65,7 +65,7 @@ const COLORS = [
 const emotionCategories: PrimaryCategory[] = [
   {
     id: "alegre",
-    name: "Alegre",
+    name: "Alegría",
     secondaryEmotions: [
       {
         id: "descansado",
@@ -122,7 +122,7 @@ const emotionCategories: PrimaryCategory[] = [
   },
   {
     id: "confundido",
-    name: "Confundido",
+    name: "Confusión",
     secondaryEmotions: [
       {
         id: "desorientado",
@@ -133,7 +133,7 @@ const emotionCategories: PrimaryCategory[] = [
   },
   {
     id: "vulnerable",
-    name: "Inseguro",
+    name: "Inseguridad",
     secondaryEmotions: [
       {
         id: "avergonzado",
@@ -169,7 +169,7 @@ const emotionCategories: PrimaryCategory[] = [
   },
   {
     id: "irritado",
-    name: "Irritado",
+    name: "Irritación",
     secondaryEmotions: [
       {
         id: "deseo",
@@ -211,7 +211,7 @@ const emotionCategories: PrimaryCategory[] = [
   },
   {
     id: "conectado",
-    name: "Seguro",
+    name: "Seguridad",
     secondaryEmotions: [
       {
         id: "abierto",
@@ -293,7 +293,7 @@ const emotionCategories: PrimaryCategory[] = [
   },
   {
     id: "cansado",
-    name: "Triste",
+    name: "Tristeza",
     secondaryEmotions: [
       {
         id: "abandono",
