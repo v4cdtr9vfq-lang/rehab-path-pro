@@ -611,9 +611,9 @@ export default function Home() {
   const checkAndUnlockMedals = async (userId: string, days: number, currentMedals: any[], addictionId: string = 'original') => {
     const medalsToCheck = [
       { type: 'valor', days: 0, name: 'Valor', emoji: '🥉' },
-      { type: 'constancia', days: 40, name: 'Constancia', emoji: '🥈' },
-      { type: 'recuperacion', days: 90, name: 'Recuperación', emoji: '🥇' },
-      { type: 'servicio', days: 180, name: 'Servicio', emoji: '🏆' }
+      { type: 'constancia', days: 90, name: 'Constancia', emoji: '🥈' },
+      { type: 'recuperacion', days: 180, name: 'Recuperación', emoji: '🥇' },
+      { type: 'servicio', days: 360, name: 'Libertad', emoji: '🏆' }
     ];
 
     for (const medal of medalsToCheck) {
@@ -658,9 +658,9 @@ export default function Home() {
 
   // Medal configuration
   const medalConfig = [
-    { type: 'servicio', name: 'Libertad', emoji: '🏆', requiredDays: 180 },
-    { type: 'recuperacion', name: 'Recuperación', emoji: '🥇', requiredDays: 90 },
-    { type: 'constancia', name: 'Constancia', emoji: '🥈', requiredDays: 40 },
+    { type: 'servicio', name: 'Libertad', emoji: '🏆', requiredDays: 360 },
+    { type: 'recuperacion', name: 'Recuperación', emoji: '🥇', requiredDays: 180 },
+    { type: 'constancia', name: 'Constancia', emoji: '🥈', requiredDays: 90 },
     { type: 'valor', name: 'Valor', emoji: '🥉', requiredDays: 0 }
   ];
 
@@ -1057,9 +1057,9 @@ export default function Home() {
                       <p className="font-bold text-foreground text-sm md:text-base mb-0.5 break-words">{medal.name}</p>
                       <p className={`text-xs md:text-sm break-words ${medal.requiredDays === 0 || status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
                         {medal.requiredDays === 0
-                          ? 'Preconcedida'
+                          ? '¡Conseguida!'
                           : status.isUnlocked 
-                            ? '¡Conseguido!' 
+                            ? '¡Conseguida!' 
                             : `+${status.progress} / ${medal.requiredDays} días.`
                         }
                       </p>
