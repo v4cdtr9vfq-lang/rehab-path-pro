@@ -261,7 +261,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "confiado",
         name: "Confiado",
-        tertiaryEmotions: ["Abierto", "Empoderado", "Orgulloso", "Protegido", "Seguro"]
+        tertiaryEmotions: ["Empoderado", "Orgulloso", "Protegido", "Seguro"]
       },
       {
         id: "despreocupado",
@@ -281,7 +281,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "valiente",
         name: "Valiente",
-        tertiaryEmotions: ["Audaz", "Decidido", "Determinado", "Intrépido", "Osado", "Valiente"]
+        tertiaryEmotions: ["Audaz", "Decidido", "Determinado", "Intrépido", "Osado"]
       }
     ]
   },
@@ -343,7 +343,7 @@ const emotionCategories: PrimaryCategory[] = [
       {
         id: "fatigado",
         name: "Fatigado",
-        tertiaryEmotions: ["Agotado", "Apático", "Cansado", "Exhausto", "Fatigado", "Letárgico", "Quemado", "Somnoliento"]
+        tertiaryEmotions: ["Apático", "Exhausto", "Fatigado", "Letárgico", "Quemado", "Somnoliento"]
       },
       {
         id: "triste",
