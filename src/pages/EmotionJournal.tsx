@@ -542,10 +542,8 @@ export default function EmotionJournal() {
     );
   };
 
-  // Generate hashtags from title and content
+  // Generate hashtags from title only
   const generateHashtags = (title: string, content: string, emotionName: string): string[] => {
-    const tags: string[] = [];
-    
     // Add title-based hashtag (remove spaces, convert to lowercase)
     const titleTag = title.toLowerCase()
       .replace(/\s+/g, '-')
@@ -555,53 +553,8 @@ export default function EmotionJournal() {
       .replace(/[óòöô]/g, 'o')
       .replace(/[úùüû]/g, 'u')
       .replace(/ñ/g, 'n');
-    tags.push(titleTag);
     
-    // Always add "emociones"
-    tags.push('emociones');
-    
-    // Add emotion name
-    if (emotionName) {
-      tags.push(emotionName.toLowerCase().replace(/\s+/g, '-'));
-    }
-    
-    // Extract keywords from content (words longer than 4 characters)
-    const stopWords = new Set([
-      'este', 'esta', 'estos', 'estas', 'que', 'para', 'con', 'por', 'como', 
-      'pero', 'porque', 'cuando', 'donde', 'cual', 'quien', 'muy', 'más', 
-      'también', 'hacer', 'sobre', 'sido', 'estar', 'tener', 'puede', 'debe',
-      'desde', 'hasta', 'entre', 'sobre', 'aunque', 'tanto', 'mientras'
-    ]);
-    
-    const words = content.toLowerCase()
-      .replace(/[.,!?;:()\[\]{}"""'']/g, ' ')
-      .split(/\s+/)
-      .filter(word => word.length > 4 && !stopWords.has(word))
-      .map(word => word
-        .replace(/[áàäâ]/g, 'a')
-        .replace(/[éèëê]/g, 'e')
-        .replace(/[íìïî]/g, 'i')
-        .replace(/[óòöô]/g, 'o')
-        .replace(/[úùüû]/g, 'u')
-        .replace(/ñ/g, 'n')
-      );
-    
-    // Count word frequency
-    const wordCount = new Map<string, number>();
-    words.forEach(word => {
-      wordCount.set(word, (wordCount.get(word) || 0) + 1);
-    });
-    
-    // Get top 3 most frequent words
-    const topWords = Array.from(wordCount.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3)
-      .map(([word]) => word);
-    
-    tags.push(...topWords);
-    
-    // Remove duplicates and limit to 6 tags total
-    return [...new Set(tags)].slice(0, 6);
+    return [titleTag];
   };
 
   const handleSubmit = async () => {
