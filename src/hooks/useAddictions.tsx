@@ -32,6 +32,8 @@ export function useAddictions() {
       if (error) throw error;
       return data as Addiction[];
     },
+    staleTime: 0,
+    gcTime: 0,
   });
 
   const addAddiction = useMutation({
