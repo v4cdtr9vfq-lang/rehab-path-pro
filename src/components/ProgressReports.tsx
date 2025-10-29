@@ -10,7 +10,8 @@ import { FileText, Calendar, Loader2, Trash2, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 
 interface ProgressReport {
   id: string;
@@ -22,6 +23,8 @@ interface ProgressReport {
 
 export default function ProgressReports() {
   const { toast } = useToast();
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === 'es' ? es : enUS;
   const [reports, setReports] = useState<ProgressReport[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState<string>("last_week");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -92,8 +95,8 @@ export default function ProgressReports() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
-          title: "Error",
-          description: "Debes iniciar sesión para generar un informe",
+          title: t('common.error'),
+          description: t('progress.loginRequiredReport'),
           variant: "destructive",
         });
         return;
@@ -108,14 +111,14 @@ export default function ProgressReports() {
       if (error) {
         if (error.message?.includes("429")) {
           toast({
-            title: "Límite excedido",
-            description: "Has alcanzado el límite de solicitudes. Intenta más tarde.",
+            title: t('progress.limitExceeded'),
+            description: t('progress.limitExceededDescription'),
             variant: "destructive",
           });
         } else if (error.message?.includes("402")) {
           toast({
-            title: "Pago requerido",
-            description: "Se requiere añadir fondos a tu cuenta de Lovable AI.",
+            title: t('progress.paymentRequired'),
+            description: t('progress.paymentRequiredDescription'),
             variant: "destructive",
           });
         } else {
@@ -126,16 +129,16 @@ export default function ProgressReports() {
 
       if (data?.report) {
         toast({
-          title: "Informe generado",
-          description: "Tu informe de progreso ha sido generado exitosamente",
+          title: t('progress.reportGenerated'),
+          description: t('progress.reportGeneratedSuccess'),
         });
         await loadReports();
       }
     } catch (error: any) {
       console.error("Error generating report:", error);
       toast({
-        title: "Error",
-        description: error.message || "No se pudo generar el informe",
+        title: t('common.error'),
+        description: error.message || t('progress.errorGeneratingReport'),
         variant: "destructive",
       });
     } finally {
@@ -166,16 +169,16 @@ export default function ProgressReports() {
       if (error) throw error;
 
       toast({
-        title: "Informe eliminado",
-        description: "El informe ha sido eliminado correctamente",
+        title: t('progress.reportDeleted'),
+        description: t('progress.reportDeletedSuccess'),
       });
 
       await loadReports();
     } catch (error: any) {
       console.error("Error deleting report:", error);
       toast({
-        title: "Error",
-        description: "No se pudo eliminar el informe",
+        title: t('common.error'),
+        description: t('progress.errorDeletingReport'),
         variant: "destructive",
       });
     } finally {
@@ -199,25 +202,25 @@ export default function ProgressReports() {
         body: {
           recipientEmail,
           reportContent: reportToEmail.report_content,
-          reportPeriod: `${format(new Date(reportToEmail.start_date), "d MMM", { locale: es })} - ${format(new Date(reportToEmail.end_date), "d MMM yyyy", { locale: es })}`,
-          reportDate: format(new Date(reportToEmail.created_at), "d MMMM yyyy", { locale: es })
+          reportPeriod: `${format(new Date(reportToEmail.start_date), "d MMM", { locale: dateLocale })} - ${format(new Date(reportToEmail.end_date), "d MMM yyyy", { locale: dateLocale })}`,
+          reportDate: format(new Date(reportToEmail.created_at), "d MMMM yyyy", { locale: dateLocale })
         },
       });
 
       if (error) throw error;
 
       toast({
-        title: "Correo enviado",
-        description: `El informe ha sido enviado a ${recipientEmail}`,
+        title: t('progress.emailSent'),
+        description: `${t('progress.emailSentSuccess')} ${recipientEmail}`,
       });
 
       setShowEmailDialog(false);
       setRecipientEmail("");
     } catch (error: any) {
       console.error("Error sending email:", error);
-      const errorMessage = error.message || "No se pudo enviar el correo";
+      const errorMessage = error.message || t('progress.errorGeneratingReport');
       toast({
-        title: "Error al enviar correo",
+        title: t('progress.errorSendingEmail'),
         description: errorMessage,
         variant: "destructive",
         duration: 8000,
@@ -229,11 +232,11 @@ export default function ProgressReports() {
 
   const getPeriodLabel = (period: string) => {
     const labels: Record<string, string> = {
-      last_week: "Última semana",
-      last_month: "Último mes",
-      last_3_months: "Últimos 3 meses",
-      last_6_months: "Últimos 6 meses",
-      last_year: "Último año",
+      last_week: t('progress.lastWeek'),
+      last_month: t('progress.lastMonth'),
+      last_3_months: t('progress.last3Months'),
+      last_6_months: t('progress.last6Months'),
+      last_year: t('progress.lastYear'),
     };
     return labels[period] || period;
   };
@@ -244,22 +247,22 @@ export default function ProgressReports() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5" />
-            Informes de progreso
+            {t('progress.progressReports')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Período temporal</label>
+            <label className="text-sm font-medium">{t('progress.timePeriod')}</label>
             <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
               <SelectTrigger>
-                <SelectValue placeholder="Selecciona un período" />
+                <SelectValue placeholder={t('progress.selectPeriod')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="last_week">Última semana</SelectItem>
-                <SelectItem value="last_month">Último mes</SelectItem>
-                <SelectItem value="last_3_months">Últimos 3 meses</SelectItem>
-                <SelectItem value="last_6_months">Últimos 6 meses</SelectItem>
-                <SelectItem value="last_year">Último año</SelectItem>
+                <SelectItem value="last_week">{t('progress.lastWeek')}</SelectItem>
+                <SelectItem value="last_month">{t('progress.lastMonth')}</SelectItem>
+                <SelectItem value="last_3_months">{t('progress.last3Months')}</SelectItem>
+                <SelectItem value="last_6_months">{t('progress.last6Months')}</SelectItem>
+                <SelectItem value="last_year">{t('progress.lastYear')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -270,15 +273,15 @@ export default function ProgressReports() {
             className="w-full"
           >
             {isGenerating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isGenerating ? "Generando informe..." : "Generar informe"}
+            {isGenerating ? t('progress.generatingReport') : t('progress.generateReport')}
           </Button>
 
           <div className="space-y-2">
-            <h4 className="text-sm font-medium">Registro de informes</h4>
+            <h4 className="text-sm font-medium">{t('progress.reportHistory')}</h4>
             <div className="space-y-2 max-h-[300px] overflow-y-auto">
               {reports.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center py-4">
-                  No hay informes generados todavía
+                  {t('progress.noReportsYet')}
                 </p>
               ) : (
                 reports.map((report) => (
@@ -288,11 +291,11 @@ export default function ProgressReports() {
                         <div className="flex items-center gap-2 text-sm">
                           <Calendar className="h-4 w-4 flex-shrink-0" />
                           <span className="font-medium">
-                            {format(new Date(report.created_at), "d MMM yyyy", { locale: es })}
+                            {format(new Date(report.created_at), "d MMM yyyy", { locale: dateLocale })}
                           </span>
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">
-                          Período: {format(new Date(report.start_date), "d MMM", { locale: es })} - {format(new Date(report.end_date), "d MMM", { locale: es })}
+                          {t('progress.period')}: {format(new Date(report.start_date), "d MMM", { locale: dateLocale })} - {format(new Date(report.end_date), "d MMM", { locale: dateLocale })}
                         </p>
                       </div>
                       <div className="flex gap-2 flex-shrink-0">
@@ -300,7 +303,7 @@ export default function ProgressReports() {
                           e.stopPropagation();
                           openReport(report);
                         }}>
-                          Ver
+                          {t('progress.view')}
                         </Button>
                         <Button 
                           variant="ghost" 
@@ -331,17 +334,17 @@ export default function ProgressReports() {
       <Dialog open={showReportDialog} onOpenChange={setShowReportDialog}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Informe de Progreso</DialogTitle>
+            <DialogTitle>{t('progress.progressReport')}</DialogTitle>
           </DialogHeader>
           {selectedReport && (
             <div className="space-y-4">
               <div className="flex items-center gap-4 text-sm text-muted-foreground pb-4 border-b">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
-                  <span>Generado: {format(new Date(selectedReport.created_at), "d MMMM yyyy", { locale: es })}</span>
+                  <span>{t('progress.generated')}: {format(new Date(selectedReport.created_at), "d MMMM yyyy", { locale: dateLocale })}</span>
                 </div>
                 <div>
-                  Período: {format(new Date(selectedReport.start_date), "d MMM", { locale: es })} - {format(new Date(selectedReport.end_date), "d MMM yyyy", { locale: es })}
+                  {t('progress.period')}: {format(new Date(selectedReport.start_date), "d MMM", { locale: dateLocale })} - {format(new Date(selectedReport.end_date), "d MMM yyyy", { locale: dateLocale })}
                 </div>
               </div>
               <div className="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap">
@@ -355,15 +358,15 @@ export default function ProgressReports() {
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar informe?</AlertDialogTitle>
+            <AlertDialogTitle>{t('progress.deleteReport')}</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción eliminará permanentemente el informe de progreso. Esta acción no se puede deshacer.
+              {t('progress.deleteReportDescription')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
             <AlertDialogAction onClick={confirmDelete} className="bg-destructive hover:bg-destructive/90">
-              Eliminar
+              {t('common.delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -372,29 +375,29 @@ export default function ProgressReports() {
       <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Enviar informe por correo</DialogTitle>
+            <DialogTitle>{t('progress.sendReportEmail')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Correo del destinatario</Label>
+              <Label htmlFor="email">{t('progress.recipientEmail')}</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="correo@ejemplo.com"
+                placeholder={t('progress.emailPlaceholder')}
                 value={recipientEmail}
                 onChange={(e) => setRecipientEmail(e.target.value)}
               />
             </div>
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={() => setShowEmailDialog(false)}>
-                Cancelar
+                {t('common.cancel')}
               </Button>
               <Button 
                 onClick={sendReportEmail} 
                 disabled={!recipientEmail || isSendingEmail}
               >
                 {isSendingEmail && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {isSendingEmail ? "Enviando..." : "Enviar"}
+                {isSendingEmail ? t('progress.sending') : t('progress.send')}
               </Button>
             </div>
           </div>
