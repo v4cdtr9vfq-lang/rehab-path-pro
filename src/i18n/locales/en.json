@@ -81,6 +81,7 @@
     "great": "Great!"
   },
   "goals": {
+    "title": "Goals",
     "today": "Today",
     "thisWeek": "This week",
     "always": "Pending",

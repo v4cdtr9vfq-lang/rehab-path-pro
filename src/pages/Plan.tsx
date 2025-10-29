@@ -1009,15 +1009,15 @@ export default function Plan() {
   };
   return <div className="space-y-[30px] animate-in fade-in duration-500 mt-[14px] md:-mt-[4px]">
       <div className="flex justify-between items-center gap-4 pl-[35px]">
-        <h2 className="text-3xl font-bold text-foreground">Metas</h2>
+        <h2 className="text-3xl font-bold text-foreground">{t('goals.title') || 'Metas'}</h2>
         <div className="flex gap-2">
           {hasUnsavedOrder && (
             <>
               <Button onClick={cancelReorder} variant="outline" className="gap-2">
-                Cancelar
+                {t('plan.cancelOrder')}
               </Button>
               <Button onClick={saveGoalOrder} variant="default" className="gap-2">
-                Guardar orden
+                {t('plan.saveOrder')}
               </Button>
             </>
           )}
@@ -1025,12 +1025,12 @@ export default function Plan() {
             <DialogTrigger asChild>
               <Button variant="accent" className="gap-2">
                 <Plus className="h-5 w-5" />
-                Añadir meta
+                {t('plan.addGoal')}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Añadir nueva meta</DialogTitle>
+                <DialogTitle>{t('plan.addGoal')}</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <div className="space-y-2">
@@ -1261,7 +1261,7 @@ export default function Plan() {
         {/* Today */}
         <Card className="border-sidebar-border bg-card/50 backdrop-blur rounded-3xl">
           <CardHeader>
-            <SectionHeader title="Hoy" sectionKey="today" />
+            <SectionHeader title={t('plan.today')} sectionKey="today" />
           </CardHeader>
           {sections.today.open && (
             <CardContent className="space-y-3">
@@ -1286,7 +1286,7 @@ export default function Plan() {
         {/* This Week */}
         <Card className="border-sidebar-border bg-card/50 backdrop-blur rounded-3xl">
           <CardHeader>
-            <SectionHeader title="Esta semana (L-D)" sectionKey="week" />
+            <SectionHeader title={t('plan.thisWeek') + " (L-D)"} sectionKey="week" />
           </CardHeader>
           {sections.week.open && (
             <CardContent className="space-y-3">
@@ -1311,7 +1311,7 @@ export default function Plan() {
         {/* This Month */}
         <Card className="border-sidebar-border bg-card/50 backdrop-blur rounded-3xl">
           <CardHeader>
-            <SectionHeader title="Este mes" sectionKey="month" />
+            <SectionHeader title={t('plan.thisMonth')} sectionKey="month" />
           </CardHeader>
           {sections.month.open && (
             <CardContent className="space-y-3">
