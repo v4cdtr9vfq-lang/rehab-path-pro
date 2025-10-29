@@ -51,7 +51,7 @@ interface ExpandedGoal extends Goal {
 }
 export default function Plan() {
   const isMobile = useIsMobile();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   // Helper function to translate goal text if it's a translation key
   const translateGoalText = (text: string): string => {
@@ -363,7 +363,7 @@ export default function Plan() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [hasUnsavedOrder]);
+  }, [hasUnsavedOrder, i18n.language]);
   const fetchGoals = async () => {
     try {
       const {

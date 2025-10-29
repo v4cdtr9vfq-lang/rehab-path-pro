@@ -31,7 +31,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 export default function Home() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const quickTools = useTranslatedQuickTools();
   
   // Helper function to translate goal text if it's a translation key
@@ -457,7 +457,7 @@ export default function Home() {
       window.removeEventListener('abstinenceDateUpdated', handleDateUpdate);
       supabase.removeChannel(channel);
     };
-  }, [currentAddictionId]);
+  }, [currentAddictionId, i18n.language]);
 
   // Drag and drop sensors
   const sensors = useSensors(
