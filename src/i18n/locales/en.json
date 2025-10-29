@@ -173,7 +173,13 @@
     "resetSuccessTitle": "Goals reset",
     "resetSuccessDescription": "Default goals have been loaded and your abstinence date has been reset.",
     "loginRequiredDescription": "You must be logged in.",
-    "resetErrorDescription": "Could not reset goals."
+    "resetErrorDescription": "Could not reset goals.",
+    "completedExclamation": "Completed!",
+    "remaining": "remaining",
+    "remainingPlural": "remaining",
+    "todayLower": "today",
+    "thisWeekLower": "this week",
+    "thisMonthLower": "this month"
   },
   "progress": {
     "title": "Progress",

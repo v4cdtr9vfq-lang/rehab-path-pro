@@ -61,6 +61,21 @@ export default function Plan() {
     return text;
   };
   
+  // Helper function to get completion status text
+  const getCompletionStatusText = (goal: ExpandedGoal, sectionKey: keyof typeof sections, displayCompleted: boolean): string => {
+    if (displayCompleted) {
+      return t('plan.completedExclamation');
+    }
+    
+    const remaining = getRemainingCount(goal, sectionKey);
+    const remainingText = remaining !== 1 ? t('plan.remainingPlural') : t('plan.remaining');
+    const timeText = sectionKey === "today" ? t('plan.todayLower') : 
+                     sectionKey === "week" ? t('plan.thisWeekLower') : 
+                     sectionKey === "month" ? t('plan.thisMonthLower') : "";
+    
+    return `${remaining} ${remainingText} ${timeText}`;
+  };
+  
   const {
     toast
   } = useToast();
@@ -270,87 +285,64 @@ export default function Plan() {
             completed: allCompletedInstances.has(instanceId)
           });
         }
-      } 
-      // Weekly goals: create ONE instance per week
-      else if (g.goal_type === 'week') {
-        // Use the first date of the context as the identifier
-        const dateStr = getLocalDateString(dates[0]);
-        
-        // Create the number of instances specified by 'remaining'
-        for (let i = 0; i < g.remaining; i++) {
-          const instanceId = `${g.id}__${dateStr}__${i}`;
-          expanded.push({
-            ...g,
-            id: instanceId,
-            originalId: g.id,
-            instanceIndex: i,
-            completed: allCompletedInstances.has(instanceId)
-          });
-        }
-      }
-      // Monthly goals: create ONE instance per month
-      else if (g.goal_type === 'month') {
-        // Use the first date of the month
-        const firstOfMonth = new Date(dates[0].getFullYear(), dates[0].getMonth(), 1);
-        const dateStr = getLocalDateString(firstOfMonth);
-        
-        // Create the number of instances specified by 'remaining'
-        for (let i = 0; i < g.remaining; i++) {
-          const instanceId = `${g.id}__${dateStr}__${i}`;
-          expanded.push({
-            ...g,
-            id: instanceId,
-            originalId: g.id,
-            instanceIndex: i,
-            completed: allCompletedInstances.has(instanceId)
-          });
-        }
-      }
-      // Periodic goals: only create instances on their specific day
-      else if (g.goal_type === 'periodic' && g.periodic_type) {
-        dates.forEach((date) => {
-          const dayOfMonth = date.getDate();
-          const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-          let isSpecificDay = false;
+      } else {
+        // Recurring goals: iterate through dates
+        dates.forEach((date, dayIndex) => {
+          const dateStr = getLocalDateString(date);
           
-          if (g.periodic_type === 'inicio_mes' && dayOfMonth === 1) {
-            isSpecificDay = true;
-          } else if (g.periodic_type === 'mitad_mes' && dayOfMonth === 15) {
-            isSpecificDay = true;
-          } else if (g.periodic_type === 'final_mes' && dayOfMonth === lastDayOfMonth) {
-            isSpecificDay = true;
-          }
-          
-          // Only create instances on the specific day
-          if (isSpecificDay) {
-            const dateStr = getLocalDateString(date);
+          // Periodic goals: only create instances on their specific day
+          if (g.goal_type === 'periodic' && g.periodic_type) {
+            const dayOfMonth = date.getDate();
+            const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+            let isSpecificDay = false;
+            
+            if (g.periodic_type === 'inicio_mes' && dayOfMonth === 1) {
+              isSpecificDay = true;
+            } else if (g.periodic_type === 'mitad_mes' && dayOfMonth === 15) {
+              isSpecificDay = true;
+            } else if (g.periodic_type === 'final_mes' && dayOfMonth === lastDayOfMonth) {
+              isSpecificDay = true;
+            }
+            
+            // Only create instances on the specific day
+            if (isSpecificDay) {
+              for (let i = 0; i < g.remaining; i++) {
+                const instanceId = `${g.id}__${dateStr}__${i}`;
+                expanded.push({
+                  ...g,
+                  id: instanceId,
+                  originalId: g.id,
+                  instanceIndex: i,
+                  completed: allCompletedInstances.has(instanceId)
+                });
+              }
+            }
+          } else if (g.goal_type === 'week' && context === 'month') {
+            // Weekly goals in monthly view: only on week boundaries
+            if (dayIndex % 7 === 0) {
+              for (let i = 0; i < g.remaining; i++) {
+                const instanceId = `${g.id}__${dateStr}__${i}`;
+                expanded.push({
+                  ...g,
+                  id: instanceId,
+                  originalId: g.id,
+                  instanceIndex: dayIndex * g.remaining + i,
+                  completed: allCompletedInstances.has(instanceId)
+                });
+              }
+            }
+          } else {
+            // Daily and always goals: create instances for each day
             for (let i = 0; i < g.remaining; i++) {
               const instanceId = `${g.id}__${dateStr}__${i}`;
               expanded.push({
                 ...g,
                 id: instanceId,
                 originalId: g.id,
-                instanceIndex: i,
+                instanceIndex: dayIndex * g.remaining + i,
                 completed: allCompletedInstances.has(instanceId)
               });
             }
-          }
-        });
-      }
-      // Daily and 'always' goals: create instances for each day
-      else if (g.goal_type === 'today' || g.goal_type === 'always') {
-        dates.forEach((date) => {
-          const dateStr = getLocalDateString(date);
-          
-          for (let i = 0; i < g.remaining; i++) {
-            const instanceId = `${g.id}__${dateStr}__${i}`;
-            expanded.push({
-              ...g,
-              id: instanceId,
-              originalId: g.id,
-              instanceIndex: i,
-              completed: allCompletedInstances.has(instanceId)
-            });
           }
         });
       }
@@ -806,11 +798,10 @@ export default function Plan() {
       opacity: isDragging ? 0.5 : 1,
     };
 
-    // All goals are clickable now
-    const isClickable = true;
+    const isClickable = sectionKey !== 'week' && sectionKey !== 'month';
     const allInstancesOfGoal = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
     const allCompleted = allInstancesOfGoal.every(g => g.completed);
-    const displayCompleted = goal.completed;
+    const displayCompleted = (sectionKey === 'week' || sectionKey === 'month') ? allCompleted : goal.completed;
     
     if (isMobile) {
       return (
@@ -832,7 +823,7 @@ export default function Plan() {
                 <p className="font-semibold text-foreground text-sm">{translateGoalText(goal.text)}</p>
               )}
               <p className={`text-xs ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
-                {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+                {getCompletionStatusText(goal, sectionKey, displayCompleted)}
               </p>
             </div>
           </div>
@@ -894,7 +885,7 @@ export default function Plan() {
               <p className="font-semibold text-foreground text-sm md:text-base">{translateGoalText(goal.text)}</p>
             )}
             <p className={`text-xs md:text-sm ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
-              {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+              {getCompletionStatusText(goal, sectionKey, displayCompleted)}
             </p>
           </div>
         </div>
