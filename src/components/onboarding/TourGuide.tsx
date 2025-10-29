@@ -9,7 +9,6 @@ interface TourGuideProps {
 
 export function TourGuide({ onComplete }: TourGuideProps) {
   const [run, setRun] = useState(false);
-  const [stepIndex, setStepIndex] = useState(0);
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -40,68 +39,42 @@ export function TourGuide({ onComplete }: TourGuideProps) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Navegar cuando cambia el stepIndex
-  useEffect(() => {
-    if (run && stepIndex < stepRoutes.length) {
-      navigate(stepRoutes[stepIndex]);
-      
-      // En mobile, asegurar que el menú permanece abierto
-      if (isMobile) {
-        setTimeout(() => {
-          const sheetOverlay = document.querySelector('[data-state="open"]');
-          if (!sheetOverlay) {
-            const menuButton = document.querySelector('button[aria-label="Open sidebar"]') as HTMLButtonElement;
-            if (menuButton) {
-              menuButton.click();
-            }
-          }
-        }, 100);
-      }
-    }
-  }, [stepIndex, run, isMobile, navigate, stepRoutes]);
-
   useEffect(() => {
     // Esperar a que el DOM esté listo y verificar que el primer elemento existe
     const checkAndStart = () => {
-      // Primero navegar a dashboard
-      navigate('/dashboard');
-      
       // En mobile, abrir el sheet primero
       if (isMobile) {
-        setTimeout(() => {
-          const menuButton = document.querySelector('button[aria-label="Open sidebar"]') as HTMLButtonElement;
-          if (menuButton) {
-            menuButton.click();
-          }
-          
-          // Esperar a que el sheet se abra y el elemento esté visible
+        const menuButton = document.querySelector('button[aria-label="Open sidebar"]') as HTMLButtonElement;
+        if (menuButton) {
+          menuButton.click();
+          // Esperar a que el sheet se abra antes de iniciar el tour
           setTimeout(() => {
             const firstElement = document.querySelector('#dashboard-link');
             if (firstElement) {
-              setRun(true);
-            } else {
-              setTimeout(checkAndStart, 300);
+              // Navegar a la primera ruta antes de iniciar
+              navigate(stepRoutes[0]);
+              setTimeout(() => setRun(true), 100);
             }
-          }, 500);
-        }, 300);
-        return;
+          }, 400);
+          return;
+        }
       }
       
-      // En desktop, esperar a que el elemento esté visible
-      setTimeout(() => {
-        const firstElement = document.querySelector('#dashboard-link');
-        if (firstElement) {
-          setRun(true);
-        } else {
-          setTimeout(checkAndStart, 300);
-        }
-      }, 500);
+      const firstElement = document.querySelector('#dashboard-link');
+      if (firstElement) {
+        // Navegar a la primera ruta antes de iniciar
+        navigate(stepRoutes[0]);
+        setTimeout(() => setRun(true), 100);
+      } else {
+        // Si no existe, reintentar después de un tiempo
+        setTimeout(checkAndStart, 300);
+      }
     };
     
-    const timer = setTimeout(checkAndStart, 500);
+    const timer = setTimeout(checkAndStart, 800);
     
     return () => clearTimeout(timer);
-  }, [isMobile, navigate]);
+  }, [isMobile, navigate, stepRoutes]);
 
   const steps: Step[] = [
     {
@@ -168,16 +141,27 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   ];
 
   const handleJoyrideCallback = async (data: CallBackProps) => {
-    const { status, index, action, type } = data;
+    const { status, action, index, type } = data;
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
-    console.log('Tour callback:', { type, action, index, currentStepIndex: stepIndex });
-
-    // Actualizar el stepIndex cuando avanzan o retroceden
-    if (action === ACTIONS.NEXT && type === EVENTS.STEP_AFTER) {
-      setStepIndex((prev) => Math.min(prev + 1, steps.length - 1));
-    } else if (action === ACTIONS.PREV && type === EVENTS.STEP_AFTER) {
-      setStepIndex((prev) => Math.max(prev - 1, 0));
+    // Navegar cuando el paso está a punto de mostrarse
+    if (type === EVENTS.STEP_BEFORE || type === EVENTS.TARGET_NOT_FOUND) {
+      if (index >= 0 && index < stepRoutes.length) {
+        navigate(stepRoutes[index]);
+        
+        // En mobile, asegurar que el menú permanece abierto
+        if (isMobile) {
+          setTimeout(() => {
+            const sheetOverlay = document.querySelector('[data-state="open"]');
+            if (!sheetOverlay) {
+              const menuButton = document.querySelector('button[aria-label="Open sidebar"]') as HTMLButtonElement;
+              if (menuButton) {
+                menuButton.click();
+              }
+            }
+          }, 100);
+        }
+      }
     }
 
     if (finishedStatuses.includes(status)) {
@@ -207,12 +191,9 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       continuous
       showProgress
       showSkipButton
-      stepIndex={stepIndex}
+      stepIndex={0}
       disableOverlayClose
       spotlightClicks={false}
-      disableScrolling={false}
-      scrollToFirstStep
-      scrollOffset={200}
       callback={handleJoyrideCallback}
       styles={{
         options: {
