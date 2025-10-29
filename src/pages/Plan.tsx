@@ -61,6 +61,21 @@ export default function Plan() {
     return text;
   };
   
+  // Helper function to get completion status text
+  const getCompletionStatusText = (goal: ExpandedGoal, sectionKey: keyof typeof sections, displayCompleted: boolean): string => {
+    if (displayCompleted) {
+      return t('plan.completedExclamation');
+    }
+    
+    const remaining = getRemainingCount(goal, sectionKey);
+    const remainingText = remaining !== 1 ? t('plan.remainingPlural') : t('plan.remaining');
+    const timeText = sectionKey === "today" ? t('plan.todayLower') : 
+                     sectionKey === "week" ? t('plan.thisWeekLower') : 
+                     sectionKey === "month" ? t('plan.thisMonthLower') : "";
+    
+    return `${remaining} ${remainingText} ${timeText}`;
+  };
+  
   const {
     toast
   } = useToast();
@@ -808,7 +823,7 @@ export default function Plan() {
                 <p className="font-semibold text-foreground text-sm">{translateGoalText(goal.text)}</p>
               )}
               <p className={`text-xs ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
-                {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+                {getCompletionStatusText(goal, sectionKey, displayCompleted)}
               </p>
             </div>
           </div>
@@ -870,7 +885,7 @@ export default function Plan() {
               <p className="font-semibold text-foreground text-sm md:text-base">{translateGoalText(goal.text)}</p>
             )}
             <p className={`text-xs md:text-sm ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
-              {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
+              {getCompletionStatusText(goal, sectionKey, displayCompleted)}
             </p>
           </div>
         </div>
