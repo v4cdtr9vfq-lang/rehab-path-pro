@@ -20,63 +20,63 @@ export function TourGuide({ onComplete }: TourGuideProps) {
 
   const steps: Step[] = [
     {
-      target: 'a[href="/dashboard"]',
+      target: '#dashboard-link',
       content: '🫀 Mi centro - Aquí verás tu contador de abstinencia, metas diarias y progreso.',
       disableBeacon: true,
       placement: 'right',
     },
     {
-      target: 'a[href="/plan"]',
+      target: '#plan-link',
       content: '🎯 Mi Plan - Gestiona tus metas y objetivos de recuperación.',
       placement: 'right',
     },
     {
-      target: 'a[href="/progress"]',
+      target: '#progress-link',
       content: '📈 Progreso - Visualiza tu avance con gráficas y reportes detallados.',
       placement: 'right',
     },
     {
-      target: 'a[href="/emotion-journal"]',
+      target: '#emotion-journal-link',
       content: '😊 Diario de emociones - Registra y analiza tus emociones diarias.',
       placement: 'right',
     },
     {
-      target: 'a[href="/journal"]',
+      target: '#journal-link',
       content: '📔 Diario - Escribe reflexiones y pensamientos sobre tu proceso.',
       placement: 'right',
     },
     {
-      target: 'a[href="/gratitude"]',
+      target: '#gratitude-link',
       content: '🙏 Agradecimiento - Practica la gratitud registrando aquello por lo que estás agradecido.',
       placement: 'right',
     },
     {
-      target: 'a[href="/values"]',
+      target: '#values-link',
       content: '❤️ Valores - Define y trabaja en tus valores personales.',
       placement: 'right',
     },
     {
-      target: 'a[href="/chat"]',
+      target: '#chat-link',
       content: '💬 Chat - Conecta con otros miembros de la comunidad en tiempo real.',
       placement: 'right',
     },
     {
-      target: 'a[href="/community"]',
+      target: '#community-link',
       content: '🫶 Comunidad - Encuentra mentores o conviértete en mentor de otros.',
       placement: 'right',
     },
     {
-      target: 'a[href="/tools"]',
+      target: '#tools-link',
       content: '🛠️ Herramientas - Accede a recursos adicionales para tu recuperación.',
       placement: 'right',
     },
     {
-      target: 'a[href="/help"]',
+      target: '#help-link',
       content: '🆘 Ayuda - Encuentra preguntas frecuentes y soporte.',
       placement: 'right',
     },
     {
-      target: 'a[href="/settings"]',
+      target: '#settings-link',
       content: '⚙️ Configuración - Personaliza tu experiencia y gestiona tu cuenta.',
       placement: 'right',
     },
