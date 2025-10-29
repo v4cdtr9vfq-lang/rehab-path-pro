@@ -299,100 +299,61 @@ export default function CheckIn() {
       if (checkInError) throw checkInError;
 
       const today = new Date().toISOString().split('T')[0];
-
-      // If answered "yes" to trigger question and has description, save as journal entry
+      
+      // Create comprehensive check-in journal entry
+      const journalTitle = format(new Date(), "EEEE d MMM. yyyy", { locale: es })
+        .replace(/^\w/, (c) => c.toUpperCase())
+        .replace(/\b([a-z]{3})\./i, (match) => match.charAt(0).toUpperCase() + match.slice(1));
+      
+      // Build journal content with all text answers
+      let journalContent = "";
+      
+      // Question 3 - text answer
+      if (finalAnswers[3] && finalAnswers[3].trim()) {
+        journalContent += `**Hoy lo más importante recordarme es:**\n${finalAnswers[3].trim()}\n\n`;
+      }
+      
+      // Question 2 - trigger description
       if (answers[2] === "yes" && triggerDescription.trim()) {
-        // Check if entry already exists
-        const { data: existingEntry } = await supabase
-          .from('journal_entries')
-          .select('id')
-          .eq('user_id', user.id)
-          .eq('entry_date', today)
-          .eq('title', "Gatillos emocionales")
-          .maybeSingle();
-
-        if (existingEntry) {
-          // Update existing entry
-          const { error: journalError } = await supabase
-            .from('journal_entries')
-            .update({
-              content: triggerDescription.trim(),
-              tags: ["gatillos", "check-in"]
-            })
-            .eq('id', existingEntry.id);
-
-          if (journalError) {
-            console.error("Error updating journal entry:", journalError);
-          }
-        } else {
-          // Insert new entry
-          const { error: journalError } = await supabase
-            .from('journal_entries')
-            .insert({
-              user_id: user.id,
-              entry_date: today,
-              title: "Gatillos emocionales",
-              content: triggerDescription.trim(),
-              tags: ["gatillos", "check-in"]
-            });
-
-          if (journalError) {
-            console.error("Error inserting journal entry:", journalError);
-          }
-        }
+        journalContent += `**Situación que me alteró:**\n${triggerDescription.trim()}\n\n`;
       }
-
-      // If answered "yes" to resentment question and has description, save as journal entry
+      
+      // Question 4 - resentment description
       if (answers[4] === "yes" && resentmentDescription.trim()) {
-        // Check if entry already exists
-        const { data: existingEntry } = await supabase
-          .from('journal_entries')
-          .select('id')
-          .eq('user_id', user.id)
-          .eq('entry_date', today)
-          .eq('title', "Resentimientos")
-          .maybeSingle();
-
-        if (existingEntry) {
-          // Update existing entry
-          const { error: journalError } = await supabase
-            .from('journal_entries')
-            .update({
-              content: resentmentDescription.trim(),
-              tags: ["resentimientos", "check-in"]
-            })
-            .eq('id', existingEntry.id);
-
-          if (journalError) {
-            console.error("Error updating journal entry:", journalError);
-          }
-        } else {
-          // Insert new entry
-          const { error: journalError } = await supabase
-            .from('journal_entries')
-            .insert({
-              user_id: user.id,
-              entry_date: today,
-              title: "Resentimientos",
-              content: resentmentDescription.trim(),
-              tags: ["resentimientos", "check-in"]
-            });
-
-          if (journalError) {
-            console.error("Error inserting journal entry:", journalError);
-          }
-        }
+        journalContent += `**Resentimiento:**\n${resentmentDescription.trim()}\n\n`;
       }
-
-      // If answered "no" to values question and has description, save as journal entry
+      
+      // Question 7 - values description
       if (answers[7] === "no" && valuesDescription.trim()) {
-        // Check if entry already exists
+        journalContent += `**Infidelidad a mis valores:**\n${valuesDescription.trim()}\n\n`;
+      }
+      
+      // Question 8 - limiting description
+      if (answers[8] === "yes" && limitingDescription.trim()) {
+        journalContent += `**Obstáculos a superar:**\n${limitingDescription.trim()}\n\n`;
+      }
+      
+      // Build tags array
+      const journalTags = ["check-in", "observaciones"];
+      if (answers[2] === "yes" && triggerDescription.trim()) {
+        journalTags.push("situaciones");
+      }
+      if (answers[4] === "yes" && resentmentDescription.trim()) {
+        journalTags.push("resentimientos");
+      }
+      if (answers[8] === "yes" && limitingDescription.trim()) {
+        journalTags.push("limitaciones");
+      }
+      
+      // Create or update the check-in journal entry
+      if (journalContent.trim()) {
+        const checkInTitle = `Check-in ${journalTitle}`;
         const { data: existingEntry } = await supabase
           .from('journal_entries')
           .select('id')
           .eq('user_id', user.id)
           .eq('entry_date', today)
-          .eq('title', "Cuándo soy infiel a mis valores")
+          .eq('title', checkInTitle)
           .maybeSingle();
 
         if (existingEntry) {
@@ -400,8 +361,8 @@ export default function CheckIn() {
           const { error: journalError } = await supabase
             .from('journal_entries')
             .update({
-              content: valuesDescription.trim(),
-              tags: ["valores", "check-in"]
+              content: journalContent.trim(),
+              tags: journalTags
             })
             .eq('id', existingEntry.id);
 
@@ -415,9 +376,9 @@ export default function CheckIn() {
             .insert({
               user_id: user.id,
               entry_date: today,
-              title: "Cuándo soy infiel a mis valores",
-              content: valuesDescription.trim(),
-              tags: ["valores", "check-in"]
+              title: checkInTitle,
+              content: journalContent.trim(),
+              tags: journalTags
             });
 
           if (journalError) {
