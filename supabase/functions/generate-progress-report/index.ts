@@ -12,19 +12,23 @@ serve(async (req) => {
   }
 
   try {
-    const { startDate, endDate } = await req.json();
+    const { startDate, endDate, language = 'es' } = await req.json();
     
     if (!startDate || !endDate) {
+      const errorMsg = language === 'es' 
+        ? "Se requieren fechas de inicio y fin"
+        : "Start and end dates are required";
       return new Response(
-        JSON.stringify({ error: "Se requieren fechas de inicio y fin" }),
+        JSON.stringify({ error: errorMsg }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
+      const errorMsg = language === 'es' ? "No autorizado" : "Unauthorized";
       return new Response(
-        JSON.stringify({ error: "No autorizado" }),
+        JSON.stringify({ error: errorMsg }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -39,8 +43,11 @@ serve(async (req) => {
 
     if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceKey || !lovableApiKey) {
       console.error("Missing environment variables");
+      const errorMsg = language === 'es' 
+        ? "Error de configuración del servidor"
+        : "Server configuration error";
       return new Response(
-        JSON.stringify({ error: "Error de configuración del servidor" }),
+        JSON.stringify({ error: errorMsg }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -52,8 +59,9 @@ serve(async (req) => {
     const { data: { user }, error: userError } = await supabase.auth.getUser(token);
     if (userError || !user) {
       console.error("User error:", userError);
+      const errorMsg = language === 'es' ? "Usuario no autenticado" : "User not authenticated";
       return new Response(
-        JSON.stringify({ error: "Usuario no autenticado" }),
+        JSON.stringify({ error: errorMsg }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -107,7 +115,7 @@ serve(async (req) => {
       checkIns: checkInData.data || []
     };
 
-    const systemPrompt = `Eres un psicólogo integrativo con amplia experiencia en análisis clínico y seguimiento terapéutico. Tu enfoque combina perspectivas humanistas, cognitivo-conductuales y sistémicas para ofrecer una comprensión holística del proceso de cambio del consultante.
+    const systemPromptES = `Eres un psicólogo integrativo con amplia experiencia en análisis clínico y seguimiento terapéutico. Tu enfoque combina perspectivas humanistas, cognitivo-conductuales y sistémicas para ofrecer una comprensión holística del proceso de cambio del consultante.
 
 Tu tarea es elaborar un informe psicológico profesional y detallado que incluya:
 
@@ -142,7 +150,42 @@ El informe debe ser:
 - Redactado en español formal pero cercano
 - Sin asteriscos, almohadillas, negritas, cursivas ni ningún formato markdown`;
 
-    const userPrompt = `Analiza los siguientes datos del usuario para el período ${context.periodo}:
+    const systemPromptEN = `You are an integrative psychologist with extensive experience in clinical analysis and therapeutic monitoring. Your approach combines humanistic, cognitive-behavioral, and systemic perspectives to offer a holistic understanding of the client's change process.
+
+Your task is to prepare a professional and detailed psychological report that includes:
+
+1. EXECUTIVE SUMMARY
+Overview of the analyzed period with the most relevant findings from the therapeutic process.
+
+2. EMOTIONAL STATE EVOLUTION
+Analysis of identified emotional patterns, including improvement trends, stability, or areas of difficulty. Identify emotional resources and observed coping strategies.
+
+3. RECORDS AND PERSONAL NARRATIVE ANALYSIS
+Insights derived from personal diary, daily check-ins, and gratitude exercises. Explore recurring themes, internal conflicts, and advances in self-awareness.
+
+4. RISK FACTORS AND WARNING SIGNS
+Identification of indicators requiring special attention or adjustments in therapeutic support.
+
+5. PERSONAL RESOURCES AND STRENGTHS
+Positive aspects, resilient capacities, and significant achievements observed during the period.
+
+6. THERAPEUTIC RECOMMENDATIONS
+Specific evidence-based suggestions to continue the change process, including behavioral strategies, reflection exercises, and priority work areas.
+
+7. FOLLOW-UP PLAN
+Key areas to monitor in future sessions and suggested therapeutic objectives for the next period.
+
+IMPORTANT: Write the report in professional plain text. DO NOT use any formatting symbols like asterisks, hashtags, dashes, or any type of markup. Use only running text with line breaks to separate sections. Titles should be written in UPPERCASE without additional symbols.
+
+The report should be:
+- Professional, rigorous, and empathetic
+- Based on clinical evidence derived from provided data
+- Constructive and growth-oriented
+- Specific, personalized, and respectful
+- Written in formal but approachable English
+- Without asterisks, hashtags, bold, italics, or any markdown formatting`;
+
+    const userPromptES = `Analiza los siguientes datos del usuario para el período ${context.periodo}:
 
 IMPORTANTE: Ignora completamente cualquier entrada que contenga únicamente la frase "Lo mejor está por regar" o "Lo mejor está por llegar", ya que es texto de placeholder por defecto y no representa contenido real del usuario.
 
@@ -162,6 +205,30 @@ CHECK-INS DIARIOS (${context.checkIns.length} entradas):
 ${JSON.stringify(context.checkIns, null, 2)}
 
 Genera un informe completo de progreso psicológico y emocional, excluyendo cualquier referencia a las frases por defecto mencionadas.`;
+
+    const userPromptEN = `Analyze the following user data for the period ${context.periodo}:
+
+IMPORTANT: Completely ignore any entry that contains only the phrase "Lo mejor está por regar" or "Lo mejor está por llegar", as it is default placeholder text and does not represent actual user content.
+
+RECORDED EMOTIONS (${context.emociones.length} entries):
+${JSON.stringify(context.emociones, null, 2)}
+
+DIARY ENTRIES (${context.diario.length} entries):
+${JSON.stringify(context.diario, null, 2)}
+
+GRATITUDE (${context.gratitud.length} entries):
+${JSON.stringify(context.gratitud, null, 2)}
+
+VALUES:
+${JSON.stringify(context.valores, null, 2)}
+
+DAILY CHECK-INS (${context.checkIns.length} entries):
+${JSON.stringify(context.checkIns, null, 2)}
+
+Generate a complete psychological and emotional progress report, excluding any reference to the default phrases mentioned.`;
+
+    const systemPrompt = language === 'es' ? systemPromptES : systemPromptEN;
+    const userPrompt = language === 'es' ? userPromptES : userPromptEN;
 
     console.log("Calling Lovable AI...");
 
@@ -188,21 +255,28 @@ Genera un informe completo de progreso psicológico y emocional, excluyendo cual
       console.error("AI API error:", aiResponse.status, errorText);
       
       if (aiResponse.status === 429) {
+        const errorMsg = language === 'es'
+          ? "Límite de solicitudes excedido. Por favor, intenta más tarde."
+          : "Request limit exceeded. Please try again later.";
         return new Response(
-          JSON.stringify({ error: "Límite de solicitudes excedido. Por favor, intenta más tarde." }),
+          JSON.stringify({ error: errorMsg }),
           { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       
       if (aiResponse.status === 402) {
+        const errorMsg = language === 'es'
+          ? "Se requiere pago. Por favor, añade fondos a tu cuenta de Lovable AI."
+          : "Payment required. Please add funds to your Lovable AI account.";
         return new Response(
-          JSON.stringify({ error: "Se requiere pago. Por favor, añade fondos a tu cuenta de Lovable AI." }),
+          JSON.stringify({ error: errorMsg }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
 
+      const errorMsg = language === 'es' ? "Error al generar el informe" : "Error generating report";
       return new Response(
-        JSON.stringify({ error: "Error al generar el informe" }),
+        JSON.stringify({ error: errorMsg }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -212,8 +286,11 @@ Genera un informe completo de progreso psicológico y emocional, excluyendo cual
 
     if (!reportContent) {
       console.error("No content in AI response:", aiData);
+      const errorMsg = language === 'es' 
+        ? "No se pudo generar el contenido del informe"
+        : "Could not generate report content";
       return new Response(
-        JSON.stringify({ error: "No se pudo generar el contenido del informe" }),
+        JSON.stringify({ error: errorMsg }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -234,8 +311,9 @@ Genera un informe completo de progreso psicológico y emocional, excluyendo cual
 
     if (insertError) {
       console.error("Insert error:", insertError);
+      const errorMsg = language === 'es' ? "Error al guardar el informe" : "Error saving report";
       return new Response(
-        JSON.stringify({ error: "Error al guardar el informe" }),
+        JSON.stringify({ error: errorMsg }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -243,7 +321,10 @@ Genera un informe completo de progreso psicológico y emocional, excluyendo cual
     console.log("Report saved successfully:", report.id);
 
     // Also save as journal entry
-    const journalTitle = `Informe de Progreso: ${startDate} a ${endDate}`;
+    const journalTitle = language === 'es'
+      ? `Informe de Progreso: ${startDate} a ${endDate}`
+      : `Progress Report: ${startDate} to ${endDate}`;
+    const journalTags = language === 'es' ? ['informe', 'progreso'] : ['report', 'progress'];
     const { error: journalError } = await supabaseAdmin
       .from("journal_entries")
       .insert({
@@ -251,7 +332,7 @@ Genera un informe completo de progreso psicológico y emocional, excluyendo cual
         title: journalTitle,
         content: reportContent,
         entry_date: new Date().toISOString().split('T')[0],
-        tags: ['informe', 'progreso']
+        tags: journalTags
       });
 
     if (journalError) {
@@ -274,8 +355,9 @@ Genera un informe completo de progreso psicológico y emocional, excluyendo cual
 
   } catch (error) {
     console.error("Function error:", error);
+    const errorMsg = error instanceof Error ? error.message : "Error desconocido";
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Error desconocido" }),
+      JSON.stringify({ error: errorMsg }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

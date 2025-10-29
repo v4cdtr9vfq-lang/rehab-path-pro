@@ -105,7 +105,7 @@ export default function ProgressReports() {
       const { startDate, endDate } = calculateDateRange(selectedPeriod);
 
       const { data, error } = await supabase.functions.invoke("generate-progress-report", {
-        body: { startDate, endDate },
+        body: { startDate, endDate, language: i18n.language },
       });
 
       if (error) {
