@@ -10,10 +10,38 @@ interface TourGuideProps {
 export function TourGuide({ onComplete }: TourGuideProps) {
   const [run, setRun] = useState(false);
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detectar si estamos en mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     // Esperar a que el DOM esté listo y verificar que el primer elemento existe
     const checkAndStart = () => {
+      // En mobile, abrir el sheet primero
+      if (isMobile) {
+        const menuButton = document.querySelector('button[aria-label="Open sidebar"]') as HTMLButtonElement;
+        if (menuButton) {
+          menuButton.click();
+          // Esperar a que el sheet se abra antes de iniciar el tour
+          setTimeout(() => {
+            const firstElement = document.querySelector('#dashboard-link');
+            if (firstElement) {
+              setRun(true);
+            }
+          }, 400);
+          return;
+        }
+      }
+      
       const firstElement = document.querySelector('#dashboard-link');
       if (firstElement) {
         setRun(true);
@@ -26,7 +54,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
     const timer = setTimeout(checkAndStart, 800);
     
     return () => clearTimeout(timer);
-  }, []);
+  }, [isMobile]);
 
   const stepRoutes = [
     '/dashboard',
@@ -111,6 +139,17 @@ export function TourGuide({ onComplete }: TourGuideProps) {
     const { status, action, index, type } = data;
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
+    // En mobile, mantener el sheet abierto durante el tour
+    if (isMobile && type === EVENTS.STEP_AFTER && (action === ACTIONS.NEXT || action === ACTIONS.PREV)) {
+      const sheetOverlay = document.querySelector('[data-state="open"]');
+      if (!sheetOverlay) {
+        const menuButton = document.querySelector('button[aria-label="Open sidebar"]') as HTMLButtonElement;
+        if (menuButton) {
+          menuButton.click();
+        }
+      }
+    }
+
     // Navegar a la ruta correspondiente cuando se avanza o retrocede
     if (type === EVENTS.STEP_AFTER && (action === ACTIONS.NEXT || action === ACTIONS.PREV)) {
       const nextIndex = action === ACTIONS.NEXT ? index + 1 : index - 1;
@@ -153,10 +192,13 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       styles={{
         options: {
           primaryColor: 'hsl(var(--primary))',
-          zIndex: 10000,
+          zIndex: 10001,
         },
         tooltipContainer: {
           textAlign: 'left',
+        },
+        tooltip: {
+          maxWidth: isMobile ? '280px' : '400px',
         },
         buttonNext: {
           backgroundColor: 'hsl(var(--primary))',
