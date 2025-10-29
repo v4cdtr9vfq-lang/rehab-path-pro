@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Plus } from "lucide-react";
 import { AddAddictionDialog } from "./AddAddictionDialog";
 import { toast } from "sonner";
@@ -40,8 +40,8 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
     loadRehabType();
   }, []);
 
-  // Combine original addiction with additional ones
-  const allAddictions = [
+  // Combine original addiction with additional ones - memoized to prevent infinite loops
+  const allAddictions = useMemo(() => [
     ...(startDate ? [{
       id: 'original',
       addiction_type: rehabilitationType || 'Recuperación',
@@ -49,7 +49,7 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
       isOriginal: true
     }] : []),
     ...addictions.map(a => ({ ...a, isOriginal: false }))
-  ];
+  ], [startDate, rehabilitationType, addictions]);
 
   const canAddMoreAddictions = addictions.length < 2; // Max 3 total (1 original + 2 additional)
 
@@ -103,9 +103,9 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
     }
   }, [selectedIndex, allAddictions]); // Removed onAddictionChange to prevent infinite loop
 
-  // Reset selectedIndex if out of bounds
+  // Reset selectedIndex if out of bounds - only if actually needed
   useEffect(() => {
-    if (selectedIndex >= allAddictions.length && allAddictions.length > 0) {
+    if (allAddictions.length > 0 && selectedIndex >= allAddictions.length) {
       setSelectedIndex(0);
     }
   }, [allAddictions.length, selectedIndex]);
