@@ -113,18 +113,20 @@ export default function Values() {
       // If no values exist, create default ones
       if (!existingValues || existingValues.length === 0) {
         const defaultValues = [
-          "Autocuidado",
-          "Gratitud",
-          "Humor",
-          "Respeto",
-          "Salud",
-          "Consideración",
-          "Compromiso"
+          { name: "Autocuidado", type: "primary" },
+          { name: "Gratitud", type: "primary" },
+          { name: "Humor", type: "primary" },
+          { name: "Respeto", type: "secondary" },
+          { name: "Salud", type: "secondary" },
+          { name: "Consideración", type: "secondary" },
+          { name: "Compromiso", type: "secondary" }
         ];
 
-        const valuesToInsert = defaultValues.map(name => ({
+        const valuesToInsert = defaultValues.map((val, index) => ({
           user_id: user.id,
-          name: name
+          name: val.name,
+          value_type: val.type,
+          order_index: index
         }));
 
         await supabase
