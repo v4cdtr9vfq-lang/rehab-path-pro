@@ -9,6 +9,7 @@ interface TourGuideProps {
 
 export function TourGuide({ onComplete }: TourGuideProps) {
   const [run, setRun] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0);
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -38,6 +39,26 @@ export function TourGuide({ onComplete }: TourGuideProps) {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Navegar cuando cambia el stepIndex
+  useEffect(() => {
+    if (run && stepIndex < stepRoutes.length) {
+      navigate(stepRoutes[stepIndex]);
+      
+      // En mobile, asegurar que el menú permanece abierto
+      if (isMobile) {
+        setTimeout(() => {
+          const sheetOverlay = document.querySelector('[data-state="open"]');
+          if (!sheetOverlay) {
+            const menuButton = document.querySelector('button[aria-label="Open sidebar"]') as HTMLButtonElement;
+            if (menuButton) {
+              menuButton.click();
+            }
+          }
+        }, 100);
+      }
+    }
+  }, [stepIndex, run, isMobile, navigate, stepRoutes]);
 
   useEffect(() => {
     // Esperar a que el DOM esté listo y verificar que el primer elemento existe
@@ -144,28 +165,12 @@ export function TourGuide({ onComplete }: TourGuideProps) {
     const { status, action, index, type } = data;
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
-    // Navegar ANTES de mostrar el paso
-    if (type === EVENTS.STEP_BEFORE) {
-      if (index >= 0 && index < stepRoutes.length) {
-        navigate(stepRoutes[index]);
-        
-        // En mobile, asegurar que el menú permanece abierto
-        if (isMobile) {
-          setTimeout(() => {
-            const sheetOverlay = document.querySelector('[data-state="open"]');
-            if (!sheetOverlay) {
-              const menuButton = document.querySelector('button[aria-label="Open sidebar"]') as HTMLButtonElement;
-              if (menuButton) {
-                menuButton.click();
-              }
-            }
-          }, 200);
-        }
-        
-        // Esperar a que la navegación se complete y el DOM se actualice
-        return new Promise(resolve => {
-          setTimeout(() => resolve(undefined), 300);
-        });
+    // Actualizar el stepIndex cuando el paso cambia
+    if (type === EVENTS.STEP_AFTER) {
+      if (action === ACTIONS.NEXT) {
+        setStepIndex(index + 1);
+      } else if (action === ACTIONS.PREV) {
+        setStepIndex(index - 1);
       }
     }
 
@@ -196,7 +201,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       continuous
       showProgress
       showSkipButton
-      stepIndex={0}
+      stepIndex={stepIndex}
       disableOverlayClose
       spotlightClicks={false}
       disableScrolling={false}
