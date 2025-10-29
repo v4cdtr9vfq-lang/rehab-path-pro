@@ -57,6 +57,17 @@ export function OnboardingTour() {
 
   useEffect(() => {
     checkOnboardingStatus();
+    
+    // Listen for rehabilitation type completion
+    const handleRehabilitationTypeComplete = () => {
+      setTimeout(() => checkOnboardingStatus(), 500);
+    };
+    
+    window.addEventListener('rehabilitation-type-complete', handleRehabilitationTypeComplete);
+    
+    return () => {
+      window.removeEventListener('rehabilitation-type-complete', handleRehabilitationTypeComplete);
+    };
   }, []);
 
   useEffect(() => {
@@ -104,14 +115,16 @@ export function OnboardingTour() {
 
       const { data: profile } = await supabase
         .from("profiles")
-        .select("onboarding_completed")
+        .select("onboarding_completed, rehabilitation_type")
         .eq("user_id", user.id)
         .single();
 
       console.log("📊 Profile data:", profile);
       console.log("🎓 Onboarding completed:", profile?.onboarding_completed);
+      console.log("🏥 Rehabilitation type:", (profile as any)?.rehabilitation_type);
 
-      if (profile && !profile.onboarding_completed) {
+      // Only show tour if rehabilitation type is set and onboarding is not completed
+      if (profile && !profile.onboarding_completed && (profile as any).rehabilitation_type) {
         console.log("🚀 Starting onboarding tour in 1 second...");
         // Delay to let the page render first
         setTimeout(() => {

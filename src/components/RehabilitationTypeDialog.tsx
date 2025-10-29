@@ -47,6 +47,17 @@ export default function RehabilitationTypeDialog() {
 
   useEffect(() => {
     checkIfNeedsDialog();
+    
+    // Listen for text onboarding completion
+    const handleTextOnboardingComplete = () => {
+      setTimeout(() => checkIfNeedsDialog(), 500);
+    };
+    
+    window.addEventListener('text-onboarding-complete', handleTextOnboardingComplete);
+    
+    return () => {
+      window.removeEventListener('text-onboarding-complete', handleTextOnboardingComplete);
+    };
   }, []);
 
   const checkIfNeedsDialog = async () => {
@@ -60,14 +71,12 @@ export default function RehabilitationTypeDialog() {
         .eq('user_id', user.id)
         .single();
 
-      // Show dialog if rehabilitation_type is null or undefined
-      if (profile && !(profile as any).rehabilitation_type) {
+      // Show dialog only if text onboarding is completed and rehabilitation_type is not set
+      if (profile && (profile as any).text_onboarding_completed && !(profile as any).rehabilitation_type) {
         setOpen(true);
       }
     } catch (error) {
       console.error('Error checking rehabilitation type:', error);
-      // Show dialog on error as well (column might not exist yet)
-      setOpen(true);
     }
   };
 
@@ -102,6 +111,9 @@ export default function RehabilitationTypeDialog() {
         description: "Tu preferencia ha sido guardada exitosamente",
       });
       setOpen(false);
+      
+      // Trigger check for next onboarding step
+      window.dispatchEvent(new Event('rehabilitation-type-complete'));
     } catch (error: any) {
       toast({
         title: "Error",
@@ -113,8 +125,27 @@ export default function RehabilitationTypeDialog() {
     }
   };
 
-  const handleSkip = () => {
-    setOpen(false);
+  const handleSkip = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Set a default value when skipped so the tour can continue
+      const { error } = await supabase
+        .from('profiles')
+        .update({ rehabilitation_type: 'otros' })
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      
+      setOpen(false);
+      
+      // Trigger check for next onboarding step
+      window.dispatchEvent(new Event('rehabilitation-type-complete'));
+    } catch (error) {
+      console.error('Error skipping rehabilitation type:', error);
+      setOpen(false);
+    }
   };
 
   return (

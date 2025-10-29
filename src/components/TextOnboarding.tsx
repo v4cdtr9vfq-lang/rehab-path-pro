@@ -69,6 +69,9 @@ export function TextOnboarding() {
         .eq("user_id", user.id);
 
       setIsVisible(false);
+      
+      // Trigger check for next onboarding step
+      window.dispatchEvent(new Event('text-onboarding-complete'));
     } catch (error) {
       console.error("Error completing text onboarding:", error);
     }
