@@ -101,7 +101,7 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
     if (onAddictionChange) {
       onAddictionChange(selectedAddiction.id, totalDays);
     }
-  }, [allAddictions.length, selectedIndex]);
+  }, [selectedIndex, onAddictionChange]); // Solo depender de selectedIndex y onAddictionChange
 
   // Reset selectedIndex if out of bounds
   useEffect(() => {
