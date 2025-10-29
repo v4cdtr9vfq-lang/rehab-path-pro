@@ -880,26 +880,6 @@ export default function Home() {
         </CardContent>
       </Card>
 
-      {/* Daily Reflection */}
-      <Card className="border-sidebar-border bg-gradient-to-br from-sky-blue/10 to-transparent md:-mt-[3px]">
-        <CardHeader className="pb-4">
-          <div className="flex items-center gap-3">
-            <span className="text-3xl">💡</span>
-            <CardTitle className="text-lg md:text-2xl">Reflexión del día</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <p className="text-foreground/80 text-base md:text-lg leading-relaxed px-[15px]">
-            {getReflectionOfTheDay()}
-          </p>
-          <Link to={`/journal?reflection=${encodeURIComponent(getReflectionOfTheDay())}`} className="block">
-            <Button variant="outline" size="lg" className="w-full bg-background hover:bg-background/80">
-              Escribir sobre esto
-            </Button>
-          </Link>
-        </CardContent>
-      </Card>
-
       {/* Active Goals Summary */}
       <Card className="border-sidebar-border md:-mt-[3px]" data-tour="goals-section">
         <CardHeader className="flex flex-row items-center justify-between gap-2 pb-[25px]">
@@ -993,6 +973,26 @@ export default function Home() {
               )}
             </>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Daily Reflection */}
+      <Card className="border-sidebar-border bg-gradient-to-br from-sky-blue/10 to-transparent md:-mt-[3px]">
+        <CardHeader className="pb-4">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl">💡</span>
+            <CardTitle className="text-lg md:text-2xl">Reflexión del día</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <p className="text-foreground/80 text-base md:text-lg leading-relaxed px-[15px]">
+            {getReflectionOfTheDay()}
+          </p>
+          <Link to={`/journal?reflection=${encodeURIComponent(getReflectionOfTheDay())}`} className="block">
+            <Button variant="outline" size="lg" className="w-full bg-background hover:bg-background/80">
+              Escribir sobre esto
+            </Button>
+          </Link>
         </CardContent>
       </Card>
 
