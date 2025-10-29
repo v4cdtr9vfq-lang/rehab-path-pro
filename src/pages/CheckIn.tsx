@@ -49,8 +49,8 @@ const questions: Question[] = [
   { id: 6, text: "¿Me aislé hoy?", type: "yesno" },
   { id: 7, text: "¿Seguí mis valores diarios?", type: "yesno" },
   { id: 8, text: "¿Has hecho algo que crees que te limita en lugar de expandirte?", type: "yesno" },
-  { id: 9, text: "¿Te acostado ayer con la casa recogida y limpia?", type: "yesno" },
-  { id: 10, text: "¿Has tenido pensamientos negativos hoy?", type: "yesno" },
+  { id: 9, text: "¿Has tenido pensamientos negativos hoy?", type: "yesno" },
+  { id: 10, text: "¿Te acostado ayer con la casa recogida y limpia?", type: "yesno" },
   { id: 11, text: "¿Cómo calificarías tu descanso ayer por la noche?", type: "scale" },
   { id: 12, text: "¿Has comido bien en cantidad y calidad?", type: "scale" },
   { id: 13, text: "¿Crees que te has movido lo suficiente?", type: "scale" },
@@ -336,8 +336,8 @@ export default function CheckIn() {
         journalParts.push(`Obstáculos a superar: ${limitingDescription.trim()}`);
       }
       
-      // Question 10 - negative thoughts description
-      if (answers[10] === "yes" && negativeThoughtsDescription.trim()) {
+      // Question 9 - negative thoughts description
+      if (answers[9] === "yes" && negativeThoughtsDescription.trim()) {
         journalParts.push(`Pensamientos negativos: ${negativeThoughtsDescription.trim()}`);
       }
       
@@ -442,7 +442,7 @@ export default function CheckIn() {
                   <div className="flex gap-3">
                     <Button
                       variant={answers[question.id] === "yes" ? "default" : "outline"}
-                      className={`flex-1 ${answers[question.id] === "yes" && [1, 5, 7, 9].includes(question.id) ? "bg-green-600 hover:bg-green-700 text-white" : ""}`}
+                      className={`flex-1 ${answers[question.id] === "yes" && [1, 5, 7, 10].includes(question.id) ? "bg-green-600 hover:bg-green-700 text-white" : ""}`}
                       onClick={() => handleAnswer(question.id, "yes")}
                     >
                       SÍ
@@ -452,7 +452,7 @@ export default function CheckIn() {
                       className={`flex-1 ${
                         answers[question.id] === "no" && question.id === 1 
                           ? "bg-red-600 hover:bg-red-700 text-white" 
-                          : answers[question.id] === "no" && [2, 4, 6, 8, 10].includes(question.id) 
+                          : answers[question.id] === "no" && [2, 4, 6, 8, 9].includes(question.id) 
                           ? "bg-green-600 hover:bg-green-700 text-white" 
                           : ""
                       }`}
@@ -544,8 +544,8 @@ export default function CheckIn() {
                     </div>
                   )}
 
-                  {/* Show negative thoughts description field if question 10 answered "yes" */}
-                  {question.id === 10 && answers[10] === "yes" && (
+                  {/* Show negative thoughts description field if question 9 answered "yes" */}
+                  {question.id === 9 && answers[9] === "yes" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                       <Label htmlFor="negative-thoughts-description" className="text-sm font-medium text-foreground pl-4">
                         Describe tus pensamientos negativos:
