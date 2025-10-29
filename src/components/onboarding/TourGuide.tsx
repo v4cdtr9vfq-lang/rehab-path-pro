@@ -121,9 +121,9 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       continuous
       showProgress
       showSkipButton
-      stepIndex={0}
       disableOverlayClose
-      spotlightClicks={false}
+      spotlightClicks
+      scrollToFirstStep
       callback={handleJoyrideCallback}
       styles={{
         options: {
