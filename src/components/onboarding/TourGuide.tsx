@@ -10,10 +10,18 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   const [run, setRun] = useState(false);
 
   useEffect(() => {
-    // Pequeño delay para asegurar que el DOM esté listo
-    const timer = setTimeout(() => {
-      setRun(true);
-    }, 500);
+    // Esperar a que el DOM esté listo y verificar que el primer elemento existe
+    const checkAndStart = () => {
+      const firstElement = document.querySelector('#dashboard-link');
+      if (firstElement) {
+        setRun(true);
+      } else {
+        // Si no existe, reintentar después de un tiempo
+        setTimeout(checkAndStart, 300);
+      }
+    };
+    
+    const timer = setTimeout(checkAndStart, 800);
     
     return () => clearTimeout(timer);
   }, []);
