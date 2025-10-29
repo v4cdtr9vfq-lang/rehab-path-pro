@@ -70,6 +70,8 @@ export default function Settings() {
   const [trialDaysUsed, setTrialDaysUsed] = useState(0);
   const [rehabilitationType, setRehabilitationType] = useState<string>("");
   const [isUpdatingRehabType, setIsUpdatingRehabType] = useState(false);
+  const [initialRehabilitationType, setInitialRehabilitationType] = useState<string>("");
+  const [initialAbstinenceDate, setInitialAbstinenceDate] = useState("");
 
   const REHABILITATION_TYPES = [
     { id: 'adiccion_1', label: 'Adicción 1' },
@@ -145,6 +147,7 @@ export default function Settings() {
           .toISOString()
           .split('T')[0];
         setAbstinenceStartDate(localDate);
+        setInitialAbstinenceDate(localDate);
       }
     } catch (error) {
       console.error('Error loading abstinence date:', error);
@@ -332,7 +335,9 @@ export default function Settings() {
         setFullName(profile.full_name);
       }
       if ((profile as any)?.rehabilitation_type) {
-        setRehabilitationType((profile as any).rehabilitation_type);
+        const rehabType = (profile as any).rehabilitation_type;
+        setRehabilitationType(rehabType);
+        setInitialRehabilitationType(rehabType);
       }
     } catch (error) {
       console.error('Error loading user profile:', error);
@@ -1043,17 +1048,21 @@ export default function Settings() {
                       />
                     </PopoverContent>
                   </Popover>
-                  <Button 
-                    size="sm"
-                    onClick={() => {
-                      handleUpdateRehabilitationType();
-                      handleUpdateAbstinenceDate();
-                    }}
-                    disabled={isUpdatingDate || isUpdatingRehabType}
-                    className="w-full mt-2"
-                  >
-                    {(isUpdatingDate || isUpdatingRehabType) ? "..." : "Guardar"}
-                  </Button>
+                  {(rehabilitationType !== initialRehabilitationType || abstinenceStartDate !== initialAbstinenceDate) && (
+                    <Button 
+                      size="sm"
+                      onClick={() => {
+                        handleUpdateRehabilitationType();
+                        handleUpdateAbstinenceDate();
+                        setInitialRehabilitationType(rehabilitationType);
+                        setInitialAbstinenceDate(abstinenceStartDate);
+                      }}
+                      disabled={isUpdatingDate || isUpdatingRehabType}
+                      className="w-full mt-2"
+                    >
+                      {(isUpdatingDate || isUpdatingRehabType) ? "..." : "Guardar"}
+                    </Button>
+                  )}
                 </div>
               </div>
 
