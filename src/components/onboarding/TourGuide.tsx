@@ -4,57 +4,85 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-const TOUR_STEPS: Step[] = [
-  {
-    target: '#dashboard-link',
-    content: '🫀 Tu Centro: Aquí encontrarás tu resumen diario, check-ins y estadísticas principales.',
-    disableBeacon: true,
-  },
-  {
-    target: '#plan-link',
-    content: '🎯 Mi Plan: Crea y gestiona tu plan de recuperación personalizado.',
-  },
-  {
-    target: '#progress-link',
-    content: '📈 Progreso: Visualiza tu evolución y logros a lo largo del tiempo.',
-  },
-  {
-    target: '[href="/emotion-journal"]',
-    content: '😊 Diario de Emociones: Registra cómo te sientes cada día.',
-  },
-  {
-    target: '[href="/journal"]',
-    content: '📔 Diario: Escribe libremente tus pensamientos y reflexiones.',
-  },
-  {
-    target: '[href="/gratitude"]',
-    content: '🙏 Agradecimiento: Practica la gratitud diariamente.',
-  },
-  {
-    target: '[href="/values"]',
-    content: '❤️ Valores: Define y conecta con tus valores fundamentales.',
-  },
-  {
-    target: '[href="/chat"]',
-    content: '💬 Chat: Habla con tu asistente de IA y la comunidad.',
-  },
-  {
-    target: '#community-link',
-    content: '🫶 Comunidad: Conecta con otros en recuperación, comparte y encuentra apoyo.',
-  },
-  {
-    target: '[href="/tools"]',
-    content: '🛠️ Herramientas: Accede a recursos útiles para tu recuperación.',
-  },
-  {
-    target: '[href="/help"]',
-    content: '🆘 Ayuda: Encuentra ayuda inmediata cuando la necesites.',
-  },
-  {
-    target: '[href="/settings"]',
-    content: '⚙️ Configuración: Personaliza tu experiencia y preferencias.',
-  },
-];
+const getTourSteps = (isMobile: boolean): Step[] => {
+  const placement = isMobile ? 'bottom' : 'right';
+  
+  return [
+    {
+      target: '#dashboard-link',
+      content: '🫀 Tu Centro: Aquí encontrarás tu resumen diario, check-ins y estadísticas principales.',
+      disableBeacon: true,
+      placement,
+      offset: 10,
+    },
+    {
+      target: '#plan-link',
+      content: '🎯 Mi Plan: Crea y gestiona tu plan de recuperación personalizado.',
+      placement,
+      offset: 10,
+    },
+    {
+      target: '#progress-link',
+      content: '📈 Progreso: Visualiza tu evolución y logros a lo largo del tiempo.',
+      placement,
+      offset: 10,
+    },
+    {
+      target: '[href="/emotion-journal"]',
+      content: '😊 Diario de Emociones: Registra cómo te sientes cada día.',
+      placement,
+      offset: 10,
+    },
+    {
+      target: '[href="/journal"]',
+      content: '📔 Diario: Escribe libremente tus pensamientos y reflexiones.',
+      placement,
+      offset: 10,
+    },
+    {
+      target: '[href="/gratitude"]',
+      content: '🙏 Agradecimiento: Practica la gratitud diariamente.',
+      placement,
+      offset: 10,
+    },
+    {
+      target: '[href="/values"]',
+      content: '❤️ Valores: Define y conecta con tus valores fundamentales.',
+      placement,
+      offset: 10,
+    },
+    {
+      target: '[href="/chat"]',
+      content: '💬 Chat: Habla con tu asistente de IA y la comunidad.',
+      placement,
+      offset: 10,
+    },
+    {
+      target: '#community-link',
+      content: '🫶 Comunidad: Conecta con otros en recuperación, comparte y encuentra apoyo.',
+      placement,
+      offset: 10,
+    },
+    {
+      target: '[href="/tools"]',
+      content: '🛠️ Herramientas: Accede a recursos útiles para tu recuperación.',
+      placement,
+      offset: 10,
+    },
+    {
+      target: '[href="/help"]',
+      content: '🆘 Ayuda: Encuentra ayuda inmediata cuando la necesites.',
+      placement,
+      offset: 10,
+    },
+    {
+      target: '[href="/settings"]',
+      content: '⚙️ Configuración: Personaliza tu experiencia y preferencias.',
+      placement,
+      offset: 10,
+    },
+  ];
+};
 
 interface TourGuideProps {
   onComplete: () => void;
@@ -64,6 +92,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   const [run, setRun] = useState(false);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const tourSteps = getTourSteps(isMobile);
 
   useEffect(() => {
     // Esperar un momento para que el DOM esté listo
@@ -124,7 +153,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
 
   return (
     <Joyride
-      steps={TOUR_STEPS}
+      steps={tourSteps}
       run={run}
       continuous
       showProgress
