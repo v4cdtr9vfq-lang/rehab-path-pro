@@ -1034,7 +1034,7 @@ export default function Plan() {
               </DialogHeader>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="goal-type">Tipo</Label>
+                  <Label htmlFor="goal-type">{t('plan.goalType')}</Label>
                   <Select value={newGoal.type} onValueChange={value => setNewGoal(prev => ({
                   ...prev,
                   type: value as (keyof typeof sections | 'always' | 'periodic'),
@@ -1042,32 +1042,32 @@ export default function Plan() {
                   periodic_type: undefined
                 }))}>
                     <SelectTrigger id="goal-type">
-                      <SelectValue placeholder="Seleccionar tipo" />
+                      <SelectValue placeholder={t('plan.selectType')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="today">Hoy</SelectItem>
-                      <SelectItem value="week">Esta semana</SelectItem>
-                      <SelectItem value="month">Este mes</SelectItem>
-                      <SelectItem value="onetime">Meta única</SelectItem>
-                      <SelectItem value="periodic">Meta periódica</SelectItem>
-                      <SelectItem value="always">Siempre</SelectItem>
+                      <SelectItem value="today">{t('plan.today')}</SelectItem>
+                      <SelectItem value="week">{t('plan.thisWeek')}</SelectItem>
+                      <SelectItem value="month">{t('plan.thisMonth')}</SelectItem>
+                      <SelectItem value="onetime">{t('plan.oneTimeGoal')}</SelectItem>
+                      <SelectItem value="periodic">{t('plan.periodicGoal')}</SelectItem>
+                      <SelectItem value="always">{t('plan.always')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="goal-text">Meta</Label>
-                  <Input id="goal-text" placeholder="Escribe tu meta..." value={newGoal.text} onChange={e => setNewGoal(prev => ({
+                  <Label htmlFor="goal-text">{t('plan.goalText')}</Label>
+                  <Input id="goal-text" placeholder={t('plan.writeGoalPlaceholder')} value={newGoal.text} onChange={e => setNewGoal(prev => ({
                   ...prev,
                   text: e.target.value
                 }))} />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="goal-description">Descripción</Label>
+                  <Label htmlFor="goal-description">{t('plan.goalDescription')}</Label>
                   <Textarea 
                     id="goal-description" 
-                    placeholder="Descripción de la meta..." 
+                    placeholder={t('plan.descriptionPlaceholder')} 
                     value={newGoal.description || ""} 
                     onChange={e => setNewGoal(prev => ({
                       ...prev,
@@ -1079,7 +1079,7 @@ export default function Plan() {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="goal-link">Link (opcional)</Label>
+                  <Label htmlFor="goal-link">{t('plan.linkOptional')}</Label>
                   <Input 
                     id="goal-link" 
                     type="url"
@@ -1090,18 +1090,18 @@ export default function Plan() {
                       link: e.target.value
                     }))}
                   />
-                  <p className="text-xs text-muted-foreground">El nombre de la meta será clickeable si añades un link</p>
+                  <p className="text-xs text-muted-foreground">{t('plan.linkHint')}</p>
                 </div>
                 
                 {newGoal.type === 'onetime' && <div className="space-y-2">
-                    <Label>Fecha objetivo</Label>
+                    <Label>{t('plan.targetDate')}</Label>
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !newGoal.target_date && "text-muted-foreground")}>
                           <CalendarIcon className="mr-2 h-4 w-4" />
                           {newGoal.target_date ? format(newGoal.target_date, "PPP", {
                         locale: es
-                      }) : <span>Seleccionar fecha</span>}
+                      }) : <span>{t('plan.selectDate')}</span>}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
@@ -1114,31 +1114,31 @@ export default function Plan() {
                   </div>}
 
                 {newGoal.type === 'periodic' && <div className="space-y-2">
-                    <Label htmlFor="periodic-type">Periodicidad</Label>
+                    <Label htmlFor="periodic-type">{t('plan.periodicity')}</Label>
                     <Select value={newGoal.periodic_type} onValueChange={value => setNewGoal(prev => ({
                   ...prev,
                   periodic_type: value
                 }))}>
                       <SelectTrigger id="periodic-type">
-                        <SelectValue placeholder="Seleccionar periodicidad" />
+                        <SelectValue placeholder={t('plan.selectPeriodicity')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="inicio_mes">Primero de mes</SelectItem>
-                        <SelectItem value="mitad_mes">Mitad de mes</SelectItem>
-                        <SelectItem value="final_mes">Final de mes</SelectItem>
+                        <SelectItem value="inicio_mes">{t('plan.startOfMonth')}</SelectItem>
+                        <SelectItem value="mitad_mes">{t('plan.middleOfMonth')}</SelectItem>
+                        <SelectItem value="final_mes">{t('plan.endOfMonth')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>}
 
                 {newGoal.type !== 'onetime' && <div className="space-y-2">
-                  <Label htmlFor="goal-remaining">Número de veces</Label>
+                  <Label htmlFor="goal-remaining">{t('plan.numberOfTimes')}</Label>
                   <Input id="goal-remaining" type="number" min="1" value={newGoal.remaining} onChange={e => setNewGoal(prev => ({
                   ...prev,
                   remaining: parseInt(e.target.value) || 1
                 }))} />
                 </div>}
               <Button onClick={addGoal} className="w-full">
-                Añadir
+                {t('plan.add')}
               </Button>
             </div>
           </DialogContent>
@@ -1150,43 +1150,43 @@ export default function Plan() {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Editar meta</DialogTitle>
+            <DialogTitle>{t('plan.editGoal')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-text">Meta</Label>
-              <Input id="edit-goal-text" placeholder="Escribe tu meta..." value={editingGoal?.text || ""} onChange={e => setEditingGoal(prev => ({
+              <Label htmlFor="edit-goal-text">{t('plan.goalText')}</Label>
+              <Input id="edit-goal-text" placeholder={t('plan.writeGoalPlaceholder')} value={editingGoal?.text || ""} onChange={e => setEditingGoal(prev => ({
               ...prev,
               text: e.target.value
             }))} />
             </div>
             
             {editingGoal?.goal_type === 'periodic' && <div className="space-y-2">
-                <Label htmlFor="edit-periodic-type">Periodicidad</Label>
+                <Label htmlFor="edit-periodic-type">{t('plan.periodicity')}</Label>
                 <Select value={editingGoal?.periodic_type || ""} onValueChange={value => setEditingGoal(prev => ({
               ...prev,
               periodic_type: value
             }))}>
                   <SelectTrigger id="edit-periodic-type">
-                    <SelectValue placeholder="Seleccionar periodicidad" />
+                    <SelectValue placeholder={t('plan.selectPeriodicity')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="inicio_mes">Primero de mes</SelectItem>
-                    <SelectItem value="mitad_mes">Mitad de mes</SelectItem>
-                    <SelectItem value="final_mes">Final de mes</SelectItem>
+                    <SelectItem value="inicio_mes">{t('plan.startOfMonth')}</SelectItem>
+                    <SelectItem value="mitad_mes">{t('plan.middleOfMonth')}</SelectItem>
+                    <SelectItem value="final_mes">{t('plan.endOfMonth')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>}
 
             {editingGoal?.goal_type === 'onetime' && <div className="space-y-2">
-                <Label>Fecha objetivo</Label>
+                <Label>{t('plan.targetDate')}</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !editingGoal?.target_date && "text-muted-foreground")}>
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {editingGoal?.target_date ? format(new Date(editingGoal.target_date), "PPP", {
                     locale: es
-                  }) : <span>Seleccionar fecha</span>}
+                  }) : <span>{t('plan.selectDate')}</span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
@@ -1199,7 +1199,7 @@ export default function Plan() {
               </div>}
 
             {editingGoal?.goal_type !== 'onetime' && <div className="space-y-2">
-              <Label htmlFor="edit-goal-remaining">Número de veces</Label>
+              <Label htmlFor="edit-goal-remaining">{t('plan.numberOfTimes')}</Label>
               <Input id="edit-goal-remaining" type="number" min="1" value={editingGoal?.remaining || 1} onChange={e => setEditingGoal(prev => ({
               ...prev,
               remaining: parseInt(e.target.value) || 1
@@ -1207,10 +1207,10 @@ export default function Plan() {
             </div>}
             
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-instructions">Instrucciones</Label>
+              <Label htmlFor="edit-goal-instructions">{t('plan.instructions')}</Label>
               <Textarea 
                 id="edit-goal-instructions" 
-                placeholder="Instrucciones para la meta..." 
+                placeholder={t('plan.instructionsPlaceholder')} 
                 value={editingGoal?.instructions || ""} 
                 onChange={e => setEditingGoal(prev => ({
                   ...prev,
@@ -1222,10 +1222,10 @@ export default function Plan() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-notes">Observaciones</Label>
+              <Label htmlFor="edit-goal-notes">{t('plan.notes')}</Label>
               <Textarea 
                 id="edit-goal-notes" 
-                placeholder="Observaciones sobre la meta..." 
+                placeholder={t('plan.notesPlaceholder')} 
                 value={editingGoal?.notes || ""} 
                 onChange={e => setEditingGoal(prev => ({
                   ...prev,
@@ -1237,7 +1237,7 @@ export default function Plan() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-link">Link (opcional)</Label>
+              <Label htmlFor="edit-goal-link">{t('plan.linkOptional')}</Label>
               <Input 
                 id="edit-goal-link" 
                 type="url"
@@ -1248,10 +1248,10 @@ export default function Plan() {
                   link: e.target.value
                 }))}
               />
-              <p className="text-xs text-muted-foreground">El nombre de la meta será clickeable si añades un link</p>
+              <p className="text-xs text-muted-foreground">{t('plan.linkHint')}</p>
             </div>
             <Button onClick={updateGoal} className="w-full">
-              Guardar cambios
+              {t('plan.saveChanges')}
             </Button>
           </div>
         </DialogContent>
