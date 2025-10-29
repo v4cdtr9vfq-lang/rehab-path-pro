@@ -10,7 +10,17 @@
     "next": "Siguiente",
     "finish": "Finalizar",
     "skip": "Saltar",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "yes": "Sí",
+    "no": "No",
+    "search": "Buscar",
+    "send": "Enviar",
+    "submit": "Enviar",
+    "continue": "Continuar",
+    "download": "Descargar",
+    "share": "Compartir",
+    "ok": "Aceptar",
+    "confirm": "Confirmar"
   },
   "auth": {
     "signIn": "Iniciar sesión",
@@ -21,7 +31,9 @@
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "alreadyHaveAccount": "¿Ya tienes cuenta?",
     "dontHaveAccount": "¿No tienes cuenta?",
-    "resetPassword": "Restablecer contraseña"
+    "resetPassword": "Restablecer contraseña",
+    "welcomeBack": "Bienvenido de nuevo",
+    "createAccount": "Crear cuenta"
   },
   "navigation": {
     "dashboard": "Tu Centro",
@@ -36,7 +48,9 @@
     "tools": "Herramientas",
     "help": "Ayuda",
     "settings": "Configuración",
-    "supportNetwork": "Red de Apoyo"
+    "supportNetwork": "Red de Apoyo",
+    "checkIn": "Check-in",
+    "sleepQuality": "Calidad de Sueño"
   },
   "dashboard": {
     "cleanTime": "Tiempo limpio:",
@@ -66,6 +80,191 @@
     "youUnlocked": "Has desbloqueado la medalla",
     "great": "¡Genial!"
   },
+  "goals": {
+    "today": "Hoy",
+    "thisWeek": "Esta semana",
+    "always": "Pendiente",
+    "goalUpdated": "Meta actualizada",
+    "markedAsPending": "Meta marcada como pendiente.",
+    "goalCompleted": "¡Meta completada!",
+    "error": "Error",
+    "couldNotUpdate": "No se pudo actualizar la meta.",
+    "changesCanceled": "Cambios cancelados",
+    "originalOrderRestored": "Se restauró el orden original de las metas.",
+    "orderSaved": "Orden guardado",
+    "orderUpdated": "El orden de las metas ha sido actualizado.",
+    "couldNotSaveOrder": "No se pudo guardar el orden de las metas.",
+    "addGoal": "Agregar meta",
+    "editGoal": "Editar meta",
+    "deleteGoal": "Eliminar meta",
+    "goalText": "Texto de la meta",
+    "goalType": "Tipo de meta",
+    "daily": "Diaria",
+    "weekly": "Semanal",
+    "permanent": "Permanente"
+  },
+  "quickTools": {
+    "journal": "Diario",
+    "emotionJournal": "Diario de emociones",
+    "gratitude": "Agradecimiento",
+    "emergencyPlan": "Plan de emergencia"
+  },
+  "plan": {
+    "title": "Mi Plan",
+    "description": "Crea y gestiona tu plan de recuperación personalizado",
+    "noGoals": "No tienes metas aún",
+    "addFirstGoal": "Agrega tu primera meta",
+    "todayGoals": "Metas para hoy",
+    "weekGoals": "Metas semanales",
+    "permanentGoals": "Metas permanentes"
+  },
+  "progress": {
+    "title": "Progreso",
+    "description": "Visualiza tu evolución y logros",
+    "statistics": "Estadísticas",
+    "achievements": "Logros",
+    "reports": "Informes",
+    "generateReport": "Generar informe",
+    "viewReport": "Ver informe",
+    "noReports": "No tienes informes aún"
+  },
+  "journal": {
+    "title": "Diario",
+    "newEntry": "Nueva entrada",
+    "writeYourThoughts": "Escribe tus pensamientos...",
+    "saveEntry": "Guardar entrada",
+    "noEntries": "No tienes entradas aún",
+    "startWriting": "Comienza a escribir",
+    "entryTitle": "Título de la entrada",
+    "entryContent": "Contenido",
+    "tags": "Etiquetas",
+    "date": "Fecha"
+  },
+  "emotionJournal": {
+    "title": "Diario de Emociones",
+    "howDoYouFeel": "¿Cómo te sientes hoy?",
+    "selectEmotion": "Selecciona una emoción",
+    "addNote": "Agregar nota",
+    "trigger": "Detonante",
+    "person": "Persona",
+    "situation": "Situación",
+    "describe": "Describe",
+    "noEntries": "No tienes entradas emocionales aún"
+  },
+  "gratitude": {
+    "title": "Agradecimiento",
+    "whatAreYouGratefulFor": "¿Por qué estás agradecido hoy?",
+    "addGratitude": "Agregar agradecimiento",
+    "noEntries": "No tienes agradecimientos aún",
+    "startPracticing": "Comienza a practicar la gratitud"
+  },
+  "values": {
+    "title": "Valores",
+    "myValues": "Mis valores",
+    "selectYourValues": "Selecciona tus valores fundamentales",
+    "addValue": "Agregar valor",
+    "noValues": "No has seleccionado valores aún"
+  },
+  "chat": {
+    "title": "Chat",
+    "typeMessage": "Escribe un mensaje...",
+    "aiAssistant": "Asistente IA",
+    "community": "Comunidad",
+    "rooms": "Salas",
+    "narcotics": "Narcóticos Anónimos",
+    "alcoholics": "Alcohólicos Anónimos",
+    "general": "General"
+  },
+  "community": {
+    "title": "Comunidad",
+    "connect": "Conecta con otros",
+    "share": "Comparte tu experiencia",
+    "support": "Encuentra apoyo",
+    "mentorship": "Mentoría",
+    "becomeMentor": "Ser mentor",
+    "findMentor": "Encontrar mentor",
+    "messages": "Mensajes",
+    "noMessages": "No tienes mensajes"
+  },
+  "supportNetwork": {
+    "title": "Red de Apoyo",
+    "addContact": "Agregar contacto",
+    "name": "Nombre",
+    "phone": "Teléfono",
+    "email": "Email",
+    "relationship": "Relación",
+    "notes": "Notas",
+    "noContacts": "No tienes contactos aún",
+    "addFirstContact": "Agrega tu primer contacto de apoyo"
+  },
+  "help": {
+    "title": "Ayuda",
+    "emergency": "Emergencia",
+    "needHelpNow": "¿Necesitas ayuda ahora?",
+    "crisisLine": "Línea de crisis",
+    "emergencyContacts": "Contactos de emergencia",
+    "resources": "Recursos",
+    "faq": "Preguntas frecuentes"
+  },
+  "tools": {
+    "title": "Herramientas",
+    "emergencyPlan": "Plan de emergencia",
+    "relaxation": "Relajación",
+    "meditation": "Meditación",
+    "breathing": "Respiración",
+    "resources": "Recursos útiles"
+  },
+  "settings": {
+    "title": "Configuración",
+    "profile": "Perfil",
+    "notifications": "Notificaciones",
+    "privacy": "Privacidad",
+    "language": "Idioma",
+    "theme": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema",
+    "account": "Cuenta",
+    "preferences": "Preferencias",
+    "about": "Acerca de",
+    "version": "Versión",
+    "logout": "Cerrar sesión"
+  },
+  "checkIn": {
+    "title": "Check-in Diario",
+    "howAreYouFeeling": "¿Cómo te sientes hoy?",
+    "sleepQuality": "Calidad de sueño",
+    "energyLevel": "Nivel de energía",
+    "mood": "Estado de ánimo",
+    "cravings": "Antojos",
+    "notes": "Notas",
+    "saveCheckIn": "Guardar check-in",
+    "checkInSaved": "Check-in guardado",
+    "todayCheckIn": "Check-in de hoy"
+  },
+  "sleepQuality": {
+    "title": "Calidad de Sueño",
+    "rateYourSleep": "Califica tu sueño",
+    "hours": "Horas de sueño",
+    "quality": "Calidad",
+    "poor": "Mala",
+    "fair": "Regular",
+    "good": "Buena",
+    "veryGood": "Muy buena",
+    "excellent": "Excelente"
+  },
+  "addictions": {
+    "add": "Agregar adicción",
+    "manage": "Gestionar adicciones",
+    "type": "Tipo de adicción",
+    "startDate": "Fecha de inicio",
+    "maxReached": "Máximo 3 adicciones permitidas",
+    "selectType": "Selecciona el tipo",
+    "alcohol": "Alcohol",
+    "drugs": "Drogas",
+    "gambling": "Juego",
+    "other": "Otro"
+  },
   "tour": {
     "welcome": "¡Bienvenido! 👋 Te mostraré las funciones principales de la app. Puedes acceder al menú desde el botón ☰ en la esquina superior izquierda.",
     "cleanTime": "🫀 Aquí verás tu tiempo limpio y podrás gestionar tus adicciones.",
@@ -87,25 +286,30 @@
     "settingsDesc": "⚙️ Configuración: Personaliza tu experiencia y preferencias.",
     "skipTour": "Saltar tour"
   },
-  "goals": {
-    "today": "Hoy",
-    "thisWeek": "Esta semana",
-    "always": "Pendiente",
-    "goalUpdated": "Meta actualizada",
-    "markedAsPending": "Meta marcada como pendiente.",
-    "goalCompleted": "¡Meta completada!",
-    "error": "Error",
-    "couldNotUpdate": "No se pudo actualizar la meta.",
-    "changesCanceled": "Cambios cancelados",
-    "originalOrderRestored": "Se restauró el orden original de las metas.",
-    "orderSaved": "Orden guardado",
-    "orderUpdated": "El orden de las metas ha sido actualizado.",
-    "couldNotSaveOrder": "No se pudo guardar el orden de las metas."
+  "footer": {
+    "madeWith": "Hecho con",
+    "for": "para",
+    "recovery": "la recuperación"
   },
-  "quickTools": {
-    "journal": "Diario",
-    "emotionJournal": "Diario de emociones",
-    "gratitude": "Agradecimiento",
-    "emergencyPlan": "Plan de emergencia"
+  "landing": {
+    "welcome": "Bienvenido a tu viaje de recuperación",
+    "subtitle": "Una herramienta completa para apoyar tu proceso",
+    "getStarted": "Comenzar",
+    "learnMore": "Saber más",
+    "features": "Características",
+    "testimonials": "Testimonios"
+  },
+  "errors": {
+    "genericError": "Algo salió mal",
+    "tryAgain": "Intentar de nuevo",
+    "notFound": "No encontrado",
+    "unauthorized": "No autorizado",
+    "networkError": "Error de red"
+  },
+  "quotes": {
+    "save": "Guardar frase",
+    "saved": "Frase guardada",
+    "removed": "Frase eliminada",
+    "viewSaved": "Ver mensajes guardados"
   }
 }

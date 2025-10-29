@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTranslation } from "react-i18next";
+import { useTranslatedQuickTools } from "@/hooks/useTranslatedQuickTools";
 import {
   DndContext,
   closestCenter,
@@ -31,6 +32,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 export default function Home() {
   const { t } = useTranslation();
+  const quickTools = useTranslatedQuickTools();
   const {
     toast
   } = useToast();
@@ -198,14 +200,14 @@ export default function Home() {
         completed: allInstancesCompleted
       }).eq('id', goal.originalId).eq('user_id', user.id);
       toast({
-        title: "Meta actualizada",
-        description: wasCompleted ? "Meta marcada como pendiente." : "¡Meta completada!"
+        title: t('goals.goalUpdated'),
+        description: wasCompleted ? t('goals.markedAsPending') : t('goals.goalCompleted')
       });
     } catch (error: any) {
       console.error('Error in toggleGoal:', error);
       toast({
-        title: "Error",
-        description: "No se pudo actualizar la meta.",
+        title: t('goals.error'),
+        description: t('goals.couldNotUpdate'),
         variant: "destructive"
       });
       // Revert optimistic update on error
@@ -473,8 +475,8 @@ export default function Home() {
     setHasUnsavedOrder(false);
     setOriginalGoalsOrder([]);
     toast({
-      title: "Cambios cancelados",
-      description: "Se restauró el orden original de las metas."
+      title: t('goals.changesCanceled'),
+      description: t('goals.originalOrderRestored')
     });
   };
 
@@ -523,14 +525,14 @@ export default function Home() {
       setHasUnsavedOrder(false);
       setOriginalGoalsOrder([]);
       toast({
-        title: "Orden guardado",
-        description: "El orden de las metas ha sido actualizado."
+        title: t('goals.orderSaved'),
+        description: t('goals.orderUpdated')
       });
     } catch (error) {
       console.error('Error updating goal order:', error);
       toast({
-        title: "Error",
-        description: "No se pudo guardar el orden de las metas.",
+        title: t('goals.error'),
+        description: t('goals.couldNotSaveOrder'),
         variant: "destructive",
       });
     }
@@ -541,8 +543,8 @@ export default function Home() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
-          title: "Error",
-          description: "Debes iniciar sesión para guardar frases.",
+          title: t('goals.error'),
+          description: t('errors.unauthorized'),
           variant: "destructive",
         });
         return;
@@ -565,11 +567,11 @@ export default function Home() {
         toast({
           title: (
             <span className="flex items-start justify-between w-full">
-              <span>Frase eliminada</span>
+              <span>{t('quotes.removed')}</span>
               <span className="text-lg ml-2">🗑️</span>
             </span>
           ) as any,
-          description: "La frase ha sido eliminada de tus guardados.",
+          description: t('quotes.removed'),
         });
           
           setSavedQuotes(savedQuotes.filter((sq: any) => sq.id !== quoteToRemove.id));
@@ -588,8 +590,8 @@ export default function Home() {
         if (error) throw error;
 
         toast({
-          title: "Frase guardada",
-          description: "La frase ha sido guardada exitosamente.",
+          title: t('quotes.saved'),
+          description: t('quotes.saved'),
         });
         
         setIsQuoteSaved(true);
@@ -598,11 +600,11 @@ export default function Home() {
       toast({
         title: (
           <span className="flex items-start justify-between w-full">
-            <span>Error</span>
+            <span>{t('goals.error')}</span>
             <span className="text-lg ml-2">⚠️</span>
           </span>
         ) as any,
-        description: "No se pudo guardar la frase.",
+        description: t('errors.genericError'),
         variant: "destructive",
       });
     }
@@ -659,10 +661,10 @@ export default function Home() {
 
   // Medal configuration
   const medalConfig = [
-    { type: 'servicio', name: 'Libertad', emoji: '🏆', requiredDays: 360 },
-    { type: 'recuperacion', name: 'Recuperación', emoji: '🥇', requiredDays: 180 },
-    { type: 'constancia', name: 'Constancia', emoji: '🥈', requiredDays: 90 },
-    { type: 'valor', name: 'Valor', emoji: '🥉', requiredDays: 0 }
+    { type: 'servicio', name: t('medals.freedom'), emoji: '🏆', requiredDays: 360 },
+    { type: 'recuperacion', name: t('medals.recovery'), emoji: '🥇', requiredDays: 180 },
+    { type: 'constancia', name: t('medals.perseverance'), emoji: '🥈', requiredDays: 90 },
+    { type: 'valor', name: t('medals.courage'), emoji: '🥉', requiredDays: 0 }
   ];
 
   const getMedalStatus = (medalType: string, requiredDays: number) => {
@@ -701,41 +703,18 @@ export default function Home() {
 
       setSleepQuality(score);
       toast({
-        title: "Registrado",
-        description: `Calidad de sueño: ${score}/10`,
+        title: t('checkIn.checkInSaved'),
+        description: `${t('checkIn.sleepQuality')}: ${score}/10`,
       });
     } catch (error: any) {
       console.error('Error saving sleep quality:', error);
       toast({
-        title: "Error",
-        description: "No se pudo guardar la calidad de sueño",
+        title: t('goals.error'),
+        description: t('errors.genericError'),
         variant: "destructive",
       });
     }
   };
-
-  // Quick tools - configurable
-  const quickTools = [{
-    emoji: "📔",
-    label: "Diario",
-    path: "/journal",
-    color: "text-primary"
-  }, {
-    emoji: "😊",
-    label: "Diario de emociones",
-    path: "/emotion-journal",
-    color: "text-primary"
-  }, {
-    emoji: "🙏",
-    label: "Agradecimiento",
-    path: "/gratitude",
-    color: "text-accent"
-  }, {
-    emoji: "🚨",
-    label: "Plan de emergencia",
-    path: "/tools",
-    color: "text-destructive"
-  }];
 
   // Sortable Goal Item Component
   function SortableGoalItem({ goal }: { goal: any }) {
@@ -1018,10 +997,10 @@ export default function Home() {
                       <p className="font-bold text-foreground text-sm md:text-base mb-0.5 break-words">{medal.name}</p>
                       <p className={`text-xs md:text-sm break-words ${medal.requiredDays === 0 || status.isUnlocked ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
                         {medal.requiredDays === 0
-                          ? '¡Conseguida!'
+                          ? t('medals.unlocked')
                           : status.isUnlocked 
-                            ? '¡Conseguida!' 
-                            : `+${status.progress} / ${medal.requiredDays} días.`
+                            ? t('medals.unlocked')
+                            : `+${status.progress} / ${medal.requiredDays} ${t('medals.daysClean')}.`
                         }
                       </p>
                     </div>
@@ -1050,7 +1029,7 @@ export default function Home() {
           <p className="text-center text-muted-foreground text-sm">— {dailyQuote.author}</p>
           <div className="flex justify-center mt-4">
             <Link to="/message">
-              <Button variant="ghost" size="sm" className="text-primary text-xs">Ver mensajes guardados.</Button>
+              <Button variant="ghost" size="sm" className="text-primary text-xs">{t('quotes.viewSaved')}</Button>
             </Link>
           </div>
         </CardContent>
@@ -1086,18 +1065,18 @@ export default function Home() {
               </div>
             </div>
             <AlertDialogTitle className="text-center text-2xl">
-              ¡Conseguido!
+              {t('medals.unlocked')}
             </AlertDialogTitle>
             <AlertDialogDescription className="text-center text-lg">
-              <span className="font-bold text-primary">{sobrietyDays} días libre!</span>
+              <span className="font-bold text-primary">{sobrietyDays} {t('medals.daysClean')}!</span>
               <br />
-              Has desbloqueado la medalla <span className="font-semibold">{newMedal?.name}</span>
+              {t('medals.youUnlocked')} <span className="font-semibold">{newMedal?.name}</span>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex justify-center mt-4">
             <Button onClick={closeMedalPopup} className="rounded-xl">
               <PartyPopper className="mr-2 h-4 w-4" />
-              ¡Genial!
+              {t('medals.great')}
             </Button>
           </div>
         </AlertDialogContent>

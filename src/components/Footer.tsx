@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { Heart, Mail, Info } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export function Footer() {
+  const { t } = useTranslation();
+  
   return (
     <footer className="mt-auto border-t border-border bg-card/50 backdrop-blur">
       <div className="mx-auto px-[15px] lg:px-8 max-w-6xl pt-12 pb-8">
@@ -13,32 +16,32 @@ export function Footer() {
               <h3 className="text-lg font-bold text-foreground">Rehabp.org</h3>
             </div>
             <p className="text-sm text-muted-foreground">
-              Tu compañero en el camino hacia la recuperación y el bienestar.
+              {t('landing.subtitle')}
             </p>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Enlaces rápidos</h4>
+            <h4 className="font-semibold text-foreground">{t('navigation.dashboard')}</h4>
             <ul className="space-y-2">
               <li>
                 <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Mi Centro
+                  {t('navigation.dashboard')}
                 </Link>
               </li>
               <li>
                 <Link to="/plan" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Mi Plan
+                  {t('navigation.plan')}
                 </Link>
               </li>
               <li>
                 <Link to="/progress" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Progreso
+                  {t('navigation.progress')}
                 </Link>
               </li>
               <li>
                 <Link to="/tools" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Herramientas
+                  {t('navigation.tools')}
                 </Link>
               </li>
             </ul>
@@ -46,11 +49,11 @@ export function Footer() {
 
           {/* Resources */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Recursos</h4>
+            <h4 className="font-semibold text-foreground">{t('help.resources')}</h4>
             <ul className="space-y-2">
               <li>
                 <Link to="/help" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Centro de ayuda
+                  {t('navigation.help')}
                 </Link>
               </li>
               <li>
@@ -60,12 +63,12 @@ export function Footer() {
               </li>
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Comunidad
+                  {t('navigation.community')}
                 </a>
               </li>
               <li>
                 <Link to="/settings" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Configuración
+                  {t('navigation.settings')}
                 </Link>
               </li>
             </ul>
@@ -77,23 +80,23 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Política de privacidad
+                  {t('settings.privacy')}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Términos de servicio
+                  Terms of Service
                 </a>
               </li>
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Política de cookies
+                  Cookies
                 </a>
               </li>
               <li>
                 <a href="mailto:info@rehabp.org" className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">
                   <Mail className="h-3 w-3" />
-                  Contacto
+                  Contact
                 </a>
               </li>
             </ul>

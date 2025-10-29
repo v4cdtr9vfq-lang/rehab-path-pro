@@ -7,60 +7,68 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/ThemeToggle";
-const menuItems = [{
-  emoji: "🫀",
-  label: "Mi centro",
-  path: "/dashboard"
-}, {
-  emoji: "🎯",
-  label: "Mi Plan",
-  path: "/plan"
-}, {
-  emoji: "📈",
-  label: "Progreso",
-  path: "/progress"
-}, {
-  emoji: "😊",
-  label: "Diario de emociones",
-  path: "/emotion-journal"
-}, {
-  emoji: "📔",
-  label: "Diario",
-  path: "/journal"
-}, {
-  emoji: "🙏",
-  label: "Agradecimiento",
-  path: "/gratitude"
-}, {
-  emoji: "❤️",
-  label: "Valores",
-  path: "/values"
-}, {
-  emoji: "💬",
-  label: "Chat",
-  path: "/chat"
-}, {
-  emoji: "🫶",
-  label: "Comunidad",
-  path: "/community"
-}, {
-  emoji: "🛠️",
-  label: "Herramientas",
-  path: "/tools"
-}, {
-  emoji: "🆘",
-  label: "Ayuda",
-  path: "/help"
-}, {
-  emoji: "⚙️",
-  label: "Configuración",
-  path: "/settings"
-}];
+import { useTranslation } from "react-i18next";
+
 export function Sidebar() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [totalOnlineInChat, setTotalOnlineInChat] = useState(0);
+  
+  const menuItems = [{
+    emoji: "🫀",
+    label: t('navigation.dashboard'),
+    path: "/dashboard",
+    id: "dashboard-link"
+  }, {
+    emoji: "🎯",
+    label: t('navigation.plan'),
+    path: "/plan",
+    id: "plan-link"
+  }, {
+    emoji: "📈",
+    label: t('navigation.progress'),
+    path: "/progress",
+    id: "progress-link"
+  }, {
+    emoji: "😊",
+    label: t('navigation.emotionJournal'),
+    path: "/emotion-journal"
+  }, {
+    emoji: "📔",
+    label: t('navigation.journal'),
+    path: "/journal"
+  }, {
+    emoji: "🙏",
+    label: t('navigation.gratitude'),
+    path: "/gratitude"
+  }, {
+    emoji: "❤️",
+    label: t('navigation.values'),
+    path: "/values"
+  }, {
+    emoji: "💬",
+    label: t('navigation.chat'),
+    path: "/chat"
+  }, {
+    emoji: "🫶",
+    label: t('navigation.community'),
+    path: "/community",
+    id: "community-link"
+  }, {
+    emoji: "🛠️",
+    label: t('navigation.tools'),
+    path: "/tools"
+  }, {
+    emoji: "🆘",
+    label: t('navigation.help'),
+    path: "/help"
+  }, {
+    emoji: "⚙️",
+    label: t('navigation.settings'),
+    path: "/settings"
+  }];
   useEffect(() => {
     // Escuchar actualizaciones del contador de usuarios en chat
     const handleChatUsersUpdate = (event: CustomEvent) => {
@@ -74,9 +82,9 @@ export function Sidebar() {
       const { error } = await supabase.auth.signOut();
       if (error) {
         console.error('Logout error:', error);
-        toast.error("Error al cerrar sesión");
+        toast.error(t('errors.genericError'));
       } else {
-        toast.success("Sesión cerrada");
+        toast.success(t('settings.logout'));
         // Force navigation and reload
         window.location.href = "/auth?mode=login";
       }

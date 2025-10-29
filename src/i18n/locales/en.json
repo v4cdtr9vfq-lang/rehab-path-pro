@@ -10,7 +10,17 @@
     "next": "Next",
     "finish": "Finish",
     "skip": "Skip",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "yes": "Yes",
+    "no": "No",
+    "search": "Search",
+    "send": "Send",
+    "submit": "Submit",
+    "continue": "Continue",
+    "download": "Download",
+    "share": "Share",
+    "ok": "OK",
+    "confirm": "Confirm"
   },
   "auth": {
     "signIn": "Sign In",
@@ -21,7 +31,9 @@
     "forgotPassword": "Forgot your password?",
     "alreadyHaveAccount": "Already have an account?",
     "dontHaveAccount": "Don't have an account?",
-    "resetPassword": "Reset Password"
+    "resetPassword": "Reset Password",
+    "welcomeBack": "Welcome back",
+    "createAccount": "Create account"
   },
   "navigation": {
     "dashboard": "Your Center",
@@ -36,7 +48,9 @@
     "tools": "Tools",
     "help": "Help",
     "settings": "Settings",
-    "supportNetwork": "Support Network"
+    "supportNetwork": "Support Network",
+    "checkIn": "Check-in",
+    "sleepQuality": "Sleep Quality"
   },
   "dashboard": {
     "cleanTime": "Clean time:",
@@ -66,6 +80,191 @@
     "youUnlocked": "You have unlocked the medal",
     "great": "Great!"
   },
+  "goals": {
+    "today": "Today",
+    "thisWeek": "This week",
+    "always": "Pending",
+    "goalUpdated": "Goal updated",
+    "markedAsPending": "Goal marked as pending.",
+    "goalCompleted": "Goal completed!",
+    "error": "Error",
+    "couldNotUpdate": "Could not update the goal.",
+    "changesCanceled": "Changes canceled",
+    "originalOrderRestored": "Original goal order restored.",
+    "orderSaved": "Order saved",
+    "orderUpdated": "Goal order has been updated.",
+    "couldNotSaveOrder": "Could not save goal order.",
+    "addGoal": "Add goal",
+    "editGoal": "Edit goal",
+    "deleteGoal": "Delete goal",
+    "goalText": "Goal text",
+    "goalType": "Goal type",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "permanent": "Permanent"
+  },
+  "quickTools": {
+    "journal": "Journal",
+    "emotionJournal": "Emotion journal",
+    "gratitude": "Gratitude",
+    "emergencyPlan": "Emergency plan"
+  },
+  "plan": {
+    "title": "My Plan",
+    "description": "Create and manage your personalized recovery plan",
+    "noGoals": "You don't have goals yet",
+    "addFirstGoal": "Add your first goal",
+    "todayGoals": "Today's goals",
+    "weekGoals": "Weekly goals",
+    "permanentGoals": "Permanent goals"
+  },
+  "progress": {
+    "title": "Progress",
+    "description": "Visualize your evolution and achievements",
+    "statistics": "Statistics",
+    "achievements": "Achievements",
+    "reports": "Reports",
+    "generateReport": "Generate report",
+    "viewReport": "View report",
+    "noReports": "You don't have reports yet"
+  },
+  "journal": {
+    "title": "Journal",
+    "newEntry": "New entry",
+    "writeYourThoughts": "Write your thoughts...",
+    "saveEntry": "Save entry",
+    "noEntries": "You don't have entries yet",
+    "startWriting": "Start writing",
+    "entryTitle": "Entry title",
+    "entryContent": "Content",
+    "tags": "Tags",
+    "date": "Date"
+  },
+  "emotionJournal": {
+    "title": "Emotion Journal",
+    "howDoYouFeel": "How do you feel today?",
+    "selectEmotion": "Select an emotion",
+    "addNote": "Add note",
+    "trigger": "Trigger",
+    "person": "Person",
+    "situation": "Situation",
+    "describe": "Describe",
+    "noEntries": "You don't have emotional entries yet"
+  },
+  "gratitude": {
+    "title": "Gratitude",
+    "whatAreYouGratefulFor": "What are you grateful for today?",
+    "addGratitude": "Add gratitude",
+    "noEntries": "You don't have gratitude entries yet",
+    "startPracticing": "Start practicing gratitude"
+  },
+  "values": {
+    "title": "Values",
+    "myValues": "My values",
+    "selectYourValues": "Select your core values",
+    "addValue": "Add value",
+    "noValues": "You haven't selected values yet"
+  },
+  "chat": {
+    "title": "Chat",
+    "typeMessage": "Type a message...",
+    "aiAssistant": "AI Assistant",
+    "community": "Community",
+    "rooms": "Rooms",
+    "narcotics": "Narcotics Anonymous",
+    "alcoholics": "Alcoholics Anonymous",
+    "general": "General"
+  },
+  "community": {
+    "title": "Community",
+    "connect": "Connect with others",
+    "share": "Share your experience",
+    "support": "Find support",
+    "mentorship": "Mentorship",
+    "becomeMentor": "Become a mentor",
+    "findMentor": "Find a mentor",
+    "messages": "Messages",
+    "noMessages": "You don't have messages"
+  },
+  "supportNetwork": {
+    "title": "Support Network",
+    "addContact": "Add contact",
+    "name": "Name",
+    "phone": "Phone",
+    "email": "Email",
+    "relationship": "Relationship",
+    "notes": "Notes",
+    "noContacts": "You don't have contacts yet",
+    "addFirstContact": "Add your first support contact"
+  },
+  "help": {
+    "title": "Help",
+    "emergency": "Emergency",
+    "needHelpNow": "Need help now?",
+    "crisisLine": "Crisis line",
+    "emergencyContacts": "Emergency contacts",
+    "resources": "Resources",
+    "faq": "Frequently asked questions"
+  },
+  "tools": {
+    "title": "Tools",
+    "emergencyPlan": "Emergency plan",
+    "relaxation": "Relaxation",
+    "meditation": "Meditation",
+    "breathing": "Breathing",
+    "resources": "Useful resources"
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "privacy": "Privacy",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "account": "Account",
+    "preferences": "Preferences",
+    "about": "About",
+    "version": "Version",
+    "logout": "Log out"
+  },
+  "checkIn": {
+    "title": "Daily Check-in",
+    "howAreYouFeeling": "How are you feeling today?",
+    "sleepQuality": "Sleep quality",
+    "energyLevel": "Energy level",
+    "mood": "Mood",
+    "cravings": "Cravings",
+    "notes": "Notes",
+    "saveCheckIn": "Save check-in",
+    "checkInSaved": "Check-in saved",
+    "todayCheckIn": "Today's check-in"
+  },
+  "sleepQuality": {
+    "title": "Sleep Quality",
+    "rateYourSleep": "Rate your sleep",
+    "hours": "Hours of sleep",
+    "quality": "Quality",
+    "poor": "Poor",
+    "fair": "Fair",
+    "good": "Good",
+    "veryGood": "Very good",
+    "excellent": "Excellent"
+  },
+  "addictions": {
+    "add": "Add addiction",
+    "manage": "Manage addictions",
+    "type": "Addiction type",
+    "startDate": "Start date",
+    "maxReached": "Maximum 3 addictions allowed",
+    "selectType": "Select type",
+    "alcohol": "Alcohol",
+    "drugs": "Drugs",
+    "gambling": "Gambling",
+    "other": "Other"
+  },
   "tour": {
     "welcome": "Welcome! 👋 I'll show you the main features of the app. You can access the menu from the ☰ button in the top left corner.",
     "cleanTime": "🫀 Here you'll see your clean time and manage your addictions.",
@@ -87,25 +286,30 @@
     "settingsDesc": "⚙️ Settings: Customize your experience and preferences.",
     "skipTour": "Skip tour"
   },
-  "goals": {
-    "today": "Today",
-    "thisWeek": "This week",
-    "always": "Pending",
-    "goalUpdated": "Goal updated",
-    "markedAsPending": "Goal marked as pending.",
-    "goalCompleted": "Goal completed!",
-    "error": "Error",
-    "couldNotUpdate": "Could not update the goal.",
-    "changesCanceled": "Changes canceled",
-    "originalOrderRestored": "Original goal order restored.",
-    "orderSaved": "Order saved",
-    "orderUpdated": "Goal order has been updated.",
-    "couldNotSaveOrder": "Could not save goal order."
+  "footer": {
+    "madeWith": "Made with",
+    "for": "for",
+    "recovery": "recovery"
   },
-  "quickTools": {
-    "journal": "Journal",
-    "emotionJournal": "Emotion journal",
-    "gratitude": "Gratitude",
-    "emergencyPlan": "Emergency plan"
+  "landing": {
+    "welcome": "Welcome to your recovery journey",
+    "subtitle": "A complete tool to support your process",
+    "getStarted": "Get started",
+    "learnMore": "Learn more",
+    "features": "Features",
+    "testimonials": "Testimonials"
+  },
+  "errors": {
+    "genericError": "Something went wrong",
+    "tryAgain": "Try again",
+    "notFound": "Not found",
+    "unauthorized": "Unauthorized",
+    "networkError": "Network error"
+  },
+  "quotes": {
+    "save": "Save quote",
+    "saved": "Quote saved",
+    "removed": "Quote removed",
+    "viewSaved": "View saved messages"
   }
 }
