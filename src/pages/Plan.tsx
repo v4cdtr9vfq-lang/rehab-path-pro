@@ -369,7 +369,7 @@ export default function Plan() {
                 ...g,
                 id: instanceId,
                 originalId: g.id,
-                instanceIndex: dayIndex * g.remaining + i,
+                instanceIndex: i,  // Use i directly since each date is independent
                 completed: allCompletedInstances.has(instanceId)
               });
             }
