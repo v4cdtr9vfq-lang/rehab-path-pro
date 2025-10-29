@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Plus } from "lucide-react";
 import { AddAddictionDialog } from "./AddAddictionDialog";
 import { toast } from "sonner";
@@ -15,24 +15,13 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [rehabilitationType, setRehabilitationType] = useState<string | null>(null);
-  const [count, setCount] = useState({
-    years: 0,
-    months: 0,
-    days: 0
-  });
-  
-  // Use ref to store stable reference to callback
-  const onAddictionChangeRef = useRef(onAddictionChange);
-  
-  useEffect(() => {
-    onAddictionChangeRef.current = onAddictionChange;
-  }, [onAddictionChange]);
 
-  // Load rehabilitation type from profile
+  // Load rehabilitation type from profile - ONCE
   useEffect(() => {
+    let mounted = true;
     const loadRehabType = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user || !mounted) return;
 
       const { data: profile } = await supabase
         .from('profiles')
@@ -40,14 +29,15 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
         .eq('user_id', user.id)
         .single();
 
-      if (profile?.rehabilitation_type) {
+      if (profile?.rehabilitation_type && mounted) {
         setRehabilitationType(profile.rehabilitation_type);
       }
     };
     loadRehabType();
+    return () => { mounted = false; };
   }, []);
 
-  // Combine original addiction with additional ones - memoized to prevent infinite loops
+  // Combine original addiction with additional ones
   const allAddictions = useMemo(() => [
     ...(startDate ? [{
       id: 'original',
@@ -58,64 +48,43 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
     ...addictions.map(a => ({ ...a, isOriginal: false }))
   ], [startDate, rehabilitationType, addictions]);
 
-  const canAddMoreAddictions = addictions.length < 2; // Max 3 total (1 original + 2 additional)
+  const canAddMoreAddictions = addictions.length < 2;
 
-  // Calculate time based on selected addiction
-  useEffect(() => {
-    const calculateTime = () => {
-      if (allAddictions.length === 0) {
-        setCount({ years: 0, months: 0, days: 0 });
-        return;
-      }
-
-      const selectedAddiction = allAddictions[selectedIndex];
-      if (!selectedAddiction) {
-        setCount({ years: 0, months: 0, days: 0 });
-        return;
-      }
-
-      const dateToUse = new Date(selectedAddiction.start_date);
-      const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const start = new Date(dateToUse.getFullYear(), dateToUse.getMonth(), dateToUse.getDate());
-      
-      const diff = today.getTime() - start.getTime();
-      const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
-      
-      const years = Math.floor(totalDays / 365);
-      const daysAfterYears = totalDays % 365;
-      const months = Math.floor(daysAfterYears / 30);
-      const days = daysAfterYears % 30;
-      
-      setCount({ years, months, days });
-    };
-    
-    calculateTime();
-    const interval = setInterval(calculateTime, 1000 * 60 * 60);
-    return () => clearInterval(interval);
-  }, [allAddictions, selectedIndex]);
-
-  // Notify parent when addiction changes or component mounts
-  useEffect(() => {
-    if (allAddictions.length === 0 || !allAddictions[selectedIndex]) return;
-    
-    const selectedAddiction = allAddictions[selectedIndex];
-    const dateToUse = new Date(selectedAddiction.start_date);
+  // Calculate count - pure function, no side effects
+  const calculateCount = (addiction: any) => {
+    const dateToUse = new Date(addiction.start_date);
     const now = new Date();
-    const diff = now.getTime() - dateToUse.getTime();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const start = new Date(dateToUse.getFullYear(), dateToUse.getMonth(), dateToUse.getDate());
+    
+    const diff = today.getTime() - start.getTime();
     const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
     
-    if (onAddictionChangeRef.current) {
-      onAddictionChangeRef.current(selectedAddiction.id, totalDays);
-    }
-  }, [selectedIndex, allAddictions]);
+    const years = Math.floor(totalDays / 365);
+    const daysAfterYears = totalDays % 365;
+    const months = Math.floor(daysAfterYears / 30);
+    const days = daysAfterYears % 30;
+    
+    return { years, months, days, totalDays };
+  };
 
-  // Reset selectedIndex if out of bounds - only if actually needed
+  // Get current addiction
+  const currentAddiction = allAddictions[selectedIndex] || allAddictions[0];
+  const count = currentAddiction ? calculateCount(currentAddiction) : { years: 0, months: 0, days: 0, totalDays: 0 };
+
+  // Notify parent ONLY on mount and when selection changes
+  useEffect(() => {
+    if (!currentAddiction || !onAddictionChange) return;
+    const { totalDays } = calculateCount(currentAddiction);
+    onAddictionChange(currentAddiction.id, totalDays);
+  }, [selectedIndex, currentAddiction?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Reset selectedIndex if out of bounds
   useEffect(() => {
     if (allAddictions.length > 0 && selectedIndex >= allAddictions.length) {
       setSelectedIndex(0);
     }
-  }, [allAddictions.length, selectedIndex]);
+  }, [allAddictions.length]);
 
   const handleAddAddiction = () => {
     if (!canAddMoreAddictions) {
@@ -132,20 +101,7 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
 
   const handleCircleClick = (index: number) => {
     setSelectedIndex(index);
-    
-    // Notify parent about addiction change
-    if (onAddictionChangeRef.current && allAddictions[index]) {
-      const selectedAddiction = allAddictions[index];
-      const dateToUse = new Date(selectedAddiction.start_date);
-      const now = new Date();
-      const diff = now.getTime() - dateToUse.getTime();
-      const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
-      
-      onAddictionChangeRef.current(selectedAddiction.id, totalDays);
-    }
   };
-
-  const currentAddiction = allAddictions[selectedIndex];
 
   return (
     <>
