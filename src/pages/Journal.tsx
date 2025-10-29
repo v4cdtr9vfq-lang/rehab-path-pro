@@ -36,6 +36,7 @@ export default function Journal() {
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoadingDemo, setIsLoadingDemo] = useState(false);
+  const [expandedEntries, setExpandedEntries] = useState<Set<string>>(new Set());
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
 
@@ -339,6 +340,29 @@ export default function Journal() {
     setEntryContent(entry.content);
     setEntryTags(entry.tags.join(', '));
     setShowNewEntry(true);
+  };
+
+  const toggleExpandEntry = (entryId: string) => {
+    setExpandedEntries(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(entryId)) {
+        newSet.delete(entryId);
+      } else {
+        newSet.add(entryId);
+      }
+      return newSet;
+    });
+  };
+
+  const getDisplayContent = (entry: JournalEntry) => {
+    const MAX_LENGTH = 300;
+    const isExpanded = expandedEntries.has(entry.id);
+    
+    if (entry.content.length <= MAX_LENGTH || isExpanded) {
+      return entry.content;
+    }
+    
+    return entry.content.slice(0, MAX_LENGTH) + "...";
   };
 
   const filteredEntries = entries.filter(entry => {
@@ -659,7 +683,17 @@ export default function Journal() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-foreground/80 mb-4 whitespace-pre-line">{entry.content}</p>
+                  <p className="text-foreground/80 mb-4 whitespace-pre-line">{getDisplayContent(entry)}</p>
+                  {entry.content.length > 300 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => toggleExpandEntry(entry.id)}
+                      className="mb-4 text-primary hover:text-primary"
+                    >
+                      {expandedEntries.has(entry.id) ? "Leer menos" : "Leer más"}
+                    </Button>
+                  )}
                   <div className="flex flex-wrap gap-2">
                     {entry.tags.map((tag, i) => (
                       <button
