@@ -270,64 +270,87 @@ export default function Plan() {
             completed: allCompletedInstances.has(instanceId)
           });
         }
-      } else {
-        // Recurring goals: iterate through dates
-        dates.forEach((date, dayIndex) => {
-          const dateStr = getLocalDateString(date);
+      } 
+      // Weekly goals: create ONE instance per week
+      else if (g.goal_type === 'week') {
+        // Use the first date of the context as the identifier
+        const dateStr = getLocalDateString(dates[0]);
+        
+        // Create the number of instances specified by 'remaining'
+        for (let i = 0; i < g.remaining; i++) {
+          const instanceId = `${g.id}__${dateStr}__${i}`;
+          expanded.push({
+            ...g,
+            id: instanceId,
+            originalId: g.id,
+            instanceIndex: i,
+            completed: allCompletedInstances.has(instanceId)
+          });
+        }
+      }
+      // Monthly goals: create ONE instance per month
+      else if (g.goal_type === 'month') {
+        // Use the first date of the month
+        const firstOfMonth = new Date(dates[0].getFullYear(), dates[0].getMonth(), 1);
+        const dateStr = getLocalDateString(firstOfMonth);
+        
+        // Create the number of instances specified by 'remaining'
+        for (let i = 0; i < g.remaining; i++) {
+          const instanceId = `${g.id}__${dateStr}__${i}`;
+          expanded.push({
+            ...g,
+            id: instanceId,
+            originalId: g.id,
+            instanceIndex: i,
+            completed: allCompletedInstances.has(instanceId)
+          });
+        }
+      }
+      // Periodic goals: only create instances on their specific day
+      else if (g.goal_type === 'periodic' && g.periodic_type) {
+        dates.forEach((date) => {
+          const dayOfMonth = date.getDate();
+          const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+          let isSpecificDay = false;
           
-          // Periodic goals: only create instances on their specific day
-          if (g.goal_type === 'periodic' && g.periodic_type) {
-            const dayOfMonth = date.getDate();
-            const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-            let isSpecificDay = false;
-            
-            if (g.periodic_type === 'inicio_mes' && dayOfMonth === 1) {
-              isSpecificDay = true;
-            } else if (g.periodic_type === 'mitad_mes' && dayOfMonth === 15) {
-              isSpecificDay = true;
-            } else if (g.periodic_type === 'final_mes' && dayOfMonth === lastDayOfMonth) {
-              isSpecificDay = true;
-            }
-            
-            // Only create instances on the specific day
-            if (isSpecificDay) {
-              for (let i = 0; i < g.remaining; i++) {
-                const instanceId = `${g.id}__${dateStr}__${i}`;
-                expanded.push({
-                  ...g,
-                  id: instanceId,
-                  originalId: g.id,
-                  instanceIndex: i,
-                  completed: allCompletedInstances.has(instanceId)
-                });
-              }
-            }
-          } else if (g.goal_type === 'week' && context === 'month') {
-            // Weekly goals in monthly view: only on week boundaries
-            if (dayIndex % 7 === 0) {
-              for (let i = 0; i < g.remaining; i++) {
-                const instanceId = `${g.id}__${dateStr}__${i}`;
-                expanded.push({
-                  ...g,
-                  id: instanceId,
-                  originalId: g.id,
-                  instanceIndex: dayIndex * g.remaining + i,
-                  completed: allCompletedInstances.has(instanceId)
-                });
-              }
-            }
-          } else {
-            // Daily and always goals: create instances for each day
+          if (g.periodic_type === 'inicio_mes' && dayOfMonth === 1) {
+            isSpecificDay = true;
+          } else if (g.periodic_type === 'mitad_mes' && dayOfMonth === 15) {
+            isSpecificDay = true;
+          } else if (g.periodic_type === 'final_mes' && dayOfMonth === lastDayOfMonth) {
+            isSpecificDay = true;
+          }
+          
+          // Only create instances on the specific day
+          if (isSpecificDay) {
+            const dateStr = getLocalDateString(date);
             for (let i = 0; i < g.remaining; i++) {
               const instanceId = `${g.id}__${dateStr}__${i}`;
               expanded.push({
                 ...g,
                 id: instanceId,
                 originalId: g.id,
-                instanceIndex: dayIndex * g.remaining + i,
+                instanceIndex: i,
                 completed: allCompletedInstances.has(instanceId)
               });
             }
+          }
+        });
+      }
+      // Daily and 'always' goals: create instances for each day
+      else if (g.goal_type === 'today' || g.goal_type === 'always') {
+        dates.forEach((date) => {
+          const dateStr = getLocalDateString(date);
+          
+          for (let i = 0; i < g.remaining; i++) {
+            const instanceId = `${g.id}__${dateStr}__${i}`;
+            expanded.push({
+              ...g,
+              id: instanceId,
+              originalId: g.id,
+              instanceIndex: i,
+              completed: allCompletedInstances.has(instanceId)
+            });
           }
         });
       }
@@ -783,10 +806,11 @@ export default function Plan() {
       opacity: isDragging ? 0.5 : 1,
     };
 
-    const isClickable = sectionKey !== 'week' && sectionKey !== 'month';
+    // All goals are clickable now
+    const isClickable = true;
     const allInstancesOfGoal = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
     const allCompleted = allInstancesOfGoal.every(g => g.completed);
-    const displayCompleted = (sectionKey === 'week' || sectionKey === 'month') ? allCompleted : goal.completed;
+    const displayCompleted = goal.completed;
     
     if (isMobile) {
       return (
