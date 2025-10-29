@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import Joyride, { Step, CallBackProps, STATUS } from "react-joyride";
+import Joyride, { Step, CallBackProps, STATUS, ACTIONS, EVENTS } from "react-joyride";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 interface TourGuideProps {
   onComplete: () => void;
@@ -8,6 +9,7 @@ interface TourGuideProps {
 
 export function TourGuide({ onComplete }: TourGuideProps) {
   const [run, setRun] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Esperar a que el DOM esté listo y verificar que el primer elemento existe
@@ -25,6 +27,21 @@ export function TourGuide({ onComplete }: TourGuideProps) {
     
     return () => clearTimeout(timer);
   }, []);
+
+  const stepRoutes = [
+    '/dashboard',
+    '/plan',
+    '/progress',
+    '/emotion-journal',
+    '/journal',
+    '/gratitude',
+    '/values',
+    '/chat',
+    '/community',
+    '/tools',
+    '/help',
+    '/settings',
+  ];
 
   const steps: Step[] = [
     {
@@ -91,8 +108,16 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   ];
 
   const handleJoyrideCallback = async (data: CallBackProps) => {
-    const { status } = data;
+    const { status, action, index, type } = data;
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
+
+    // Navegar a la ruta correspondiente cuando se avanza o retrocede
+    if (type === EVENTS.STEP_AFTER && (action === ACTIONS.NEXT || action === ACTIONS.PREV)) {
+      const nextIndex = action === ACTIONS.NEXT ? index + 1 : index - 1;
+      if (nextIndex >= 0 && nextIndex < stepRoutes.length) {
+        navigate(stepRoutes[nextIndex]);
+      }
+    }
 
     if (finishedStatuses.includes(status)) {
       setRun(false);
