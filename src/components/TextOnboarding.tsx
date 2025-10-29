@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 const steps = [
   {
     title: "¡Bienvenido!",
-    content: "Esta aplicación te apoya en tu proceso de rehabilitación de dependencias. Podrás encontrar varias herramientas que te ayudarán a entender en qué punto te encuentras, a registrar tus emociones y a comprender qué situaciones o qué personas pueden estar dificultando tus propósitos. Podrás activar hasta 3 procesos de rehabilitación, ya que muchos hábitos y sustancias están conectados entre ellos."
+    content: "Esta aplicación te apoya en tu proceso de rehabilitación de dependencias. Podrás encontrar varias herramientas que te ayudarán a entender en qué punto te encuentras, a registrar tus emociones y a comprender qué situaciones o qué personas pueden estar dificultando tus propósitos. Podrás activar hasta 3 procesos de rehabilitación, ya que muchos hábitos y sustancias están conectadas entre ellas."
   },
   {
     title: "Anonimato",
