@@ -318,48 +318,62 @@ export default function Plan() {
               }
             }
           } else if (g.goal_type === 'week' && context === 'month') {
-            // Weekly goals in monthly view: create instances for each week
-            // Only create instances on Monday (or first day) of each week
-            const dayOfWeek = date.getDay(); // 0 = Sunday, 1 = Monday, etc.
-            if (dayOfWeek === 1 || (dayIndex === 0 && dayOfWeek !== 1)) {
-              for (let i = 0; i < g.remaining; i++) {
-                const instanceId = `${g.id}__${dateStr}__${i}`;
-                expanded.push({
-                  ...g,
-                  id: instanceId,
-                  originalId: g.id,
-                  instanceIndex: i,
-                  completed: allCompletedInstances.has(instanceId)
-                });
+            // Weekly goals in monthly view: one instance per week
+            // Count weeks from today to end of month
+            const weeksSeen = new Set<string>();
+            dates.forEach((date) => {
+              // Get the Monday of this week as the week identifier
+              const monday = new Date(date);
+              const day = monday.getDay();
+              const diff = monday.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+              monday.setDate(diff);
+              monday.setHours(0, 0, 0, 0);
+              
+              const weekKey = getLocalDateString(monday);
+              
+              if (!weeksSeen.has(weekKey)) {
+                weeksSeen.add(weekKey);
+                for (let i = 0; i < g.remaining; i++) {
+                  const instanceId = `${g.id}__${weekKey}__${i}`;
+                  expanded.push({
+                    ...g,
+                    id: instanceId,
+                    originalId: g.id,
+                    instanceIndex: i,
+                    completed: allCompletedInstances.has(instanceId)
+                  });
+                }
               }
-            }
+            });
           } else if (g.goal_type === 'week' && context === 'week') {
-            // Weekly goals in weekly view: only create instances on the first day of the week
-            if (dayIndex === 0) {
-              for (let i = 0; i < g.remaining; i++) {
-                const instanceId = `${g.id}__${dateStr}__${i}`;
-                expanded.push({
-                  ...g,
-                  id: instanceId,
-                  originalId: g.id,
-                  instanceIndex: i,
-                  completed: allCompletedInstances.has(instanceId)
-                });
-              }
+            // Weekly goals in weekly view: one instance for the current week
+            // Use the first day of the week range as the identifier
+            const firstDay = dates[0];
+            const dateStr = getLocalDateString(firstDay);
+            for (let i = 0; i < g.remaining; i++) {
+              const instanceId = `${g.id}__${dateStr}__${i}`;
+              expanded.push({
+                ...g,
+                id: instanceId,
+                originalId: g.id,
+                instanceIndex: i,
+                completed: allCompletedInstances.has(instanceId)
+              });
             }
           } else if (g.goal_type === 'month' && context === 'month') {
-            // Monthly goals: only create instances on the first day of the month
-            if (dayIndex === 0) {
-              for (let i = 0; i < g.remaining; i++) {
-                const instanceId = `${g.id}__${dateStr}__${i}`;
-                expanded.push({
-                  ...g,
-                  id: instanceId,
-                  originalId: g.id,
-                  instanceIndex: i,
-                  completed: allCompletedInstances.has(instanceId)
-                });
-              }
+            // Monthly goals: one instance for the current month
+            // Use the first day of the month as the identifier
+            const firstDay = new Date(dates[0].getFullYear(), dates[0].getMonth(), 1);
+            const dateStr = getLocalDateString(firstDay);
+            for (let i = 0; i < g.remaining; i++) {
+              const instanceId = `${g.id}__${dateStr}__${i}`;
+              expanded.push({
+                ...g,
+                id: instanceId,
+                originalId: g.id,
+                instanceIndex: i,
+                completed: allCompletedInstances.has(instanceId)
+              });
             }
           } else if (g.goal_type === 'today' || g.goal_type === 'always') {
             // Daily and always goals: create instances for each day
@@ -448,13 +462,13 @@ export default function Plan() {
         // CRITICAL: Maintain the order_index order when grouping goals by section
         // Filter goals that should appear in each section while preserving order
         const todayRelevantGoals = goals.filter(g => 
-          g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic' || g.goal_type === 'onetime'
+          g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic'
         );
         const weekRelevantGoals = goals.filter(g => 
-          g.goal_type === 'week' || g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic' || g.goal_type === 'onetime'
+          g.goal_type === 'week' || g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic'
         );
         const monthRelevantGoals = goals.filter(g => 
-          g.goal_type === 'month' || g.goal_type === 'week' || g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic' || g.goal_type === 'onetime'
+          g.goal_type === 'month' || g.goal_type === 'week' || g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic'
         );
         const onetimeGoals = goals.filter(g => g.goal_type === 'onetime');
         
