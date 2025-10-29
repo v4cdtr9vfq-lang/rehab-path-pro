@@ -54,6 +54,7 @@ const questions: Question[] = [
   { id: 11, text: "¿Cómo calificarías tu descanso ayer por la noche?", type: "scale" },
   { id: 12, text: "¿Has comido bien en cantidad y calidad?", type: "scale" },
   { id: 13, text: "¿Crees que te has movido lo suficiente?", type: "scale" },
+  { id: 14, text: "¿Cuántos vasos de agua has tomado a lo largo del día?", type: "scale" },
 ];
 
 export default function CheckIn() {
