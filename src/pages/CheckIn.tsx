@@ -63,6 +63,7 @@ export default function CheckIn() {
   const [resentmentDescription, setResentmentDescription] = useState("");
   const [valuesDescription, setValuesDescription] = useState("");
   const [limitingDescription, setLimitingDescription] = useState("");
+  const [negativeThoughtsDescription, setNegativeThoughtsDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userValues, setUserValues] = useState<string[]>([]);
   const [showRelapseDialog, setShowRelapseDialog] = useState(false);
@@ -100,6 +101,10 @@ export default function CheckIn() {
         // Load limiting description if exists
         if ((checkIn.answers as any).limiting_description) {
           setLimitingDescription((checkIn.answers as any).limiting_description);
+        }
+        // Load negative thoughts description if exists
+        if ((checkIn.answers as any).negative_thoughts_description) {
+          setNegativeThoughtsDescription((checkIn.answers as any).negative_thoughts_description);
         }
       }
 
@@ -283,7 +288,8 @@ export default function CheckIn() {
         trigger_description: triggerDescription,
         resentment_description: resentmentDescription,
         values_description: valuesDescription,
-        limiting_description: limitingDescription
+        limiting_description: limitingDescription,
+        negative_thoughts_description: negativeThoughtsDescription
       };
 
       const { error: checkInError } = await supabase
@@ -331,6 +337,11 @@ export default function CheckIn() {
       // Question 8 - limiting description
       if (answers[8] === "yes" && limitingDescription.trim()) {
         journalContent += `**Obstáculos a superar:**\n${limitingDescription.trim()}\n\n`;
+      }
+      
+      // Question 9 - negative thoughts description
+      if (answers[9] === "yes" && negativeThoughtsDescription.trim()) {
+        journalContent += `**Pensamientos negativos:**\n${negativeThoughtsDescription.trim()}\n\n`;
       }
       
       // Build tags array
@@ -528,6 +539,22 @@ export default function CheckIn() {
                         placeholder="Describe de forma concreta los obstáculos a superar"
                         value={limitingDescription}
                         onChange={(e) => setLimitingDescription(e.target.value)}
+                        className="min-h-[100px]"
+                      />
+                    </div>
+                  )}
+
+                  {/* Show negative thoughts description field if question 9 answered "yes" */}
+                  {question.id === 9 && answers[9] === "yes" && (
+                    <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <Label htmlFor="negative-thoughts-description" className="text-sm font-medium text-foreground pl-4">
+                        Describe tus pensamientos negativos:
+                      </Label>
+                      <Textarea
+                        id="negative-thoughts-description"
+                        placeholder="¿Qué pensamientos negativos tuviste hoy?"
+                        value={negativeThoughtsDescription}
+                        onChange={(e) => setNegativeThoughtsDescription(e.target.value)}
                         className="min-h-[100px]"
                       />
                     </div>
