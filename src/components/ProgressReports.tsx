@@ -304,7 +304,7 @@ export default function ProgressReports() {
                           variant="ghost" 
                           size="sm" 
                           onClick={(e) => handleEmailClick(report, e)}
-                          className="text-primary hover:text-primary hover:bg-primary/10"
+                          className="hover:bg-accent"
                         >
                           <Mail className="h-4 w-4" />
                         </Button>
