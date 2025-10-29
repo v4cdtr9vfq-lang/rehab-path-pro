@@ -9,7 +9,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 import {
   Select,
   SelectContent,
@@ -30,7 +31,7 @@ import {
 
 interface Question {
   id: number;
-  text: string;
+  key: string;
   type: "yesno" | "text" | "scale";
 }
 
@@ -40,26 +41,29 @@ interface UserAddiction {
   isOriginal: boolean;
 }
 
-const questions: Question[] = [
-  { id: 1, text: "¿Me mantuve limpio de consumo hoy?", type: "yesno" },
-  { id: 2, text: "¿Encontré alguna situación que me alterara hoy?", type: "yesno" },
-  { id: 3, text: "Hoy lo más importante recordarme es:", type: "text" },
-  { id: 4, text: "¿Sentí resentimiento hoy?", type: "yesno" },
-  { id: 5, text: "¿Estuve en contacto con mis sentimientos hoy?", type: "yesno" },
-  { id: 6, text: "¿Me aislé hoy?", type: "yesno" },
-  { id: 7, text: "¿Seguí mis valores diarios?", type: "yesno" },
-  { id: 8, text: "¿Has hecho algo que crees que te limita en lugar de expandirte?", type: "yesno" },
-  { id: 9, text: "¿Has tenido pensamientos negativos hoy?", type: "yesno" },
-  { id: 10, text: "¿Te acostado ayer con la casa recogida?", type: "yesno" },
-  { id: 11, text: "¿Cómo calificarías tu descanso ayer por la noche?", type: "scale" },
-  { id: 12, text: "¿Has comido bien en cantidad y calidad?", type: "scale" },
-  { id: 13, text: "¿Crees que te has movido lo suficiente?", type: "scale" },
-  { id: 14, text: "¿Cuántos vasos de agua has tomado a lo largo del día?", type: "scale" },
+const getQuestions = (t: any): Question[] => [
+  { id: 1, key: "question1", type: "yesno" },
+  { id: 2, key: "question2", type: "yesno" },
+  { id: 3, key: "question3", type: "text" },
+  { id: 4, key: "question4", type: "yesno" },
+  { id: 5, key: "question5", type: "yesno" },
+  { id: 6, key: "question6", type: "yesno" },
+  { id: 7, key: "question7", type: "yesno" },
+  { id: 8, key: "question8", type: "yesno" },
+  { id: 9, key: "question9", type: "yesno" },
+  { id: 10, key: "question10", type: "yesno" },
+  { id: 11, key: "question11", type: "scale" },
+  { id: 12, key: "question12", type: "scale" },
+  { id: 13, key: "question13", type: "scale" },
+  { id: 14, key: "question14", type: "scale" },
 ];
 
 export default function CheckIn() {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === 'es' ? es : enUS;
+  const questions = getQuestions(t);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [triggerDescription, setTriggerDescription] = useState("");
   const [resentmentDescription, setResentmentDescription] = useState("");
@@ -186,8 +190,8 @@ export default function CheckIn() {
 
       if (!selectedRelapseAddiction) {
         toast({
-          title: "Error",
-          description: "Selecciona una adicción",
+          title: t('common.error'),
+          description: t('checkIn.selectAddictionError'),
           variant: "destructive",
         });
         return;
@@ -220,13 +224,13 @@ export default function CheckIn() {
       setRelapseConfirmed(true);
       
       toast({
-        title: "Contador reseteado",
-        description: "El contador de esta adicción ha sido actualizado",
+        title: t('checkIn.counterReset'),
+        description: t('checkIn.counterResetDescription'),
       });
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "No se pudo resetear el contador",
+        title: t('common.error'),
+        description: error.message || t('checkIn.couldNotResetCounter'),
         variant: "destructive",
       });
     }
@@ -245,7 +249,7 @@ export default function CheckIn() {
         .insert({
           user_id: user.id,
           entry_date: today,
-          title: "Inventario de la recaída",
+          title: t('checkIn.relapseInventoryTitle'),
           content: "",
           tags: ["recaída", "inventario"]
         });
@@ -257,8 +261,8 @@ export default function CheckIn() {
       navigate('/journal');
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "No se pudo crear el inventario",
+        title: t('common.error'),
+        description: error.message || t('checkIn.couldNotCreateInventory'),
         variant: "destructive",
       });
     }
@@ -271,8 +275,8 @@ export default function CheckIn() {
       
       if (!user) {
         toast({
-          title: "Error",
-          description: "Debes iniciar sesión para guardar el check-in",
+          title: t('common.error'),
+          description: t('checkIn.loginRequiredError'),
           variant: "destructive",
         });
         return;
@@ -282,7 +286,7 @@ export default function CheckIn() {
       // Use default text for question 3 if empty
       const finalAnswers = { ...answers };
       if (!finalAnswers[3] || finalAnswers[3].trim() === "") {
-        finalAnswers[3] = "Lo mejor está por regar";
+        finalAnswers[3] = t('checkIn.defaultPlaceholder');
       }
       
       const answersWithDescriptions = {
@@ -309,7 +313,7 @@ export default function CheckIn() {
       const today = new Date().toISOString().split('T')[0];
       
       // Create comprehensive check-in journal entry
-      const journalTitle = format(new Date(), "EEEE d MMM. yyyy", { locale: es })
+      const journalTitle = format(new Date(), "EEEE d MMM. yyyy", { locale: dateLocale })
         .replace(/^\w/, (c) => c.toUpperCase())
         .replace(/\b([a-z]{3})\./i, (match) => match.charAt(0).toUpperCase() + match.slice(1));
       
@@ -399,15 +403,15 @@ export default function CheckIn() {
       }
 
       toast({
-        title: "Check-in guardado",
-        description: "Tu progreso diario ha sido registrado exitosamente",
+        title: t('checkIn.checkInSaved'),
+        description: t('checkIn.checkInSavedSuccess'),
       });
 
       navigate('/dashboard');
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "No se pudo guardar el check-in",
+        title: t('common.error'),
+        description: error.message || t('checkIn.couldNotSaveCheckIn'),
         variant: "destructive",
       });
     } finally {
@@ -420,12 +424,12 @@ export default function CheckIn() {
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <span className="md:hidden">Check-In</span>
-            <span className="hidden md:inline">Check-In Diario</span>
+            <span className="md:hidden">{t('checkIn.checkIn')}</span>
+            <span className="hidden md:inline">{t('checkIn.title')}</span>
             <span className="text-xl">👀</span>
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            {format(new Date(), "EEEE, d MMM. yyyy", { locale: es })
+            {format(new Date(), "EEEE, d MMM. yyyy", { locale: dateLocale })
               .replace(/^\w/, (c) => c.toUpperCase())
               .replace(/\b([a-z]{3})\./i, (match) => match.charAt(0).toUpperCase() + match.slice(1))}
           </p>
@@ -434,7 +438,7 @@ export default function CheckIn() {
           {questions.map((question) => (
             <div key={question.id} className="space-y-3">
               <Label className="text-base font-medium text-foreground pl-4">
-                {question.id}. {question.text}
+                {question.id}. {t(`checkIn.${question.key}`)}
               </Label>
               
               {question.type === "yesno" ? (
@@ -445,7 +449,7 @@ export default function CheckIn() {
                       className={`flex-1 ${answers[question.id] === "yes" && [1, 5, 7, 10].includes(question.id) ? "bg-green-600 hover:bg-green-700 text-white" : ""}`}
                       onClick={() => handleAnswer(question.id, "yes")}
                     >
-                      SÍ
+                      {t('checkIn.yes')}
                     </Button>
                     <Button
                       variant={answers[question.id] === "no" ? "default" : "outline"}
@@ -458,7 +462,7 @@ export default function CheckIn() {
                       }`}
                       onClick={() => handleAnswer(question.id, "no")}
                     >
-                      NO
+                      {t('checkIn.no')}
                     </Button>
                   </div>
                   
@@ -466,17 +470,17 @@ export default function CheckIn() {
                   {question.id === 2 && answers[2] === "yes" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                       <Label htmlFor="trigger-description" className="text-sm font-medium text-foreground pl-4">
-                        Describe la situación sin juzgar:
+                        {t('checkIn.triggerLabel')}
                       </Label>
                       <Textarea
                         id="trigger-description"
-                        placeholder="Cuenta tu versión de los hechos sin juzgar y cómo y dónde lo sentiste."
+                        placeholder={t('checkIn.triggerPlaceholder')}
                         value={triggerDescription}
                         onChange={(e) => setTriggerDescription(e.target.value)}
                         className="min-h-[100px]"
                       />
                       <p className="text-xs text-muted-foreground">
-                        Esta descripción se guardará automáticamente como entrada en tu diario con el título "Gatillos emocionales"
+                        {t('checkIn.triggerHelp')}
                       </p>
                     </div>
                   )}
@@ -583,7 +587,7 @@ export default function CheckIn() {
                 </div>
               ) : (
                 <Input
-                  placeholder={question.id === 3 ? "Lo mejor está por regar" : "Escribe..."}
+                  placeholder={question.id === 3 ? t('checkIn.defaultPlaceholder') : t('checkIn.writePlaceholder')}
                   value={answers[question.id] || ""}
                   onChange={(e) => handleAnswer(question.id, e.target.value)}
                   className="text-sm lg:text-base"
@@ -598,7 +602,7 @@ export default function CheckIn() {
             onClick={handleSubmit}
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Guardando..." : "Enviar"}
+            {isSubmitting ? t('checkIn.submitting') : t('checkIn.submit')}
             <ArrowRight className="h-5 w-5" />
           </Button>
         </CardContent>
@@ -607,7 +611,7 @@ export default function CheckIn() {
       <Card className="bg-gradient-to-br from-accent/5 to-transparent border-accent/20">
         <CardContent className="p-6">
           <p className="text-center text-foreground/80">
-            Los check-ins diarios te ayudan a mantener conciencia de tu estado emocional e identificar patrones en tu camino de recuperación. Todas las respuestas de texto crearán una nueva entrada en tu diario.
+            {t('checkIn.helpText')}
           </p>
         </CardContent>
       </Card>
@@ -620,22 +624,22 @@ export default function CheckIn() {
       }}>
         <AlertDialogContent className="max-w-md">
           <AlertDialogHeader className="text-left">
-            <AlertDialogTitle className="text-left">Nada de culpa. ¡Seguimos!</AlertDialogTitle>
+            <AlertDialogTitle className="text-left">{t('checkIn.relapseTitle')}</AlertDialogTitle>
             <AlertDialogDescription className="text-left">
-              Las recaídas son parte del proceso. Lo importante es aprender de ellas.
+              {t('checkIn.relapseDescription')}
             </AlertDialogDescription>
           </AlertDialogHeader>
 
           <div className="space-y-4 py-4">
             {userAddictions.length > 1 ? (
               <div className="space-y-2">
-                <Label className="text-left">¿En qué adicción has tenido la recaída?</Label>
+                <Label className="text-left">{t('checkIn.relapseAddictionLabel')}</Label>
                 <Select
                   value={selectedRelapseAddiction}
                   onValueChange={setSelectedRelapseAddiction}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecciona una adicción" />
+                    <SelectValue placeholder={t('checkIn.relapseAddictionPlaceholder')} />
                   </SelectTrigger>
                   <SelectContent className="bg-background">
                     {userAddictions.map((addiction, index) => (
@@ -645,27 +649,27 @@ export default function CheckIn() {
                     ))}
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-muted-foreground text-left">Total de adicciones: {userAddictions.length}</p>
+                <p className="text-xs text-muted-foreground text-left">{t('checkIn.totalAddictions')} {userAddictions.length}</p>
               </div>
             ) : (
-              <p className="text-xs text-muted-foreground text-left">Total de adicciones: {userAddictions.length}</p>
+              <p className="text-xs text-muted-foreground text-left">{t('checkIn.totalAddictions')} {userAddictions.length}</p>
             )}
           </div>
 
           <div className="flex flex-col gap-2 w-full -mt-[20px]">
             <Button onClick={handleRelapseInventory} className="bg-secondary w-full justify-start">
-              Inventario
+              {t('checkIn.inventory')}
             </Button>
             {!relapseConfirmed && (
               <Button onClick={handleConfirmRelapse} className="bg-primary w-full justify-start">
-                Confirmar
+                {t('checkIn.confirm')}
               </Button>
             )}
             <Button onClick={() => {
               setShowRelapseDialog(false);
               setRelapseConfirmed(false);
             }} variant="outline" className="w-full justify-start">
-              Cerrar
+              {t('checkIn.close')}
             </Button>
           </div>
         </AlertDialogContent>
