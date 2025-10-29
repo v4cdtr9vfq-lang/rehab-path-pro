@@ -285,8 +285,40 @@ export default function Plan() {
             completed: allCompletedInstances.has(instanceId)
           });
         }
+      } else if (g.goal_type === 'week') {
+        // Weekly goals: create ONE set of instances for the entire period
+        // Use the first date as the reference date for all instances
+        const referenceDate = dates[0];
+        const dateStr = getLocalDateString(referenceDate);
+        
+        for (let i = 0; i < g.remaining; i++) {
+          const instanceId = `${g.id}__${dateStr}__${i}`;
+          expanded.push({
+            ...g,
+            id: instanceId,
+            originalId: g.id,
+            instanceIndex: i,
+            completed: allCompletedInstances.has(instanceId)
+          });
+        }
+      } else if (g.goal_type === 'month') {
+        // Monthly goals: create ONE set of instances for the entire month
+        // Use the first date as the reference date for all instances
+        const referenceDate = dates[0];
+        const dateStr = getLocalDateString(referenceDate);
+        
+        for (let i = 0; i < g.remaining; i++) {
+          const instanceId = `${g.id}__${dateStr}__${i}`;
+          expanded.push({
+            ...g,
+            id: instanceId,
+            originalId: g.id,
+            instanceIndex: i,
+            completed: allCompletedInstances.has(instanceId)
+          });
+        }
       } else {
-        // Recurring goals: iterate through dates
+        // Daily, always, and periodic goals: iterate through dates
         dates.forEach((date, dayIndex) => {
           const dateStr = getLocalDateString(date);
           
@@ -313,20 +345,6 @@ export default function Plan() {
                   id: instanceId,
                   originalId: g.id,
                   instanceIndex: i,
-                  completed: allCompletedInstances.has(instanceId)
-                });
-              }
-            }
-          } else if (g.goal_type === 'week' && context === 'month') {
-            // Weekly goals in monthly view: only on week boundaries
-            if (dayIndex % 7 === 0) {
-              for (let i = 0; i < g.remaining; i++) {
-                const instanceId = `${g.id}__${dateStr}__${i}`;
-                expanded.push({
-                  ...g,
-                  id: instanceId,
-                  originalId: g.id,
-                  instanceIndex: dayIndex * g.remaining + i,
                   completed: allCompletedInstances.has(instanceId)
                 });
               }
