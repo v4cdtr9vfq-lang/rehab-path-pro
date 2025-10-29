@@ -240,6 +240,25 @@ Genera un informe completo de progreso psicológico y emocional.`;
 
     console.log("Report saved successfully:", report.id);
 
+    // Also save as journal entry
+    const journalTitle = `Informe de Progreso: ${startDate} a ${endDate}`;
+    const { error: journalError } = await supabaseAdmin
+      .from("journal_entries")
+      .insert({
+        user_id: user.id,
+        title: journalTitle,
+        content: reportContent,
+        entry_date: new Date().toISOString().split('T')[0],
+        tags: ['informe', 'progreso']
+      });
+
+    if (journalError) {
+      console.error("Journal insert error:", journalError);
+      // Don't fail the whole operation if journal insert fails
+    } else {
+      console.log("Report also saved to journal");
+    }
+
     return new Response(
       JSON.stringify({ 
         success: true, 
