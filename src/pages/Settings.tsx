@@ -653,8 +653,8 @@ export default function Settings() {
     <div className="space-y-[35px] animate-in fade-in duration-500">
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            Cuenta
+          <CardTitle className="flex items-center gap-2 pl-4">
+            Cuenta:
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -779,8 +779,8 @@ export default function Settings() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            Suscripción
+          <CardTitle className="flex items-center gap-2 pl-4">
+            Suscripción:
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -964,7 +964,7 @@ export default function Settings() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle>
+          <CardTitle className="pl-4">
             Configuración de recuperación:
           </CardTitle>
         </CardHeader>
@@ -1236,9 +1236,9 @@ export default function Settings() {
       <Card className="border-primary/20">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 pl-4">
               <Bell className="h-5 w-5 text-primary" />
-              Recordatorios
+              Recordatorios:
             </CardTitle>
             <Dialog open={isReminderDialogOpen} onOpenChange={setIsReminderDialogOpen}>
               <DialogTrigger asChild>
@@ -1350,7 +1350,7 @@ export default function Settings() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle>Privacidad y seguridad</CardTitle>
+          <CardTitle className="pl-4">Privacidad y seguridad:</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
@@ -1369,7 +1369,7 @@ export default function Settings() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle>Acerca de</CardTitle>
+          <CardTitle className="pl-4">Acerca de:</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex justify-between">
@@ -1389,8 +1389,8 @@ export default function Settings() {
 
       <Card className="border-destructive/50 bg-destructive/5">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-destructive">
-            Zona de peligro
+          <CardTitle className="flex items-center gap-2 text-destructive pl-4">
+            Zona de peligro:
           </CardTitle>
         </CardHeader>
         <CardContent>
