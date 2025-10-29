@@ -7,7 +7,16 @@ interface TourGuideProps {
 }
 
 export function TourGuide({ onComplete }: TourGuideProps) {
-  const [run, setRun] = useState(true);
+  const [run, setRun] = useState(false);
+
+  useEffect(() => {
+    // Pequeño delay para asegurar que el DOM esté listo
+    const timer = setTimeout(() => {
+      setRun(true);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const steps: Step[] = [
     {
