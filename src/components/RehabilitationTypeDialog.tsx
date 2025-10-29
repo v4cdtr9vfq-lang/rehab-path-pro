@@ -51,15 +51,15 @@ export default function RehabilitationTypeDialog() {
   useEffect(() => {
     checkIfNeedsDialog();
     
-    // Listen for text onboarding completion
-    const handleTextOnboardingComplete = () => {
+    // Listen for tour completion
+    const handleTourComplete = () => {
       setTimeout(() => checkIfNeedsDialog(), 500);
     };
     
-    window.addEventListener('text-onboarding-complete', handleTextOnboardingComplete);
+    window.addEventListener('onboarding-tour-complete', handleTourComplete);
     
     return () => {
-      window.removeEventListener('text-onboarding-complete', handleTextOnboardingComplete);
+      window.removeEventListener('onboarding-tour-complete', handleTourComplete);
     };
   }, []);
 
@@ -81,16 +81,16 @@ export default function RehabilitationTypeDialog() {
         tourCompleted: profile?.onboarding_completed
       });
 
-      // SOLO mostrar si el texto está completo PERO el tipo no está configurado
+      // SOLO mostrar si texto Y tour están completos, pero tipo no está configurado
       const shouldShow = profile && 
                         (profile as any).text_onboarding_completed && 
-                        !(profile as any).rehabilitation_type &&
-                        !profile.onboarding_completed;
+                        profile.onboarding_completed &&
+                        !(profile as any).rehabilitation_type;
 
       console.log("🏥 [RehabDialog] ¿Debe mostrarse?:", shouldShow);
 
       if (shouldShow) {
-        setTimeout(() => setOpen(true), 500); // Delay para asegurar que TextOnboarding se cierre
+        setTimeout(() => setOpen(true), 500); // Delay para asegurar que OnboardingTour se cierre
       }
     } catch (error) {
       console.error('Error checking rehabilitation type:', error);

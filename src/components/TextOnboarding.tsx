@@ -60,8 +60,8 @@ export function TextOnboarding() {
       // SOLO mostrar si NINGUNO de los onboardings está completo
       const shouldShow = profile && 
                         !profile.text_onboarding_completed && 
-                        !(profile as any).rehabilitation_type &&
-                        !profile.onboarding_completed;
+                        !profile.onboarding_completed &&
+                        !(profile as any).rehabilitation_type;
 
       console.log("📝 [TextOnboarding] ¿Debe mostrarse?:", shouldShow);
       
@@ -85,7 +85,7 @@ export function TextOnboarding() {
 
       setIsVisible(false);
       
-      // Trigger check for next onboarding step
+      // Trigger check for next onboarding step (OnboardingTour)
       window.dispatchEvent(new Event('text-onboarding-complete'));
     } catch (error) {
       console.error("Error completing text onboarding:", error);

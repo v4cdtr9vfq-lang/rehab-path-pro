@@ -58,15 +58,15 @@ export function OnboardingTour() {
   useEffect(() => {
     checkOnboardingStatus();
     
-    // Listen for rehabilitation type completion
-    const handleRehabilitationTypeComplete = () => {
+    // Listen for text onboarding completion
+    const handleTextOnboardingComplete = () => {
       setTimeout(() => checkOnboardingStatus(), 500);
     };
     
-    window.addEventListener('rehabilitation-type-complete', handleRehabilitationTypeComplete);
+    window.addEventListener('text-onboarding-complete', handleTextOnboardingComplete);
     
     return () => {
-      window.removeEventListener('rehabilitation-type-complete', handleRehabilitationTypeComplete);
+      window.removeEventListener('text-onboarding-complete', handleTextOnboardingComplete);
     };
   }, []);
 
@@ -125,21 +125,21 @@ export function OnboardingTour() {
         tourCompleted: profile?.onboarding_completed
       });
 
-      // SOLO mostrar si AMBOS pasos anteriores están completos
+      // SOLO mostrar si el texto está completo PERO el tour no
       const shouldShow = profile && 
-                        (profile as any).text_onboarding_completed &&
-                        (profile as any).rehabilitation_type && 
-                        !profile.onboarding_completed;
+                        (profile as any).text_onboarding_completed && 
+                        !profile.onboarding_completed &&
+                        !(profile as any).rehabilitation_type;
 
       console.log("🎯 [OnboardingTour] ¿Debe mostrarse?:", shouldShow);
 
       if (shouldShow) {
-        console.log("🚀 Starting onboarding tour in 2 seconds...");
-        // Delay mayor para asegurar que RehabilitationTypeDialog se cierre
+        console.log("🚀 Starting onboarding tour in 1 second...");
+        // Delay para asegurar que TextOnboarding se cierre
         setTimeout(() => {
           console.log("✨ Setting tour visible NOW");
           setIsVisible(true);
-        }, 2000);
+        }, 1000);
       }
     } catch (error) {
       console.error("💥 Error checking onboarding status:", error);
@@ -161,6 +161,9 @@ export function OnboardingTour() {
         title: "¡Tutorial completado!",
         description: "Ya puedes empezar a usar la aplicación."
       });
+      
+      // Trigger check for next onboarding step (RehabilitationTypeDialog)
+      window.dispatchEvent(new Event('onboarding-tour-complete'));
     } catch (error) {
       console.error("Error completing onboarding:", error);
     }
