@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { X, ArrowRight, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface OnboardingStep {
   id: string;
@@ -51,6 +52,7 @@ const steps: OnboardingStep[] = [
 
 export function OnboardingTour() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [highlightRect, setHighlightRect] = useState<DOMRect | null>(null);
@@ -133,12 +135,14 @@ export function OnboardingTour() {
       console.log("🎯 [OnboardingTour] ¿Debe mostrarse?:", shouldShow);
 
       if (shouldShow) {
-        console.log("🚀 Starting onboarding tour in 1 second...");
-        // Delay para asegurar que TextOnboarding se cierre
+        console.log("🚀 Starting onboarding tour - redirecting to dashboard...");
+        // Redirigir al Dashboard primero
+        navigate('/');
+        // Delay para asegurar que TextOnboarding se cierre y Dashboard se cargue
         setTimeout(() => {
           console.log("✨ Setting tour visible NOW");
           setIsVisible(true);
-        }, 1000);
+        }, 1500);
       }
     } catch (error) {
       console.error("💥 Error checking onboarding status:", error);

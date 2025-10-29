@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
   {
@@ -32,6 +33,7 @@ const steps = [
 ];
 
 export function TextOnboarding() {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -85,8 +87,14 @@ export function TextOnboarding() {
 
       setIsVisible(false);
       
+      // Redirigir al Dashboard y luego activar el tour
+      console.log("📝 [TextOnboarding] Completado - redirigiendo a Dashboard");
+      navigate('/');
+      
       // Trigger check for next onboarding step (OnboardingTour)
-      window.dispatchEvent(new Event('text-onboarding-complete'));
+      setTimeout(() => {
+        window.dispatchEvent(new Event('text-onboarding-complete'));
+      }, 500);
     } catch (error) {
       console.error("Error completing text onboarding:", error);
     }
