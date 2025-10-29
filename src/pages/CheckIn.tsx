@@ -49,7 +49,7 @@ const questions: Question[] = [
   { id: 6, text: "¿Me aislé hoy?", type: "yesno" },
   { id: 7, text: "¿Seguí mis valores diarios?", type: "yesno" },
   { id: 8, text: "¿Has hecho algo que crees que te limita en lugar de expandirte?", type: "yesno" },
-  { id: 9, text: "¿Me acosté con la casa recogida y limpia?", type: "yesno" },
+  { id: 9, text: "¿Te acostado ayer con la casa recogida y limpia?", type: "yesno" },
   { id: 10, text: "¿Has tenido pensamientos negativos hoy?", type: "yesno" },
   { id: 11, text: "¿Cómo calificarías tu descanso ayer por la noche?", type: "scale" },
   { id: 12, text: "¿Has comido bien en cantidad y calidad?", type: "scale" },
