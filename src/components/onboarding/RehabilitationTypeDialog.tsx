@@ -107,7 +107,7 @@ export function RehabilitationTypeDialog({ onComplete }: RehabilitationTypeDialo
 
   return (
     <Dialog open={true} onOpenChange={() => {}}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px]" style={{ zIndex: 9999 }}>
         <DialogHeader>
           <DialogTitle className="text-left text-xl pl-[17px]">
             ¿Qué quieres rehabilitar?
@@ -125,7 +125,7 @@ export function RehabilitationTypeDialog({ onComplete }: RehabilitationTypeDialo
               <SelectTrigger className="w-full pl-[17px]">
                 <SelectValue placeholder="Selecciona una opción" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="z-[99999] bg-popover">
                 {REHABILITATION_TYPES.map((type) => (
                   <SelectItem key={type.id} value={type.id}>
                     {type.label}

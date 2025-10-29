@@ -14,39 +14,54 @@ import { RehabilitationTypeDialog } from "./RehabilitationTypeDialog";
  */
 export function OnboardingManager() {
   const [userId, setUserId] = useState<string | null>(null);
-  const [currentStep, setCurrentStep] = useState<'text' | 'tour' | 'rehab' | 'complete'>('complete');
+  const [currentStep, setCurrentStep] = useState<'text' | 'tour' | 'rehab' | 'complete' | 'loading'>('loading');
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     checkOnboardingStatus();
-  }, []);
+  }, [retryCount]);
 
   const checkOnboardingStatus = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        setCurrentStep('complete');
+        return;
+      }
 
       setUserId(user.id);
 
-      const { data: profile } = await supabase
+      const { data: profile, error } = await supabase
         .from('profiles')
         .select('text_onboarding_completed, onboarding_completed, rehabilitation_type')
         .eq('user_id', user.id)
         .single();
 
-      if (!profile) return;
+      // Si el perfil no existe y no hemos reintentado mucho, reintentar
+      if (!profile && retryCount < 3) {
+        setTimeout(() => setRetryCount(prev => prev + 1), 1000);
+        return;
+      }
+
+      if (!profile) {
+        console.error('[OnboardingManager] Profile not found after retries');
+        setCurrentStep('complete');
+        return;
+      }
 
       // Determinar qué paso mostrar
       if (!profile.text_onboarding_completed) {
         setCurrentStep('text');
       } else if (!profile.onboarding_completed) {
         setCurrentStep('tour');
-      } else if (!(profile as any).rehabilitation_type) {
+      } else if (!profile.rehabilitation_type) {
         setCurrentStep('rehab');
       } else {
         setCurrentStep('complete');
       }
     } catch (error) {
       console.error('[OnboardingManager] Error:', error);
+      setCurrentStep('complete');
     }
   };
 
@@ -84,7 +99,7 @@ export function OnboardingManager() {
     setCurrentStep('complete');
   };
 
-  if (currentStep === 'complete') return null;
+  if (currentStep === 'complete' || currentStep === 'loading') return null;
 
   return (
     <>
