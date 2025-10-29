@@ -5,7 +5,54 @@ import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const getTourSteps = (isMobile: boolean): Step[] => {
-  const placement = isMobile ? 'bottom' : 'right';
+  if (isMobile) {
+    // Tour para mobile: enfocado en elementos visibles sin necesidad de abrir el sidebar
+    return [
+      {
+        target: 'body',
+        content: '¡Bienvenido! 👋 Te mostraré las funciones principales de la app. Puedes acceder al menú desde el botón ☰ en la esquina superior izquierda.',
+        disableBeacon: true,
+        placement: 'center',
+      },
+      {
+        target: '.abstinence-counter',
+        content: '🫀 Aquí verás tu tiempo limpio y podrás gestionar tus adicciones.',
+        disableBeacon: true,
+        placement: 'bottom',
+        offset: 10,
+      },
+      {
+        target: '[data-tour="daily-progress"]',
+        content: '📊 Tu Progreso Diario: check-ins, metas completadas y recordatorios.',
+        disableBeacon: true,
+        placement: 'bottom',
+        offset: 10,
+      },
+      {
+        target: '[data-tour="goals-section"]',
+        content: '🎯 Metas de Hoy: marca tus objetivos diarios como completados.',
+        disableBeacon: true,
+        placement: 'bottom',
+        offset: 10,
+      },
+      {
+        target: '[data-tour="quick-tools"]',
+        content: '🛠️ Accesos Directos: accede rápidamente a tus herramientas favoritas.',
+        disableBeacon: true,
+        placement: 'bottom',
+        offset: 10,
+      },
+      {
+        target: 'body',
+        content: '💡 Usa el menú ☰ para explorar todas las secciones: Diario, Chat, Comunidad, Herramientas y más.',
+        disableBeacon: true,
+        placement: 'center',
+      },
+    ];
+  }
+  
+  // Tour para desktop: mantener el original
+  const placement = 'right';
   
   return [
     {
@@ -108,20 +155,17 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   useEffect(() => {
     // Esperar un momento para que el DOM esté listo
     const timer = setTimeout(() => {
-      // Navegar al dashboard si no estamos allí
-      navigate('/dashboard');
-      
-      // En móvil, intentar abrir el sidebar
-      if (isMobile) {
-        const menuButton = document.querySelector('[aria-label="Open sidebar"]') as HTMLElement;
-        if (menuButton) {
-          menuButton.click();
-        }
+      // En desktop, navegar al dashboard y abrir sidebar
+      if (!isMobile) {
+        navigate('/dashboard');
       }
       
       // Verificar que los elementos existan antes de iniciar
       const checkElements = setInterval(() => {
-        const firstElement = document.querySelector('#dashboard-link');
+        const firstElement = isMobile 
+          ? document.querySelector('.abstinence-counter')  // Para mobile, verificar elemento visible
+          : document.querySelector('#dashboard-link');      // Para desktop, verificar link del sidebar
+        
         if (firstElement) {
           clearInterval(checkElements);
           setRun(true);
