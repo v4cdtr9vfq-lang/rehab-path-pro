@@ -17,6 +17,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 const REHABILITATION_TYPES = [
+  { id: 'adiccion_1', label: 'Adicción 1' },
+  { id: 'adiccion_2', label: 'Adicción 2' },
+  { id: 'adiccion_3', label: 'Adicción 3' },
   { id: 'alcohol', label: 'Alcohol' },
   { id: 'amor', label: 'Amor' },
   { id: 'azucar', label: 'Azúcar' },
