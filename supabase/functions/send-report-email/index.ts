@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const BREVO_API_KEY = Deno.env.get("BREVO_API_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -31,17 +31,25 @@ serve(async (req) => {
 
     console.log("Sending report email to:", recipientEmail);
 
-    const emailResponse = await fetch("https://api.resend.com/emails", {
+    const emailResponse = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${RESEND_API_KEY}`,
+        "api-key": BREVO_API_KEY || "",
       },
       body: JSON.stringify({
-        from: "Informes de Progreso <onboarding@resend.dev>",
-        to: [recipientEmail],
+        sender: {
+          name: "Informes de Progreso",
+          email: "noreply@tudominio.com"
+        },
+        to: [
+          {
+            email: recipientEmail,
+            name: recipientEmail
+          }
+        ],
         subject: `Informe de Progreso - ${reportPeriod}`,
-        html: `
+        htmlContent: `
           <!DOCTYPE html>
           <html>
             <head>
@@ -116,13 +124,7 @@ serve(async (req) => {
 
     if (!emailResponse.ok) {
       const errorData = await emailResponse.json();
-      console.error("Resend API error:", errorData);
-      
-      // Handle specific Resend errors
-      if (emailResponse.status === 403 && errorData.message?.includes("verify a domain")) {
-        throw new Error("Para enviar emails a otros destinatarios, necesitas verificar un dominio en resend.com/domains. Actualmente solo puedes enviar emails a tu propia dirección de Resend.");
-      }
-      
+      console.error("Brevo API error:", errorData);
       throw new Error(errorData.message || `Error del servidor de correo: ${emailResponse.status}`);
     }
 
