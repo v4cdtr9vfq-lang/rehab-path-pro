@@ -141,8 +141,9 @@ export default function Auth() {
           return;
         }
 
-        toast.success("¡Cuenta creada! Revisa tu correo para validar tu cuenta");
-        setIsLogin(true);
+        toast.success("¡Cuenta creada! Redirigiendo...");
+        // Auto-login after signup since email is auto-confirmed
+        navigate("/dashboard");
       }
     } catch (error) {
       toast.error("Ocurrió un error inesperado");
