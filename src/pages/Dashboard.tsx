@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Clock, Circle, Star, GripVertical, PartyPopper, Plus } from "lucide-react";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -607,7 +607,7 @@ export default function Home() {
   };
 
   // Check and unlock medals
-  const checkAndUnlockMedals = async (userId: string, days: number, currentMedals: any[], addictionId: string = 'original') => {
+  const checkAndUnlockMedals = useCallback(async (userId: string, days: number, currentMedals: any[], addictionId: string = 'original') => {
     const medalsToCheck = [
       { type: 'valor', days: 0, name: 'Valor', emoji: '🥉' },
       { type: 'constancia', days: 90, name: 'Constancia', emoji: '🥈' },
@@ -648,7 +648,7 @@ export default function Home() {
         }
       }
     }
-  };
+  }, []);
 
   const closeMedalPopup = () => {
     setShowMedalPopup(false);
@@ -801,7 +801,7 @@ export default function Home() {
   }
 
   // Handle addiction change from counter
-  const handleAddictionChange = async (addictionId: string, days: number) => {
+  const handleAddictionChange = useCallback(async (addictionId: string, days: number) => {
     setCurrentAddictionId(addictionId);
     setSobrietyDays(days);
     
@@ -821,7 +821,7 @@ export default function Home() {
 
     // Check and unlock medals for this addiction
     await checkAndUnlockMedals(user.id, days, userMedals || [], addictionId);
-  };
+  }, [checkAndUnlockMedals]);
 
   return <div className="container mx-auto px-[15px] md:px-0 pt-4 md:pt-0 md:-mt-[3px] pb-8 space-y-[35px] animate-in fade-in duration-500">
       {/* Header - Abstinence Counter */}
