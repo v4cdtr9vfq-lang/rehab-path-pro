@@ -3,7 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { FileText, Calendar, Loader2 } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { FileText, Calendar, Loader2, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -24,6 +25,8 @@ export default function ProgressReports() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedReport, setSelectedReport] = useState<ProgressReport | null>(null);
   const [showReportDialog, setShowReportDialog] = useState(false);
+  const [reportToDelete, setReportToDelete] = useState<string | null>(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   useEffect(() => {
     loadReports();
@@ -139,6 +142,42 @@ export default function ProgressReports() {
     setShowReportDialog(true);
   };
 
+  const handleDeleteClick = (reportId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setReportToDelete(reportId);
+    setShowDeleteDialog(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!reportToDelete) return;
+
+    try {
+      const { error } = await supabase
+        .from("progress_reports")
+        .delete()
+        .eq("id", reportToDelete);
+
+      if (error) throw error;
+
+      toast({
+        title: "Informe eliminado",
+        description: "El informe ha sido eliminado correctamente",
+      });
+
+      await loadReports();
+    } catch (error: any) {
+      console.error("Error deleting report:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar el informe",
+        variant: "destructive",
+      });
+    } finally {
+      setShowDeleteDialog(false);
+      setReportToDelete(null);
+    }
+  };
+
   const getPeriodLabel = (period: string) => {
     const labels: Record<string, string> = {
       last_week: "Última semana",
@@ -207,12 +246,22 @@ export default function ProgressReports() {
                           Período: {format(new Date(report.start_date), "d MMM", { locale: es })} - {format(new Date(report.end_date), "d MMM", { locale: es })}
                         </p>
                       </div>
-                      <Button variant="ghost" size="sm" className="flex-shrink-0" onClick={(e) => {
-                        e.stopPropagation();
-                        openReport(report);
-                      }}>
-                        Ver
-                      </Button>
+                      <div className="flex gap-2 flex-shrink-0">
+                        <Button variant="ghost" size="sm" onClick={(e) => {
+                          e.stopPropagation();
+                          openReport(report);
+                        }}>
+                          Ver
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={(e) => handleDeleteClick(report.id, e)}
+                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </Card>
                 ))
@@ -245,6 +294,23 @@ export default function ProgressReports() {
           )}
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar informe?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción eliminará permanentemente el informe de progreso. Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive hover:bg-destructive/90">
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
