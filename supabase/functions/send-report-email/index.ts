@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
-const BREVO_API_KEY = Deno.env.get("BREVO_API_KEY");
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -29,35 +29,27 @@ serve(async (req) => {
       );
     }
 
-    if (!BREVO_API_KEY) {
-      console.error("BREVO_API_KEY is not configured");
+    if (!RESEND_API_KEY) {
+      console.error("RESEND_API_KEY is not configured");
       return new Response(
-        JSON.stringify({ error: "La API key de Brevo no está configurada. Por favor, configúrala en los secretos del proyecto." }),
+        JSON.stringify({ error: "La API key de Resend no está configurada. Por favor, configúrala en los secretos del proyecto." }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     console.log("Sending report email to:", recipientEmail);
 
-    const emailResponse = await fetch("https://api.brevo.com/v3/smtp/email", {
+    const emailResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "api-key": BREVO_API_KEY || "",
+        "Authorization": `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        sender: {
-          name: "Informes de Progreso",
-          email: "noreply@tudominio.com"
-        },
-        to: [
-          {
-            email: recipientEmail,
-            name: recipientEmail
-          }
-        ],
+        from: "Informes de Progreso <onboarding@resend.dev>",
+        to: [recipientEmail],
         subject: `Informe de Progreso - ${reportPeriod}`,
-        htmlContent: `
+        html: `
           <!DOCTYPE html>
           <html>
             <head>
@@ -132,7 +124,7 @@ serve(async (req) => {
 
     if (!emailResponse.ok) {
       const errorData = await emailResponse.json();
-      console.error("Brevo API error:", errorData);
+      console.error("Resend API error:", errorData);
       throw new Error(errorData.message || `Error del servidor de correo: ${emailResponse.status}`);
     }
 
