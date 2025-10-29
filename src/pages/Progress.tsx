@@ -5,6 +5,7 @@ import { CheckCircle2, Circle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import ProgressReports from "@/components/ProgressReports";
 
 interface ProgressArea {
   name: string;
@@ -673,6 +674,9 @@ export default function ProgressPage() {
           </CardContent>
         </Card>
       </Tabs>
+
+      {/* Progress Reports Widget */}
+      <ProgressReports />
     </div>
   );
 }

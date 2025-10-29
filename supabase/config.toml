@@ -1,1 +1,4 @@
 project_id = "ntxhuytetumqlyvbwvka"
+
+[functions.generate-progress-report]
+verify_jwt = true
