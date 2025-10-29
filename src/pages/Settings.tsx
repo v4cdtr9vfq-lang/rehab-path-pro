@@ -95,7 +95,6 @@ export default function Settings() {
     { id: 'vaporizadores', label: 'Vaporizadores' },
     { id: 'videojuegos', label: 'Videojuegos' },
     { id: 'otros', label: 'Otros' },
-    { id: 'prefiero_no_decir', label: 'Prefiero no decirlo' },
   ] as const;
   
   // Reminders state

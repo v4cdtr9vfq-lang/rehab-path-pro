@@ -87,7 +87,7 @@ export default function RehabilitationTypeDialog() {
       if (!user) throw new Error("Usuario no autenticado");
 
       const updateData: any = { 
-        rehabilitation_type: selectedType === 'prefiero_no_decir' ? 'prefiero_no_decir' : selectedType 
+        rehabilitation_type: selectedType 
       };
 
       const { error } = await supabase
@@ -140,9 +140,6 @@ export default function RehabilitationTypeDialog() {
                     {type.label}
                   </SelectItem>
                 ))}
-                <SelectItem value="prefiero_no_decir">
-                  Prefiero no decirlo
-                </SelectItem>
               </SelectContent>
             </Select>
           </div>
