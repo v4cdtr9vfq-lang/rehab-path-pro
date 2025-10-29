@@ -7,27 +7,27 @@ import { Progress } from "@/components/ui/progress";
 const steps = [
   {
     title: "¡Bienvenido!",
-    content: "Esta aplicación le apoya en su proceso de rehabilitación de dependencias. Podrá encontrar varias herramientas que le ayudan a entender en qué punto se encuentra, a registrar sus emociones y a comprender qué situaciones o qué personas puede estar dificultando sus propósitos. Podrá activar hasta 3 procesos de rehabilitación, ya que muchos hábitos y sustancias estén conectados entre ellos."
+    content: "Esta aplicación te apoya en tu proceso de rehabilitación de dependencias. Podrás encontrar varias herramientas que te ayudan a entender en qué punto te encuentras, a registrar tus emociones y a comprender qué situaciones o qué personas pueden estar dificultando tus propósitos. Podrás activar hasta 3 procesos de rehabilitación, ya que muchos hábitos y sustancias están conectados entre ellos."
   },
   {
     title: "Anonimato",
-    content: "El anonimato es especialmente importante para nosotros. Si no desea seleccionar una dependencia concreta en el registro, tiene la opción de incluir \"Adicción 1\" \"Adicción 2\" y \"Adicción 3\". En las zonas de chat, podrá escribir en modo anónimo. Todo su información está encriptada baja estrictos protocolos de seguridad."
+    content: "El anonimato es especialmente importante para nosotros. Si no deseas seleccionar una dependencia concreta en el registro, tienes la opción de incluir \"Adicción 1\", \"Adicción 2\" y \"Adicción 3\". En las zonas de chat, podrás escribir en modo anónimo. Toda tu información está encriptada bajo estrictos protocolos de seguridad."
   },
   {
     title: "Herramientas probadas por la ciencia",
-    content: "Hemos incluido herramientas, como los Check-in diarios, el uso del diario, el diario de emociones, los listados de valores, los chats o las mentorías con otros miembros de la comunidad que con probados resultados en su proceso."
+    content: "Hemos incluido herramientas como los Check-in diarios, el uso del diario, el diario de emociones, los listados de valores, los chats o las mentorías con otros miembros de la comunidad, todas con resultados probados en tu proceso."
   },
   {
     title: "Plan y metas predefinidas",
-    content: "La aplicación por defecto carga una serie de metas diarias para su \"Plan de acción\" puede borrar o editar la periodicidad de las tareas si lo desea, aunque recomendamos encarecidamente que pruebe al menos 40 días ceñirse a estas tareas únicamente."
+    content: "La aplicación por defecto carga una serie de metas diarias para tu \"Plan de acción\". Puedes borrar o editar la periodicidad de las tareas si lo deseas, aunque recomendamos encarecidamente que pruebes al menos 40 días ceñirte únicamente a estas tareas."
   },
   {
     title: "Plan de emergencia y recaídas",
-    content: "Nuestra funcionalidad contempla la posibilidad de las recaídas. Si en el Check-in diario responde \"No\" a la pregunta \"¿Me mantuve limpio de consumo hoy?\" se activará la opción de escribir un \"Inventario de la recaída\" para escribir una entrada donde describa que situación o emociones le han llevado a esta situación. Recuerda que el objetivo es aprender de cada proceso para ganar mayor capacidad de acción."
+    content: "Nuestra funcionalidad contempla la posibilidad de las recaídas. Si en tu Check-in diario respondes \"No\" a la pregunta \"¿Me mantuve limpio de consumo hoy?\", se activará la opción de escribir un \"Inventario de la recaída\" para que describas qué situación o emociones te han llevado a esta situación. Recuerda que el objetivo es aprender de cada proceso para ganar mayor capacidad de acción."
   },
   {
     title: "Informes de evolución",
-    content: "En el área \"Progreso\" podrá generar informes psicoterapéuticos asistidos por una inteligencia artificial que puede servirle para entender su progreso a la necesidad de cambios para seguir progresando. Estos informes pueden ser también de utilidad para su terapeuta."
+    content: "En el área \"Progreso\" podrás generar informes psicoterapéuticos asistidos por inteligencia artificial que pueden servirte para entender tu progreso o la necesidad de hacer cambios para seguir avanzando. Estos informes también pueden ser de utilidad para tu terapeuta."
   }
 ];
 
