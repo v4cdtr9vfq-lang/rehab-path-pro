@@ -686,10 +686,10 @@ export default function Journal() {
                   <p className="text-foreground/80 mb-4 whitespace-pre-line">{getDisplayContent(entry)}</p>
                   {entry.content.length > 300 && (
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
                       onClick={() => toggleExpandEntry(entry.id)}
-                      className="mb-4 text-primary hover:text-primary"
+                      className="mb-4 bg-white text-black border-black hover:bg-green-500 hover:text-white hover:border-green-500"
                     >
                       {expandedEntries.has(entry.id) ? "Leer menos" : "Leer más"}
                     </Button>
