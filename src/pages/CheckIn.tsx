@@ -314,34 +314,29 @@ export default function CheckIn() {
       // Build journal content with all text answers
       let journalContent = "";
       
-      // Question 3 - text answer
-      if (finalAnswers[3] && finalAnswers[3].trim()) {
-        journalContent += `**Hoy lo más importante recordarme es:**\n${finalAnswers[3].trim()}\n\n`;
-      }
-      
       // Question 2 - trigger description
       if (answers[2] === "yes" && triggerDescription.trim()) {
-        journalContent += `**Situación que me alteró:**\n${triggerDescription.trim()}\n\n`;
+        journalContent += `Situación que me alteró:\n${triggerDescription.trim()}\n\n`;
       }
       
       // Question 4 - resentment description
       if (answers[4] === "yes" && resentmentDescription.trim()) {
-        journalContent += `**Resentimiento:**\n${resentmentDescription.trim()}\n\n`;
+        journalContent += `Resentimiento:\n${resentmentDescription.trim()}\n\n`;
       }
       
       // Question 7 - values description
       if (answers[7] === "no" && valuesDescription.trim()) {
-        journalContent += `**Infidelidad a mis valores:**\n${valuesDescription.trim()}\n\n`;
+        journalContent += `Infidelidad a mis valores:\n${valuesDescription.trim()}\n\n`;
       }
       
       // Question 8 - limiting description
       if (answers[8] === "yes" && limitingDescription.trim()) {
-        journalContent += `**Obstáculos a superar:**\n${limitingDescription.trim()}\n\n`;
+        journalContent += `Obstáculos a superar:\n${limitingDescription.trim()}\n\n`;
       }
       
       // Question 9 - negative thoughts description
       if (answers[9] === "yes" && negativeThoughtsDescription.trim()) {
-        journalContent += `**Pensamientos negativos:**\n${negativeThoughtsDescription.trim()}\n\n`;
+        journalContent += `Pensamientos negativos:\n${negativeThoughtsDescription.trim()}\n\n`;
       }
       
       // Build tags array
