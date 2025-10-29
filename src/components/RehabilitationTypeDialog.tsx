@@ -182,7 +182,7 @@ export default function RehabilitationTypeDialog() {
               <SelectTrigger className="w-full pl-[17px]">
                 <SelectValue placeholder="Selecciona una opción" />
               </SelectTrigger>
-              <SelectContent className="z-[100000]">
+              <SelectContent>
                 {REHABILITATION_TYPES.map((type) => (
                   <SelectItem key={type.id} value={type.id}>
                     {type.label}
