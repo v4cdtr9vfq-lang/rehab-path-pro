@@ -14,13 +14,14 @@ export function OnboardingManager() {
   const [userId, setUserId] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState<'text' | 'rehab' | 'complete' | 'loading'>('loading');
   const [retryCount, setRetryCount] = useState(0);
-  const [initialCheckDone, setInitialCheckDone] = useState(false);
+  const [hasChecked, setHasChecked] = useState(false);
 
   useEffect(() => {
-    if (!initialCheckDone) {
+    // Solo verificar si no hemos verificado aún o si estamos reintentando
+    if (!hasChecked || retryCount > 0) {
       checkOnboardingStatus();
     }
-  }, [retryCount, initialCheckDone]);
+  }, [retryCount]);
 
   const checkOnboardingStatus = async () => {
     try {
@@ -59,11 +60,11 @@ export function OnboardingManager() {
         setCurrentStep('complete');
       }
       
-      setInitialCheckDone(true);
+      setHasChecked(true);
     } catch (error) {
       console.error('[OnboardingManager] Error:', error);
       setCurrentStep('complete');
-      setInitialCheckDone(true);
+      setHasChecked(true);
     }
   };
 
