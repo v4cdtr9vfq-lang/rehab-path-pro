@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { TextOnboarding } from "./TextOnboarding";
-import { OnboardingTour } from "./OnboardingTour";
 import { RehabilitationTypeDialog } from "./RehabilitationTypeDialog";
 
 /**
@@ -9,12 +8,11 @@ import { RehabilitationTypeDialog } from "./RehabilitationTypeDialog";
  * 
  * Flujo:
  * 1. TextOnboarding (6 pasos descriptivos)
- * 2. OnboardingTour (tour interactivo)
- * 3. RehabilitationTypeDialog (selección de adicción)
+ * 2. RehabilitationTypeDialog (selección de adicción)
  */
 export function OnboardingManager() {
   const [userId, setUserId] = useState<string | null>(null);
-  const [currentStep, setCurrentStep] = useState<'text' | 'tour' | 'rehab' | 'complete' | 'loading'>('loading');
+  const [currentStep, setCurrentStep] = useState<'text' | 'rehab' | 'complete' | 'loading'>('loading');
   const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
@@ -52,8 +50,6 @@ export function OnboardingManager() {
       // Determinar qué paso mostrar
       if (!profile.text_onboarding_completed) {
         setCurrentStep('text');
-      } else if (!profile.onboarding_completed) {
-        setCurrentStep('tour');
       } else if (!profile.rehabilitation_type) {
         setCurrentStep('rehab');
       } else {
@@ -71,27 +67,15 @@ export function OnboardingManager() {
     try {
       await supabase
         .from('profiles')
-        .update({ text_onboarding_completed: true })
-        .eq('user_id', userId);
-      
-      setCurrentStep('tour');
-    } catch (error) {
-      console.error('[OnboardingManager] Error completing text:', error);
-    }
-  };
-
-  const handleTourComplete = async () => {
-    if (!userId) return;
-    
-    try {
-      await supabase
-        .from('profiles')
-        .update({ onboarding_completed: true })
+        .update({ 
+          text_onboarding_completed: true,
+          onboarding_completed: true 
+        })
         .eq('user_id', userId);
       
       setCurrentStep('rehab');
     } catch (error) {
-      console.error('[OnboardingManager] Error completing tour:', error);
+      console.error('[OnboardingManager] Error completing text:', error);
     }
   };
 
@@ -105,9 +89,6 @@ export function OnboardingManager() {
     <>
       {currentStep === 'text' && (
         <TextOnboarding onComplete={handleTextComplete} />
-      )}
-      {currentStep === 'tour' && (
-        <OnboardingTour onComplete={handleTourComplete} />
       )}
       {currentStep === 'rehab' && (
         <RehabilitationTypeDialog onComplete={handleRehabComplete} />
