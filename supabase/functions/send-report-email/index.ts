@@ -115,9 +115,15 @@ serve(async (req) => {
     });
 
     if (!emailResponse.ok) {
-      const errorData = await emailResponse.text();
+      const errorData = await emailResponse.json();
       console.error("Resend API error:", errorData);
-      throw new Error(`Resend API error: ${emailResponse.status}`);
+      
+      // Handle specific Resend errors
+      if (emailResponse.status === 403 && errorData.message?.includes("verify a domain")) {
+        throw new Error("Para enviar emails a otros destinatarios, necesitas verificar un dominio en resend.com/domains. Actualmente solo puedes enviar emails a tu propia dirección de Resend.");
+      }
+      
+      throw new Error(errorData.message || `Error del servidor de correo: ${emailResponse.status}`);
     }
 
     const data = await emailResponse.json();

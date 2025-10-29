@@ -215,10 +215,12 @@ export default function ProgressReports() {
       setRecipientEmail("");
     } catch (error: any) {
       console.error("Error sending email:", error);
+      const errorMessage = error.message || "No se pudo enviar el correo";
       toast({
-        title: "Error",
-        description: error.message || "No se pudo enviar el correo",
+        title: "Error al enviar correo",
+        description: errorMessage,
         variant: "destructive",
+        duration: 8000,
       });
     } finally {
       setIsSendingEmail(false);
