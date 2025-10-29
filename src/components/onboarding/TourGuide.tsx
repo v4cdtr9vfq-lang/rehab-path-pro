@@ -12,6 +12,22 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
 
+  // Rutas de navegación para cada paso del tour
+  const stepRoutes = [
+    '/dashboard',
+    '/plan',
+    '/progress',
+    '/emotion-journal',
+    '/journal',
+    '/gratitude',
+    '/values',
+    '/chat',
+    '/community',
+    '/tools',
+    '/help',
+    '/settings',
+  ];
+
   // Detectar si estamos en mobile
   useEffect(() => {
     const checkMobile = () => {
@@ -58,22 +74,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
     const timer = setTimeout(checkAndStart, 800);
     
     return () => clearTimeout(timer);
-  }, [isMobile, navigate]);
-
-  const stepRoutes = [
-    '/dashboard',
-    '/plan',
-    '/progress',
-    '/emotion-journal',
-    '/journal',
-    '/gratitude',
-    '/values',
-    '/chat',
-    '/community',
-    '/tools',
-    '/help',
-    '/settings',
-  ];
+  }, [isMobile, navigate, stepRoutes]);
 
   const steps: Step[] = [
     {

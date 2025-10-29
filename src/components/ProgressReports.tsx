@@ -87,6 +87,7 @@ export default function ProgressReports() {
   };
 
   const generateReport = async () => {
+    console.log('[ProgressReports] generateReport called - Esto consume créditos!');
     setIsGenerating(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
