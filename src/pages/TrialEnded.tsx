@@ -104,7 +104,7 @@ export default function TrialEnded() {
 
         {/* Footer */}
         <div className="text-center text-sm text-muted-foreground">
-          <p>¿Necesitas ayuda? Contáctanos en info@neurotropy.com</p>
+          <p>¿Necesitas ayuda? Contáctanos en somos@felices.org</p>
         </div>
       </div>
     </div>
