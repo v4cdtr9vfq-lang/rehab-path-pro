@@ -137,8 +137,11 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        // CRITICAL: Defer async operations to prevent deadlocks
         if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
-          checkSubscription();
+          setTimeout(() => {
+            checkSubscription(false);
+          }, 0);
         } else if (event === "SIGNED_OUT") {
           setSubscribed(false);
           setPlan("free");

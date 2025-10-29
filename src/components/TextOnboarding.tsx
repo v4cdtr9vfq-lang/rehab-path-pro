@@ -77,14 +77,26 @@ export function TextOnboarding() {
 
   const completeOnboarding = async () => {
     try {
+      console.log("📝 [TextOnboarding] Iniciando completeOnboarding...");
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      console.log("📝 [TextOnboarding] Usuario actual:", user?.id);
+      
+      if (!user) {
+        console.error("📝 [TextOnboarding] ERROR: No hay usuario!");
+        return;
+      }
 
-      await supabase
+      const { error } = await supabase
         .from("profiles")
         .update({ text_onboarding_completed: true })
         .eq("user_id", user.id);
 
+      if (error) {
+        console.error("📝 [TextOnboarding] ERROR actualizando perfil:", error);
+        return;
+      }
+
+      console.log("📝 [TextOnboarding] Perfil actualizado exitosamente");
       setIsVisible(false);
       
       // Redirigir al Dashboard y luego activar el tour
@@ -93,10 +105,11 @@ export function TextOnboarding() {
       
       // Trigger check for next onboarding step (OnboardingTour)
       setTimeout(() => {
+        console.log("📝 [TextOnboarding] Disparando evento text-onboarding-complete");
         window.dispatchEvent(new Event('text-onboarding-complete'));
       }, 500);
     } catch (error) {
-      console.error("Error completing text onboarding:", error);
+      console.error("📝 [TextOnboarding] Error completing text onboarding:", error);
     }
   };
 
