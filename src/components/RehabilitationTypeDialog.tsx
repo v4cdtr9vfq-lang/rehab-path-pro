@@ -65,6 +65,7 @@ export default function RehabilitationTypeDialog() {
 
   const checkIfNeedsDialog = async () => {
     try {
+      console.log("🏥 [RehabDialog] Verificando estado...");
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
@@ -74,13 +75,22 @@ export default function RehabilitationTypeDialog() {
         .eq('user_id', user.id)
         .single();
 
-      // ONLY show if text onboarding is completed, rehabilitation_type is NOT set,
-      // AND visual tour is not completed
-      if (profile && 
-          (profile as any).text_onboarding_completed && 
-          !(profile as any).rehabilitation_type &&
-          !profile.onboarding_completed) {
-        setTimeout(() => setOpen(true), 300); // Small delay to ensure TextOnboarding is hidden
+      console.log("🏥 [RehabDialog] Estado del perfil:", {
+        textOnboarding: (profile as any)?.text_onboarding_completed,
+        rehabType: (profile as any)?.rehabilitation_type,
+        tourCompleted: profile?.onboarding_completed
+      });
+
+      // SOLO mostrar si el texto está completo PERO el tipo no está configurado
+      const shouldShow = profile && 
+                        (profile as any).text_onboarding_completed && 
+                        !(profile as any).rehabilitation_type &&
+                        !profile.onboarding_completed;
+
+      console.log("🏥 [RehabDialog] ¿Debe mostrarse?:", shouldShow);
+
+      if (shouldShow) {
+        setTimeout(() => setOpen(true), 500); // Delay para asegurar que TextOnboarding se cierre
       }
     } catch (error) {
       console.error('Error checking rehabilitation type:', error);
@@ -157,7 +167,7 @@ export default function RehabilitationTypeDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] z-[10002]">
         <DialogHeader>
           <DialogTitle className="text-left text-xl pl-[17px]">
             ¿Qué quieres rehabilitar?

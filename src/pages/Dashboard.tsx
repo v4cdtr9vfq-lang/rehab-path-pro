@@ -1,5 +1,4 @@
 import { AbstinenceCounter } from "@/components/AbstinenceCounter";
-import { OnboardingTour } from "@/components/OnboardingTour";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -825,9 +824,6 @@ export default function Home() {
   };
 
   return <div className="container mx-auto px-[15px] md:px-0 pt-4 md:pt-0 md:-mt-[3px] pb-8 space-y-[35px] animate-in fade-in duration-500">
-      {/* Onboarding Tour */}
-      <OnboardingTour />
-      
       {/* Header - Abstinence Counter */}
       <div className="abstinence-counter">
         <AbstinenceCounter 

@@ -105,7 +105,7 @@ export function OnboardingTour() {
 
   const checkOnboardingStatus = async () => {
     try {
-      console.log("🎯 Checking onboarding status...");
+      console.log("🎯 [OnboardingTour] Verificando estado...");
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         console.log("❌ No user found");
@@ -115,32 +115,31 @@ export function OnboardingTour() {
 
       const { data: profile } = await supabase
         .from("profiles")
-        .select("onboarding_completed, rehabilitation_type")
+        .select("text_onboarding_completed, onboarding_completed, rehabilitation_type")
         .eq("user_id", user.id)
         .single();
 
-      console.log("📊 Profile data:", profile);
-      console.log("🎓 Onboarding completed:", profile?.onboarding_completed);
-      console.log("🏥 Rehabilitation type:", (profile as any)?.rehabilitation_type);
+      console.log("📊 [OnboardingTour] Estado del perfil:", {
+        textOnboarding: (profile as any)?.text_onboarding_completed,
+        rehabType: (profile as any)?.rehabilitation_type,
+        tourCompleted: profile?.onboarding_completed
+      });
 
-      // ONLY show tour if text onboarding is done, rehabilitation type is set, 
-      // and tour is not completed
-      if (profile && 
-          (profile as any).text_onboarding_completed &&
-          (profile as any).rehabilitation_type && 
-          !profile.onboarding_completed) {
-        console.log("🚀 Starting onboarding tour in 1 second...");
-        // Delay to let the page render and ensure other dialogs are closed
+      // SOLO mostrar si AMBOS pasos anteriores están completos
+      const shouldShow = profile && 
+                        (profile as any).text_onboarding_completed &&
+                        (profile as any).rehabilitation_type && 
+                        !profile.onboarding_completed;
+
+      console.log("🎯 [OnboardingTour] ¿Debe mostrarse?:", shouldShow);
+
+      if (shouldShow) {
+        console.log("🚀 Starting onboarding tour in 2 seconds...");
+        // Delay mayor para asegurar que RehabilitationTypeDialog se cierre
         setTimeout(() => {
           console.log("✨ Setting tour visible NOW");
           setIsVisible(true);
-        }, 1500); // Longer delay to ensure RehabilitationTypeDialog is closed
-      } else {
-        console.log("⏭️ Skipping tour - conditions not met:", {
-          textOnboarding: (profile as any)?.text_onboarding_completed,
-          rehabType: (profile as any)?.rehabilitation_type,
-          tourCompleted: profile?.onboarding_completed
-        });
+        }, 2000);
       }
     } catch (error) {
       console.error("💥 Error checking onboarding status:", error);

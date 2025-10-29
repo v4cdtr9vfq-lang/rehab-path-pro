@@ -41,6 +41,7 @@ export function TextOnboarding() {
 
   const checkOnboardingStatus = async () => {
     try {
+      console.log("📝 [TextOnboarding] Verificando estado...");
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
@@ -50,12 +51,21 @@ export function TextOnboarding() {
         .eq("user_id", user.id)
         .single();
 
-      // ONLY show if text onboarding is not completed
-      // AND no other onboarding steps are in progress
-      if (profile && 
-          !profile.text_onboarding_completed && 
-          !(profile as any).rehabilitation_type &&
-          !profile.onboarding_completed) {
+      console.log("📝 [TextOnboarding] Estado del perfil:", {
+        textOnboarding: profile?.text_onboarding_completed,
+        rehabType: (profile as any)?.rehabilitation_type,
+        tourCompleted: profile?.onboarding_completed
+      });
+
+      // SOLO mostrar si NINGUNO de los onboardings está completo
+      const shouldShow = profile && 
+                        !profile.text_onboarding_completed && 
+                        !(profile as any).rehabilitation_type &&
+                        !profile.onboarding_completed;
+
+      console.log("📝 [TextOnboarding] ¿Debe mostrarse?:", shouldShow);
+      
+      if (shouldShow) {
         setIsVisible(true);
       }
     } catch (error) {
@@ -101,7 +111,7 @@ export function TextOnboarding() {
   const progress = ((currentStep + 1) / steps.length) * 100;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/95 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-background/95 backdrop-blur-sm">
       <Card className="w-full max-w-2xl mx-4 p-8 shadow-xl">
         <div className="space-y-6">
           <div className="space-y-2">
