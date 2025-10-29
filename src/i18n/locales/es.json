@@ -20,7 +20,8 @@
     "download": "Descargar",
     "share": "Compartir",
     "ok": "Aceptar",
-    "confirm": "Confirmar"
+    "confirm": "Confirmar",
+    "error": "Error"
   },
   "auth": {
     "signIn": "Iniciar sesión",
@@ -163,7 +164,15 @@
     "instructionsPlaceholder": "Instrucciones para la meta...",
     "notes": "Observaciones",
     "notesPlaceholder": "Observaciones sobre la meta...",
-    "saveChanges": "Guardar cambios"
+    "saveChanges": "Guardar cambios",
+    "resetButton": "Volver a cargar todas las metas predefinidas al inicio",
+    "resetConfirmTitle": "¿Estás seguro?",
+    "resetConfirmDescription": "Esta acción eliminará todas tus metas actuales y completaciones, y las reemplazará con las metas predefinidas. También se reseteará tu fecha de inicio de abstinencia a hoy. Esta acción no se puede deshacer.",
+    "resetConfirmButton": "Confirmar reseteo",
+    "resetSuccessTitle": "Metas reseteadas",
+    "resetSuccessDescription": "Se han cargado las metas predefinidas y se ha reseteado tu fecha de abstinencia.",
+    "loginRequiredDescription": "Debes iniciar sesión.",
+    "resetErrorDescription": "No se pudieron resetear las metas."
   },
   "progress": {
     "title": "Progreso",

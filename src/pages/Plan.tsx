@@ -52,6 +52,15 @@ interface ExpandedGoal extends Goal {
 export default function Plan() {
   const isMobile = useIsMobile();
   const { t } = useTranslation();
+  
+  // Helper function to translate goal text if it's a translation key
+  const translateGoalText = (text: string): string => {
+    if (text.startsWith('defaultGoals.')) {
+      return t(text);
+    }
+    return text;
+  };
+  
   const {
     toast
   } = useToast();
@@ -447,8 +456,8 @@ export default function Plan() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
-          title: "Error",
-          description: "Debes iniciar sesión.",
+          title: t('common.error') || 'Error',
+          description: t('plan.loginRequiredDescription'),
           variant: "destructive"
         });
         return;
@@ -468,14 +477,14 @@ export default function Plan() {
       window.dispatchEvent(new Event('abstinenceDateUpdated'));
 
       toast({
-        title: "Metas reseteadas",
-        description: "Se han cargado las metas predefinidas y se ha reseteado tu fecha de abstinencia."
+        title: t('plan.resetSuccessTitle'),
+        description: t('plan.resetSuccessDescription')
       });
     } catch (error: any) {
       console.error('Error resetting goals:', error);
       toast({
-        title: "Error",
-        description: "No se pudieron resetear las metas.",
+        title: t('common.error') || 'Error',
+        description: t('plan.resetErrorDescription'),
         variant: "destructive"
       });
     }
@@ -793,10 +802,10 @@ export default function Plan() {
                   className="font-semibold text-foreground text-sm hover:text-green-600"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {goal.text}
+                  {translateGoalText(goal.text)}
                 </a>
               ) : (
-                <p className="font-semibold text-foreground text-sm">{goal.text}</p>
+                <p className="font-semibold text-foreground text-sm">{translateGoalText(goal.text)}</p>
               )}
               <p className={`text-xs ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
                 {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
@@ -855,10 +864,10 @@ export default function Plan() {
                 className="font-semibold text-foreground text-sm md:text-base hover:text-green-600"
                 onClick={(e) => e.stopPropagation()}
               >
-                {goal.text}
+                {translateGoalText(goal.text)}
               </a>
             ) : (
-              <p className="font-semibold text-foreground text-sm md:text-base">{goal.text}</p>
+              <p className="font-semibold text-foreground text-sm md:text-base">{translateGoalText(goal.text)}</p>
             )}
             <p className={`text-xs md:text-sm ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
               {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
@@ -1363,20 +1372,20 @@ export default function Plan() {
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="outline" className="text-muted-foreground hover:text-destructive">
-                Volver a cargar todas las metas predefinidas al inicio
+                {t('plan.resetButton')}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+                <AlertDialogTitle>{t('plan.resetConfirmTitle')}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Esta acción eliminará todas tus metas actuales y completaciones, y las reemplazará con las metas predefinidas. También se reseteará tu fecha de inicio de abstinencia a hoy. Esta acción no se puede deshacer.
+                  {t('plan.resetConfirmDescription')}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
                 <AlertDialogAction onClick={resetToDefaultGoals} className="bg-destructive hover:bg-destructive/90">
-                  Confirmar reseteo
+                  {t('plan.resetConfirmButton')}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

@@ -20,7 +20,8 @@
     "download": "Download",
     "share": "Share",
     "ok": "OK",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "error": "Error"
   },
   "auth": {
     "signIn": "Sign In",
@@ -163,7 +164,15 @@
     "instructionsPlaceholder": "Instructions for the goal...",
     "notes": "Notes",
     "notesPlaceholder": "Notes about the goal...",
-    "saveChanges": "Save changes"
+    "saveChanges": "Save changes",
+    "resetButton": "Reload all default goals from the beginning",
+    "resetConfirmTitle": "Are you sure?",
+    "resetConfirmDescription": "This action will delete all your current goals and completions, and replace them with the default goals. Your abstinence start date will also be reset to today. This action cannot be undone.",
+    "resetConfirmButton": "Confirm reset",
+    "resetSuccessTitle": "Goals reset",
+    "resetSuccessDescription": "Default goals have been loaded and your abstinence date has been reset.",
+    "loginRequiredDescription": "You must be logged in.",
+    "resetErrorDescription": "Could not reset goals."
   },
   "progress": {
     "title": "Progress",
