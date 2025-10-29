@@ -96,7 +96,10 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   }, [navigate, isMobile]);
 
   const handleJoyrideCallback = async (data: CallBackProps) => {
-    const { status } = data;
+    const { status, action, index, type } = data;
+    
+    console.log('Tour callback:', { status, action, index, type });
+    
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
     if (finishedStatuses.includes(status)) {
@@ -128,8 +131,8 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       showSkipButton
       callback={handleJoyrideCallback}
       scrollToFirstStep
-      disableOverlayClose
-      spotlightClicks
+      disableOverlayClose={false}
+      spotlightPadding={0}
       locale={{
         back: 'Atrás',
         close: 'Cerrar',
