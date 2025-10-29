@@ -135,14 +135,12 @@ export function OnboardingTour() {
       console.log("🎯 [OnboardingTour] ¿Debe mostrarse?:", shouldShow);
 
       if (shouldShow) {
-        console.log("🚀 Starting onboarding tour - redirecting to dashboard...");
-        // Redirigir al Dashboard primero
-        navigate('/');
-        // Delay para asegurar que TextOnboarding se cierre y Dashboard se cargue
+        console.log("🚀 Starting onboarding tour NOW");
+        // TextOnboarding ya navegó al Dashboard, solo mostrar el tour
         setTimeout(() => {
           console.log("✨ Setting tour visible NOW");
           setIsVisible(true);
-        }, 1500);
+        }, 800);
       }
     } catch (error) {
       console.error("💥 Error checking onboarding status:", error);
