@@ -286,35 +286,57 @@ export default function Plan() {
           });
         }
       } else if (g.goal_type === 'week') {
-        // Weekly goals: create ONE set of instances for the entire period
-        // Use the first date as the reference date for all instances
-        const referenceDate = dates[0];
-        const dateStr = getLocalDateString(referenceDate);
+        // Weekly goals: check ALL dates in range to find completed instances
+        const weekStart = dates[0];
+        const weekStartStr = getLocalDateString(weekStart);
         
         for (let i = 0; i < g.remaining; i++) {
-          const instanceId = `${g.id}__${dateStr}__${i}`;
+          // Check if this instance was completed on ANY day in the range
+          let isCompleted = false;
+          for (const date of dates) {
+            const dateStr = getLocalDateString(date);
+            const instanceId = `${g.id}__${dateStr}__${i}`;
+            if (allCompletedInstances.has(instanceId)) {
+              isCompleted = true;
+              break;
+            }
+          }
+          
+          // Create instance with week start date but mark as completed if found on any day
+          const instanceId = `${g.id}__${weekStartStr}__${i}`;
           expanded.push({
             ...g,
             id: instanceId,
             originalId: g.id,
             instanceIndex: i,
-            completed: allCompletedInstances.has(instanceId)
+            completed: isCompleted
           });
         }
       } else if (g.goal_type === 'month') {
-        // Monthly goals: create ONE set of instances for the entire month
-        // Use the first date as the reference date for all instances
-        const referenceDate = dates[0];
-        const dateStr = getLocalDateString(referenceDate);
+        // Monthly goals: check ALL dates in range to find completed instances
+        const monthStart = dates[0];
+        const monthStartStr = getLocalDateString(monthStart);
         
         for (let i = 0; i < g.remaining; i++) {
-          const instanceId = `${g.id}__${dateStr}__${i}`;
+          // Check if this instance was completed on ANY day in the range
+          let isCompleted = false;
+          for (const date of dates) {
+            const dateStr = getLocalDateString(date);
+            const instanceId = `${g.id}__${dateStr}__${i}`;
+            if (allCompletedInstances.has(instanceId)) {
+              isCompleted = true;
+              break;
+            }
+          }
+          
+          // Create instance with month start date but mark as completed if found on any day
+          const instanceId = `${g.id}__${monthStartStr}__${i}`;
           expanded.push({
             ...g,
             id: instanceId,
             originalId: g.id,
             instanceIndex: i,
-            completed: allCompletedInstances.has(instanceId)
+            completed: isCompleted
           });
         }
       } else {
@@ -816,7 +838,7 @@ export default function Plan() {
       opacity: isDragging ? 0.5 : 1,
     };
 
-    const isClickable = sectionKey !== 'week' && sectionKey !== 'month';
+    const isClickable = true; // All goals are now clickable
     const allInstancesOfGoal = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
     const allCompleted = allInstancesOfGoal.every(g => g.completed);
     const displayCompleted = (sectionKey === 'week' || sectionKey === 'month') ? allCompleted : goal.completed;
