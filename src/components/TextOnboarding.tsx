@@ -101,7 +101,7 @@ export function TextOnboarding() {
       
       // Redirigir al Dashboard y luego activar el tour
       console.log("📝 [TextOnboarding] Completado - redirigiendo a Dashboard");
-      navigate('/');
+      navigate('/dashboard');
       
       // Trigger check for next onboarding step (OnboardingTour)
       setTimeout(() => {
