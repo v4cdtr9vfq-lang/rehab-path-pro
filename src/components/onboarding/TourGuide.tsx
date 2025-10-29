@@ -63,39 +63,45 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   useEffect(() => {
     // Esperar a que el DOM esté listo y verificar que el primer elemento existe
     const checkAndStart = () => {
+      // Primero navegar a dashboard
+      navigate('/dashboard');
+      
       // En mobile, abrir el sheet primero
       if (isMobile) {
-        const menuButton = document.querySelector('button[aria-label="Open sidebar"]') as HTMLButtonElement;
-        if (menuButton) {
-          menuButton.click();
-          // Esperar a que el sheet se abra antes de iniciar el tour
+        setTimeout(() => {
+          const menuButton = document.querySelector('button[aria-label="Open sidebar"]') as HTMLButtonElement;
+          if (menuButton) {
+            menuButton.click();
+          }
+          
+          // Esperar a que el sheet se abra y el elemento esté visible
           setTimeout(() => {
             const firstElement = document.querySelector('#dashboard-link');
             if (firstElement) {
-              // Navegar a la primera ruta antes de iniciar
-              navigate(stepRoutes[0]);
-              setTimeout(() => setRun(true), 100);
+              setRun(true);
+            } else {
+              setTimeout(checkAndStart, 300);
             }
-          }, 400);
-          return;
-        }
+          }, 500);
+        }, 300);
+        return;
       }
       
-      const firstElement = document.querySelector('#dashboard-link');
-      if (firstElement) {
-        // Navegar a la primera ruta antes de iniciar
-        navigate(stepRoutes[0]);
-        setTimeout(() => setRun(true), 100);
-      } else {
-        // Si no existe, reintentar después de un tiempo
-        setTimeout(checkAndStart, 300);
-      }
+      // En desktop, esperar a que el elemento esté visible
+      setTimeout(() => {
+        const firstElement = document.querySelector('#dashboard-link');
+        if (firstElement) {
+          setRun(true);
+        } else {
+          setTimeout(checkAndStart, 300);
+        }
+      }, 500);
     };
     
-    const timer = setTimeout(checkAndStart, 800);
+    const timer = setTimeout(checkAndStart, 500);
     
     return () => clearTimeout(timer);
-  }, [isMobile, navigate, stepRoutes]);
+  }, [isMobile, navigate]);
 
   const steps: Step[] = [
     {
