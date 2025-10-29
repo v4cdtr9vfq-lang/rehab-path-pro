@@ -42,29 +42,42 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   useEffect(() => {
     // Esperar a que el DOM esté listo y verificar que el primer elemento existe
     const checkAndStart = () => {
+      // Navegar a la primera ruta primero
+      navigate(stepRoutes[0]);
+      
       // En mobile, abrir el sheet primero
       if (isMobile) {
         const menuButton = document.querySelector('button[aria-label="Open sidebar"]') as HTMLButtonElement;
         if (menuButton) {
           menuButton.click();
-          // Esperar a que el sheet se abra antes de iniciar el tour
+          // Esperar a que el sheet se abra y el elemento esté visible
           setTimeout(() => {
             const firstElement = document.querySelector('#dashboard-link');
             if (firstElement) {
-              // Navegar a la primera ruta antes de iniciar
-              navigate(stepRoutes[0]);
-              setTimeout(() => setRun(true), 100);
+              // Asegurar que el elemento es visible y tiene dimensiones
+              const rect = firstElement.getBoundingClientRect();
+              if (rect.height > 0 && rect.width > 0) {
+                setTimeout(() => setRun(true), 200);
+              } else {
+                setTimeout(checkAndStart, 200);
+              }
+            } else {
+              setTimeout(checkAndStart, 200);
             }
-          }, 400);
+          }, 500);
           return;
         }
       }
       
       const firstElement = document.querySelector('#dashboard-link');
       if (firstElement) {
-        // Navegar a la primera ruta antes de iniciar
-        navigate(stepRoutes[0]);
-        setTimeout(() => setRun(true), 100);
+        // Asegurar que el elemento es visible y tiene dimensiones
+        const rect = firstElement.getBoundingClientRect();
+        if (rect.height > 0 && rect.width > 0) {
+          setTimeout(() => setRun(true), 200);
+        } else {
+          setTimeout(checkAndStart, 200);
+        }
       } else {
         // Si no existe, reintentar después de un tiempo
         setTimeout(checkAndStart, 300);
@@ -81,62 +94,74 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       target: '#dashboard-link',
       content: '🫀 Mi centro - Aquí verás tu contador de abstinencia, metas diarias y progreso.',
       disableBeacon: true,
-      placement: 'right',
+      placement: isMobile ? 'bottom' : 'right',
+      offset: 10,
     },
     {
       target: '#plan-link',
       content: '🎯 Mi Plan - Gestiona tus metas y objetivos de recuperación.',
-      placement: 'right',
+      placement: isMobile ? 'bottom' : 'right',
+      offset: 10,
     },
     {
       target: '#progress-link',
       content: '📈 Progreso - Visualiza tu avance con gráficas y reportes detallados.',
-      placement: 'right',
+      placement: isMobile ? 'bottom' : 'right',
+      offset: 10,
     },
     {
       target: '#emotion-journal-link',
       content: '😊 Diario de emociones - Registra y analiza tus emociones diarias.',
-      placement: 'right',
+      placement: isMobile ? 'bottom' : 'right',
+      offset: 10,
     },
     {
       target: '#journal-link',
       content: '📔 Diario - Escribe reflexiones y pensamientos sobre tu proceso.',
-      placement: 'right',
+      placement: isMobile ? 'bottom' : 'right',
+      offset: 10,
     },
     {
       target: '#gratitude-link',
       content: '🙏 Agradecimiento - Practica la gratitud registrando aquello por lo que estás agradecido.',
-      placement: 'right',
+      placement: isMobile ? 'bottom' : 'right',
+      offset: 10,
     },
     {
       target: '#values-link',
       content: '❤️ Valores - Define y trabaja en tus valores personales.',
-      placement: 'right',
+      placement: isMobile ? 'bottom' : 'right',
+      offset: 10,
     },
     {
       target: '#chat-link',
       content: '💬 Chat - Conecta con otros miembros de la comunidad en tiempo real.',
-      placement: 'right',
+      placement: isMobile ? 'bottom' : 'right',
+      offset: 10,
     },
     {
       target: '#community-link',
       content: '🫶 Comunidad - Encuentra mentores o conviértete en mentor de otros.',
-      placement: 'right',
+      placement: isMobile ? 'bottom' : 'right',
+      offset: 10,
     },
     {
       target: '#tools-link',
       content: '🛠️ Herramientas - Accede a recursos adicionales para tu recuperación.',
-      placement: 'right',
+      placement: isMobile ? 'bottom' : 'right',
+      offset: 10,
     },
     {
       target: '#help-link',
       content: '🆘 Ayuda - Encuentra preguntas frecuentes y soporte.',
-      placement: 'right',
+      placement: isMobile ? 'bottom' : 'right',
+      offset: 10,
     },
     {
       target: '#settings-link',
       content: '⚙️ Configuración - Personaliza tu experiencia y gestiona tu cuenta.',
-      placement: 'right',
+      placement: isMobile ? 'bottom' : 'right',
+      offset: 10,
     },
   ];
 
@@ -199,12 +224,17 @@ export function TourGuide({ onComplete }: TourGuideProps) {
         options: {
           primaryColor: 'hsl(var(--primary))',
           zIndex: 10001,
+          overlayColor: 'rgba(0, 0, 0, 0.5)',
         },
         tooltipContainer: {
           textAlign: 'left',
         },
         tooltip: {
           maxWidth: isMobile ? '280px' : '400px',
+          position: 'relative',
+        },
+        spotlight: {
+          borderRadius: '8px',
         },
         buttonNext: {
           backgroundColor: 'hsl(var(--primary))',
