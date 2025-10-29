@@ -607,7 +607,7 @@ export default function CheckIn() {
       <Card className="bg-gradient-to-br from-accent/5 to-transparent border-accent/20">
         <CardContent className="p-6">
           <p className="text-center text-foreground/80">
-            Los check-ins diarios te ayudan a mantener conciencia de tu estado emocional e identificar patrones en tu camino de recuperación. Todas las respuestas de texto crearán una nueva entrada de en tu diario
+            Los check-ins diarios te ayudan a mantener conciencia de tu estado emocional e identificar patrones en tu camino de recuperación. Todas las respuestas de texto crearán una nueva entrada en tu diario.
           </p>
         </CardContent>
       </Card>
