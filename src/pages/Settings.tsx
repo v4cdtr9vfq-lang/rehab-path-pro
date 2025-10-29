@@ -660,7 +660,7 @@ export default function Settings() {
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="full-name">Nombre completo</Label>
+              <Label htmlFor="full-name">Nombre completo:</Label>
               <div className="flex gap-2">
                 <Input
                   id="full-name"
@@ -679,7 +679,7 @@ export default function Settings() {
             </div>
 
             <div className="border-t pt-4 space-y-2">
-              <Label htmlFor="rehab-type">Tipo de rehabilitación</Label>
+              <Label htmlFor="rehab-type">Tipo de rehabilitación:</Label>
               <div className="flex gap-2">
                 <Select value={rehabilitationType} onValueChange={setRehabilitationType}>
                   <SelectTrigger id="rehab-type">
@@ -703,7 +703,7 @@ export default function Settings() {
             </div>
 
             <div className="border-t pt-4 space-y-2">
-              <Label htmlFor="new-email">Cambiar Email</Label>
+              <Label htmlFor="new-email">Cambiar Email:</Label>
               <Input
                 id="new-email"
                 type="email"
@@ -711,7 +711,7 @@ export default function Settings() {
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
               />
-              <Label htmlFor="confirm-email">Confirmar Email</Label>
+              <Label htmlFor="confirm-email">Confirmar Email:</Label>
               <Input
                 id="confirm-email"
                 type="email"
@@ -733,10 +733,10 @@ export default function Settings() {
 
             <div className="border-t pt-4 space-y-4">
               <div className="flex items-center gap-2 mb-2">
-                <Label>Cambiar Contraseña</Label>
+                <Label>Cambiar Contraseña:</Label>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="current-password">Contraseña Actual</Label>
+                <Label htmlFor="current-password">Contraseña Actual:</Label>
                 <Input
                   id="current-password"
                   type="password"
@@ -746,7 +746,7 @@ export default function Settings() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="new-password">Nueva Contraseña</Label>
+                <Label htmlFor="new-password">Nueva Contraseña:</Label>
                 <Input
                   id="new-password"
                   type="password"
@@ -756,7 +756,7 @@ export default function Settings() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirm-password">Confirmar Contraseña</Label>
+                <Label htmlFor="confirm-password">Confirmar Contraseña:</Label>
                 <Input
                   id="confirm-password"
                   type="password"
@@ -973,7 +973,7 @@ export default function Settings() {
           {/* List of all addictions including main one */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <Label>Mis adicciones</Label>
+              <Label>Mis adicciones:</Label>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">{addictions.length + 1}/3</span>
                 {addictions.length < 2 && (
@@ -1218,7 +1218,7 @@ export default function Settings() {
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Recordatorio de Check-In Diario</Label>
+              <Label>Recordatorio de Check-In Diario:</Label>
               <p className="text-sm text-muted-foreground">Recibe notificaciones para completar tu check-in diario</p>
             </div>
             <Switch defaultChecked />
@@ -1226,7 +1226,7 @@ export default function Settings() {
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Recordatorios de Metas</Label>
+              <Label>Recordatorios de Metas:</Label>
               <p className="text-sm text-muted-foreground">Recibe recordatorios de próximas metas</p>
             </div>
             <Switch defaultChecked />
@@ -1254,7 +1254,7 @@ export default function Settings() {
                 </DialogHeader>
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="reminder-title">Título</Label>
+                    <Label htmlFor="reminder-title">Título:</Label>
                     <Input
                       id="reminder-title"
                       placeholder="Ej: Meditación matutina"
@@ -1263,7 +1263,7 @@ export default function Settings() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="reminder-time">Hora</Label>
+                    <Label htmlFor="reminder-time">Hora:</Label>
                     <Input
                       id="reminder-time"
                       type="time"
@@ -1272,8 +1272,8 @@ export default function Settings() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Tipo de Notificación</Label>
-                    <RadioGroup 
+                    <Label>Tipo de Notificación:</Label>
+                    <RadioGroup
                       value={newReminder.notificationType} 
                       onValueChange={(value: "email" | "popup") => setNewReminder(prev => ({ ...prev, notificationType: value }))}
                     >
@@ -1356,7 +1356,7 @@ export default function Settings() {
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Bloqueo de Aplicación</Label>
+              <Label>Bloqueo de Aplicación:</Label>
               <p className="text-sm text-muted-foreground">Requiere PIN o biométrico para abrir la app</p>
             </div>
             <Switch />
@@ -1398,7 +1398,7 @@ export default function Settings() {
           <div className="space-y-6">
             {/* Reset goals */}
             <div className="space-y-2">
-              <Label className="text-orange-600 dark:text-orange-500 font-semibold">Reiniciar tus metas</Label>
+              <Label className="text-orange-600 dark:text-orange-500 font-semibold">Reiniciar tus metas:</Label>
               <p className="text-sm text-muted-foreground mb-4">
                 Restaura las metas a su configuración por defecto y reinicia el contador de abstinencia. 
                 Todos tus demás datos (check-ins, diarios, contactos, etc.) se mantendrán intactos.
@@ -1462,7 +1462,7 @@ export default function Settings() {
 
             {/* Delete account */}
             <div className="space-y-2">
-              <Label className="text-destructive font-semibold">Eliminar cuenta</Label>
+              <Label className="text-destructive font-semibold">Eliminar cuenta:</Label>
               <p className="text-sm text-muted-foreground mb-4">
                 Esta acción es permanente y no se puede deshacer. Todos tus datos serán eliminados permanentemente.
               </p>
