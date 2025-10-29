@@ -100,7 +100,7 @@ export function TextOnboarding() {
             <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>Paso {currentStep + 1} de {steps.length}</span>
             </div>
-            <Progress value={progress} className="h-2" />
+            <Progress value={progress} className="h-2 [&>div]:bg-green-500" />
           </div>
 
           <div className="space-y-4">
