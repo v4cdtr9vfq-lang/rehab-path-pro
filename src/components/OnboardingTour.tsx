@@ -128,8 +128,7 @@ export function OnboardingTour() {
       // SOLO mostrar si el texto está completo PERO el tour no
       const shouldShow = profile && 
                         (profile as any).text_onboarding_completed && 
-                        !profile.onboarding_completed &&
-                        !(profile as any).rehabilitation_type;
+                        !profile.onboarding_completed;
 
       console.log("🎯 [OnboardingTour] ¿Debe mostrarse?:", shouldShow);
 
