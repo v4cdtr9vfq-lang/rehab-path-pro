@@ -173,31 +173,34 @@ export function TourGuide({ onComplete }: TourGuideProps) {
         options: {
           primaryColor: 'hsl(var(--primary))',
           textColor: 'hsl(var(--foreground))',
-          backgroundColor: 'hsl(var(--background))',
+          backgroundColor: '#ffffff',
           overlayColor: 'rgba(0, 0, 0, 0.5)',
-          arrowColor: 'hsl(var(--background))',
+          arrowColor: '#ffffff',
           zIndex: 10000,
         },
         tooltip: {
           borderRadius: '12px',
           padding: '16px',
           fontSize: '14px',
+          backgroundColor: '#ffffff',
+          color: '#1a1a1a',
         },
         tooltipContent: {
           padding: '8px 0',
+          color: '#1a1a1a',
         },
         buttonNext: {
           backgroundColor: 'hsl(var(--primary))',
-          color: 'hsl(var(--primary-foreground))',
+          color: '#ffffff',
           borderRadius: '8px',
           padding: '8px 16px',
         },
         buttonBack: {
-          color: 'hsl(var(--muted-foreground))',
+          color: '#666666',
           marginRight: '8px',
         },
         buttonSkip: {
-          color: 'hsl(var(--muted-foreground))',
+          color: '#666666',
         },
         spotlight: {
           borderRadius: '8px',
