@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useNavigate } from "react-router-dom";
 
 const steps = [
   {
@@ -32,92 +30,18 @@ const steps = [
   }
 ];
 
-export function TextOnboarding() {
-  const navigate = useNavigate();
+interface TextOnboardingProps {
+  onComplete: () => void;
+}
+
+export function TextOnboarding({ onComplete }: TextOnboardingProps) {
   const [currentStep, setCurrentStep] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    checkOnboardingStatus();
-  }, []);
-
-  const checkOnboardingStatus = async () => {
-    try {
-      console.log("📝 [TextOnboarding] Verificando estado...");
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("text_onboarding_completed, rehabilitation_type, onboarding_completed")
-        .eq("user_id", user.id)
-        .single();
-
-      console.log("📝 [TextOnboarding] Estado del perfil:", {
-        textOnboarding: profile?.text_onboarding_completed,
-        rehabType: (profile as any)?.rehabilitation_type,
-        tourCompleted: profile?.onboarding_completed
-      });
-
-      // SOLO mostrar si NINGUNO de los onboardings está completo
-      const shouldShow = profile && 
-                        !profile.text_onboarding_completed && 
-                        !profile.onboarding_completed &&
-                        !(profile as any).rehabilitation_type;
-
-      console.log("📝 [TextOnboarding] ¿Debe mostrarse?:", shouldShow);
-      
-      if (shouldShow) {
-        setIsVisible(true);
-      }
-    } catch (error) {
-      console.error("Error checking text onboarding status:", error);
-    }
-  };
-
-  const completeOnboarding = async () => {
-    try {
-      console.log("📝 [TextOnboarding] Iniciando completeOnboarding...");
-      const { data: { user } } = await supabase.auth.getUser();
-      console.log("📝 [TextOnboarding] Usuario actual:", user?.id);
-      
-      if (!user) {
-        console.error("📝 [TextOnboarding] ERROR: No hay usuario!");
-        return;
-      }
-
-      const { error } = await supabase
-        .from("profiles")
-        .update({ text_onboarding_completed: true })
-        .eq("user_id", user.id);
-
-      if (error) {
-        console.error("📝 [TextOnboarding] ERROR actualizando perfil:", error);
-        return;
-      }
-
-      console.log("📝 [TextOnboarding] Perfil actualizado exitosamente");
-      setIsVisible(false);
-      
-      // Redirigir al Dashboard y luego activar el tour
-      console.log("📝 [TextOnboarding] Completado - redirigiendo a Dashboard");
-      navigate('/dashboard');
-      
-      // Trigger check for next onboarding step (OnboardingTour)
-      setTimeout(() => {
-        console.log("📝 [TextOnboarding] Disparando evento text-onboarding-complete");
-        window.dispatchEvent(new Event('text-onboarding-complete'));
-      }, 500);
-    } catch (error) {
-      console.error("📝 [TextOnboarding] Error completing text onboarding:", error);
-    }
-  };
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      completeOnboarding();
+      onComplete();
     }
   };
 
@@ -126,8 +50,6 @@ export function TextOnboarding() {
       setCurrentStep(currentStep - 1);
     }
   };
-
-  if (!isVisible) return null;
 
   const progress = ((currentStep + 1) / steps.length) * 100;
 

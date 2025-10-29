@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -40,59 +40,14 @@ const REHABILITATION_TYPES = [
   { id: 'otros', label: 'Otros' },
 ] as const;
 
-export default function RehabilitationTypeDialog() {
+interface RehabilitationTypeDialogProps {
+  onComplete: () => void;
+}
+
+export function RehabilitationTypeDialog({ onComplete }: RehabilitationTypeDialogProps) {
   const { toast } = useToast();
-  const [open, setOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<string>("");
   const [isSaving, setIsSaving] = useState(false);
-
-  useEffect(() => {
-    checkIfNeedsDialog();
-    
-    // Listen for tour completion
-    const handleTourComplete = () => {
-      setTimeout(() => checkIfNeedsDialog(), 500);
-    };
-    
-    window.addEventListener('onboarding-tour-complete', handleTourComplete);
-    
-    return () => {
-      window.removeEventListener('onboarding-tour-complete', handleTourComplete);
-    };
-  }, []);
-
-  const checkIfNeedsDialog = async () => {
-    try {
-      console.log("🏥 [RehabDialog] Verificando estado...");
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('text_onboarding_completed, rehabilitation_type, onboarding_completed')
-        .eq('user_id', user.id)
-        .single();
-
-      console.log("🏥 [RehabDialog] Estado del perfil:", {
-        textOnboarding: (profile as any)?.text_onboarding_completed,
-        rehabType: (profile as any)?.rehabilitation_type,
-        tourCompleted: profile?.onboarding_completed
-      });
-
-      // SOLO mostrar DESPUÉS del tour (onboarding_completed: true) sin tipo configurado
-      const shouldShow = profile && 
-                        profile.onboarding_completed &&
-                        !(profile as any).rehabilitation_type;
-
-      console.log("🏥 [RehabDialog] ¿Debe mostrarse?:", shouldShow);
-
-      if (shouldShow) {
-        setTimeout(() => setOpen(true), 500); // Delay para asegurar que OnboardingTour se cierre
-      }
-    } catch (error) {
-      console.error('Error checking rehabilitation type:', error);
-    }
-  };
 
   const handleSave = async () => {
     if (!selectedType) {
@@ -109,13 +64,9 @@ export default function RehabilitationTypeDialog() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Usuario no autenticado");
 
-      const updateData: any = { 
-        rehabilitation_type: selectedType 
-      };
-
       const { error } = await supabase
         .from('profiles')
-        .update(updateData)
+        .update({ rehabilitation_type: selectedType })
         .eq('user_id', user.id);
 
       if (error) throw error;
@@ -124,10 +75,8 @@ export default function RehabilitationTypeDialog() {
         title: "Guardado",
         description: "Tu preferencia ha sido guardada exitosamente",
       });
-      setOpen(false);
       
-      // Trigger check for next onboarding step
-      window.dispatchEvent(new Event('rehabilitation-type-complete'));
+      onComplete();
     } catch (error: any) {
       toast({
         title: "Error",
@@ -144,26 +93,20 @@ export default function RehabilitationTypeDialog() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Set a default value when skipped so the tour can continue
-      const { error } = await supabase
+      await supabase
         .from('profiles')
         .update({ rehabilitation_type: 'otros' })
         .eq('user_id', user.id);
-
-      if (error) throw error;
       
-      setOpen(false);
-      
-      // Trigger check for next onboarding step
-      window.dispatchEvent(new Event('rehabilitation-type-complete'));
+      onComplete();
     } catch (error) {
       console.error('Error skipping rehabilitation type:', error);
-      setOpen(false);
+      onComplete();
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={true} onOpenChange={() => {}}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-left text-xl pl-[17px]">
