@@ -1007,7 +1007,9 @@ export default function Settings() {
                       <SelectValue placeholder="Selecciona una adicción" />
                     </SelectTrigger>
                     <SelectContent>
-                      {REHABILITATION_TYPES.map((type) => (
+                      {REHABILITATION_TYPES.filter(type => 
+                        !addictions.some(a => a.addiction_type === type.id)
+                      ).map((type) => (
                         <SelectItem key={type.id} value={type.id}>
                           {type.label}
                         </SelectItem>
@@ -1107,7 +1109,11 @@ export default function Settings() {
                               </SelectValue>
                             </SelectTrigger>
                             <SelectContent>
-                              {REHABILITATION_TYPES.map((type) => (
+                              {REHABILITATION_TYPES.filter(type => 
+                                type.id === typeValue || 
+                                (type.id !== rehabilitationType && 
+                                 !addictions.some(a => a.id !== addiction.id && a.addiction_type === type.id))
+                              ).map((type) => (
                                 <SelectItem key={type.id} value={type.id}>
                                   {type.label}
                                 </SelectItem>

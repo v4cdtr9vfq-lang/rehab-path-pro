@@ -28,33 +28,35 @@ export function AddAddictionDialog({ open, onOpenChange, onAdd, existingAddictio
   const [startDate, setStartDate] = useState<Date>(new Date());
 
   const allOptions = [
-    "Adicción 1",
-    "Adicción 2",
-    "Adicción 3",
-    "Alcohol",
-    "Amor",
-    "Azúcar",
-    "Cannabis",
-    "Cocaína",
-    "Codependencia",
-    "Comida",
-    "Compras",
-    "Drama",
-    "Internet",
-    "Juego",
-    "Medicamentos",
-    "Narcóticos",
-    "Pornografía",
-    "Redes Sociales",
-    "Sexo",
-    "Tabaco",
-    "Tecnología",
-    "Trabajo",
-    "Videojuegos"
+    { id: 'adiccion_1', label: 'Adicción 1' },
+    { id: 'adiccion_2', label: 'Adicción 2' },
+    { id: 'adiccion_3', label: 'Adicción 3' },
+    { id: 'alcohol', label: 'Alcohol' },
+    { id: 'amor', label: 'Amor' },
+    { id: 'azucar', label: 'Azúcar' },
+    { id: 'cannabis', label: 'Cannabis' },
+    { id: 'cocaina', label: 'Cocaína' },
+    { id: 'codependencia', label: 'Codependencia' },
+    { id: 'comida', label: 'Comida' },
+    { id: 'compras', label: 'Compras' },
+    { id: 'drama', label: 'Drama' },
+    { id: 'medicamentos', label: 'Medicamentos' },
+    { id: 'narcoticos', label: 'Narcóticos' },
+    { id: 'pornografia', label: 'Pornografía' },
+    { id: 'redes_sociales', label: 'Redes Sociales' },
+    { id: 'sexo', label: 'Sexo' },
+    { id: 'tabaco', label: 'Tabaco' },
+    { id: 'tecnologia', label: 'Tecnología' },
+    { id: 'trabajo', label: 'Trabajo' },
+    { id: 'vaporizadores', label: 'Vaporizadores' },
+    { id: 'videojuegos', label: 'Videojuegos' },
+    { id: 'otros', label: 'Otros' },
   ];
 
-  // Show all options without filtering
-  const availableOptions = allOptions;
+  // Filter out already selected addictions
+  const availableOptions = allOptions.filter(option => 
+    !existingAddictions.includes(option.id.toLowerCase())
+  );
 
   const handleSubmit = () => {
     if (addictionType.trim()) {
@@ -82,8 +84,8 @@ export function AddAddictionDialog({ open, onOpenChange, onAdd, existingAddictio
               </SelectTrigger>
               <SelectContent>
                 {availableOptions.map((option) => (
-                  <SelectItem key={option} value={option}>
-                    {option}
+                  <SelectItem key={option.id} value={option.id}>
+                    {option.label}
                   </SelectItem>
                 ))}
               </SelectContent>
