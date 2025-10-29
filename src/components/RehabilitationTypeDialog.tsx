@@ -78,9 +78,8 @@ export default function RehabilitationTypeDialog() {
         tourCompleted: profile?.onboarding_completed
       });
 
-      // SOLO mostrar si texto Y tour están completos, pero tipo no está configurado
+      // SOLO mostrar DESPUÉS del tour (onboarding_completed: true) sin tipo configurado
       const shouldShow = profile && 
-                        (profile as any).text_onboarding_completed && 
                         profile.onboarding_completed &&
                         !(profile as any).rehabilitation_type;
 
