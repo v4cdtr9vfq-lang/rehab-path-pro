@@ -25,6 +25,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useSubscription, SUBSCRIPTION_PLANS } from "@/contexts/SubscriptionContext";
+import { useTranslation } from "react-i18next";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -55,6 +56,7 @@ interface Addiction {
 export default function Settings() {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const { subscribed, plan, subscriptionEnd, loading, checkSubscription, createCheckoutSession, openCustomerPortal } = useSubscription();
   const [newEmail, setNewEmail] = useState("");
   const [confirmEmail, setConfirmEmail] = useState("");
@@ -1243,6 +1245,36 @@ export default function Settings() {
               <p className="text-sm text-muted-foreground pl-4">Recibe recordatorios de próximas metas</p>
             </div>
             <Switch defaultChecked />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle className="pl-4">{t('settings.language')}:</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label className="pl-4">{t('settings.selectLanguage')}:</Label>
+            <p className="text-sm text-muted-foreground pl-4">{t('settings.languageDescription')}</p>
+            <Select
+              value={i18n.language}
+              onValueChange={(value) => {
+                i18n.changeLanguage(value);
+                toast({
+                  title: value === 'es' ? 'Idioma actualizado' : 'Language updated',
+                  description: value === 'es' ? 'El idioma se ha cambiado a español.' : 'Language has been changed to English.',
+                });
+              }}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="es">{t('settings.spanish')}</SelectItem>
+                <SelectItem value="en">{t('settings.english')}</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>
