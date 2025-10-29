@@ -570,7 +570,7 @@ export default function CheckIn() {
                         answers[question.id] === String(num)
                           ? num <= 4
                             ? "bg-orange-600 hover:bg-orange-700 text-white border-orange-600 shadow-orange-600/50 scale-110"
-                            : num <= 7
+                            : num <= 6
                             ? "bg-yellow-600 hover:bg-yellow-700 text-white border-yellow-600 shadow-yellow-600/50 scale-110"
                             : "bg-green-600 hover:bg-green-700 text-white border-green-600 shadow-green-600/50 scale-110"
                           : "hover:scale-105 hover:shadow-lg"
