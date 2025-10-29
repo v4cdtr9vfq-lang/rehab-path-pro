@@ -24,6 +24,7 @@ export default function Auth() {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -42,6 +43,11 @@ export default function Auth() {
       // Solo validar requisitos estrictos en registro, no en login
       if (!isLogin) {
         passwordSchema.parse(password);
+        // Validar que las contraseñas coincidan
+        if (password !== confirmPassword) {
+          toast.error("Las contraseñas no coinciden");
+          return false;
+        }
       } else {
         // En login, solo verificar que no esté vacía
         z.string().min(1, "La contraseña es requerida").parse(password);
@@ -261,7 +267,7 @@ export default function Auth() {
                     />
                   </div>
 
-                  <div className="space-y-2 pb-[35px]">
+                  <div className="space-y-2">
                     <div className="flex items-center justify-between pl-4">
                       <Label htmlFor="password">Contraseña:</Label>
                       {isLogin && (
@@ -291,6 +297,24 @@ export default function Auth() {
                       </p>
                     )}
                   </div>
+
+                  {!isLogin && (
+                    <div className="space-y-2 pb-[35px]">
+                      <Label htmlFor="confirmPassword" className="pl-4">Confirmar contraseña:</Label>
+                      <Input
+                        id="confirmPassword"
+                        type="password"
+                        placeholder="••••••••"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required={!isLogin}
+                        disabled={loading}
+                        className="rounded-xl"
+                      />
+                    </div>
+                  )}
+
+                  {isLogin && <div className="pb-[35px]" />}
 
                   <Button
                     type="submit"
