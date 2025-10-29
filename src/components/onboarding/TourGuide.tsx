@@ -144,8 +144,8 @@ export function TourGuide({ onComplete }: TourGuideProps) {
     const { status, action, index, type } = data;
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
-    // Navegar cuando el paso está a punto de mostrarse
-    if (type === EVENTS.STEP_BEFORE || type === EVENTS.TARGET_NOT_FOUND) {
+    // Navegar ANTES de mostrar el paso
+    if (type === EVENTS.STEP_BEFORE) {
       if (index >= 0 && index < stepRoutes.length) {
         navigate(stepRoutes[index]);
         
@@ -159,8 +159,13 @@ export function TourGuide({ onComplete }: TourGuideProps) {
                 menuButton.click();
               }
             }
-          }, 100);
+          }, 200);
         }
+        
+        // Esperar a que la navegación se complete y el DOM se actualice
+        return new Promise(resolve => {
+          setTimeout(() => resolve(undefined), 300);
+        });
       }
     }
 
@@ -194,6 +199,9 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       stepIndex={0}
       disableOverlayClose
       spotlightClicks={false}
+      disableScrolling={false}
+      scrollToFirstStep
+      scrollOffset={200}
       callback={handleJoyrideCallback}
       styles={{
         options: {
