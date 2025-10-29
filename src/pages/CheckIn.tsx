@@ -251,7 +251,7 @@ export default function CheckIn() {
           entry_date: today,
           title: t('checkIn.relapseInventoryTitle'),
           content: "",
-          tags: ["recaída", "inventario"]
+          tags: [t('checkIn.tagRelapse'), t('checkIn.tagInventory')]
         });
 
       if (journalError) throw journalError;
@@ -322,42 +322,42 @@ export default function CheckIn() {
       
       // Question 2 - trigger description
       if (answers[2] === "yes" && triggerDescription.trim()) {
-        journalParts.push(`Situación que me alteró: ${triggerDescription.trim()}`);
+        journalParts.push(`${t('checkIn.journalTrigger')}: ${triggerDescription.trim()}`);
       }
       
       // Question 4 - resentment description
       if (answers[4] === "yes" && resentmentDescription.trim()) {
-        journalParts.push(`Resentimiento: ${resentmentDescription.trim()}`);
+        journalParts.push(`${t('checkIn.journalResentment')}: ${resentmentDescription.trim()}`);
       }
       
       // Question 7 - values description
       if (answers[7] === "no" && valuesDescription.trim()) {
-        journalParts.push(`Infidelidad a mis valores: ${valuesDescription.trim()}`);
+        journalParts.push(`${t('checkIn.journalValues')}: ${valuesDescription.trim()}`);
       }
       
       // Question 8 - limiting description
       if (answers[8] === "yes" && limitingDescription.trim()) {
-        journalParts.push(`Obstáculos a superar: ${limitingDescription.trim()}`);
+        journalParts.push(`${t('checkIn.journalLimiting')}: ${limitingDescription.trim()}`);
       }
       
       // Question 9 - negative thoughts description
       if (answers[9] === "yes" && negativeThoughtsDescription.trim()) {
-        journalParts.push(`Pensamientos negativos: ${negativeThoughtsDescription.trim()}`);
+        journalParts.push(`${t('checkIn.journalNegativeThoughts')}: ${negativeThoughtsDescription.trim()}`);
       }
       
       // Join all parts with " - "
       let journalContent = journalParts.join(" - ");
       
       // Build tags array
-      const journalTags = ["check-in", "observaciones"];
+      const journalTags = ["check-in", t('checkIn.tagObservations')];
       if (answers[2] === "yes" && triggerDescription.trim()) {
-        journalTags.push("situaciones");
+        journalTags.push(t('checkIn.tagSituations'));
       }
       if (answers[4] === "yes" && resentmentDescription.trim()) {
-        journalTags.push("resentimientos");
+        journalTags.push(t('checkIn.tagResentments'));
       }
       if (answers[8] === "yes" && limitingDescription.trim()) {
-        journalTags.push("limitaciones");
+        journalTags.push(t('checkIn.tagLimitations'));
       }
       
       // Create or update the check-in journal entry
