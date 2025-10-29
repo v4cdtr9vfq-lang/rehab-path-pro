@@ -33,6 +33,15 @@ import { CSS } from '@dnd-kit/utilities';
 export default function Home() {
   const { t } = useTranslation();
   const quickTools = useTranslatedQuickTools();
+  
+  // Helper function to translate goal text if it's a translation key
+  const translateGoalText = (text: string): string => {
+    if (text && text.startsWith('defaultGoals.')) {
+      return t(text);
+    }
+    return text;
+  };
+  
   const {
     toast
   } = useToast();
@@ -772,10 +781,10 @@ export default function Home() {
                 className="font-semibold text-foreground text-sm md:text-base hover:text-green-600"
                 onClick={(e) => e.stopPropagation()}
               >
-                {goal.title}
+                {translateGoalText(goal.title)}
               </a>
             ) : (
-              <p className="font-semibold text-foreground text-sm md:text-base">{goal.title}</p>
+              <p className="font-semibold text-foreground text-sm md:text-base">{translateGoalText(goal.title)}</p>
             )}
             <p
               className={`text-xs md:text-sm ${
@@ -784,7 +793,7 @@ export default function Home() {
                   : "text-muted-foreground"
               }`}
             >
-              {goal.status === "completed" ? "¡Completado!" : "Pendiente"}
+              {goal.status === "completed" ? t('goals.completed') : t('goals.pending')}
             </p>
           </div>
         </div>
@@ -926,10 +935,10 @@ export default function Home() {
                               className="font-semibold text-foreground text-sm hover:text-green-600"
                               onClick={(e) => e.stopPropagation()}
                             >
-                              {goal.title}
+                              {translateGoalText(goal.title)}
                             </a>
                           ) : (
-                            <p className="font-semibold text-foreground text-sm">{goal.title}</p>
+                            <p className="font-semibold text-foreground text-sm">{translateGoalText(goal.title)}</p>
                           )}
                           <p
                             className={`text-xs ${
@@ -938,7 +947,7 @@ export default function Home() {
                                 : "text-muted-foreground"
                             }`}
                           >
-                            {goal.status === "completed" ? "¡Completado!" : goal.period}
+                            {goal.status === "completed" ? t('goals.completed') : goal.period}
                           </p>
                         </div>
                       </div>

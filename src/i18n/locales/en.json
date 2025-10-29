@@ -86,6 +86,7 @@
     "today": "Today",
     "thisWeek": "This week",
     "always": "Pending",
+    "pending": "Pending",
     "goalUpdated": "Goal updated",
     "markedAsPending": "Goal marked as pending.",
     "goalCompleted": "Goal completed!",
