@@ -33,6 +33,15 @@ interface ExpandedGoal {
 
 export default function ProgressPage() {
   const { t } = useTranslation();
+  
+  // Helper function to translate goal text if it's a translation key
+  const translateGoalText = (text: string): string => {
+    if (text && text.startsWith('defaultGoals.')) {
+      return t(text);
+    }
+    return text;
+  };
+  
   const [hasCheckedInToday, setHasCheckedInToday] = useState(false);
   const [dailyGoals, setDailyGoals] = useState<ExpandedGoal[]>([]);
   const [weeklyGoals, setWeeklyGoals] = useState<ExpandedGoal[]>([]);
@@ -433,7 +442,7 @@ export default function ProgressPage() {
     return (
       <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-semibold text-foreground">{goal.text}</span>
+          <span className="text-sm font-semibold text-foreground">{translateGoalText(goal.text)}</span>
           <span className={`text-sm font-bold ${getProgressColor()}`}>{goal.percentage}%</span>
         </div>
         <Progress value={goal.percentage} className={`h-2.5 ${getProgressBgColor()}`} />
