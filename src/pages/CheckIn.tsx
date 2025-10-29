@@ -441,7 +441,7 @@ export default function CheckIn() {
                       className={`flex-1 ${
                         answers[question.id] === "no" && question.id === 1 
                           ? "bg-red-600 hover:bg-red-700 text-white" 
-                          : answers[question.id] === "no" && [2, 4, 6, 8].includes(question.id) 
+                          : answers[question.id] === "no" && [2, 4, 6, 8, 9].includes(question.id) 
                           ? "bg-green-600 hover:bg-green-700 text-white" 
                           : ""
                       }`}
