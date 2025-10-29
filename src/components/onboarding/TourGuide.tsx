@@ -3,48 +3,49 @@ import Joyride, { Step, CallBackProps, STATUS } from "react-joyride";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useTranslation } from "react-i18next";
 
-const getTourSteps = (isMobile: boolean): Step[] => {
+const getTourSteps = (isMobile: boolean, t: any): Step[] => {
   if (isMobile) {
     // Tour para mobile: enfocado en elementos visibles sin necesidad de abrir el sidebar
     return [
       {
         target: 'body',
-        content: '¡Bienvenido! 👋 Te mostraré las funciones principales de la app. Puedes acceder al menú desde el botón ☰ en la esquina superior izquierda.',
+        content: t('tour.welcome'),
         disableBeacon: true,
         placement: 'center',
       },
       {
         target: '.abstinence-counter',
-        content: '🫀 Aquí verás tu tiempo limpio y podrás gestionar tus adicciones.',
+        content: t('tour.cleanTime'),
         disableBeacon: true,
         placement: 'bottom',
         offset: 10,
       },
       {
         target: '[data-tour="daily-progress"]',
-        content: '📊 Tu Progreso Diario: check-ins, metas completadas y recordatorios.',
+        content: t('tour.dailyProgress'),
         disableBeacon: true,
         placement: 'bottom',
         offset: 10,
       },
       {
         target: '[data-tour="goals-section"]',
-        content: '🎯 Metas de Hoy: marca tus objetivos diarios como completados.',
+        content: t('tour.goals'),
         disableBeacon: true,
         placement: 'bottom',
         offset: 10,
       },
       {
         target: '[data-tour="quick-tools"]',
-        content: '🛠️ Accesos Directos: accede rápidamente a tus herramientas favoritas.',
+        content: t('tour.quickTools'),
         disableBeacon: true,
         placement: 'bottom',
         offset: 10,
       },
       {
         target: 'body',
-        content: '💡 Usa el menú ☰ para explorar todas las secciones: Diario, Chat, Comunidad, Herramientas y más.',
+        content: t('tour.menu'),
         disableBeacon: true,
         placement: 'center',
       },
@@ -57,84 +58,84 @@ const getTourSteps = (isMobile: boolean): Step[] => {
   return [
     {
       target: '#dashboard-link',
-      content: '🫀 Tu Centro: Aquí encontrarás tu resumen diario, check-ins y estadísticas principales.',
+      content: t('tour.center'),
       disableBeacon: true,
       placement,
       offset: 10,
     },
     {
       target: '#plan-link',
-      content: '🎯 Mi Plan: Crea y gestiona tu plan de recuperación personalizado.',
+      content: t('tour.planDesc'),
       disableBeacon: true,
       placement,
       offset: 10,
     },
     {
       target: '#progress-link',
-      content: '📈 Progreso: Visualiza tu evolución y logros a lo largo del tiempo.',
+      content: t('tour.progressDesc'),
       disableBeacon: true,
       placement,
       offset: 10,
     },
     {
       target: '[href="/emotion-journal"]',
-      content: '😊 Diario de Emociones: Registra cómo te sientes cada día.',
+      content: t('tour.emotionJournalDesc'),
       disableBeacon: true,
       placement,
       offset: 10,
     },
     {
       target: '[href="/journal"]',
-      content: '📔 Diario: Escribe libremente tus pensamientos y reflexiones.',
+      content: t('tour.journalDesc'),
       disableBeacon: true,
       placement,
       offset: 10,
     },
     {
       target: '[href="/gratitude"]',
-      content: '🙏 Agradecimiento: Practica la gratitud diariamente.',
+      content: t('tour.gratitudeDesc'),
       disableBeacon: true,
       placement,
       offset: 10,
     },
     {
       target: '[href="/values"]',
-      content: '❤️ Valores: Define y conecta con tus valores fundamentales.',
+      content: t('tour.valuesDesc'),
       disableBeacon: true,
       placement,
       offset: 10,
     },
     {
       target: '[href="/chat"]',
-      content: '💬 Chat: Habla con tu asistente de IA y la comunidad.',
+      content: t('tour.chatDesc'),
       disableBeacon: true,
       placement,
       offset: 10,
     },
     {
       target: '#community-link',
-      content: '🫶 Comunidad: Conecta con otros en recuperación, comparte y encuentra apoyo.',
+      content: t('tour.communityDesc'),
       disableBeacon: true,
       placement,
       offset: 10,
     },
     {
       target: '[href="/tools"]',
-      content: '🛠️ Herramientas: Accede a recursos útiles para tu recuperación.',
+      content: t('tour.toolsDesc'),
       disableBeacon: true,
       placement,
       offset: 10,
     },
     {
       target: '[href="/help"]',
-      content: '🆘 Ayuda: Encuentra ayuda inmediata cuando la necesites.',
+      content: t('tour.helpDesc'),
       disableBeacon: true,
       placement,
       offset: 10,
     },
     {
       target: '[href="/settings"]',
-      content: '⚙️ Configuración: Personaliza tu experiencia y preferencias.',
+      content: t('tour.settingsDesc'),
       disableBeacon: true,
       placement,
       offset: 10,
@@ -147,10 +148,11 @@ interface TourGuideProps {
 }
 
 export function TourGuide({ onComplete }: TourGuideProps) {
+  const { t } = useTranslation();
   const [run, setRun] = useState(false);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const tourSteps = getTourSteps(isMobile);
+  const tourSteps = getTourSteps(isMobile, t);
 
   useEffect(() => {
     // Esperar un momento para que el DOM esté listo
@@ -218,11 +220,11 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       disableOverlayClose={false}
       spotlightPadding={0}
       locale={{
-        back: 'Atrás',
-        close: 'Cerrar',
-        last: 'Finalizar',
-        next: 'Siguiente',
-        skip: 'Saltar tour',
+        back: t('common.back'),
+        close: t('common.close'),
+        last: t('common.finish'),
+        next: t('common.next'),
+        skip: t('tour.skipTour'),
       }}
       styles={{
         options: {

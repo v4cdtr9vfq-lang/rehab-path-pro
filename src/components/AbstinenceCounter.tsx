@@ -4,6 +4,7 @@ import { AddAddictionDialog } from "./AddAddictionDialog";
 import { toast } from "sonner";
 import { useAddictions } from "@/hooks/useAddictions";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 
 interface CounterProps {
   startDate?: Date;
@@ -11,6 +12,7 @@ interface CounterProps {
 }
 
 export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps) {
+  const { t } = useTranslation();
   const { addictions, addAddiction } = useAddictions();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -108,7 +110,7 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
       <div className="rounded-3xl p-8 md:p-12 bg-card border border-sidebar-border relative">
         {/* Title in top left corner */}
         <p className="absolute top-[17px] md:top-[22px] left-8 text-foreground text-xl md:text-2xl font-bold text-left">
-          Tiempo limpio:
+          {t('dashboard.cleanTime')}
         </p>
 
         {/* Circles in top right corner */}

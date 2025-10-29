@@ -11,6 +11,7 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useTranslation } from "react-i18next";
 import {
   DndContext,
   closestCenter,
@@ -29,6 +30,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 export default function Home() {
+  const { t } = useTranslation();
   const {
     toast
   } = useToast();
@@ -835,13 +837,13 @@ export default function Home() {
       {/* Daily Progress Panel */}
       <Card className="border-sidebar-border md:-mt-[3px]" data-tour="daily-progress">
         <CardHeader>
-          <CardTitle className="text-xl md:text-2xl font-bold">Progreso diario:</CardTitle>
+          <CardTitle className="text-xl md:text-2xl font-bold">{t('dashboard.dailyProgress')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Goals Progress Bar */}
           <div className="space-y-2">
             <div className="flex justify-between items-center mb-2">
-              <p className="text-sm font-medium text-muted-foreground">Metas completadas hoy:</p>
+              <p className="text-sm font-medium text-muted-foreground">{t('dashboard.goalsCompleted')}</p>
               <p className="text-sm font-bold text-green-500">{goalsCompleted} de {totalGoals}</p>
             </div>
             <Progress key="dashboard-progress" value={goalsProgress} className="h-3 [&>div]:bg-green-500" />
@@ -855,25 +857,25 @@ export default function Home() {
               </button>
               <div>
                 <p className="font-semibold text-foreground">
-                  <span className="md:hidden">Check-in</span>
-                  <span className="hidden md:inline">Check-in diario</span>
+                  <span className="md:hidden">{t('dashboard.checkIn')}</span>
+                  <span className="hidden md:inline">{t('dashboard.checkIn')}</span>
                 </p>
                 <p className={`text-sm ${checkInCompleted ? "text-green-500" : "text-muted-foreground"}`}>
-                  {checkInCompleted ? "Completado" : "Pendiente"}
+                  {checkInCompleted ? t('dashboard.completed') : t('dashboard.pending')}
                 </p>
               </div>
             </div>
             {checkInCompleted ? <Link to="/checkin">
-                <Button size="sm" variant="outline" className="rounded-xl">Editar</Button>
+                <Button size="sm" variant="outline" className="rounded-xl">{t('common.edit')}</Button>
               </Link> : <Link to="/checkin">
-                <Button size="sm" className="rounded-xl">Registrar</Button>
+                <Button size="sm" className="rounded-xl">{t('dashboard.register')}</Button>
               </Link>}
           </div>
 
           {/* Today's Reminder */}
           {checkInCompleted && todayReminder && <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-sidebar-border">
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Hoy elijo recordarme que:</p>
+                <p className="text-sm text-muted-foreground mb-1">{t('dashboard.todayReminder')}</p>
                 <p className="text-sm md:text-lg font-semibold text-green-500">{todayReminder}</p>
               </div>
             </div>}
@@ -883,27 +885,27 @@ export default function Home() {
       {/* Active Goals Summary */}
       <Card className="border-sidebar-border md:-mt-[3px]" data-tour="goals-section">
         <CardHeader className="flex flex-row items-center justify-between gap-2 pb-[25px]">
-          <CardTitle className="text-xl md:text-2xl font-bold">Metas de hoy:</CardTitle>
+          <CardTitle className="text-xl md:text-2xl font-bold">{t('dashboard.todayGoals')}</CardTitle>
           <div className="flex gap-2">
             {hasUnsavedOrder && (
               <>
                 <Button onClick={cancelReorder} variant="outline" size="sm">
-                  Cancelar
+                  {t('common.cancel')}
                 </Button>
                 <Button onClick={saveGoalOrder} variant="default" size="sm">
-                  Guardar orden
+                  {t('common.save')}
                 </Button>
               </>
             )}
             <Link to="/plan">
-              <Button variant="ghost" size="sm" className="text-primary">Ver todas</Button>
+              <Button variant="ghost" size="sm" className="text-primary">{t('dashboard.viewAll')}</Button>
             </Link>
           </div>
         </CardHeader>
         <CardContent>
           {activeGoals.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-muted-foreground mb-4">No tienes metas activas aún</p>
+              <p className="text-muted-foreground mb-4">{t('dashboard.noActiveGoals')}</p>
               <Link to="/plan">
                 <Button size="icon" className="rounded-full h-12 w-12">
                   <Plus className="h-6 w-6" />
@@ -981,7 +983,7 @@ export default function Home() {
         <CardHeader className="pb-4">
           <div className="flex items-center gap-3">
             <span className="text-3xl">💡</span>
-            <CardTitle className="text-lg md:text-2xl">Reflexión del día</CardTitle>
+            <CardTitle className="text-lg md:text-2xl">{t('dashboard.reflectionOfTheDay')}</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -990,7 +992,7 @@ export default function Home() {
           </p>
           <Link to={`/journal?reflection=${encodeURIComponent(getReflectionOfTheDay())}`} className="block">
             <Button variant="outline" size="lg" className="w-full bg-background hover:bg-background/80">
-              Escribir sobre esto
+              {t('dashboard.writeAboutThis')}
             </Button>
           </Link>
         </CardContent>
@@ -1000,7 +1002,7 @@ export default function Home() {
       {/* Medals Widget */}
       <Card className="border-sidebar-border md:-mt-[3px]">
         <CardHeader className="pb-2">
-          <CardTitle className="text-xl md:text-2xl font-bold">Mis medallas:</CardTitle>
+          <CardTitle className="text-xl md:text-2xl font-bold">{t('dashboard.myMedals')}</CardTitle>
         </CardHeader>
         <CardContent className="pt-4 px-4 md:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 max-w-full">
@@ -1056,7 +1058,7 @@ export default function Home() {
 
       {/* Quick Tools */}
       <div data-tour="quick-tools">
-        <h2 className="text-xl md:text-2xl font-bold mb-4 text-foreground pl-5">Accesos directos:</h2>
+        <h2 className="text-xl md:text-2xl font-bold mb-4 text-foreground pl-5">{t('dashboard.quickAccess')}</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
           {quickTools.map(tool => {
           return <Link key={tool.label} to={tool.path}>
