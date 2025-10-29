@@ -5,7 +5,7 @@ export function Footer() {
   return (
     <footer className="mt-auto border-t border-border bg-card/50 backdrop-blur">
       <div className="mx-auto px-[15px] lg:px-8 max-w-6xl pt-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-[5px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-[35px]">
           {/* About Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
