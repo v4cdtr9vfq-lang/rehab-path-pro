@@ -30,10 +30,11 @@ serve(async (req) => {
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY");
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
 
-    if (!supabaseUrl || !supabaseKey || !lovableApiKey) {
+    if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceKey || !lovableApiKey) {
       console.error("Missing environment variables");
       return new Response(
         JSON.stringify({ error: "Error de configuración del servidor" }),
@@ -41,11 +42,12 @@ serve(async (req) => {
       );
     }
 
-    const supabase = createClient(supabaseUrl, supabaseKey, {
+    // Create client with anon key for authentication
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       global: { headers: { Authorization: authHeader } },
     });
 
-    // Get user
+    // Get user using the auth token
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) {
       console.error("User error:", userError);
@@ -57,27 +59,30 @@ serve(async (req) => {
 
     console.log("Generating report for user:", user.id, "from", startDate, "to", endDate);
 
+    // Create admin client for database operations
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+
     // Gather all user data
     const [emotionData, journalData, gratitudeData, valuesData, checkInData] = await Promise.all([
-      supabase.from("emotion_journal").select("*")
+      supabaseAdmin.from("emotion_journal").select("*")
         .eq("user_id", user.id)
         .gte("entry_date", startDate)
         .lte("entry_date", endDate),
       
-      supabase.from("journal_entries").select("*")
+      supabaseAdmin.from("journal_entries").select("*")
         .eq("user_id", user.id)
         .gte("entry_date", startDate)
         .lte("entry_date", endDate),
       
-      supabase.from("gratitude_entries").select("*")
+      supabaseAdmin.from("gratitude_entries").select("*")
         .eq("user_id", user.id)
         .gte("entry_date", startDate)
         .lte("entry_date", endDate),
       
-      supabase.from("values").select("*")
+      supabaseAdmin.from("values").select("*")
         .eq("user_id", user.id),
       
-      supabase.from("check_ins").select("*")
+      supabaseAdmin.from("check_ins").select("*")
         .eq("user_id", user.id)
         .gte("check_in_date", startDate)
         .lte("check_in_date", endDate)
@@ -196,8 +201,8 @@ Genera un informe completo de progreso psicológico y emocional.`;
 
     console.log("Report generated, saving to database...");
 
-    // Save report to database
-    const { data: report, error: insertError } = await supabase
+    // Save report to database using admin client
+    const { data: report, error: insertError } = await supabaseAdmin
       .from("progress_reports")
       .insert({
         user_id: user.id,
