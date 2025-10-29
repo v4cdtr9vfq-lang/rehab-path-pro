@@ -311,36 +311,36 @@ export default function CheckIn() {
         .replace(/^\w/, (c) => c.toUpperCase())
         .replace(/\b([a-z]{3})\./i, (match) => match.charAt(0).toUpperCase() + match.slice(1));
       
-      // Build journal content with all text answers
-      let journalContent = "";
+      // Build journal content with all text answers in a single line
+      let journalParts = [];
       
       // Question 2 - trigger description
       if (answers[2] === "yes" && triggerDescription.trim()) {
-        journalContent += `Situación que me alteró:\n${triggerDescription.trim()}\n\n• • •\n\n`;
+        journalParts.push(`Situación que me alteró: ${triggerDescription.trim()}`);
       }
       
       // Question 4 - resentment description
       if (answers[4] === "yes" && resentmentDescription.trim()) {
-        journalContent += `Resentimiento:\n${resentmentDescription.trim()}\n\n• • •\n\n`;
+        journalParts.push(`Resentimiento: ${resentmentDescription.trim()}`);
       }
       
       // Question 7 - values description
       if (answers[7] === "no" && valuesDescription.trim()) {
-        journalContent += `Infidelidad a mis valores:\n${valuesDescription.trim()}\n\n• • •\n\n`;
+        journalParts.push(`Infidelidad a mis valores: ${valuesDescription.trim()}`);
       }
       
       // Question 8 - limiting description
       if (answers[8] === "yes" && limitingDescription.trim()) {
-        journalContent += `Obstáculos a superar:\n${limitingDescription.trim()}\n\n• • •\n\n`;
+        journalParts.push(`Obstáculos a superar: ${limitingDescription.trim()}`);
       }
       
       // Question 9 - negative thoughts description
       if (answers[9] === "yes" && negativeThoughtsDescription.trim()) {
-        journalContent += `Pensamientos negativos:\n${negativeThoughtsDescription.trim()}\n\n`;
+        journalParts.push(`Pensamientos negativos: ${negativeThoughtsDescription.trim()}`);
       }
       
-      // Remove trailing separator if present
-      journalContent = journalContent.replace(/\n\n• • •\n\n$/, '');
+      // Join all parts with " - "
+      let journalContent = journalParts.join(" - ");
       
       // Build tags array
       const journalTags = ["check-in", "observaciones"];
