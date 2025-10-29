@@ -173,13 +173,7 @@
     "resetSuccessTitle": "Metas reseteadas",
     "resetSuccessDescription": "Se han cargado las metas predefinidas y se ha reseteado tu fecha de abstinencia.",
     "loginRequiredDescription": "Debes iniciar sesión.",
-    "resetErrorDescription": "No se pudieron resetear las metas.",
-    "completedExclamation": "¡Completado!",
-    "remaining": "restante",
-    "remainingPlural": "restantes",
-    "todayLower": "hoy",
-    "thisWeekLower": "esta semana",
-    "thisMonthLower": "este mes"
+    "resetErrorDescription": "No se pudieron resetear las metas."
   },
   "progress": {
     "title": "Progreso",

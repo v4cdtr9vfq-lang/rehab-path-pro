@@ -61,21 +61,6 @@ export default function Plan() {
     return text;
   };
   
-  // Helper function to get completion status text
-  const getCompletionStatusText = (goal: ExpandedGoal, sectionKey: keyof typeof sections, displayCompleted: boolean): string => {
-    if (displayCompleted) {
-      return t('plan.completedExclamation');
-    }
-    
-    const remaining = getRemainingCount(goal, sectionKey);
-    const remainingText = remaining !== 1 ? t('plan.remainingPlural') : t('plan.remaining');
-    const timeText = sectionKey === "today" ? t('plan.todayLower') : 
-                     sectionKey === "week" ? t('plan.thisWeekLower') : 
-                     sectionKey === "month" ? t('plan.thisMonthLower') : "";
-    
-    return `${remaining} ${remainingText} ${timeText}`;
-  };
-  
   const {
     toast
   } = useToast();
@@ -318,64 +303,20 @@ export default function Plan() {
               }
             }
           } else if (g.goal_type === 'week' && context === 'month') {
-            // Weekly goals in monthly view: one instance per week
-            // Count weeks from today to end of month
-            const weeksSeen = new Set<string>();
-            dates.forEach((date) => {
-              // Get the Monday of this week as the week identifier
-              const monday = new Date(date);
-              const day = monday.getDay();
-              const diff = monday.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-              monday.setDate(diff);
-              monday.setHours(0, 0, 0, 0);
-              
-              const weekKey = getLocalDateString(monday);
-              
-              if (!weeksSeen.has(weekKey)) {
-                weeksSeen.add(weekKey);
-                for (let i = 0; i < g.remaining; i++) {
-                  const instanceId = `${g.id}__${weekKey}__${i}`;
-                  expanded.push({
-                    ...g,
-                    id: instanceId,
-                    originalId: g.id,
-                    instanceIndex: i,
-                    completed: allCompletedInstances.has(instanceId)
-                  });
-                }
+            // Weekly goals in monthly view: only on week boundaries
+            if (dayIndex % 7 === 0) {
+              for (let i = 0; i < g.remaining; i++) {
+                const instanceId = `${g.id}__${dateStr}__${i}`;
+                expanded.push({
+                  ...g,
+                  id: instanceId,
+                  originalId: g.id,
+                  instanceIndex: dayIndex * g.remaining + i,
+                  completed: allCompletedInstances.has(instanceId)
+                });
               }
-            });
-          } else if (g.goal_type === 'week' && context === 'week') {
-            // Weekly goals in weekly view: one instance for the current week
-            // Use the first day of the week range as the identifier
-            const firstDay = dates[0];
-            const dateStr = getLocalDateString(firstDay);
-            for (let i = 0; i < g.remaining; i++) {
-              const instanceId = `${g.id}__${dateStr}__${i}`;
-              expanded.push({
-                ...g,
-                id: instanceId,
-                originalId: g.id,
-                instanceIndex: i,
-                completed: allCompletedInstances.has(instanceId)
-              });
             }
-          } else if (g.goal_type === 'month' && context === 'month') {
-            // Monthly goals: one instance for the current month
-            // Use the first day of the month as the identifier
-            const firstDay = new Date(dates[0].getFullYear(), dates[0].getMonth(), 1);
-            const dateStr = getLocalDateString(firstDay);
-            for (let i = 0; i < g.remaining; i++) {
-              const instanceId = `${g.id}__${dateStr}__${i}`;
-              expanded.push({
-                ...g,
-                id: instanceId,
-                originalId: g.id,
-                instanceIndex: i,
-                completed: allCompletedInstances.has(instanceId)
-              });
-            }
-          } else if (g.goal_type === 'today' || g.goal_type === 'always') {
+          } else {
             // Daily and always goals: create instances for each day
             for (let i = 0; i < g.remaining; i++) {
               const instanceId = `${g.id}__${dateStr}__${i}`;
@@ -383,7 +324,7 @@ export default function Plan() {
                 ...g,
                 id: instanceId,
                 originalId: g.id,
-                instanceIndex: i,  // Use i directly since each date is independent
+                instanceIndex: dayIndex * g.remaining + i,
                 completed: allCompletedInstances.has(instanceId)
               });
             }
@@ -462,13 +403,13 @@ export default function Plan() {
         // CRITICAL: Maintain the order_index order when grouping goals by section
         // Filter goals that should appear in each section while preserving order
         const todayRelevantGoals = goals.filter(g => 
-          g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic'
+          g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic' || g.goal_type === 'onetime'
         );
         const weekRelevantGoals = goals.filter(g => 
-          g.goal_type === 'week' || g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic'
+          g.goal_type === 'week' || g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic' || g.goal_type === 'onetime'
         );
         const monthRelevantGoals = goals.filter(g => 
-          g.goal_type === 'month' || g.goal_type === 'week' || g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic'
+          g.goal_type === 'month' || g.goal_type === 'week' || g.goal_type === 'today' || g.goal_type === 'always' || g.goal_type === 'periodic' || g.goal_type === 'onetime'
         );
         const onetimeGoals = goals.filter(g => g.goal_type === 'onetime');
         
@@ -867,7 +808,7 @@ export default function Plan() {
                 <p className="font-semibold text-foreground text-sm">{translateGoalText(goal.text)}</p>
               )}
               <p className={`text-xs ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
-                {getCompletionStatusText(goal, sectionKey, displayCompleted)}
+                {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
               </p>
             </div>
           </div>
@@ -929,7 +870,7 @@ export default function Plan() {
               <p className="font-semibold text-foreground text-sm md:text-base">{translateGoalText(goal.text)}</p>
             )}
             <p className={`text-xs md:text-sm ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
-              {getCompletionStatusText(goal, sectionKey, displayCompleted)}
+              {displayCompleted ? '¡Completado!' : `${getRemainingCount(goal, sectionKey)} restante${getRemainingCount(goal, sectionKey) !== 1 ? 's' : ''} ${sectionKey === "today" ? "hoy" : sectionKey === "week" ? "esta semana" : sectionKey === "month" ? "este mes" : ""}`}
             </p>
           </div>
         </div>
