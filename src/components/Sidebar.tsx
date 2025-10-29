@@ -104,15 +104,7 @@ export function Sidebar() {
           if (item.path === '/dashboard') return 'dashboard-link';
           if (item.path === '/plan') return 'plan-link';
           if (item.path === '/progress') return 'progress-link';
-          if (item.path === '/emotion-journal') return 'emotion-journal-link';
-          if (item.path === '/journal') return 'journal-link';
-          if (item.path === '/gratitude') return 'gratitude-link';
-          if (item.path === '/values') return 'values-link';
-          if (item.path === '/chat') return 'chat-link';
           if (item.path === '/community') return 'community-link';
-          if (item.path === '/tools') return 'tools-link';
-          if (item.path === '/help') return 'help-link';
-          if (item.path === '/settings') return 'settings-link';
           return undefined;
         };
         return <Link 

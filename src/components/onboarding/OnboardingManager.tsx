@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { TextOnboarding } from "./TextOnboarding";
 import { RehabilitationTypeDialog } from "./RehabilitationTypeDialog";
-import { TourGuide } from "./TourGuide";
 
 /**
  * OnboardingManager - Coordina el flujo completo del onboarding
@@ -10,11 +9,10 @@ import { TourGuide } from "./TourGuide";
  * Flujo:
  * 1. TextOnboarding (6 pasos descriptivos)
  * 2. RehabilitationTypeDialog (selección de adicción)
- * 3. TourGuide (tour del menú)
  */
 export function OnboardingManager() {
   const [userId, setUserId] = useState<string | null>(null);
-  const [currentStep, setCurrentStep] = useState<'text' | 'rehab' | 'tour' | 'complete' | 'loading'>('loading');
+  const [currentStep, setCurrentStep] = useState<'text' | 'rehab' | 'complete' | 'loading'>('loading');
   const [retryCount, setRetryCount] = useState(0);
   const [hasChecked, setHasChecked] = useState(false);
 
@@ -37,7 +35,7 @@ export function OnboardingManager() {
 
       const { data: profile, error } = await supabase
         .from('profiles')
-        .select('text_onboarding_completed, onboarding_completed, rehabilitation_type, tour_completed')
+        .select('text_onboarding_completed, onboarding_completed, rehabilitation_type')
         .eq('user_id', user.id)
         .single();
 
@@ -58,8 +56,6 @@ export function OnboardingManager() {
         setCurrentStep('text');
       } else if (!profile.rehabilitation_type) {
         setCurrentStep('rehab');
-      } else if (!profile.tour_completed) {
-        setCurrentStep('tour');
       } else {
         setCurrentStep('complete');
       }
@@ -91,10 +87,6 @@ export function OnboardingManager() {
   };
 
   const handleRehabComplete = () => {
-    setCurrentStep('tour');
-  };
-
-  const handleTourComplete = () => {
     setCurrentStep('complete');
   };
 
@@ -107,9 +99,6 @@ export function OnboardingManager() {
       )}
       {currentStep === 'rehab' && (
         <RehabilitationTypeDialog onComplete={handleRehabComplete} />
-      )}
-      {currentStep === 'tour' && (
-        <TourGuide onComplete={handleTourComplete} />
       )}
     </>
   );
