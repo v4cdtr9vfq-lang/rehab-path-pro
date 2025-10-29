@@ -659,7 +659,7 @@ export default function Journal() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-foreground/80 mb-4">{entry.content}</p>
+                  <p className="text-foreground/80 mb-4 whitespace-pre-line">{entry.content}</p>
                   <div className="flex flex-wrap gap-2">
                     {entry.tags.map((tag, i) => (
                       <button
