@@ -95,7 +95,18 @@ export default function Home() {
     return allQuotes[dayOfYear % allQuotes.length];
   };
   const dailyQuote = getQuoteOfTheDay();
-  const reflections = ["¿Cómo puedes practicar la simplicidad en tu recuperación hoy? ¿Qué pequeña acción consistente puedes tomar para construir confianza contigo mismo y con los demás?", "¿Qué obstáculo te está deteniendo hoy? ¿Cómo puedes transformarlo en una oportunidad de crecimiento?", "¿Qué cosa pequeña puedes hacer hoy para cuidar mejor de ti mismo?", "¿A quién puedes agradecer hoy por su apoyo en tu camino de recuperación?", "¿Qué has aprendido sobre ti mismo en los últimos días? ¿Cómo puedes aplicar esa lección hoy?", "¿Qué te hace sentir más fuerte en tu recuperación? ¿Cómo puedes incorporar más de eso en tu día?", "¿Qué significa para ti el progreso hoy? ¿Cómo lo vas a medir?", "¿Qué cosa puedes perdonarte hoy? ¿Qué paso puedes dar hacia adelante?"];
+  
+  // Get translated reflections
+  const reflections = [
+    t('reflections.1'),
+    t('reflections.2'),
+    t('reflections.3'),
+    t('reflections.4'),
+    t('reflections.5'),
+    t('reflections.6'),
+    t('reflections.7'),
+    t('reflections.8')
+  ];
 
   // Get reflection of the day based on date
   const getReflectionOfTheDay = () => {

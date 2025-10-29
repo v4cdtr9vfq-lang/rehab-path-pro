@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface GratitudeItem {
   id: string;
@@ -32,6 +33,7 @@ export default function Gratitude() {
   const [editText, setEditText] = useState("");
   const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadEntries();
@@ -229,7 +231,7 @@ export default function Gratitude() {
         <Card className="border-border">
           <CardHeader className="pb-3">
             <CardTitle className="flex flex-col md:flex-row md:items-center md:justify-between pl-[14px] gap-2">
-              <span>Gratitud de hoy:</span>
+              <span>{t('gratitude.todayGratitude')}</span>
               <span className="text-sm font-normal text-muted-foreground md:pr-6">
                 {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/^\w/, c => c.toUpperCase()).replace(/\sde\s(\w)/, (match, p1) => ` de ${p1.toUpperCase()}`)}
               </span>
@@ -262,13 +264,13 @@ export default function Gratitude() {
             ))}
             <Button onClick={addNewField} variant="outline" className="w-full gap-2">
               <Plus className="h-4 w-4" />
-              Añadir otro agradecimiento
+              {t('gratitude.addAnother')}
             </Button>
           </div>
 
           {todayEntry && todayEntry.items.length > 0 && (
             <div className="space-y-3 pt-4">
-              <h3 className="font-semibold text-foreground pl-[14px]">Hoy estoy agradecido por:</h3>
+              <h3 className="font-semibold text-foreground pl-[14px]">{t('gratitude.todayGratefulFor')}</h3>
               <ul className="space-y-2">
                 {todayEntry.items.map((item) => (
                   <li

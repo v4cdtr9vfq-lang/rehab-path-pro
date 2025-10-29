@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import ProgressReports from "@/components/ProgressReports";
+import { useTranslation } from "react-i18next";
 
 interface ProgressArea {
   name: string;
@@ -31,6 +32,7 @@ interface ExpandedGoal {
 }
 
 export default function ProgressPage() {
+  const { t } = useTranslation();
   const [hasCheckedInToday, setHasCheckedInToday] = useState(false);
   const [dailyGoals, setDailyGoals] = useState<ExpandedGoal[]>([]);
   const [weeklyGoals, setWeeklyGoals] = useState<ExpandedGoal[]>([]);
@@ -458,9 +460,9 @@ export default function ProgressPage() {
       <Card className="border-sky-blue/40 bg-gradient-to-br from-sky-blue/15 to-sky-blue/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            {currentTab === 'daily' && 'Progreso hoy:'}
-            {currentTab === 'week' && 'Progreso semanal:'}
-            {currentTab === 'month' && 'Progreso mensual:'}
+            {currentTab === 'daily' && t('progress.progressToday')}
+            {currentTab === 'week' && t('progress.progressWeek')}
+            {currentTab === 'month' && t('progress.progressMonth')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -489,9 +491,9 @@ export default function ProgressPage() {
 
       <Tabs defaultValue="daily" className="w-full -mt-[5px]" onValueChange={setCurrentTab}>
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="daily">Diario</TabsTrigger>
-          <TabsTrigger value="week">Esta semana</TabsTrigger>
-          <TabsTrigger value="month">Este mes</TabsTrigger>
+          <TabsTrigger value="daily">{t('progress.daily')}</TabsTrigger>
+          <TabsTrigger value="week">{t('progress.weekly')}</TabsTrigger>
+          <TabsTrigger value="month">{t('progress.monthly')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="daily" className="space-y-6 mt-4">

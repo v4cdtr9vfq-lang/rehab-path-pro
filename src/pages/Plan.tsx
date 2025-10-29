@@ -33,6 +33,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useTranslation } from "react-i18next";
 interface Goal {
   id: string;
   text: string;
@@ -50,6 +51,7 @@ interface ExpandedGoal extends Goal {
 }
 export default function Plan() {
   const isMobile = useIsMobile();
+  const { t } = useTranslation();
   const {
     toast
   } = useToast();
