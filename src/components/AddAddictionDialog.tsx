@@ -82,7 +82,7 @@ export function AddAddictionDialog({ open, onOpenChange, onAdd, existingAddictio
               <SelectTrigger id="addiction">
                 <SelectValue placeholder="Selecciona un tipo" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="z-[100000]">
                 {availableOptions.map((option) => (
                   <SelectItem key={option.id} value={option.id}>
                     {option.label}
