@@ -70,14 +70,19 @@ export function Sidebar() {
     return () => window.removeEventListener('chatUsersUpdated', handleChatUsersUpdate as EventListener);
   }, []);
   const handleLogout = async () => {
-    const {
-      error
-    } = await supabase.auth.signOut();
-    if (error) {
-      toast.error("Error al cerrar sesión");
-    } else {
-      toast.success("Sesión cerrada");
-      navigate("/");
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Logout error:', error);
+        toast.error("Error al cerrar sesión");
+      } else {
+        toast.success("Sesión cerrada");
+        // Force navigation and reload
+        window.location.href = "/auth?mode=login";
+      }
+    } catch (err) {
+      console.error('Unexpected logout error:', err);
+      toast.error("Error inesperado al cerrar sesión");
     }
   };
   const SidebarContent = () => <div className="flex flex-col h-full">
