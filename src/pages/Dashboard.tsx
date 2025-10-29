@@ -835,7 +835,7 @@ export default function Home() {
       {/* Daily Progress Panel */}
       <Card className="border-sidebar-border md:-mt-[3px]" data-tour="daily-progress">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Progreso diario:</CardTitle>
+          <CardTitle className="text-xl md:text-2xl font-bold">Progreso diario:</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Goals Progress Bar */}
@@ -885,7 +885,7 @@ export default function Home() {
         <CardHeader className="pb-4">
           <div className="flex items-center gap-3">
             <span className="text-3xl">💡</span>
-            <CardTitle className="text-xl md:text-2xl">Reflexión del día</CardTitle>
+            <CardTitle className="text-lg md:text-2xl">Reflexión del día</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -903,7 +903,7 @@ export default function Home() {
       {/* Active Goals Summary */}
       <Card className="border-sidebar-border md:-mt-[3px]" data-tour="goals-section">
         <CardHeader className="flex flex-row items-center justify-between gap-2 pb-[25px]">
-          <CardTitle className="text-2xl font-bold">Metas de hoy:</CardTitle>
+          <CardTitle className="text-xl md:text-2xl font-bold">Metas de hoy:</CardTitle>
           <div className="flex gap-2">
             {hasUnsavedOrder && (
               <>
@@ -1000,7 +1000,7 @@ export default function Home() {
       {/* Medals Widget */}
       <Card className="border-sidebar-border md:-mt-[3px]">
         <CardHeader className="pb-2">
-          <CardTitle className="text-2xl font-bold">Mis medallas:</CardTitle>
+          <CardTitle className="text-xl md:text-2xl font-bold">Mis medallas:</CardTitle>
         </CardHeader>
         <CardContent className="pt-4 px-4 md:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 max-w-full">
@@ -1056,7 +1056,7 @@ export default function Home() {
 
       {/* Quick Tools */}
       <div data-tour="quick-tools">
-        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">Accesos directos:</h2>
+        <h2 className="text-xl md:text-2xl font-bold mb-4 text-foreground pl-5">Accesos directos:</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
           {quickTools.map(tool => {
           return <Link key={tool.label} to={tool.path}>
