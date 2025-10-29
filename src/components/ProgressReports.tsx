@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { FileText, Calendar, Loader2, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { FileText, Calendar, Loader2, Trash2, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -27,6 +29,10 @@ export default function ProgressReports() {
   const [showReportDialog, setShowReportDialog] = useState(false);
   const [reportToDelete, setReportToDelete] = useState<string | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [reportToEmail, setReportToEmail] = useState<ProgressReport | null>(null);
+  const [recipientEmail, setRecipientEmail] = useState("");
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
 
   useEffect(() => {
     loadReports();
@@ -178,6 +184,47 @@ export default function ProgressReports() {
     }
   };
 
+  const handleEmailClick = (report: ProgressReport, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setReportToEmail(report);
+    setShowEmailDialog(true);
+  };
+
+  const sendReportEmail = async () => {
+    if (!reportToEmail || !recipientEmail) return;
+
+    setIsSendingEmail(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("send-report-email", {
+        body: {
+          recipientEmail,
+          reportContent: reportToEmail.report_content,
+          reportPeriod: `${format(new Date(reportToEmail.start_date), "d MMM", { locale: es })} - ${format(new Date(reportToEmail.end_date), "d MMM yyyy", { locale: es })}`,
+          reportDate: format(new Date(reportToEmail.created_at), "d MMMM yyyy", { locale: es })
+        },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Correo enviado",
+        description: `El informe ha sido enviado a ${recipientEmail}`,
+      });
+
+      setShowEmailDialog(false);
+      setRecipientEmail("");
+    } catch (error: any) {
+      console.error("Error sending email:", error);
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo enviar el correo",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
+
   const getPeriodLabel = (period: string) => {
     const labels: Record<string, string> = {
       last_week: "Última semana",
@@ -256,6 +303,14 @@ export default function ProgressReports() {
                         <Button 
                           variant="ghost" 
                           size="sm" 
+                          onClick={(e) => handleEmailClick(report, e)}
+                          className="text-primary hover:text-primary hover:bg-primary/10"
+                        >
+                          <Mail className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
                           onClick={(e) => handleDeleteClick(report.id, e)}
                           className="text-destructive hover:text-destructive hover:bg-destructive/10"
                         >
@@ -311,6 +366,38 @@ export default function ProgressReports() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Enviar informe por correo</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Correo del destinatario</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="correo@ejemplo.com"
+                value={recipientEmail}
+                onChange={(e) => setRecipientEmail(e.target.value)}
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setShowEmailDialog(false)}>
+                Cancelar
+              </Button>
+              <Button 
+                onClick={sendReportEmail} 
+                disabled={!recipientEmail || isSendingEmail}
+              >
+                {isSendingEmail && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isSendingEmail ? "Enviando..." : "Enviar"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
