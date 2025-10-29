@@ -46,7 +46,7 @@ serve(async (req) => {
         "Authorization": `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "Informes de Progreso <onboarding@resend.dev>",
+        from: "Informes de Progreso <informes@felices.org>",
         to: [recipientEmail],
         subject: `Informe de Progreso - ${reportPeriod}`,
         html: `
