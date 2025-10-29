@@ -70,13 +70,17 @@ export default function RehabilitationTypeDialog() {
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('*')
+        .select('text_onboarding_completed, rehabilitation_type, onboarding_completed')
         .eq('user_id', user.id)
         .single();
 
-      // Show dialog only if text onboarding is completed and rehabilitation_type is not set
-      if (profile && (profile as any).text_onboarding_completed && !(profile as any).rehabilitation_type) {
-        setOpen(true);
+      // ONLY show if text onboarding is completed, rehabilitation_type is NOT set,
+      // AND visual tour is not completed
+      if (profile && 
+          (profile as any).text_onboarding_completed && 
+          !(profile as any).rehabilitation_type &&
+          !profile.onboarding_completed) {
+        setTimeout(() => setOpen(true), 300); // Small delay to ensure TextOnboarding is hidden
       }
     } catch (error) {
       console.error('Error checking rehabilitation type:', error);

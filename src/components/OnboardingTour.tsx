@@ -123,16 +123,24 @@ export function OnboardingTour() {
       console.log("🎓 Onboarding completed:", profile?.onboarding_completed);
       console.log("🏥 Rehabilitation type:", (profile as any)?.rehabilitation_type);
 
-      // Only show tour if rehabilitation type is set and onboarding is not completed
-      if (profile && !profile.onboarding_completed && (profile as any).rehabilitation_type) {
+      // ONLY show tour if text onboarding is done, rehabilitation type is set, 
+      // and tour is not completed
+      if (profile && 
+          (profile as any).text_onboarding_completed &&
+          (profile as any).rehabilitation_type && 
+          !profile.onboarding_completed) {
         console.log("🚀 Starting onboarding tour in 1 second...");
-        // Delay to let the page render first
+        // Delay to let the page render and ensure other dialogs are closed
         setTimeout(() => {
           console.log("✨ Setting tour visible NOW");
           setIsVisible(true);
-        }, 1000);
+        }, 1500); // Longer delay to ensure RehabilitationTypeDialog is closed
       } else {
-        console.log("⏭️ Skipping tour - already completed or no profile");
+        console.log("⏭️ Skipping tour - conditions not met:", {
+          textOnboarding: (profile as any)?.text_onboarding_completed,
+          rehabType: (profile as any)?.rehabilitation_type,
+          tourCompleted: profile?.onboarding_completed
+        });
       }
     } catch (error) {
       console.error("💥 Error checking onboarding status:", error);

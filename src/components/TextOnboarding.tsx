@@ -46,11 +46,16 @@ export function TextOnboarding() {
 
       const { data: profile } = await supabase
         .from("profiles")
-        .select("text_onboarding_completed")
+        .select("text_onboarding_completed, rehabilitation_type, onboarding_completed")
         .eq("user_id", user.id)
         .single();
 
-      if (profile && !profile.text_onboarding_completed) {
+      // ONLY show if text onboarding is not completed
+      // AND no other onboarding steps are in progress
+      if (profile && 
+          !profile.text_onboarding_completed && 
+          !(profile as any).rehabilitation_type &&
+          !profile.onboarding_completed) {
         setIsVisible(true);
       }
     } catch (error) {
