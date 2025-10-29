@@ -59,8 +59,11 @@ const mockUsers: CommunityUser[] = [
 
 const REHABILITATION_TYPES = [
   { id: 'todos', label: 'Todos' },
+  { id: 'alcohol', label: 'Alcohol' },
   { id: 'amor', label: 'Amor' },
   { id: 'azucar', label: 'Azúcar' },
+  { id: 'cannabis', label: 'Cannabis' },
+  { id: 'cocaina', label: 'Cocaína' },
   { id: 'codependencia', label: 'Codependencia' },
   { id: 'comida', label: 'Comida' },
   { id: 'compras', label: 'Compras' },
@@ -70,8 +73,10 @@ const REHABILITATION_TYPES = [
   { id: 'pornografia', label: 'Pornografía' },
   { id: 'redes_sociales', label: 'Redes Sociales' },
   { id: 'sexo', label: 'Sexo' },
+  { id: 'tabaco', label: 'Tabaco' },
   { id: 'tecnologia', label: 'Tecnología' },
   { id: 'trabajo', label: 'Trabajo' },
+  { id: 'vaporizadores', label: 'Vaporizadores' },
   { id: 'videojuegos', label: 'Videojuegos' },
   { id: 'otros', label: 'Otros' },
 ] as const;

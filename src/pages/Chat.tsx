@@ -39,8 +39,11 @@ interface ChatMessage {
 }
 
 const CHAT_ROOMS = [
+  { id: 'alcohol', label: 'Alcohol' },
   { id: 'amor', label: 'Amor' },
   { id: 'azucar', label: 'Azúcar' },
+  { id: 'cannabis', label: 'Cannabis' },
+  { id: 'cocaina', label: 'Cocaína' },
   { id: 'codependencia', label: 'Codependencia' },
   { id: 'comida', label: 'Comida' },
   { id: 'compras', label: 'Compras' },
@@ -50,8 +53,10 @@ const CHAT_ROOMS = [
   { id: 'pornografia', label: 'Pornografía' },
   { id: 'redes_sociales', label: 'Redes Sociales' },
   { id: 'sexo', label: 'Sexo' },
+  { id: 'tabaco', label: 'Tabaco' },
   { id: 'tecnologia', label: 'Tecnología' },
   { id: 'trabajo', label: 'Trabajo' },
+  { id: 'vaporizadores', label: 'Vaporizadores' },
   { id: 'videojuegos', label: 'Videojuegos' },
   { id: 'otros', label: 'Otros' },
 ] as const;
@@ -68,8 +73,11 @@ export default function Chat() {
     return savedRoom || 'narcoticos';
   });
   const [onlineCountByRoom, setOnlineCountByRoom] = useState<Record<string, number>>({
+    alcohol: 0,
     amor: 0,
     azucar: 0,
+    cannabis: 0,
+    cocaina: 0,
     codependencia: 0,
     comida: 0,
     compras: 0,
@@ -79,8 +87,10 @@ export default function Chat() {
     pornografia: 0,
     redes_sociales: 0,
     sexo: 0,
+    tabaco: 0,
     tecnologia: 0,
     trabajo: 0,
+    vaporizadores: 0,
     videojuegos: 0,
     otros: 0
   });
