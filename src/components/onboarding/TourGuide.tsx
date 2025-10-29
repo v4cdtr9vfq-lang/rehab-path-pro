@@ -35,7 +35,9 @@ export function TourGuide({ onComplete }: TourGuideProps) {
           setTimeout(() => {
             const firstElement = document.querySelector('#dashboard-link');
             if (firstElement) {
-              setRun(true);
+              // Navegar a la primera ruta antes de iniciar
+              navigate(stepRoutes[0]);
+              setTimeout(() => setRun(true), 100);
             }
           }, 400);
           return;
@@ -44,7 +46,9 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       
       const firstElement = document.querySelector('#dashboard-link');
       if (firstElement) {
-        setRun(true);
+        // Navegar a la primera ruta antes de iniciar
+        navigate(stepRoutes[0]);
+        setTimeout(() => setRun(true), 100);
       } else {
         // Si no existe, reintentar después de un tiempo
         setTimeout(checkAndStart, 300);
@@ -54,7 +58,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
     const timer = setTimeout(checkAndStart, 800);
     
     return () => clearTimeout(timer);
-  }, [isMobile]);
+  }, [isMobile, navigate]);
 
   const stepRoutes = [
     '/dashboard',
@@ -139,22 +143,23 @@ export function TourGuide({ onComplete }: TourGuideProps) {
     const { status, action, index, type } = data;
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
-    // En mobile, mantener el sheet abierto durante el tour
-    if (isMobile && type === EVENTS.STEP_AFTER && (action === ACTIONS.NEXT || action === ACTIONS.PREV)) {
-      const sheetOverlay = document.querySelector('[data-state="open"]');
-      if (!sheetOverlay) {
-        const menuButton = document.querySelector('button[aria-label="Open sidebar"]') as HTMLButtonElement;
-        if (menuButton) {
-          menuButton.click();
+    // Navegar cuando el paso está a punto de mostrarse
+    if (type === EVENTS.STEP_BEFORE || type === EVENTS.TARGET_NOT_FOUND) {
+      if (index >= 0 && index < stepRoutes.length) {
+        navigate(stepRoutes[index]);
+        
+        // En mobile, asegurar que el menú permanece abierto
+        if (isMobile) {
+          setTimeout(() => {
+            const sheetOverlay = document.querySelector('[data-state="open"]');
+            if (!sheetOverlay) {
+              const menuButton = document.querySelector('button[aria-label="Open sidebar"]') as HTMLButtonElement;
+              if (menuButton) {
+                menuButton.click();
+              }
+            }
+          }, 100);
         }
-      }
-    }
-
-    // Navegar a la ruta correspondiente cuando se avanza o retrocede
-    if (type === EVENTS.STEP_AFTER && (action === ACTIONS.NEXT || action === ACTIONS.PREV)) {
-      const nextIndex = action === ACTIONS.NEXT ? index + 1 : index - 1;
-      if (nextIndex >= 0 && nextIndex < stepRoutes.length) {
-        navigate(stepRoutes[nextIndex]);
       }
     }
 
