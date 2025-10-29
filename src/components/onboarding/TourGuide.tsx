@@ -162,16 +162,16 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   ];
 
   const handleJoyrideCallback = async (data: CallBackProps) => {
-    const { status, action, index, type } = data;
+    const { status, index, action, type } = data;
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
-    // Actualizar el stepIndex cuando el paso cambia
-    if (type === EVENTS.STEP_AFTER) {
-      if (action === ACTIONS.NEXT) {
-        setStepIndex(index + 1);
-      } else if (action === ACTIONS.PREV) {
-        setStepIndex(index - 1);
-      }
+    console.log('Tour callback:', { type, action, index, currentStepIndex: stepIndex });
+
+    // Actualizar el stepIndex cuando avanzan o retroceden
+    if (action === ACTIONS.NEXT && type === EVENTS.STEP_AFTER) {
+      setStepIndex((prev) => Math.min(prev + 1, steps.length - 1));
+    } else if (action === ACTIONS.PREV && type === EVENTS.STEP_AFTER) {
+      setStepIndex((prev) => Math.max(prev - 1, 0));
     }
 
     if (finishedStatuses.includes(status)) {
