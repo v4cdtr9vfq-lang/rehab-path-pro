@@ -128,7 +128,7 @@ export function RehabilitationTypeDialog({ onComplete }: RehabilitationTypeDialo
               <SelectTrigger className="w-full pl-[17px]">
                 <SelectValue placeholder="Selecciona una opción" />
               </SelectTrigger>
-              <SelectContent className="z-[99999] bg-popover">
+              <SelectContent className="z-[99999] bg-popover max-h-[300px] overflow-y-auto">
                 {REHABILITATION_TYPES.map((type) => (
                   <SelectItem key={type.id} value={type.id}>
                     {type.label}
