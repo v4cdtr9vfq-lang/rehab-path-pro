@@ -964,9 +964,8 @@ export default function Settings() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <span className="text-lg">⚙️</span>
-            Configuración de recuperación
+          <CardTitle>
+            Configuración de recuperación:
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
