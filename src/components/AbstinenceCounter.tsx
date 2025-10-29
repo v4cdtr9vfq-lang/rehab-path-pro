@@ -107,7 +107,7 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
     <>
       <div className="rounded-3xl p-8 md:p-12 bg-card border border-sidebar-border relative">
         {/* Title in top left corner */}
-        <p className="absolute top-4 left-6 text-foreground text-2xl font-bold text-left">
+        <p className="absolute top-8 left-8 text-foreground text-2xl font-bold text-left">
           Tiempo limpio:
         </p>
 
