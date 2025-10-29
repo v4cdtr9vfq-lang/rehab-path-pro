@@ -550,6 +550,7 @@ export type Database = {
           onboarding_completed: boolean
           rehabilitation_type: string | null
           text_onboarding_completed: boolean | null
+          tour_completed: boolean
           updated_at: string
           user_id: string
         }
@@ -562,6 +563,7 @@ export type Database = {
           onboarding_completed?: boolean
           rehabilitation_type?: string | null
           text_onboarding_completed?: boolean | null
+          tour_completed?: boolean
           updated_at?: string
           user_id: string
         }
@@ -574,6 +576,7 @@ export type Database = {
           onboarding_completed?: boolean
           rehabilitation_type?: string | null
           text_onboarding_completed?: boolean | null
+          tour_completed?: boolean
           updated_at?: string
           user_id?: string
         }
