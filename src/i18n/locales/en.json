@@ -198,7 +198,20 @@
     "trimesterChart": "Last quarter",
     "semesterChart": "Last semester",
     "yearChart": "This year",
-    "completionRate": "Completion rate"
+    "completionRate": "Completion rate",
+    "of": "of",
+    "goalsCompleted": "Goals completed!",
+    "pending": "pending",
+    "pendingSingular": "Pending",
+    "dailyCheckIn": "Daily check-in",
+    "checkIn": "Check-in",
+    "noGoalsToday": "No goals for today",
+    "noGoalsWeek": "No goals for this week",
+    "noGoalsMonth": "No goals for this month",
+    "quarter": "Quarter",
+    "semester": "Semester",
+    "thisYear": "This Year",
+    "totalProgress": "Total progress:"
   },
   "journal": {
     "title": "Journal",

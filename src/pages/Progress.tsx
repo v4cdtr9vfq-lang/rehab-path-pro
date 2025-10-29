@@ -448,10 +448,10 @@ export default function ProgressPage() {
         <Progress value={goal.percentage} className={`h-2.5 ${getProgressBgColor()}`} />
         <div className="flex justify-between items-center mt-1">
           <span className="text-xs text-muted-foreground">
-            {goal.completed} de {goal.total} completadas
+            {goal.completed} {t('progress.of')} {goal.total} {t('progress.completedGoals')}
           </span>
           <span className={`text-xs font-medium ${goal.percentage === 100 ? 'text-green-500' : 'text-muted-foreground'}`}>
-            {goal.percentage === 100 ? '✓ Completada' : `${goal.total - goal.completed} restantes`}
+            {goal.percentage === 100 ? `✓ ${t('progress.completed')}` : `${goal.total - goal.completed} ${t('progress.remaining')}`}
           </span>
         </div>
       </div>
@@ -492,7 +492,7 @@ export default function ProgressPage() {
               } transition-colors duration-500`}>{overallProgress}%</span>
             </div>
             <p className={`text-sm font-semibold mt-4 ${overallProgress === 100 ? 'text-green-500' : 'text-muted-foreground'}`}>
-              {overallProgress === 100 ? '¡Metas completadas!' : `${100 - overallProgress}% pendientes`}
+              {overallProgress === 100 ? t('progress.goalsCompleted') : `${100 - overallProgress}% ${t('progress.pending')}`}
             </p>
           </div>
         </CardContent>
@@ -511,18 +511,18 @@ export default function ProgressPage() {
               <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-semibold text-foreground">
-                    <span className="md:hidden">Check-in</span>
-                    <span className="hidden md:inline">Check-in diario</span>
+                    <span className="md:hidden">{t('progress.checkIn')}</span>
+                    <span className="hidden md:inline">{t('progress.dailyCheckIn')}</span>
                   </span>
                   <span className={`text-sm font-bold ${hasCheckedInToday ? 'text-green-500' : 'text-orange-600'}`}>{hasCheckedInToday ? '100' : '0'}%</span>
                 </div>
                 <Progress value={hasCheckedInToday ? 100 : 0} className={`h-2.5 ${hasCheckedInToday ? '[&>div]:bg-green-500' : '[&>div]:bg-orange-600'}`} />
                 <div className="flex justify-between items-center mt-1">
                   <span className="text-xs text-muted-foreground">
-                    {hasCheckedInToday ? '1 de 1 completadas' : '0 de 1 completadas'}
+                    {hasCheckedInToday ? `1 ${t('progress.of')} 1 ${t('progress.completedGoals')}` : `0 ${t('progress.of')} 1 ${t('progress.completedGoals')}`}
                   </span>
                   <span className={`text-xs font-medium ${hasCheckedInToday ? 'text-green-500' : 'text-muted-foreground'}`}>
-                    {hasCheckedInToday ? '✓ Completado' : 'Pendiente'}
+                    {hasCheckedInToday ? `✓ ${t('progress.completed')}` : t('progress.pendingSingular')}
                   </span>
                 </div>
               </div>
@@ -532,7 +532,7 @@ export default function ProgressPage() {
               ))}
 
               {dailyGoals.length === 0 && (
-                <p className="text-center py-4 text-muted-foreground">No hay metas para hoy</p>
+                <p className="text-center py-4 text-muted-foreground">{t('progress.noGoalsToday')}</p>
               )}
             </CardContent>
           </Card>
@@ -546,7 +546,7 @@ export default function ProgressPage() {
               ))}
 
               {weeklyGoals.length === 0 && (
-                <p className="text-center py-4 text-muted-foreground">No hay metas para esta semana</p>
+                <p className="text-center py-4 text-muted-foreground">{t('progress.noGoalsWeek')}</p>
               )}
             </CardContent>
           </Card>
@@ -560,7 +560,7 @@ export default function ProgressPage() {
               ))}
 
               {monthlyGoals.length === 0 && (
-                <p className="text-center py-4 text-muted-foreground">No hay metas para este mes</p>
+                <p className="text-center py-4 text-muted-foreground">{t('progress.noGoalsMonth')}</p>
               )}
             </CardContent>
           </Card>
@@ -571,16 +571,16 @@ export default function ProgressPage() {
       {/* Chart Widget Tabs */}
       <Tabs defaultValue="week" className="w-full space-y-[25px]">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="week">Trimestre</TabsTrigger>
-          <TabsTrigger value="month">Simestre</TabsTrigger>
-          <TabsTrigger value="year">Este Año</TabsTrigger>
+          <TabsTrigger value="week">{t('progress.quarter')}</TabsTrigger>
+          <TabsTrigger value="month">{t('progress.semester')}</TabsTrigger>
+          <TabsTrigger value="year">{t('progress.thisYear')}</TabsTrigger>
         </TabsList>
 
         {/* Chart Widget */}
         <Card className="border-sidebar-border">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Progreso total:
+              {t('progress.totalProgress')}
             </CardTitle>
           </CardHeader>
           <CardContent>

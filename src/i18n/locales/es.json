@@ -198,7 +198,20 @@
     "trimesterChart": "Último trimestre",
     "semesterChart": "Último semestre",
     "yearChart": "Este año",
-    "completionRate": "Tasa de cumplimiento"
+    "completionRate": "Tasa de cumplimiento",
+    "of": "de",
+    "goalsCompleted": "¡Metas completadas!",
+    "pending": "pendientes",
+    "pendingSingular": "Pendiente",
+    "dailyCheckIn": "Check-in diario",
+    "checkIn": "Check-in",
+    "noGoalsToday": "No hay metas para hoy",
+    "noGoalsWeek": "No hay metas para esta semana",
+    "noGoalsMonth": "No hay metas para este mes",
+    "quarter": "Trimestre",
+    "semester": "Semestre",
+    "thisYear": "Este Año",
+    "totalProgress": "Progreso total:"
   },
   "journal": {
     "title": "Diario",
