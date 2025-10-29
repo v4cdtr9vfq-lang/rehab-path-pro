@@ -1205,21 +1205,6 @@ export default function Plan() {
             </div>}
             
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-notes">Observaciones</Label>
-              <Textarea 
-                id="edit-goal-notes" 
-                placeholder="Observaciones sobre la meta..." 
-                value={editingGoal?.notes || ""} 
-                onChange={e => setEditingGoal(prev => ({
-                  ...prev,
-                  notes: e.target.value
-                }))}
-                rows={3}
-                className="resize-none"
-              />
-            </div>
-            
-            <div className="space-y-2">
               <Label htmlFor="edit-goal-instructions">Instrucciones</Label>
               <Textarea 
                 id="edit-goal-instructions" 
@@ -1228,6 +1213,21 @@ export default function Plan() {
                 onChange={e => setEditingGoal(prev => ({
                   ...prev,
                   instructions: e.target.value
+                }))}
+                rows={3}
+                className="resize-none"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="edit-goal-notes">Observaciones</Label>
+              <Textarea 
+                id="edit-goal-notes" 
+                placeholder="Observaciones sobre la meta..." 
+                value={editingGoal?.notes || ""} 
+                onChange={e => setEditingGoal(prev => ({
+                  ...prev,
+                  notes: e.target.value
                 }))}
                 rows={3}
                 className="resize-none"
