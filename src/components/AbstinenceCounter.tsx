@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { Plus } from "lucide-react";
 import { AddAddictionDialog } from "./AddAddictionDialog";
 import { toast } from "sonner";
@@ -20,6 +20,13 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
     months: 0,
     days: 0
   });
+  
+  // Use ref to store stable reference to callback
+  const onAddictionChangeRef = useRef(onAddictionChange);
+  
+  useEffect(() => {
+    onAddictionChangeRef.current = onAddictionChange;
+  }, [onAddictionChange]);
 
   // Load rehabilitation type from profile
   useEffect(() => {
@@ -98,10 +105,10 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
     const diff = now.getTime() - dateToUse.getTime();
     const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
     
-    if (onAddictionChange) {
-      onAddictionChange(selectedAddiction.id, totalDays);
+    if (onAddictionChangeRef.current) {
+      onAddictionChangeRef.current(selectedAddiction.id, totalDays);
     }
-  }, [selectedIndex, allAddictions, onAddictionChange]);
+  }, [selectedIndex, allAddictions]);
 
   // Reset selectedIndex if out of bounds - only if actually needed
   useEffect(() => {
@@ -127,14 +134,14 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
     setSelectedIndex(index);
     
     // Notify parent about addiction change
-    if (onAddictionChange && allAddictions[index]) {
+    if (onAddictionChangeRef.current && allAddictions[index]) {
       const selectedAddiction = allAddictions[index];
       const dateToUse = new Date(selectedAddiction.start_date);
       const now = new Date();
       const diff = now.getTime() - dateToUse.getTime();
       const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
       
-      onAddictionChange(selectedAddiction.id, totalDays);
+      onAddictionChangeRef.current(selectedAddiction.id, totalDays);
     }
   };
 
