@@ -29,6 +29,14 @@ serve(async (req) => {
       );
     }
 
+    if (!BREVO_API_KEY) {
+      console.error("BREVO_API_KEY is not configured");
+      return new Response(
+        JSON.stringify({ error: "La API key de Brevo no está configurada. Por favor, configúrala en los secretos del proyecto." }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     console.log("Sending report email to:", recipientEmail);
 
     const emailResponse = await fetch("https://api.brevo.com/v3/smtp/email", {
