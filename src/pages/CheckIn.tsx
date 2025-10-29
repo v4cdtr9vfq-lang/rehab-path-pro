@@ -489,17 +489,17 @@ export default function CheckIn() {
                   {question.id === 4 && answers[4] === "yes" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                       <Label htmlFor="resentment-description" className="text-sm font-medium text-foreground pl-4">
-                        Describe tu resentimiento:
+                        {t('checkIn.resentmentLabel')}
                       </Label>
                       <Textarea
                         id="resentment-description"
-                        placeholder="¿Qué situación o persona causó este resentimiento? ¿Cómo te afectó?"
+                        placeholder={t('checkIn.resentmentPlaceholder')}
                         value={resentmentDescription}
                         onChange={(e) => setResentmentDescription(e.target.value)}
                         className="min-h-[100px]"
                       />
                       <p className="text-xs text-muted-foreground">
-                        Esta descripción se guardará automáticamente como entrada en tu diario con el título "Resentimientos"
+                        {t('checkIn.resentmentHelp')}
                       </p>
                     </div>
                   )}
@@ -508,17 +508,17 @@ export default function CheckIn() {
                   {question.id === 7 && answers[7] === "no" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                       <Label htmlFor="values-description" className="text-sm font-medium text-foreground pl-4">
-                        Describe la situación:
+                        {t('checkIn.valuesLabel')}
                       </Label>
                       <Textarea
                         id="values-description"
-                        placeholder="A qué valor has sido infiel. Cómo y porqué has sido infiel. Cómo puedes enmendarlo."
+                        placeholder={t('checkIn.valuesPlaceholder')}
                         value={valuesDescription}
                         onChange={(e) => setValuesDescription(e.target.value)}
                         className="min-h-[100px]"
                       />
                       <p className="text-xs text-muted-foreground">
-                        Esta descripción se guardará automáticamente como entrada en tu diario con el título "Cuándo soy infiel a mis valores"
+                        {t('checkIn.valuesHelp')}
                       </p>
                       {userValues.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-2">
@@ -536,11 +536,11 @@ export default function CheckIn() {
                   {question.id === 8 && answers[8] === "yes" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                       <Label htmlFor="limiting-description" className="text-sm font-medium text-foreground pl-4">
-                        ¿Qué obstáculos hay que superar?
+                        {t('checkIn.limitingLabel')}
                       </Label>
                       <Textarea
                         id="limiting-description"
-                        placeholder="Describe de forma concreta los obstáculos a superar"
+                        placeholder={t('checkIn.limitingPlaceholder')}
                         value={limitingDescription}
                         onChange={(e) => setLimitingDescription(e.target.value)}
                         className="min-h-[100px]"
@@ -552,11 +552,11 @@ export default function CheckIn() {
                   {question.id === 9 && answers[9] === "yes" && (
                     <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                       <Label htmlFor="negative-thoughts-description" className="text-sm font-medium text-foreground pl-4">
-                        Describe tus pensamientos negativos:
+                        {t('checkIn.negativeThoughtsLabel')}
                       </Label>
                       <Textarea
                         id="negative-thoughts-description"
-                        placeholder="¿Qué pensamientos negativos tuviste hoy?"
+                        placeholder={t('checkIn.negativeThoughtsPlaceholder')}
                         value={negativeThoughtsDescription}
                         onChange={(e) => setNegativeThoughtsDescription(e.target.value)}
                         className="min-h-[100px]"
