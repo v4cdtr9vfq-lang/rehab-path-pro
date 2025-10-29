@@ -549,6 +549,7 @@ export type Database = {
           id: string
           onboarding_completed: boolean
           rehabilitation_type: string | null
+          text_onboarding_completed: boolean | null
           updated_at: string
           user_id: string
         }
@@ -560,6 +561,7 @@ export type Database = {
           id?: string
           onboarding_completed?: boolean
           rehabilitation_type?: string | null
+          text_onboarding_completed?: boolean | null
           updated_at?: string
           user_id: string
         }
@@ -571,6 +573,7 @@ export type Database = {
           id?: string
           onboarding_completed?: boolean
           rehabilitation_type?: string | null
+          text_onboarding_completed?: boolean | null
           updated_at?: string
           user_id?: string
         }

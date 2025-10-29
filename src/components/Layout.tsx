@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Sidebar } from "./Sidebar";
 import { Footer } from "./Footer";
 import RehabilitationTypeDialog from "./RehabilitationTypeDialog";
+import { TextOnboarding } from "./TextOnboarding";
 // import { useInactivityTimeout } from "@/hooks/useInactivityTimeout";
 
 interface LayoutProps {
@@ -14,6 +15,7 @@ export function Layout({ children }: LayoutProps) {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <TextOnboarding />
       <RehabilitationTypeDialog />
       <Sidebar />
       <div className="lg:pl-72 flex flex-col min-h-screen">
