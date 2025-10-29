@@ -144,6 +144,8 @@ El informe debe ser:
 
     const userPrompt = `Analiza los siguientes datos del usuario para el período ${context.periodo}:
 
+IMPORTANTE: Ignora completamente cualquier entrada que contenga únicamente la frase "Lo mejor está por regar" o "Lo mejor está por llegar", ya que es texto de placeholder por defecto y no representa contenido real del usuario.
+
 EMOCIONES REGISTRADAS (${context.emociones.length} entradas):
 ${JSON.stringify(context.emociones, null, 2)}
 
@@ -159,7 +161,7 @@ ${JSON.stringify(context.valores, null, 2)}
 CHECK-INS DIARIOS (${context.checkIns.length} entradas):
 ${JSON.stringify(context.checkIns, null, 2)}
 
-Genera un informe completo de progreso psicológico y emocional.`;
+Genera un informe completo de progreso psicológico y emocional, excluyendo cualquier referencia a las frases por defecto mencionadas.`;
 
     console.log("Calling Lovable AI...");
 
