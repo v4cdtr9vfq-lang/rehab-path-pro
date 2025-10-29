@@ -23,7 +23,7 @@ const steps = [
   },
   {
     title: "Plan de emergencia y recaídas",
-    content: "Nuestra funcionalidad contempla la posibilidad de las recaídas. Si en tu Check-in diario respondes \"No\" a la pregunta \"¿Me mantuve limpio de consumo hoy?\", se activará la opción de escribir un \"Inventario de la recaída\" para que describas qué situación o emociones te han llevado a esta situación. Recuerda que el objetivo es aprender de cada proceso para ganar mayor capacidad de acción."
+    content: "Nuestra funcionalidad contempla la posibilidad de las recaídas. Si en tu Check-in diario respondes \"No\" a la pregunta \"¿Me mantuve limpio de consumo hoy?\", se activará la opción de escribir un \"Inventario de la recaída\" para que describas qué situación o emociones te han llevado a recaer. Recuerda que el objetivo es aprender de cada proceso para ganar mayor capacidad de acción."
   },
   {
     title: "Informes de evolución",
