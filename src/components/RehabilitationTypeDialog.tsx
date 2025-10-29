@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -168,6 +169,9 @@ export default function RehabilitationTypeDialog() {
           <DialogTitle className="text-left text-xl pl-[17px]">
             ¿Qué quieres rehabilitar?
           </DialogTitle>
+          <DialogDescription className="text-left text-sm pl-[17px]">
+            Selecciona el tipo de adicción de la que te quieres liberar
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">

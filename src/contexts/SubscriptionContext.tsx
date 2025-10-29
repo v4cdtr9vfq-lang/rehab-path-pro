@@ -53,6 +53,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         setSubscriptionEnd(null);
         setTrialDaysRemaining(40);
         setIsTrialExpired(false);
+        if (showLoading) setLoading(false);
         return;
       }
 
@@ -75,20 +76,26 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
 
       const { data, error } = await supabase.functions.invoke("check-subscription");
 
-      if (error) throw error;
+      // If edge function fails, don't throw - just use defaults
+      if (error) {
+        console.error("Error checking subscription (using defaults):", error);
+        setSubscribed(false);
+        setPlan("free");
+        setSubscriptionEnd(null);
+        return;
+      }
 
       setSubscribed(data.subscribed || false);
       setPlan(data.plan || "free");
       setSubscriptionEnd(data.subscription_end || null);
     } catch (error: any) {
-      console.error("Error checking subscription:", error);
-      toast({
-        title: "Error",
-        description: "No se pudo verificar el estado de la suscripción",
-        variant: "destructive",
-      });
+      console.error("Error in checkSubscription (continuing with defaults):", error);
+      // Don't show error toast - just set defaults
+      setSubscribed(false);
+      setPlan("free");
+      setSubscriptionEnd(null);
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 

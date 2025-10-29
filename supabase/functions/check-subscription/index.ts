@@ -37,9 +37,25 @@ serve(async (req) => {
     logStep("Authenticating user with token");
     
     const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
-    if (userError) throw new Error(`Authentication error: ${userError.message}`);
+    
+    // If authentication fails, return free trial status instead of error
+    if (userError || !userData.user?.email) {
+      logStep("Auth failed or no email, returning free trial", { 
+        error: userError?.message,
+        hasUser: !!userData.user,
+        hasEmail: !!userData.user?.email
+      });
+      return new Response(JSON.stringify({ 
+        subscribed: false,
+        plan: "free",
+        trial_days_remaining: 40
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
+    }
+    
     const user = userData.user;
-    if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { userId: user.id, email: user.email });
 
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
