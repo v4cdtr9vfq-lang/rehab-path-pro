@@ -15,7 +15,7 @@ const steps = [
   },
   {
     title: "Herramientas probadas por la ciencia",
-    content: "Hemos incluido herramientas como los Check-in diarios, el uso del diario, el diario de emociones, los listados de valores, los chats o las mentorías con otros miembros de la comunidad, todas con resultados probados en tu proceso."
+    content: "Hemos incluido herramientas como los Check-in diarios, el uso del diario, el diario de emociones, los listados de valores, los chats o las mentorías con otros miembros de la comunidad, cuyos beneficios están ampliamente comprobados por la ciencia."
   },
   {
     title: "Plan y metas predefinidas",
