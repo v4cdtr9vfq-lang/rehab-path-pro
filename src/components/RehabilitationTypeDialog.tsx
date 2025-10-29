@@ -163,7 +163,7 @@ export default function RehabilitationTypeDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[425px] z-[9999]">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-left text-xl pl-[17px]">
             ¿Qué quieres rehabilitar?
