@@ -1,17 +1,16 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 
 import es from './locales/es.json';
 import en from './locales/en.json';
 import emotionsEs from './locales/emotions-es.json';
 import emotionsEn from './locales/emotions-en.json';
 
-// Force Spanish as default language
+// Clear any previous language settings and force Spanish
+localStorage.removeItem('i18nextLng');
 localStorage.setItem('i18nextLng', 'es');
 
 i18n
-  .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
@@ -26,16 +25,9 @@ i18n
     },
     supportedLngs: ['en', 'es'],
     fallbackLng: 'es',
-    lng: 'es', // Force Spanish on init
+    lng: 'es', // Always start with Spanish
     interpolation: {
       escapeValue: false,
-    },
-    detection: {
-      order: ['querystring', 'localStorage'],
-      lookupQuerystring: 'lang',
-      lookupLocalStorage: 'i18nextLng',
-      caches: ['localStorage'],
-      convertDetectedLanguage: (lng: string) => lng.split('-')[0]
     },
     debug: false,
     returnEmptyString: false,
