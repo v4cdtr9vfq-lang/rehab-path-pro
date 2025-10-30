@@ -644,13 +644,13 @@ export default function EmotionJournal() {
     const total = data.reduce((sum, item) => sum + item.count, 0);
 
     return (
-      <div className="w-full">
+      <div className="w-full pt-6 lg:pt-0">
         <ResponsiveContainer width="100%" height={400} className="lg:h-[320px]">
           <PieChart>
             <Pie
               data={data}
               cx="50%"
-              cy="45%"
+              cy="50%"
               innerRadius={50}
               outerRadius={80}
               paddingAngle={2}
@@ -1210,7 +1210,7 @@ export default function EmotionJournal() {
 
       {/* Statistics Widget */}
       {savedEntries.length > 0 && (
-        <Card className="border-sky-blue/20">
+        <Card className="border-sky-blue/20 pl-[14px]">
           <CardHeader>
             <CardTitle className="text-2xl">
               {t('emotionJournal.statistics')}
