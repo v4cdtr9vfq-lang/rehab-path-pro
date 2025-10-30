@@ -37,11 +37,6 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
         name: "Disgust",
         secondaryEmotions: [
           {
-            id: "disgusto",
-            name: "Disgust",
-            tertiaryEmotions: ["Annoyance", "Discontent", "Dissatisfaction"].sort()
-          },
-          {
             id: "repugnancia",
             name: "Repugnance",
             tertiaryEmotions: ["Denial", "Nausea", "Repulsion"].sort()
@@ -248,11 +243,6 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
       id: "asco",
       name: "Asco",
       secondaryEmotions: [
-        {
-          id: "disgusto",
-          name: "Disgusto",
-          tertiaryEmotions: ["Descontento", "Insatisfacción", "Molestia"].sort()
-        },
         {
           id: "repugnancia",
           name: "Repugnancia",
