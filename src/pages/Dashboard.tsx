@@ -1203,7 +1203,7 @@ export default function Home() {
         >
           <Star className={`h-5 w-5 ${isQuoteSaved ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`} />
         </Button>
-        <CardContent className="p-6 pt-12">
+        <CardContent className="p-6 pt-12 flex flex-col justify-center min-h-[200px]">
           <p className="text-center text-foreground text-xl font-medium leading-relaxed mb-2">
             "{dailyQuote.text}"
           </p>
