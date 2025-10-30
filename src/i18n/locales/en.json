@@ -360,7 +360,8 @@
     "alsoFeltLog": "I have also felt:",
     "andAtDeeperLevelLog": "And at a deeper level:",
     "noDataForPeriod": "No data for this period",
-    "times": "times"
+    "times": "times",
+    "dateFormat": "MMMM d, yyyy 'at' HH:mm"
   },
   "gratitude": {
     "title": "Gratitude",
@@ -602,6 +603,9 @@
     "madeWith": "Made with",
     "for": "for",
     "recovery": "recovery"
+  },
+  "sidebar": {
+    "tagline": "Assistance in rehabilitation processes."
   },
   "landing": {
     "welcome": "Welcome to your recovery journey",

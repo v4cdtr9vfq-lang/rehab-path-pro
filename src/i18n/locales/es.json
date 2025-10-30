@@ -360,7 +360,8 @@
     "alsoFeltLog": "También he sentido:",
     "andAtDeeperLevelLog": "Y a nivel más profundo:",
     "noDataForPeriod": "No hay datos para este período",
-    "times": "veces"
+    "times": "veces",
+    "dateFormat": "d 'de' MMMM, yyyy 'a las' HH:mm"
   },
   "gratitude": {
     "title": "Agradecimiento",
@@ -602,6 +603,9 @@
     "madeWith": "Hecho con",
     "for": "para",
     "recovery": "la recuperación"
+  },
+  "sidebar": {
+    "tagline": "Asistencia en procesos de rehabilitación."
   },
   "landing": {
     "welcome": "Bienvenido a tu viaje de recuperación",

@@ -6,7 +6,7 @@ import { Check, Pencil, Trash2, Calendar as CalendarIcon, ChevronLeft, ChevronRi
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
@@ -1044,11 +1044,11 @@ export default function EmotionJournal() {
             {filteredEntries.length > 0 ? (
               currentEntries.map((entry) => (
               <Card key={entry.id} className="p-6 bg-card border-border">
-                <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <CalendarIcon className="h-4 w-4" />
                     <span className="text-sm font-medium">
-                      {format(new Date(entry.created_at), "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
+                      {format(new Date(entry.created_at), t('emotionJournal.dateFormat'), { locale: t('common.yes') === 'Yes' ? enUS : es })}
                     </span>
                   </div>
                   <div className="flex gap-2 mr-[10px] lg:mr-0">
