@@ -306,7 +306,7 @@
     "stop": "Detener",
     "transcribing": "Transcribiendo...",
     "editEntry": "Editar entrada",
-    "newJournalEntry": "Nueva Entrada de Diario",
+    "newJournalEntry": "Nueva Entrada de Diario:",
     "entryTitlePlaceholder": "Título de la entrada...",
     "tagsPlaceholder": "Etiquetas (separadas por comas)",
     "updateEntry": "Actualizar Entrada",
