@@ -1019,7 +1019,7 @@ export default function Settings() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 pl-4">
+          <CardTitle className="flex items-center gap-2">
             {t('settings.subscription')}:
           </CardTitle>
         </CardHeader>
