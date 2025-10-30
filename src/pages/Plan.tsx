@@ -783,30 +783,7 @@ export default function Plan() {
 
   // Calculate remaining count for display - recalculate from goal completion status
   const getRemainingCount = (goal: ExpandedGoal, sectionKey: keyof typeof sections) => {
-    // For week/month sections showing daily/always goals, we need to count across ALL sections
-    // because daily goals appear separately in each day
-    if ((sectionKey === 'week' || sectionKey === 'month') && 
-        (goal.goal_type === 'today' || goal.goal_type === 'always' || goal.goal_type === 'periodic')) {
-      // Get all instances across ALL sections for this goal
-      const allInstancesInToday = sections.today.goals.filter(g => g.originalId === goal.originalId);
-      const allInstancesInWeek = sections.week.goals.filter(g => g.originalId === goal.originalId);
-      const allInstancesInMonth = sections.month.goals.filter(g => g.originalId === goal.originalId);
-      
-      // Combine all instances
-      const allInstances = [...allInstancesInToday, ...allInstancesInWeek, ...allInstancesInMonth];
-      
-      // Remove duplicates by checking the full ID
-      const uniqueInstances = allInstances.filter((instance, index, self) =>
-        index === self.findIndex((t) => t.id === instance.id)
-      );
-      
-      // Count completed
-      const completedCount = uniqueInstances.filter(g => g.completed).length;
-      const totalInstances = uniqueInstances.length;
-      return totalInstances - completedCount;
-    }
-    
-    // For other cases, just count in the current section
+    // Count instances only within the current section
     const allGoalsInSection = sections[sectionKey].goals.filter(g => g.originalId === goal.originalId);
     const completedCount = allGoalsInSection.filter(g => g.completed).length;
     const totalInstances = allGoalsInSection.length;
