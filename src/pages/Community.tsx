@@ -262,8 +262,11 @@ export default function Community() {
     });
 
   const getInitials = (name: string) => {
-    // Solo tomar la primera letra del nombre
-    return name.charAt(0).toUpperCase();
+    if (!name) return '';
+    const nameParts = name.trim().split(/\s+/).filter(part => part.length > 0);
+    if (nameParts.length === 0) return '';
+    if (nameParts.length === 1) return nameParts[0][0].toUpperCase();
+    return (nameParts[0][0] + nameParts[1][0]).toUpperCase();
   };
 
   const getMedalsByTime = (totalDays: number) => {
