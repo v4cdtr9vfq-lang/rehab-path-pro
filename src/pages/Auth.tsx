@@ -240,7 +240,7 @@ export default function Auth() {
                 <form onSubmit={handleAuth} className="space-y-4">
                   {!isLogin && (
                     <div className="space-y-2">
-                      <Label htmlFor="fullName" className="pl-4">Nombre de pila</Label>
+                      <Label htmlFor="fullName" className="pl-4">Nombre de pila:</Label>
                       <Input
                         id="fullName"
                         type="text"
