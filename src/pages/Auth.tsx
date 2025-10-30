@@ -184,10 +184,10 @@ export default function Auth() {
 
         <Card className="border-border/50">
           <CardHeader>
-            <CardTitle>{isForgotPassword ? "Recuperar contraseña" : isLogin ? "Iniciar sesión" : "Registrarse"}</CardTitle>
+            <CardTitle>{isForgotPassword ? "Recuperar contraseña" : isLogin ? "Iniciar sesión" : "Regístrate gratis:"}</CardTitle>
             {!isLogin && !isForgotPassword && (
               <CardDescription>
-                Completa el formulario para crear tu cuenta
+                Completa el formulario para crear tu cuenta:
               </CardDescription>
             )}
           </CardHeader>
