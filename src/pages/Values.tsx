@@ -28,6 +28,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useTranslation } from "react-i18next";
 
 interface Value {
   id: string;
@@ -46,6 +47,7 @@ const COLORS = ['#22c55e', '#f97316', '#3b82f6', '#a855f7', '#ec4899', '#eab308'
 
 export default function Values() {
   const { toast } = useToast();
+  const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [values, setValues] = useState<Value[]>([]);
   const [isPrimaryDialogOpen, setIsPrimaryDialogOpen] = useState(false);
@@ -113,13 +115,13 @@ export default function Values() {
       // If no values exist, create default ones
       if (!existingValues || existingValues.length === 0) {
         const defaultValues = [
-          { name: "Autocuidado", type: "primary" },
-          { name: "Gratitud", type: "primary" },
-          { name: "Humor", type: "primary" },
-          { name: "Respeto", type: "secondary" },
-          { name: "Salud", type: "secondary" },
-          { name: "Consideración", type: "secondary" },
-          { name: "Compromiso", type: "secondary" }
+          { name: t('values.defaultSelfCare'), type: "primary" },
+          { name: t('values.defaultGratitude'), type: "primary" },
+          { name: t('values.defaultHumor'), type: "primary" },
+          { name: t('values.defaultRespect'), type: "secondary" },
+          { name: t('values.defaultHealth'), type: "secondary" },
+          { name: t('values.defaultConsideration'), type: "secondary" },
+          { name: t('values.defaultCommitment'), type: "secondary" }
         ];
 
         const valuesToInsert = defaultValues.map((val, index) => ({
@@ -180,8 +182,8 @@ export default function Values() {
     } catch (error: any) {
       console.error('Error fetching values:', error);
       toast({
-        title: "Error",
-        description: "No se pudieron cargar los valores",
+        title: t('common.error'),
+        description: t('values.errorLoading'),
         variant: "destructive",
       });
     }
@@ -293,8 +295,8 @@ export default function Values() {
       await fetchStats();
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: "No se pudo actualizar el valor",
+        title: t('common.error'),
+        description: t('values.errorUpdating'),
         variant: "destructive",
       });
     }
@@ -309,8 +311,8 @@ export default function Values() {
     
     if (currentCount >= maxCount) {
       toast({
-        title: "Límite alcanzado",
-        description: `Solo puedes tener ${maxCount} valores ${type === 'primary' ? 'primarios' : 'secundarios'}`,
+        title: t('values.limitReached'),
+        description: t('values.limitMessage', { max: maxCount, type: t(`values.${type}`) }),
         variant: "destructive",
       });
       return;
@@ -320,8 +322,8 @@ export default function Values() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
-          title: "Error",
-          description: "Debes iniciar sesión para añadir valores",
+          title: t('common.error'),
+          description: t('values.loginRequired'),
           variant: "destructive",
         });
         return;
@@ -353,14 +355,14 @@ export default function Values() {
         setIsPrimaryDialogOpen(false);
         setIsSecondaryDialogOpen(false);
         toast({
-          title: "Valor añadido",
-          description: "Tu valor ha sido guardado exitosamente",
+          title: t('values.valueAdded'),
+          description: t('values.valueSaved'),
         });
       }
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: "No se pudo guardar el valor",
+        title: t('common.error'),
+        description: t('values.errorSaving'),
         variant: "destructive",
       });
     }
@@ -380,16 +382,16 @@ export default function Values() {
       setOriginalValuesOrder(prev => prev.filter(v => v.id !== id));
       
       toast({
-        title: "Valor eliminado",
-        description: "El valor ha sido eliminado exitosamente",
+        title: t('values.valueDeleted'),
+        description: t('values.valueDeletedSuccess'),
       });
 
       // Refresh stats
       await fetchStats();
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: "No se pudo eliminar el valor",
+        title: t('common.error'),
+        description: t('values.errorDeleting'),
         variant: "destructive",
       });
     }
@@ -403,8 +405,8 @@ export default function Values() {
   const handleUpdateValue = async (id: string) => {
     if (!editValueName.trim()) {
       toast({
-        title: "Error",
-        description: "El nombre no puede estar vacío",
+        title: t('common.error'),
+        description: t('values.nameEmpty'),
         variant: "destructive",
       });
       return;
@@ -424,13 +426,13 @@ export default function Values() {
       setEditValueName("");
 
       toast({
-        title: "Actualizado",
-        description: "El valor ha sido actualizado exitosamente",
+        title: t('values.updated'),
+        description: t('values.valueUpdated'),
       });
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: "No se pudo actualizar el valor",
+        title: t('common.error'),
+        description: t('values.errorUpdating'),
         variant: "destructive",
       });
     }
@@ -469,8 +471,8 @@ export default function Values() {
     setValues([...originalValuesOrder]);
     setHasUnsavedOrder(false);
     toast({
-      title: "Cambios cancelados",
-      description: "Se ha restaurado el orden original",
+      title: t('values.changesCancelled'),
+      description: t('values.orderRestored'),
     });
   };
 
@@ -493,13 +495,13 @@ export default function Values() {
       setHasUnsavedOrder(false);
       
       toast({
-        title: "Orden guardado",
-        description: "El orden de tus valores ha sido actualizado",
+        title: t('values.orderSaved'),
+        description: t('values.orderUpdated'),
       });
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: "No se pudo guardar el orden",
+        title: t('common.error'),
+        description: t('values.errorSavingOrder'),
         variant: "destructive",
       });
     }
@@ -509,7 +511,7 @@ export default function Values() {
     if (data.length === 0) {
       return (
         <div className="flex items-center justify-center h-[300px] text-muted-foreground">
-          No hay datos para este período
+          {t('values.noDataPeriod')}
         </div>
       );
     }
@@ -537,7 +539,7 @@ export default function Values() {
             <Tooltip 
               formatter={(value: number, name: string) => {
                 const percentage = ((value / total) * 100).toFixed(1);
-                return [`${percentage}% (${value} veces)`, name];
+                return [`${percentage}% (${value} ${t('values.times')})`, name];
               }}
             />
             <Legend 
@@ -634,7 +636,7 @@ export default function Values() {
         )}
         {value.selected && !isEditing && (
           <span className="text-xs bg-green-500 text-white px-3 py-1 rounded-full">
-            Activo Hoy
+            {t('values.activeToday')}
           </span>
         )}
         {isEditing ? (
@@ -645,14 +647,14 @@ export default function Values() {
               onClick={onSaveEdit}
               className="text-success hover:text-success"
             >
-              Guardar
+              {t('values.save')}
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={onCancelEdit}
             >
-              Cancelar
+              {t('values.cancel')}
             </Button>
           </>
         ) : (
@@ -684,13 +686,13 @@ export default function Values() {
       {hasUnsavedOrder && !isMobile && (
         <div className="flex items-center justify-end gap-2 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
           <span className="text-sm text-foreground mr-auto">
-            Hay cambios sin guardar en el orden de valores
+            {t('values.unsavedChanges')}
           </span>
           <Button variant="outline" onClick={cancelReorder}>
-            Cancelar
+            {t('values.cancel')}
           </Button>
           <Button onClick={saveValueOrder}>
-            Guardar orden
+            {t('values.orderSaved')}
           </Button>
         </div>
       )}
@@ -698,24 +700,24 @@ export default function Values() {
       {/* Valores Primarios Widget */}
       <div>
         <div className="flex justify-between items-center mb-0 pl-[35px]">
-          <h2 className="text-2xl font-semibold text-foreground">Valores primarios - Máximo 3</h2>
+          <h2 className="text-2xl font-semibold text-foreground">{t('values.primaryValues')}</h2>
           <Dialog open={isPrimaryDialogOpen} onOpenChange={setIsPrimaryDialogOpen}>
             <DialogTrigger asChild>
               <Button className="gap-2" disabled={values.filter(v => v.value_type === 'primary').length >= 3}>
                 <Plus className="h-4 w-4" />
-                Añadir primario
+                {t('values.addPrimary')}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Añadir Valor Primario</DialogTitle>
+                <DialogTitle>{t('values.addPrimaryValue')}</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="primary-value-name">Nombre del Valor</Label>
+                  <Label htmlFor="primary-value-name">{t('values.valueName')}</Label>
                   <Input
                     id="primary-value-name"
-                    placeholder="Ej: Honestidad, Perseverancia..."
+                    placeholder={t('values.primaryPlaceholder')}
                     value={newValueName}
                     onChange={(e) => setNewValueName(e.target.value)}
                     onKeyDown={(e) => {
@@ -726,7 +728,7 @@ export default function Values() {
                   />
                 </div>
                 <Button onClick={() => addValue('primary')} className="w-full">
-                  Añadir
+                  {t('values.add')}
                 </Button>
               </div>
             </DialogContent>
@@ -734,14 +736,14 @@ export default function Values() {
         </div>
 
         <p className="text-foreground/80 mb-[15px] mt-[-10px] pl-[35px]">
-          Selecciona con qué valor has conectado hoy:
+          {t('values.selectConnected')}
         </p>
 
         <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
           <CardContent className="p-6 space-y-4">
             {values.filter(v => v.value_type === 'primary').length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
-                No tienes valores primarios aún. Añade hasta 3 valores fundamentales.
+                {t('values.noPrimaryValues')}
               </div>
             ) : (
               <DndContext
@@ -783,24 +785,24 @@ export default function Values() {
       {/* Valores Secundarios Widget */}
       <div>
         <div className="flex justify-between items-center mb-0 pl-[35px]">
-          <h2 className="text-2xl font-semibold text-foreground">Valores secundarios - Máximo 6</h2>
+          <h2 className="text-2xl font-semibold text-foreground">{t('values.secondaryValues')}</h2>
           <Dialog open={isSecondaryDialogOpen} onOpenChange={setIsSecondaryDialogOpen}>
             <DialogTrigger asChild>
               <Button className="gap-2" disabled={values.filter(v => v.value_type === 'secondary').length >= 6}>
                 <Plus className="h-4 w-4" />
-                Añadir secundario
+                {t('values.addSecondary')}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Añadir Valor Secundario</DialogTitle>
+                <DialogTitle>{t('values.addSecondaryValue')}</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="secondary-value-name">Nombre del Valor</Label>
+                  <Label htmlFor="secondary-value-name">{t('values.valueName')}</Label>
                   <Input
                     id="secondary-value-name"
-                    placeholder="Ej: Paciencia, Creatividad..."
+                    placeholder={t('values.secondaryPlaceholder')}
                     value={newValueName}
                     onChange={(e) => setNewValueName(e.target.value)}
                     onKeyDown={(e) => {
@@ -811,7 +813,7 @@ export default function Values() {
                   />
                 </div>
                 <Button onClick={() => addValue('secondary')} className="w-full">
-                  Añadir
+                  {t('values.add')}
                 </Button>
               </div>
             </DialogContent>
@@ -819,14 +821,14 @@ export default function Values() {
         </div>
 
         <p className="text-foreground/80 mb-[15px] mt-[-10px] pl-[35px]">
-          Selecciona con qué valor has conectado hoy:
+          {t('values.selectConnected')}
         </p>
 
         <Card className="border-sky-blue/20">
           <CardContent className="p-6 space-y-4">
             {values.filter(v => v.value_type === 'secondary').length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
-                No tienes valores secundarios aún. Añade hasta 6 valores de apoyo.
+                {t('values.noSecondaryValues')}
               </div>
             ) : (
               <DndContext
@@ -866,11 +868,8 @@ export default function Values() {
 
         <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent mt-[24px]">
           <CardContent className="p-6">
-            <h3 className="font-semibold text-foreground mb-3">💡 Recordatorio diario de valores</h3>
-            <p className="text-foreground/80 text-sm">
-              Has seleccionado <span className="font-bold text-green-500">{values.filter(v => v.selected).length} valores</span> para hoy. 
-              Te haremos un seguimiento durante tu check-in diario para ver si has honrado estos valores.
-            </p>
+            <h3 className="font-semibold text-foreground mb-3">{t('values.dailyReminder')}</h3>
+            <p className="text-foreground/80 text-sm" dangerouslySetInnerHTML={{ __html: t('values.selectedValues', { count: values.filter(v => v.selected).length }) }} />
           </CardContent>
         </Card>
       </div>
@@ -879,15 +878,15 @@ export default function Values() {
       <Card className="border-sky-blue/20">
         <CardHeader>
           <CardTitle className="text-2xl">
-            Estadísticas
+            {t('values.statistics')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="week" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="week">Esta semana</TabsTrigger>
-              <TabsTrigger value="month">Este mes</TabsTrigger>
-              <TabsTrigger value="quarter">Trimestre</TabsTrigger>
+              <TabsTrigger value="week">{t('values.thisWeek')}</TabsTrigger>
+              <TabsTrigger value="month">{t('values.thisMonth')}</TabsTrigger>
+              <TabsTrigger value="quarter">{t('values.quarter')}</TabsTrigger>
             </TabsList>
             <TabsContent value="week" className="mt-6">
               {renderDonutChart(weekStats)}
@@ -906,13 +905,12 @@ export default function Values() {
       <Card className="border-sky-blue/20 bg-gradient-to-br from-sky-blue/5 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            Lo que más importa
+            {t('values.whatMatters')}
           </CardTitle>
         </CardHeader>
         <CardContent className="-mt-5">
           <p className="text-foreground/80">
-            Tus valores son los principios que guían tu camino de recuperación. Selecciona los valores en los que quieres enfocarte hoy, 
-            y te recordaremos honrarlos durante el día.
+            {t('values.whatMattersDescription')}
           </p>
         </CardContent>
       </Card>
@@ -921,17 +919,17 @@ export default function Values() {
       <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogTitle>{t('values.confirmDelete')}</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar este valor? Esta acción no se puede deshacer.
+              {t('values.confirmDeleteDescription')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex justify-end gap-3">
             <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>
-              Cancelar
+              {t('values.cancel')}
             </Button>
             <Button variant="destructive" onClick={() => deleteConfirmId && deleteValue(deleteConfirmId)}>
-              Sí
+              {t('values.yes')}
             </Button>
           </div>
         </AlertDialogContent>
