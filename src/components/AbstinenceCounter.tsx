@@ -99,6 +99,8 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
   const handleAddSubmit = (addictionType: string, startDate: Date) => {
     addAddiction({ addictionType, startDate });
     setShowAddDialog(false);
+    // Switch to the new addiction (it will be the last one in the array)
+    setSelectedIndex(allAddictions.length);
   };
 
   const handleCircleClick = (index: number) => {
