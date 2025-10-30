@@ -7,6 +7,9 @@ import en from './locales/en.json';
 import emotionsEs from './locales/emotions-es.json';
 import emotionsEn from './locales/emotions-en.json';
 
+// Force Spanish as default language
+localStorage.setItem('i18nextLng', 'es');
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -23,16 +26,18 @@ i18n
     },
     supportedLngs: ['en', 'es'],
     fallbackLng: 'es',
+    lng: 'es', // Force Spanish on init
     interpolation: {
       escapeValue: false,
     },
     detection: {
-      order: ['localStorage', 'navigator'],
-      caches: ['localStorage'],
+      order: ['querystring', 'localStorage'],
+      lookupQuerystring: 'lang',
       lookupLocalStorage: 'i18nextLng',
+      caches: ['localStorage'],
       convertDetectedLanguage: (lng: string) => lng.split('-')[0]
     },
-    debug: true,
+    debug: false,
     returnEmptyString: false,
     returnNull: false,
     load: 'languageOnly',
