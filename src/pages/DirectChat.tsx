@@ -11,7 +11,8 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,6 +37,8 @@ export default function DirectChat() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { i18n } = useTranslation();
+  const dateLocale = i18n.language === 'en' ? enUS : es;
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [currentUserId, setCurrentUserId] = useState<string>("");
@@ -385,7 +388,7 @@ export default function DirectChat() {
                                 isOwn ? "text-right" : "text-left"
                               } text-muted-foreground`}
                             >
-                              {format(new Date(msg.created_at), "HH:mm", { locale: es })}
+                              {format(new Date(msg.created_at), "HH:mm", { locale: dateLocale })}
                             </p>
                           </div>
                         </div>

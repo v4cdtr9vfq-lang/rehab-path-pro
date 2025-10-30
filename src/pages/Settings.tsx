@@ -17,7 +17,7 @@ import { AddAddictionDialog } from "@/components/AddAddictionDialog";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
 import { useState, useEffect } from "react";
@@ -57,6 +57,7 @@ export default function Settings() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === 'en' ? enUS : es;
   const { subscribed, plan, subscriptionEnd, loading, checkSubscription, createCheckoutSession, openCustomerPortal } = useSubscription();
   const [newEmail, setNewEmail] = useState("");
   const [confirmEmail, setConfirmEmail] = useState("");
@@ -825,7 +826,7 @@ export default function Settings() {
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {abstinenceStartDate ? (
-                          format(new Date(abstinenceStartDate), "PPP", { locale: es })
+                          format(new Date(abstinenceStartDate), "PPP", { locale: dateLocale })
                         ) : (
                           <span>Seleccionar fecha</span>
                         )}
@@ -929,7 +930,7 @@ export default function Settings() {
                               >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
                                 {dateValue ? (
-                                  format(new Date(dateValue), "PPP", { locale: es })
+                                  format(new Date(dateValue), "PPP", { locale: dateLocale })
                                 ) : (
                                   <span>Seleccionar fecha</span>
                                 )}
@@ -1039,11 +1040,11 @@ export default function Settings() {
                       {plan === "monthly" ? "Plan mensual activo" : "Plan anual activo"}
                     </span>
                   </div>
-                  {subscriptionEnd && (
-                    <p className="text-sm text-muted-foreground">
-                      Se renueva el: {new Date(subscriptionEnd).toLocaleDateString('es-ES')}
-                    </p>
-                  )}
+                    {subscriptionEnd && (
+                      <p className="text-sm text-muted-foreground">
+                        Se renueva el: {new Date(subscriptionEnd).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-ES')}
+                      </p>
+                    )}
                   <Button 
                     variant="outline" 
                     onClick={openCustomerPortal}

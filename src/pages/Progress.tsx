@@ -32,7 +32,7 @@ interface ExpandedGoal {
 }
 
 export default function ProgressPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   // Helper function to translate goal text if it's a translation key
   const translateGoalText = (text: string): string => {
@@ -300,7 +300,7 @@ export default function ProgressPage() {
         const completedGoals = completions?.length || 0;
         const percentage = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
 
-        const monthName = startDate.toLocaleDateString('es-ES', { month: 'short' });
+        const monthName = startDate.toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-ES', { month: 'short' });
         trimesterData.push({
           name: monthName.charAt(0).toUpperCase() + monthName.slice(1),
           progreso: percentage,
@@ -336,7 +336,7 @@ export default function ProgressPage() {
         const completedGoals = completions?.length || 0;
         const percentage = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
 
-        const monthName = startDate.toLocaleDateString('es-ES', { month: 'short' });
+        const monthName = startDate.toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-ES', { month: 'short' });
         semesterData.push({
           name: monthName.charAt(0).toUpperCase() + monthName.slice(1),
           progreso: percentage,
@@ -367,7 +367,7 @@ export default function ProgressPage() {
         const percentage = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
 
         const date = new Date(currentYear, month - 1);
-        const monthName = date.toLocaleDateString('es-ES', { month: 'short' });
+        const monthName = date.toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-ES', { month: 'short' });
         yearData.push({
           name: monthName.charAt(0).toUpperCase() + monthName.slice(1),
           progreso: percentage,

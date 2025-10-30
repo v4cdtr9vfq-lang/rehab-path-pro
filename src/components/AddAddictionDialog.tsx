@@ -13,8 +13,9 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface AddAddictionDialogProps {
   open: boolean;
@@ -24,6 +25,8 @@ interface AddAddictionDialogProps {
 }
 
 export function AddAddictionDialog({ open, onOpenChange, onAdd, existingAddictions = [] }: AddAddictionDialogProps) {
+  const { i18n } = useTranslation();
+  const dateLocale = i18n.language === 'en' ? enUS : es;
   const [addictionType, setAddictionType] = useState("");
   const [startDate, setStartDate] = useState<Date>(new Date());
 
@@ -103,7 +106,7 @@ export function AddAddictionDialog({ open, onOpenChange, onAdd, existingAddictio
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {startDate ? format(startDate, "PPP", { locale: es }) : "Selecciona una fecha"}
+                  {startDate ? format(startDate, "PPP", { locale: dateLocale }) : "Selecciona una fecha"}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">

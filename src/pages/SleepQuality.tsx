@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 import {
   LineChart,
   Line,
@@ -20,6 +21,7 @@ interface SleepEntry {
 
 const SleepQuality = () => {
   const { toast } = useToast();
+  const { i18n } = useTranslation();
   const [weekData, setWeekData] = useState<SleepEntry[]>([]);
   const [monthData, setMonthData] = useState<SleepEntry[]>([]);
   const [quarterData, setQuarterData] = useState<SleepEntry[]>([]);
@@ -91,7 +93,7 @@ const SleepQuality = () => {
 
   const formatChartData = (data: SleepEntry[]) => {
     return data.map(entry => ({
-      date: new Date(entry.entry_date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' }),
+      date: new Date(entry.entry_date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-ES', { day: '2-digit', month: '2-digit' }),
       calidad: entry.quality_score,
     }));
   };

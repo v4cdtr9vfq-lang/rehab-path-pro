@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -33,7 +33,8 @@ export default function Gratitude() {
   const [editText, setEditText] = useState("");
   const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
   const { toast } = useToast();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === 'en' ? enUS : es;
 
   useEffect(() => {
     loadEntries();
@@ -233,7 +234,7 @@ export default function Gratitude() {
             <CardTitle className="flex flex-col md:flex-row md:items-center md:justify-between pl-[14px] gap-2">
               <span>{t('gratitude.todayGratitude')}</span>
               <span className="text-sm font-normal text-muted-foreground md:pr-6">
-                {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/^\w/, c => c.toUpperCase()).replace(/\sde\s(\w)/, (match, p1) => ` de ${p1.toUpperCase()}`)}
+                {new Date().toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
               </span>
             </CardTitle>
           </CardHeader>
@@ -317,8 +318,8 @@ export default function Gratitude() {
                               </Button>
                             </div>
                           </div>
-                          <span className="text-xs text-muted-foreground">
-                            {item.timestamp.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                            <span className="text-xs text-muted-foreground">
+                            {item.timestamp.toLocaleTimeString(i18n.language === 'en' ? 'en-US' : 'es-ES', { hour: '2-digit', minute: '2-digit' })}
                           </span>
                         </>
                       )}
@@ -354,7 +355,7 @@ export default function Gratitude() {
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {filterDate ? format(filterDate, "d 'de' MMMM, yyyy", { locale: es }) : t('gratitude.filterByDate')}
+                  {filterDate ? format(filterDate, "PPP", { locale: dateLocale }) : t('gratitude.filterByDate')}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="end">
@@ -387,7 +388,7 @@ export default function Gratitude() {
                     <div className="flex items-center gap-2 mb-4">
                       <CalendarIcon className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm font-medium text-muted-foreground">
-                        {format(entry.date, "EEEE, d 'de' MMM. 'de' yyyy", { locale: es }).replace(/^\w/, (c) => c.toUpperCase())}
+                        {format(entry.date, "EEEE, PPP", { locale: dateLocale })}
                       </span>
                     </div>
                     <ul className="space-y-2">
@@ -434,7 +435,7 @@ export default function Gratitude() {
                                   </div>
                                 </div>
                                 <div className="text-xs text-muted-foreground">
-                                  {item.timestamp.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                                  {item.timestamp.toLocaleTimeString(i18n.language === 'en' ? 'en-US' : 'es-ES', { hour: '2-digit', minute: '2-digit' })}
                                 </div>
                               </>
                             )}

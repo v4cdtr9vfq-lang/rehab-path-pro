@@ -5,8 +5,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Trash2, Calendar } from "lucide-react";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
 import { Card } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
 
 interface Addiction {
   id: string;
@@ -26,6 +27,8 @@ export function ManageAddictionsDialog({
   onOpenChange,
   onAddictionsChanged
 }: ManageAddictionsDialogProps) {
+  const { i18n } = useTranslation();
+  const dateLocale = i18n.language === 'en' ? enUS : es;
   const [addictions, setAddictions] = useState<Addiction[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -101,7 +104,7 @@ export function ManageAddictionsDialog({
                     </h3>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Calendar className="h-4 w-4 mr-1" />
-                      Desde {format(new Date(addiction.start_date), "PPP", { locale: es })}
+                      Desde {format(new Date(addiction.start_date), "PPP", { locale: dateLocale })}
                     </div>
                   </div>
                   <Button

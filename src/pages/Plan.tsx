@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import {
@@ -52,6 +52,7 @@ interface ExpandedGoal extends Goal {
 export default function Plan() {
   const isMobile = useIsMobile();
   const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === 'en' ? enUS : es;
   
   // Helper function to translate goal text if it's a translation key
   const translateGoalText = (text: string): string => {
@@ -1218,7 +1219,7 @@ export default function Plan() {
                         <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !newGoal.target_date && "text-muted-foreground")}>
                           <CalendarIcon className="mr-2 h-4 w-4" />
                           {newGoal.target_date ? format(newGoal.target_date, "PPP", {
-                        locale: es
+                        locale: dateLocale
                       }) : <span>{t('plan.selectDate')}</span>}
                         </Button>
                       </PopoverTrigger>
@@ -1303,7 +1304,7 @@ export default function Plan() {
                     <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !editingGoal?.target_date && "text-muted-foreground")}>
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {editingGoal?.target_date ? format(new Date(editingGoal.target_date), "PPP", {
-                    locale: es
+                    locale: dateLocale
                   }) : <span>{t('plan.selectDate')}</span>}
                     </Button>
                   </PopoverTrigger>

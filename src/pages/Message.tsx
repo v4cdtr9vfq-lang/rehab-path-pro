@@ -9,7 +9,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 
 interface Quote {
   text: string;
@@ -25,6 +26,8 @@ interface SavedQuote {
 
 export default function Message() {
   const { toast } = useToast();
+  const { i18n } = useTranslation();
+  const dateLocale = i18n.language === 'en' ? enUS : es;
   const [dailyQuote, setDailyQuote] = useState<Quote | null>(null);
   const [savedQuotes, setSavedQuotes] = useState<SavedQuote[]>([]);
   const [isSaved, setIsSaved] = useState(false);
@@ -267,7 +270,7 @@ export default function Message() {
             </Button>
           </div>
           <p className="text-sm text-muted-foreground">
-            {format(new Date(), "EEEE, d 'de' MMM. 'de' yyyy", { locale: es }).replace(/^\w/, (c) => c.toUpperCase())}
+            {format(new Date(), "EEEE, PPP", { locale: dateLocale })}
           </p>
         </CardHeader>
         <CardContent>

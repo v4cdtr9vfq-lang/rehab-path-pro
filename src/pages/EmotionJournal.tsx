@@ -75,7 +75,8 @@ const COLORS = [
 ];
 
 export default function EmotionJournal() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === 'en' ? enUS : es;
   const emotionCategories = getEmotionCategories(t);
   const [selectedPrimary, setSelectedPrimary] = useState<string[]>([]);
   const [selectedSecondary, setSelectedSecondary] = useState<string[]>([]);
@@ -1014,7 +1015,7 @@ export default function EmotionJournal() {
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {filterDate ? format(filterDate, "d 'de' MMMM, yyyy", { locale: es }) : t('emotionJournal.filterByDate')}
+                  {filterDate ? format(filterDate, "PPP", { locale: dateLocale }) : t('emotionJournal.filterByDate')}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="end">
