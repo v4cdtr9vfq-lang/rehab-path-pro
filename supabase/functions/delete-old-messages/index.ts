@@ -7,15 +7,11 @@ Deno.serve(async (req) => {
     
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
-    // Calculate timestamp for 48 hours ago
-    const fortyEightHoursAgo = new Date()
-    fortyEightHoursAgo.setHours(fortyEightHoursAgo.getHours() - 48)
-
-    // Delete messages older than 48 hours
+    // Delete all chat messages
     const { data, error } = await supabase
       .from('chat_messages')
       .delete()
-      .lt('created_at', fortyEightHoursAgo.toISOString())
+      .neq('id', '00000000-0000-0000-0000-000000000000') // Delete all by using a condition that's always true
 
     if (error) {
       console.error('Error deleting old messages:', error)
