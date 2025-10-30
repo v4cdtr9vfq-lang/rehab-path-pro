@@ -1253,7 +1253,7 @@ export default function Plan() {
       {/* Edit Goal Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent>
-        <DialogHeader>
+        <DialogHeader className="px-3">
           <DialogTitle>{t('plan.editGoal')}:</DialogTitle>
         </DialogHeader>
           <div className="space-y-4">
@@ -1352,7 +1352,7 @@ export default function Plan() {
                   link: e.target.value
                 }))}
               />
-              <p className="text-xs text-muted-foreground px-3">{t('plan.linkHint')}:</p>
+              <p className="text-xs text-muted-foreground px-3">{t('plan.linkHint')}</p>
             </div>
             <Button onClick={updateGoal} className="w-full">
               {t('plan.saveChanges')}
