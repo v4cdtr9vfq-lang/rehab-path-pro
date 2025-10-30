@@ -55,6 +55,7 @@ const emotionMap: Record<string, string> = {
   "Paz": "peace",
   "Satisfacción": "satisfaction",
   "Trascendencia": "transcendence",
+  "Disgusto": "disgust_secondary",
   "Asco": "disgust_secondary",
   "Descontento": "discontent",
   "Insatisfacción": "dissatisfaction",
