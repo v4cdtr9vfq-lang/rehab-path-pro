@@ -677,11 +677,16 @@ export default function Settings() {
                 />
                 <Button 
                   onClick={handleUpdateName} 
-                  disabled={isUpdatingName}
+                  disabled={isUpdatingName || !fullName.trim()}
                 >
-                  {isUpdatingName ? "Actualizando..." : "Actualizar"}
+                  {isUpdatingName ? "..." : "Guardar"}
                 </Button>
               </div>
+              {fullName.trim() && (
+                <p className="text-xs text-muted-foreground pl-4">
+                  Presiona "Guardar" para confirmar el cambio
+                </p>
+              )}
             </div>
 
             <div className="border-t pt-4 space-y-2">
