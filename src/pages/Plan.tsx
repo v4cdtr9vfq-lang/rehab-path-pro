@@ -1111,8 +1111,8 @@ export default function Plan() {
       setHasUnsavedOrder(false);
       setOriginalSectionsOrder(null);
       toast({
-        title: "Orden guardado",
-        description: "El orden de las metas ha sido actualizado."
+        title: t('goals.orderSaved'),
+        description: t('goals.orderUpdated')
       });
 
       // Refresh to ensure consistency
@@ -1120,8 +1120,8 @@ export default function Plan() {
     } catch (error) {
       console.error('Error saving goal order:', error);
       toast({
-        title: "Error",
-        description: "No se pudo guardar el orden de las metas.",
+        title: t('goals.error'),
+        description: t('goals.couldNotSaveOrder'),
         variant: "destructive"
       });
     }
@@ -1455,7 +1455,7 @@ export default function Plan() {
         {/* One-Time Goals */}
         <Card className="border-sidebar-border bg-card/50 backdrop-blur rounded-3xl">
           <CardHeader>
-            <SectionHeader title="Metas únicas" sectionKey="onetime" />
+            <SectionHeader title={t('plan.oneTime')} sectionKey="onetime" />
           </CardHeader>
           {sections.onetime.open && (
             <CardContent className="space-y-3">
