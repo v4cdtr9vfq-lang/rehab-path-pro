@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface JournalEntry {
   id: string;
@@ -22,6 +23,7 @@ interface JournalEntry {
 }
 
 export default function Journal() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [showNewEntry, setShowNewEntry] = useState(false);
@@ -765,7 +767,7 @@ export default function Journal() {
 
       {/* Quick Tools */}
       <div className="mt-12">
-        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">Accesos directos:</h2>
+        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">{t('emotionJournal.quickAccess')}</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
           <Link to="/journal">
             <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-sidebar-border h-full">
@@ -773,7 +775,7 @@ export default function Journal() {
                 <div className="mx-auto w-12 h-12 rounded-2xl flex items-center justify-center text-primary" style={{ backgroundColor: '#d5def7' }}>
                   <span className="text-2xl">📔</span>
                 </div>
-                <p className="font-semibold text-foreground text-sm leading-tight">Diario</p>
+                <p className="font-semibold text-foreground text-sm leading-tight">{t('journal.title')}</p>
               </CardContent>
             </Card>
           </Link>
@@ -783,7 +785,7 @@ export default function Journal() {
                 <div className="mx-auto w-12 h-12 rounded-2xl flex items-center justify-center text-primary" style={{ backgroundColor: '#d5def7' }}>
                   <span className="text-2xl">😊</span>
                 </div>
-                <p className="font-semibold text-foreground text-sm leading-tight">Diario de emociones</p>
+                <p className="font-semibold text-foreground text-sm leading-tight">{t('emotionJournal.emotionDiary')}</p>
               </CardContent>
             </Card>
           </Link>
@@ -793,7 +795,7 @@ export default function Journal() {
                 <div className="mx-auto w-12 h-12 rounded-2xl flex items-center justify-center text-accent" style={{ backgroundColor: '#d5def7' }}>
                   <span className="text-2xl">🙏</span>
                 </div>
-                <p className="font-semibold text-foreground text-sm leading-tight">Agradecimiento</p>
+                <p className="font-semibold text-foreground text-sm leading-tight">{t('gratitude.title')}</p>
               </CardContent>
             </Card>
           </Link>
@@ -803,7 +805,7 @@ export default function Journal() {
                 <div className="mx-auto w-12 h-12 rounded-2xl flex items-center justify-center text-destructive" style={{ backgroundColor: '#d5def7' }}>
                   <span className="text-2xl">🚨</span>
                 </div>
-                <p className="font-semibold text-foreground text-sm leading-tight">Plan de emergencia</p>
+                <p className="font-semibold text-foreground text-sm leading-tight">{t('quickTools.emergencyPlan')}</p>
               </CardContent>
             </Card>
           </Link>
