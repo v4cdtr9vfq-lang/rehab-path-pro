@@ -1477,16 +1477,17 @@ export default function Plan() {
         </Card>
 
         {/* Sleep Schedule Widget */}
-        <Card className="bg-gradient-to-br from-primary/5 to-transparent border-primary/20 ml-[35px] mr-[35px]">
+        <Card className="border-sidebar-border bg-card/50 backdrop-blur rounded-3xl">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg">
-              Hora preferida para acostrarme:
+              Horario de sueño objetivo:
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-3">
               <div className="p-3 rounded-xl bg-background/50 border border-sidebar-border">
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                  <p className="text-xs text-muted-foreground whitespace-nowrap">Hora para acostarme:</p>
                   <select 
                     value={bedtime}
                     onChange={(e) => handleBedtimeChange(e.target.value)}
