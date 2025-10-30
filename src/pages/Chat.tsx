@@ -717,13 +717,13 @@ export default function Chat() {
               <Textarea
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Escribe un mensaje..."
+                placeholder={t('chat.writeMessage')}
                 className="w-full px-[15px] py-[10px] resize-none min-h-[60px] text-sm placeholder:text-sm"
                 disabled={isSending}
                 rows={3}
               />
               <Button type="submit" disabled={!newMessage.trim() || isSending} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                Enviar
+                {t('chat.send')}
               </Button>
               <div className="flex items-center gap-2 pl-[15px]">
                 <Switch
@@ -741,13 +741,13 @@ export default function Chat() {
               <Textarea
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Escribe un mensaje..."
+                placeholder={t('chat.writeMessage')}
                 className="flex-1 px-[15px] py-[10px] resize-none min-h-[44px] max-h-[44px] text-sm placeholder:text-sm"
                 disabled={isSending}
                 rows={2}
               />
               <Button type="submit" disabled={!newMessage.trim() || isSending} className="h-[44px] bg-primary text-primary-foreground hover:bg-primary/90">
-                Enviar
+                {t('chat.send')}
               </Button>
             </div>
           )}
@@ -759,7 +759,7 @@ export default function Chat() {
                 onCheckedChange={setIsAnonymous}
               />
               <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
-                Escribir en modo anónimo.
+                {t('chat.anonymousMode')}
               </Label>
             </div>
           )}
