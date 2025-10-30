@@ -1199,6 +1199,7 @@ export default function Settings() {
               value={i18n.language.startsWith('es') ? 'es' : 'en'}
               onValueChange={(value) => {
                 i18n.changeLanguage(value);
+                localStorage.setItem('i18nextLng', value);
                 toast({
                   title: t('settings.languageUpdated'),
                   description: value === 'es' ? t('settings.languageChangedToSpanish') : t('settings.languageChangedToEnglish'),
