@@ -1510,8 +1510,8 @@ export default function Plan() {
               
               <div className="p-3 rounded-xl bg-background/50 border border-sidebar-border">
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-                  <p className="text-xs text-muted-foreground whitespace-nowrap">Y para levantarme:</p>
-                  <select 
+                  <p className="text-xs text-muted-foreground whitespace-nowrap">Hora para levantarme:</p>
+                  <select
                     value={wakeUpTime}
                     onChange={(e) => handleWakeUpTimeChange(e.target.value)}
                     className="bg-background border border-sidebar-border rounded-lg px-2 py-1 pr-6 pl-[15px] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-primary appearance-none bg-no-repeat"
