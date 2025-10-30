@@ -363,6 +363,7 @@ export type Database = {
           goal_type: string
           id: string
           instructions: string | null
+          language: string
           link: string | null
           notes: string | null
           order_index: number | null
@@ -380,6 +381,7 @@ export type Database = {
           goal_type: string
           id?: string
           instructions?: string | null
+          language?: string
           link?: string | null
           notes?: string | null
           order_index?: number | null
@@ -397,6 +399,7 @@ export type Database = {
           goal_type?: string
           id?: string
           instructions?: string | null
+          language?: string
           link?: string | null
           notes?: string | null
           order_index?: number | null

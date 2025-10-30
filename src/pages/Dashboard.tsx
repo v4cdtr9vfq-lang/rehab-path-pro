@@ -33,27 +33,7 @@ import { CSS } from '@dnd-kit/utilities';
 export default function Home() {
   const { t, i18n } = useTranslation();
   const quickTools = useTranslatedQuickTools();
-  
-  // Helper function to translate goal text if it's a translation key
-  const translateGoalText = (text: string): string => {
-    if (!text) return text;
-    
-    if (text.startsWith('defaultGoals.')) {
-      try {
-        const translated = t(text);
-        // If translation returns the key itself, it means translation failed
-        if (translated === text) {
-          console.warn(`Translation not found for: ${text}`);
-          return text.replace('defaultGoals.', ''); // Return key without prefix as fallback
-        }
-        return translated;
-      } catch (error) {
-        console.error(`Error translating ${text}:`, error);
-        return text.replace('defaultGoals.', ''); // Return key without prefix as fallback
-      }
-    }
-    return text;
-  };
+  const currentLanguage = i18n.language || 'es'; // Get current language
   
   const {
     toast
@@ -344,11 +324,11 @@ export default function Home() {
         if (reminder) setTodayReminder(reminder);
       }
 
-      // Fetch today's goals (including 'always' type), ordered by order_index
+      // Fetch today's goals (including 'always' type), ordered by order_index, filtered by language
       const {
         data: goals,
         error: goalsError
-      } = await supabase.from('goals').select('*').eq('user_id', user.id).order('order_index', {
+      } = await supabase.from('goals').select('*').eq('user_id', user.id).eq('language', currentLanguage).order('order_index', {
         ascending: true
       });
       if (goals && goals.length > 0) {
@@ -367,7 +347,7 @@ export default function Home() {
             expandedGoals.push({
               id: instanceId,
               originalId: g.id,
-              title: g.text,
+              title: g.text, // No translation needed - already in correct language
               link: g.link,
               period: g.goal_type === 'today' ? t('goals.today') : g.goal_type === 'always' ? t('goals.always') : t('goals.thisWeek'),
               status: completedInstances.has(instanceId) ? 'completed' : 'pending',
@@ -475,7 +455,7 @@ export default function Home() {
 
           const {
             data: goals
-          } = await supabase.from('goals').select('*').eq('user_id', user.id).order('order_index', {
+          } = await supabase.from('goals').select('*').eq('user_id', user.id).eq('language', currentLanguage).order('order_index', {
             ascending: true
           });
           
@@ -491,7 +471,7 @@ export default function Home() {
                 expandedGoals.push({
                   id: instanceId,
                   originalId: g.id,
-                  title: g.text,
+                  title: g.text, // No translation needed
                   link: g.link,
                   period: g.goal_type === 'today' ? t('goals.today') : g.goal_type === 'always' ? t('goals.always') : t('goals.thisWeek'),
                   status: completedInstances.has(instanceId) ? 'completed' : 'pending',
@@ -889,10 +869,10 @@ export default function Home() {
                 className="font-semibold text-foreground text-sm md:text-base hover:text-green-600"
                 onClick={(e) => e.stopPropagation()}
               >
-                {translateGoalText(goal.title)}
+                {goal.title}
               </a>
             ) : (
-              <p className="font-semibold text-foreground text-sm md:text-base">{translateGoalText(goal.title)}</p>
+              <p className="font-semibold text-foreground text-sm md:text-base">{goal.title}</p>
             )}
             <p
               className={`text-xs md:text-sm ${
@@ -1096,10 +1076,10 @@ export default function Home() {
                               className="font-semibold text-foreground text-sm hover:text-green-600"
                               onClick={(e) => e.stopPropagation()}
                             >
-                              {translateGoalText(goal.title)}
+                              {goal.title}
                             </a>
                           ) : (
-                            <p className="font-semibold text-foreground text-sm">{translateGoalText(goal.title)}</p>
+                            <p className="font-semibold text-foreground text-sm">{goal.title}</p>
                           )}
                           <p
                             className={`text-xs ${

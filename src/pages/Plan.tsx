@@ -52,28 +52,8 @@ interface ExpandedGoal extends Goal {
 export default function Plan() {
   const isMobile = useIsMobile();
   const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language || 'es';
   const dateLocale = i18n.language === 'en' ? enUS : es;
-  
-  // Helper function to translate goal text if it's a translation key
-  const translateGoalText = (text: string): string => {
-    if (!text) return text;
-    
-    if (text.startsWith('defaultGoals.')) {
-      try {
-        const translated = t(text);
-        // If translation returns the key itself, it means translation failed
-        if (translated === text) {
-          console.warn(`Translation not found for: ${text}`);
-          return text.replace('defaultGoals.', ''); // Return key without prefix as fallback
-        }
-        return translated;
-      } catch (error) {
-        console.error(`Error translating ${text}:`, error);
-        return text.replace('defaultGoals.', ''); // Return key without prefix as fallback
-      }
-    }
-    return text;
-  };
   
   // Helper function to get completion status text
   const getCompletionStatusText = (goal: ExpandedGoal, sectionKey: keyof typeof sections, displayCompleted: boolean): string => {
@@ -447,11 +427,11 @@ export default function Plan() {
       } = await supabase.auth.getUser();
       if (!user) return;
       
-      // First fetch to check for missing order_index
+      // First fetch to check for missing order_index, filtered by language
       const {
         data: goals,
         error
-      } = await supabase.from('goals').select('*').eq('user_id', user.id);
+      } = await supabase.from('goals').select('*').eq('user_id', user.id).eq('language', currentLanguage);
       
       if (error) throw error;
       if (goals) {
@@ -478,8 +458,8 @@ export default function Plan() {
         if (profileData.preferred_wake_up_time) setWakeUpTime(profileData.preferred_wake_up_time);
       }
 
-      // Always refetch with proper ordering
-        const { data: orderedGoals } = await supabase.from('goals').select('*').eq('user_id', user.id).order('order_index', { ascending: true, nullsFirst: false });
+      // Always refetch with proper ordering, filtered by language
+        const { data: orderedGoals } = await supabase.from('goals').select('*').eq('user_id', user.id).eq('language', currentLanguage).order('order_index', { ascending: true, nullsFirst: false });
         
         if (orderedGoals) {
           goals.length = 0;
@@ -657,7 +637,8 @@ export default function Plan() {
         target_date: newGoal.target_date ? format(newGoal.target_date, 'yyyy-MM-dd') : null,
         periodic_type: newGoal.periodic_type || null,
         description: newGoal.description || null,
-        link: newGoal.link || null
+        link: newGoal.link || null,
+        language: currentLanguage // Add language field
       }).select().single();
       if (error) throw error;
       if (goal) {
@@ -732,8 +713,7 @@ export default function Plan() {
         ...originalGoalData,
         id: goal.originalId,
         sectionKey,
-        // Translate the text if it's a translation key
-        text: translateGoalText(originalGoalData.text)
+        text: originalGoalData.text // No translation needed
       });
       setIsEditDialogOpen(true);
     }
@@ -860,10 +840,10 @@ export default function Plan() {
                   className="font-semibold text-foreground text-sm hover:text-green-600"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {translateGoalText(goal.text)}
+                  {goal.text}
                 </a>
               ) : (
-                <p className="font-semibold text-foreground text-sm">{translateGoalText(goal.text)}</p>
+                <p className="font-semibold text-foreground text-sm">{goal.text}</p>
               )}
               <p className={`text-xs ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
                 {getCompletionStatusText(goal, sectionKey, displayCompleted)}
@@ -922,10 +902,10 @@ export default function Plan() {
                 className="font-semibold text-foreground text-sm md:text-base hover:text-green-600"
                 onClick={(e) => e.stopPropagation()}
               >
-                {translateGoalText(goal.text)}
+                {goal.text}
               </a>
             ) : (
-              <p className="font-semibold text-foreground text-sm md:text-base">{translateGoalText(goal.text)}</p>
+              <p className="font-semibold text-foreground text-sm md:text-base">{goal.text}</p>
             )}
             <p className={`text-xs md:text-sm ${displayCompleted ? 'text-green-500' : 'text-muted-foreground'}`}>
               {getCompletionStatusText(goal, sectionKey, displayCompleted)}

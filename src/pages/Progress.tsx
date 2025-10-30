@@ -33,14 +33,7 @@ interface ExpandedGoal {
 
 export default function ProgressPage() {
   const { t, i18n } = useTranslation();
-  
-  // Helper function to translate goal text if it's a translation key
-  const translateGoalText = (text: string): string => {
-    if (text && text.startsWith('defaultGoals.')) {
-      return t(text);
-    }
-    return text;
-  };
+  const currentLanguage = i18n.language || 'es';
   
   const [hasCheckedInToday, setHasCheckedInToday] = useState(false);
   const [dailyGoals, setDailyGoals] = useState<ExpandedGoal[]>([]);
@@ -293,7 +286,8 @@ export default function ProgressPage() {
         const { data: goals } = await supabase
           .from('goals')
           .select('*')
-          .eq('user_id', user.id);
+          .eq('user_id', user.id)
+          .eq('language', currentLanguage);
 
         const daysInMonth = endDate.getDate();
         const totalGoals = (goals?.length || 0) * daysInMonth;
@@ -329,7 +323,8 @@ export default function ProgressPage() {
         const { data: goals } = await supabase
           .from('goals')
           .select('*')
-          .eq('user_id', user.id);
+          .eq('user_id', user.id)
+          .eq('language', currentLanguage);
 
         const daysInMonth = endDate.getDate();
         const totalGoals = (goals?.length || 0) * daysInMonth;
@@ -396,11 +391,12 @@ export default function ProgressPage() {
 
       setHasCheckedInToday(!!checkIn);
 
-      // Fetch all goals ordered by order_index
+      // Fetch all goals ordered by order_index, filtered by language
       const { data: goals } = await supabase
         .from('goals')
         .select('*')
         .eq('user_id', user.id)
+        .eq('language', currentLanguage)
         .order('order_index', { ascending: true });
 
       if (goals) {
@@ -442,7 +438,7 @@ export default function ProgressPage() {
     return (
       <div className="space-y-2 p-4 rounded-xl bg-muted/50 border border-border/50">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-semibold text-foreground">{translateGoalText(goal.text)}</span>
+          <span className="text-sm font-semibold text-foreground">{goal.text}</span>
           <span className={`text-sm font-bold ${getProgressColor()}`}>{goal.percentage}%</span>
         </div>
         <Progress value={goal.percentage} className={`h-2.5 ${getProgressBgColor()}`} />
