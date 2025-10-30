@@ -242,7 +242,9 @@ export default function Values() {
     // Count occurrences of each value
     const countMap = new Map<string, number>();
     (data || []).forEach((item: any) => {
-      const valueName = item.values.name;
+      const rawValueName = item.values.name;
+      // Translate if it's a translation key
+      const valueName = rawValueName.startsWith('values.') ? t(rawValueName) : rawValueName;
       countMap.set(valueName, (countMap.get(valueName) || 0) + 1);
     });
 
@@ -631,7 +633,7 @@ export default function Values() {
           />
         ) : (
           <span className={`text-lg text-foreground flex-1 ${value.value_type === 'primary' ? 'font-semibold' : ''}`}>
-            {value.name}
+            {value.name.startsWith('values.') ? t(value.name) : value.name}
           </span>
         )}
         {value.selected && !isEditing && (
