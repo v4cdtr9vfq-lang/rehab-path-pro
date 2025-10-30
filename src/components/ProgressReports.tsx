@@ -255,7 +255,7 @@ export default function ProgressReports() {
             <div className="flex items-center gap-3 flex-1">
               <label className="text-sm font-medium whitespace-nowrap pl-[10px]">{t('progress.timePeriod')}</label>
               <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-                <SelectTrigger className="flex-1">
+                <SelectTrigger className="flex-1 h-10">
                   <SelectValue placeholder={t('progress.selectPeriod')} />
                 </SelectTrigger>
                 <SelectContent>
