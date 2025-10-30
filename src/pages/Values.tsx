@@ -737,7 +737,7 @@ export default function Values() {
           </Dialog>
         </div>
 
-        <p className="text-foreground/80 mb-[15px] mt-[-10px] pl-[35px]">
+        <p className="text-foreground/80 mb-[15px] mt-[5px] pl-[35px]">
           {t('values.selectConnected')}
         </p>
 
@@ -822,7 +822,7 @@ export default function Values() {
           </Dialog>
         </div>
 
-        <p className="text-foreground/80 mb-[15px] mt-[-10px] pl-[35px]">
+        <p className="text-foreground/80 mb-[15px] mt-[5px] pl-[35px]">
           {t('values.selectConnected')}
         </p>
 
