@@ -1302,7 +1302,7 @@ export default function Plan() {
               </div>}
 
             {editingGoal?.goal_type !== 'onetime' && <div className="space-y-2">
-              <Label htmlFor="edit-goal-remaining" className="block px-3">{t('plan.numberOfTimes')}:</Label>
+              <Label htmlFor="edit-goal-remaining" className="block px-3 text-sm font-normal">{t('plan.numberOfTimes')}:</Label>
               <Input id="edit-goal-remaining" type="number" min="1" value={editingGoal?.remaining || 1} onChange={e => setEditingGoal(prev => ({
               ...prev,
               remaining: parseInt(e.target.value) || 1
@@ -1340,7 +1340,7 @@ export default function Plan() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-link" className="block px-3">{t('plan.linkOptional')}:</Label>
+              <Label htmlFor="edit-goal-link" className="block px-3 text-sm font-normal">{t('plan.linkOptional')}:</Label>
               <Input 
                 id="edit-goal-link" 
                 type="url"
