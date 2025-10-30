@@ -124,8 +124,8 @@ export default function Settings() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "true") {
       toast({
-        title: t('settings.subscriptionActivated'),
-        description: t('settings.subscriptionActivatedDescription'),
+        title: "Suscripción activada",
+        description: "Tu suscripción ha sido activada exitosamente. Disfruta de 40 días gratis.",
       });
       checkSubscription();
       window.history.replaceState({}, "", "/settings");
@@ -180,8 +180,8 @@ export default function Settings() {
   const handleUpdateAddictionDate = async (addictionId: string, newDate: string) => {
     if (!newDate) {
       toast({
-        title: t('common.error'),
-        description: t('settings.selectValidDate'),
+        title: "Error",
+        description: "Por favor selecciona una fecha válida.",
         variant: "destructive",
       });
       return;
@@ -198,8 +198,8 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: t('settings.dateUpdated'),
-        description: t('settings.dateUpdatedDescription'),
+        title: "Fecha actualizada",
+        description: "La fecha de la adicción ha sido actualizada.",
       });
 
       loadAddictions();
@@ -210,8 +210,8 @@ export default function Settings() {
       });
     } catch (error: any) {
       toast({
-        title: t('common.error'),
-        description: error.message || t('settings.couldNotUpdateDate'),
+        title: "Error",
+        description: error.message || "No se pudo actualizar la fecha.",
         variant: "destructive",
       });
     }
@@ -220,8 +220,8 @@ export default function Settings() {
   const handleUpdateAddiction = async (addictionId: string, newDate: string, newType?: string) => {
     if (!newDate) {
       toast({
-        title: t('common.error'),
-        description: t('settings.selectValidDate'),
+        title: "Error",
+        description: "Por favor selecciona una fecha válida.",
         variant: "destructive",
       });
       return;
@@ -243,8 +243,8 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: t('settings.addictionUpdated'),
-        description: t('settings.addictionUpdatedDescription'),
+        title: "Adicción actualizada",
+        description: "Los datos de la adicción han sido actualizados.",
       });
 
       loadAddictions();
@@ -260,8 +260,8 @@ export default function Settings() {
       });
     } catch (error: any) {
       toast({
-        title: t('common.error'),
-        description: error.message || t('settings.addictionUpdatedDescription'),
+        title: "Error",
+        description: error.message || "No se pudo actualizar la adicción.",
         variant: "destructive",
       });
     }
@@ -284,16 +284,16 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: t('settings.addictionAdded'),
-        description: t('settings.addictionAddedDescription'),
+        title: "Adicción añadida",
+        description: "La adicción ha sido registrada correctamente.",
       });
 
       loadAddictions();
       setShowAddDialog(false);
     } catch (error: any) {
       toast({
-        title: t('common.error'),
-        description: error.message || t('settings.addictionAddedDescription'),
+        title: "Error",
+        description: error.message || "No se pudo añadir la adicción.",
         variant: "destructive",
       });
     }
@@ -309,15 +309,15 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: t('settings.addictionDeleted'),
-        description: t('settings.addictionDeletedDescription'),
+        title: "Adicción eliminada",
+        description: "La adicción ha sido eliminada correctamente.",
       });
 
       loadAddictions();
     } catch (error: any) {
       toast({
-        title: t('common.error'),
-        description: error.message || t('settings.addictionDeletedDescription'),
+        title: "Error",
+        description: error.message || "No se pudo eliminar la adicción.",
         variant: "destructive",
       });
     }
@@ -350,8 +350,8 @@ export default function Settings() {
   const handleUpdateRehabilitationType = async () => {
     if (!rehabilitationType) {
       toast({
-        title: t('common.error'),
-        description: t('settings.selectAnOption'),
+        title: "Error",
+        description: "Por favor selecciona una opción.",
         variant: "destructive",
       });
       return;
@@ -372,13 +372,13 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: t('settings.rehabilitationTypeUpdated'),
-        description: t('settings.rehabilitationTypeUpdatedDescription'),
+        title: "Tipo de rehabilitación actualizado",
+        description: "Tu preferencia ha sido actualizada exitosamente.",
       });
     } catch (error: any) {
       toast({
-        title: t('common.error'),
-        description: error.message || t('settings.couldNotUpdateRehabType'),
+        title: "Error",
+        description: error.message || "No se pudo actualizar el tipo de rehabilitación.",
         variant: "destructive",
       });
     } finally {
@@ -389,8 +389,8 @@ export default function Settings() {
   const handleUpdateName = async () => {
     if (!fullName.trim()) {
       toast({
-        title: t('common.error'),
-        description: t('settings.enterValidName'),
+        title: "Error",
+        description: "Por favor ingresa un nombre válido.",
         variant: "destructive",
       });
       return;
@@ -399,7 +399,7 @@ export default function Settings() {
     setIsUpdatingName(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error(t('settings.userNotAuthenticated'));
+      if (!user) throw new Error("Usuario no autenticado");
 
       const { error } = await supabase
         .from('profiles')
@@ -409,13 +409,13 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: t('settings.nameUpdated'),
-        description: t('settings.nameUpdatedDescription'),
+        title: "Nombre actualizado",
+        description: "Tu nombre ha sido actualizado exitosamente.",
       });
     } catch (error: any) {
       toast({
-        title: t('common.error'),
-        description: error.message || t('settings.couldNotUpdateName'),
+        title: "Error",
+        description: error.message || "No se pudo actualizar el nombre.",
         variant: "destructive",
       });
     } finally {
@@ -441,8 +441,8 @@ export default function Settings() {
   const handleUpdateAbstinenceDate = async () => {
     if (!abstinenceStartDate) {
       toast({
-        title: t('common.error'),
-        description: t('settings.selectValidDate'),
+        title: "Error",
+        description: "Por favor selecciona una fecha válida.",
         variant: "destructive",
       });
       return;
@@ -451,7 +451,7 @@ export default function Settings() {
     setIsUpdatingDate(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error(t('settings.userNotAuthenticated'));
+      if (!user) throw new Error("Usuario no autenticado");
 
       // Convert local date to ISO timestamp
       const dateObj = new Date(abstinenceStartDate + 'T00:00:00');
@@ -464,19 +464,19 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: t('settings.abstinenceDateUpdated'),
-        description: t('settings.abstinenceDateUpdatedDescription'),
+        title: "Fecha actualizada",
+        description: "Tu fecha de inicio de abstinencia ha sido actualizada exitosamente.",
       });
 
       // Notify Dashboard to update
       window.dispatchEvent(new CustomEvent('abstinenceDateUpdated'));
     } catch (error: any) {
       toast({
-        title: t('common.error'),
-        description: error.message || t('settings.couldNotUpdateDate'),
+        title: "Error",
+        description: error.message || "No se pudo actualizar la fecha.",
         variant: "destructive",
       });
-    } finally{
+    } finally {
       setIsUpdatingDate(false);
     }
   };
@@ -484,8 +484,8 @@ export default function Settings() {
   const handleUpdateEmail = async () => {
     if (!newEmail.trim()) {
       toast({
-        title: t('common.error'),
-        description: t('settings.enterValidEmail'),
+        title: "Error",
+        description: "Por favor ingresa un email válido.",
         variant: "destructive",
       });
       return;
@@ -493,8 +493,8 @@ export default function Settings() {
 
     if (newEmail !== confirmEmail) {
       toast({
-        title: t('common.error'),
-        description: t('settings.emailsDoNotMatch'),
+        title: "Error",
+        description: "Los emails no coinciden.",
         variant: "destructive",
       });
       return;
@@ -507,14 +507,14 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: t('settings.emailUpdated'),
-        description: t('settings.emailUpdatedDescription'),
+        title: "Email actualizado",
+        description: "Se ha enviado un correo de confirmación a tu nueva dirección.",
       });
       setNewEmail("");
       setConfirmEmail("");
     } catch (error: any) {
       toast({
-        title: t('common.error'),
+        title: "Error",
         description: error.message + ".",
         variant: "destructive",
       });
@@ -526,8 +526,8 @@ export default function Settings() {
   const handleUpdatePassword = async () => {
     if (!currentPassword) {
       toast({
-        title: t('common.error'),
-        description: t('settings.enterCurrentPassword'),
+        title: "Error",
+        description: "Por favor ingresa tu contraseña actual.",
         variant: "destructive",
       });
       return;
@@ -535,8 +535,8 @@ export default function Settings() {
 
     if (!newPassword || newPassword.length < 6) {
       toast({
-        title: t('common.error'),
-        description: t('settings.passwordMinLength'),
+        title: "Error",
+        description: "La nueva contraseña debe tener al menos 6 caracteres.",
         variant: "destructive",
       });
       return;
@@ -544,8 +544,8 @@ export default function Settings() {
 
     if (newPassword !== confirmPassword) {
       toast({
-        title: t('common.error'),
-        description: t('settings.passwordsDoNotMatch'),
+        title: "Error",
+        description: "Las contraseñas no coinciden.",
         variant: "destructive",
       });
       return;
@@ -555,7 +555,7 @@ export default function Settings() {
     try {
       // First, verify current password by attempting to sign in
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user?.email) throw new Error(t('settings.couldNotGetEmail'));
+      if (!user?.email) throw new Error("No se pudo obtener el email del usuario");
 
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: user.email,
@@ -564,8 +564,8 @@ export default function Settings() {
 
       if (signInError) {
         toast({
-          title: t('common.error'),
-          description: t('settings.currentPasswordIncorrect'),
+          title: "Error",
+          description: "La contraseña actual es incorrecta.",
           variant: "destructive",
         });
         return;
@@ -577,15 +577,15 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: t('settings.passwordUpdated'),
-        description: t('settings.passwordUpdatedDescription'),
+        title: "Contraseña actualizada",
+        description: "Tu contraseña ha sido actualizada exitosamente.",
       });
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error: any) {
       toast({
-        title: t('common.error'),
+        title: "Error",
         description: error.message + ".",
         variant: "destructive",
       });
@@ -603,8 +603,8 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: t('settings.accountDeleted'),
-        description: t('settings.accountDeletedPermanently'),
+        title: "Cuenta eliminada",
+        description: "Tu cuenta ha sido eliminada permanentemente",
       });
       
       // Sign out and redirect to landing page
@@ -612,8 +612,8 @@ export default function Settings() {
       navigate("/");
     } catch (error: any) {
       toast({
-        title: t('common.error'),
-        description: error.message || t('settings.couldNotDeleteAccount'),
+        title: "Error",
+        description: error.message || "No se pudo eliminar la cuenta",
         variant: "destructive",
       });
     }
@@ -636,8 +636,8 @@ export default function Settings() {
     setIsReminderDialogOpen(false);
     
     toast({
-      title: t('settings.reminderAdded'),
-      description: t('settings.reminderConfigured'),
+      title: "Recordatorio añadido",
+      description: "Tu recordatorio ha sido configurado exitosamente.",
     });
   };
 
@@ -650,8 +650,8 @@ export default function Settings() {
   const deleteReminder = (id: string) => {
     setReminders(prev => prev.filter(reminder => reminder.id !== id));
     toast({
-      title: t('settings.reminderDeleted'),
-      description: t('settings.reminderDeletedDescription'),
+      title: "Recordatorio eliminado",
+      description: "El recordatorio ha sido eliminado",
     });
   };
 
@@ -661,18 +661,18 @@ export default function Settings() {
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 pl-4">
-            {t('settings.account')}:
+            Cuenta:
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="full-name" className="pl-4">{t('settings.firstName')}:</Label>
+              <Label htmlFor="full-name" className="pl-4">Nombre pila:</Label>
               <div className="flex gap-2">
                 <Input
                   id="full-name"
                   type="text"
-                  placeholder={t('settings.firstNamePlaceholder')}
+                  placeholder="Solo tu nombre"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                 />
@@ -680,30 +680,30 @@ export default function Settings() {
                   onClick={handleUpdateName} 
                   disabled={isUpdatingName || !fullName.trim()}
                 >
-                  {isUpdatingName ? "..." : t('common.save')}
+                  {isUpdatingName ? "..." : "Guardar"}
                 </Button>
               </div>
               {fullName.trim() && (
                 <p className="text-xs text-muted-foreground pl-4">
-                  {t('settings.pressToConfirm')}
+                  Presiona "Guardar" para confirmar el cambio
                 </p>
               )}
             </div>
 
             <div className="border-t pt-4 space-y-2">
-              <Label htmlFor="new-email" className="pl-4">{t('settings.changeEmail')}:</Label>
+              <Label htmlFor="new-email" className="pl-4">Cambiar Email:</Label>
               <Input
                 id="new-email"
                 type="email"
-                placeholder={t('settings.newEmailPlaceholder')}
+                placeholder="nuevo@email.com"
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
               />
-              <Label htmlFor="confirm-email" className="pl-4">{t('settings.confirmEmail')}:</Label>
+              <Label htmlFor="confirm-email" className="pl-4">Confirmar Email:</Label>
               <Input
                 id="confirm-email"
                 type="email"
-                placeholder={t('settings.confirmEmailPlaceholder')}
+                placeholder="Repite tu nuevo email"
                 value={confirmEmail}
                 onChange={(e) => setConfirmEmail(e.target.value)}
               />
@@ -712,43 +712,43 @@ export default function Settings() {
                 disabled={isUpdatingEmail}
                 className="w-full"
               >
-                {isUpdatingEmail ? t('settings.updating') : t('settings.update')}
+                {isUpdatingEmail ? "Actualizando..." : "Actualizar"}
               </Button>
               <p className="text-sm text-muted-foreground pl-4">
-                {t('settings.confirmationEmailSent')}
+                Se enviará un correo de confirmación a tu nueva dirección
               </p>
             </div>
 
             <div className="border-t pt-4 space-y-4">
               <div className="flex items-center gap-2 mb-2">
-                <Label className="pl-4">{t('settings.changePassword')}:</Label>
+                <Label className="pl-4">Cambiar Contraseña:</Label>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="current-password" className="pl-4">{t('settings.currentPassword')}:</Label>
+                <Label htmlFor="current-password" className="pl-4">Contraseña Actual:</Label>
                 <Input
                   id="current-password"
                   type="password"
-                  placeholder={t('settings.currentPasswordPlaceholder')}
+                  placeholder="Ingresa tu contraseña actual"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="new-password" className="pl-4">{t('settings.newPassword')}:</Label>
+                <Label htmlFor="new-password" className="pl-4">Nueva Contraseña:</Label>
                 <Input
                   id="new-password"
                   type="password"
-                  placeholder={t('settings.newPasswordPlaceholder')}
+                  placeholder="Mínimo 6 caracteres"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirm-password" className="pl-4">{t('settings.confirmPassword')}:</Label>
+                <Label htmlFor="confirm-password" className="pl-4">Confirmar Contraseña:</Label>
                 <Input
                   id="confirm-password"
                   type="password"
-                  placeholder={t('settings.confirmPasswordPlaceholder')}
+                  placeholder="Repite tu nueva contraseña"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
@@ -758,7 +758,7 @@ export default function Settings() {
                 disabled={isUpdatingPassword}
                 className="w-full"
               >
-                {isUpdatingPassword ? t('settings.updating') : t('settings.updatePassword')}
+                {isUpdatingPassword ? "Actualizando..." : "Actualizar Contraseña"}
               </Button>
             </div>
           </div>
@@ -768,14 +768,14 @@ export default function Settings() {
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="pl-4">
-            {t('settings.recoverySettings')}:
+            Configuración de recuperación:
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* List of all addictions including main one */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <Label className="pl-4">{t('settings.myAddictions')}:</Label>
+              <Label className="pl-4">Mis adicciones:</Label>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">{addictions.length + 1}/3</span>
                 {addictions.length < 2 && (
@@ -803,7 +803,7 @@ export default function Settings() {
                     onValueChange={setRehabilitationType}
                   >
                     <SelectTrigger className="w-full h-10">
-                      <SelectValue placeholder={t('settings.selectAddiction')} />
+                      <SelectValue placeholder="Selecciona una adicción" />
                     </SelectTrigger>
                     <SelectContent>
                       {REHABILITATION_TYPES.filter(type => 
@@ -828,7 +828,7 @@ export default function Settings() {
                         {abstinenceStartDate ? (
                           format(new Date(abstinenceStartDate), "PPP", { locale: dateLocale })
                         ) : (
-                          <span>{t('settings.selectDate')}</span>
+                          <span>Seleccionar fecha</span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -861,7 +861,7 @@ export default function Settings() {
                       disabled={isUpdatingDate || isUpdatingRehabType}
                       className="w-full mt-2"
                     >
-                      {(isUpdatingDate || isUpdatingRehabType) ? t('settings.saving') : t('settings.save')}
+                      {(isUpdatingDate || isUpdatingRehabType) ? "..." : "Guardar"}
                     </Button>
                   )}
                 </div>
@@ -871,7 +871,7 @@ export default function Settings() {
               {addictions.length === 0 ? (
                 <div className="text-center py-8">
                   <p className="text-sm text-muted-foreground mb-4">
-                    {t('settings.addAdditionalAddictions')}
+                    Añade adicciones adicionales (máximo 2)
                   </p>
                   <Button
                     size="icon"
@@ -932,7 +932,7 @@ export default function Settings() {
                                 {dateValue ? (
                                   format(new Date(dateValue), "PPP", { locale: dateLocale })
                                 ) : (
-                                  <span>{t('settings.selectDate')}</span>
+                                  <span>Seleccionar fecha</span>
                                 )}
                               </Button>
                             </PopoverTrigger>
@@ -961,7 +961,7 @@ export default function Settings() {
                             onClick={() => handleUpdateAddiction(addiction.id, dateValue, typeValue)}
                             className="w-full mt-2"
                           >
-                            {t('settings.save')}
+                            Guardar
                           </Button>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
@@ -970,23 +970,23 @@ export default function Settings() {
                                 variant="ghost"
                                 className="w-full text-destructive hover:text-destructive hover:bg-destructive/10"
                               >
-                                {t('settings.deleteButton')}
+                                Borrar
                               </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>{t('settings.deleteAddiction')}</AlertDialogTitle>
+                                <AlertDialogTitle>¿Eliminar adicción?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  {t('settings.deleteAddictionWarning', { addiction: addiction.addiction_type })}
+                                  Esta acción eliminará permanentemente "{addiction.addiction_type}" y su historial. No se puede deshacer.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
-                                <AlertDialogCancel>{t('settings.cancel')}</AlertDialogCancel>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
                                 <AlertDialogAction
                                   onClick={() => handleDeleteAddiction(addiction.id)}
                                   className="bg-destructive hover:bg-destructive/90"
                                 >
-                                  {t('common.delete')}
+                                  Eliminar
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
@@ -1003,16 +1003,16 @@ export default function Settings() {
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="pl-4">{t('settings.dailyCheckInReminder')}:</Label>
-              <p className="text-sm text-muted-foreground pl-4">{t('settings.dailyCheckInDescription')}</p>
+              <Label className="pl-4">Recordatorio de Check-In Diario:</Label>
+              <p className="text-sm text-muted-foreground pl-4">Recibe notificaciones para completar tu check-in diario</p>
             </div>
             <Switch defaultChecked />
           </div>
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="pl-4">{t('settings.goalReminders')}:</Label>
-              <p className="text-sm text-muted-foreground pl-4">{t('settings.goalRemindersDescription')}</p>
+              <Label className="pl-4">Recordatorios de Metas:</Label>
+              <p className="text-sm text-muted-foreground pl-4">Recibe recordatorios de próximas metas</p>
             </div>
             <Switch defaultChecked />
           </div>
@@ -1022,7 +1022,7 @@ export default function Settings() {
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 pl-4">
-            {t('settings.subscription')}:
+            Suscripción:
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -1037,12 +1037,12 @@ export default function Settings() {
                 <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 space-y-2">
                   <div className="flex items-center gap-2">
                     <span className="font-semibold">
-                      {plan === "monthly" ? t('settings.monthlyPlanActive') : t('settings.annualPlanActive')}
+                      {plan === "monthly" ? "Plan mensual activo" : "Plan anual activo"}
                     </span>
                   </div>
                     {subscriptionEnd && (
                       <p className="text-sm text-muted-foreground">
-                        {t('settings.renewsOn')}: {new Date(subscriptionEnd).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-ES')}
+                        Se renueva el: {new Date(subscriptionEnd).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-ES')}
                       </p>
                     )}
                   <Button 
@@ -1050,7 +1050,7 @@ export default function Settings() {
                     onClick={openCustomerPortal}
                     className="w-full mt-2"
                   >
-                    {t('settings.manageSubscription')}
+                    Gestionar suscripción
                   </Button>
                 </div>
               )}
@@ -1059,7 +1059,7 @@ export default function Settings() {
               <div className="space-y-4">
                 <div className="mb-4">
                   <h3 className="text-lg font-semibold">
-                    {subscribed ? t('settings.changePlan') : t('settings.choosePlan')}
+                    {subscribed ? "Cambiar de plan" : "Elige tu plan"}
                   </h3>
                 </div>
 
@@ -1067,30 +1067,30 @@ export default function Settings() {
                 <div className={`border rounded-lg p-4 space-y-3 ${plan === "free" ? "border-primary bg-primary/5" : "border-border"}`}>
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-semibold text-lg">{t('settings.basicPlan')}</h4>
+                      <h4 className="font-semibold text-lg">Plan básico</h4>
                       <div className="flex items-center gap-2 mt-1">
-                        <p className="text-2xl font-bold text-primary">{t('settings.free')}</p>
-                        <span className="text-sm text-muted-foreground">+{trialDaysUsed}/40 {t('settings.days')}</span>
+                        <p className="text-2xl font-bold text-primary">Gratis</p>
+                        <span className="text-sm text-muted-foreground">+{trialDaysUsed}/40 días</span>
                       </div>
                     </div>
                     {plan === "free" && (
                       <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
-                        {t('settings.yourPlan')}
+                        Tu Plan
                       </span>
                     )}
                   </div>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      {t('settings.fullAccess')}
+                      Acceso completo a todas las funciones.
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      {t('settings.communityChat')}
+                      Chat comunitario.
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      {t('settings.personalizedTracking')}
+                      Seguimiento personalizado.
                     </li>
                   </ul>
                   {plan === "free" && (
@@ -1099,7 +1099,7 @@ export default function Settings() {
                       variant="destructive"
                       className="w-full mt-48"
                     >
-                      {t('settings.currentPlan')}
+                      Plan actual
                     </Button>
                   )}
                 </div>
@@ -1108,27 +1108,27 @@ export default function Settings() {
                 <div className={`border rounded-lg p-4 space-y-3 ${plan === "monthly" ? "border-primary bg-primary/5" : "border-border"}`}>
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-semibold text-lg">{t('settings.monthlyPlan')}</h4>
-                      <p className="text-2xl font-bold text-primary mt-1">6€<span className="text-sm text-muted-foreground">/{t('settings.month')}</span></p>
+                      <h4 className="font-semibold text-lg">Plan mensual</h4>
+                      <p className="text-2xl font-bold text-primary mt-1">6€<span className="text-sm text-muted-foreground">/mes</span></p>
                     </div>
                     {plan === "monthly" && (
                       <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
-                        {t('settings.yourPlan')}
+                        Tu plan
                       </span>
                     )}
                   </div>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      {t('settings.fullAccess')}
+                      Acceso completo a todas las funciones.
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      {t('settings.communityChat')}
+                      Chat comunitario.
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      {t('settings.personalizedTracking')}
+                      Seguimiento personalizado.
                     </li>
                   </ul>
                   {plan === "monthly" ? (
@@ -1137,14 +1137,14 @@ export default function Settings() {
                       variant="destructive"
                       className="w-full mt-16"
                     >
-                      {t('settings.currentPlan')}
+                      Plan Actual
                     </Button>
                   ) : (
                     <Button 
                       onClick={() => createCheckoutSession(SUBSCRIPTION_PLANS.monthly.priceId)}
                       className="w-full mt-16"
                     >
-                      {t('settings.upgradePlan')}
+                      Actualiza tu plan
                     </Button>
                   )}
                 </div>
@@ -1152,32 +1152,32 @@ export default function Settings() {
                 {/* Annual Plan */}
                 <div className={`border rounded-lg p-4 space-y-3 relative ${plan === "annual" ? "border-primary bg-primary/5" : "border-border"}`}>
                   <div className="absolute -top-3 right-4 bg-primary text-primary-foreground text-xs px-3 py-1 rounded-full font-semibold">
-                    {t('settings.save50')}
+                    Ahorra 50%
                   </div>
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-semibold text-lg">{t('settings.annualPlan')}</h4>
-                      <p className="text-2xl font-bold text-primary mt-1">30€<span className="text-sm text-muted-foreground">/{t('settings.year')}</span></p>
-                      <p className="text-xs text-muted-foreground">{t('settings.only')} 2.5€/{t('settings.month')}</p>
+                      <h4 className="font-semibold text-lg">Plan anual</h4>
+                      <p className="text-2xl font-bold text-primary mt-1">30€<span className="text-sm text-muted-foreground">/año</span></p>
+                      <p className="text-xs text-muted-foreground">Solo 2.5€/mes</p>
                     </div>
                     {plan === "annual" && (
                       <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
-                        {t('settings.yourPlan')}
+                        Tu plan
                       </span>
                     )}
                   </div>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      {t('settings.allMonthlyFeatures')}
+                      Todo lo del plan mensual.
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      {t('settings.savePerYear')}
+                      Ahorra 42€ al año.
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      {t('settings.bestValue')}
+                      Mejor valor por tu dinero.
                     </li>
                   </ul>
                   {plan === "annual" ? (
@@ -1186,14 +1186,14 @@ export default function Settings() {
                       variant="destructive"
                       className="w-full mt-16"
                     >
-                      {t('settings.currentPlan')}
+                      Plan Actual
                     </Button>
                   ) : (
                     <Button 
                       onClick={() => createCheckoutSession(SUBSCRIPTION_PLANS.annual.priceId)}
                       className="w-full mt-16"
                     >
-                      {t('settings.upgradePlan')}
+                      Actualiza tu plan
                     </Button>
                   )}
                 </div>
@@ -1217,8 +1217,8 @@ export default function Settings() {
               onValueChange={(value) => {
                 i18n.changeLanguage(value);
                 toast({
-                  title: t('settings.languageUpdated'),
-                  description: value === 'es' ? t('settings.languageChangedToSpanish') : t('settings.languageChangedToEnglish'),
+                  title: value === 'es' ? 'Idioma actualizado' : 'Language updated',
+                  description: value === 'es' ? 'El idioma se ha cambiado a español.' : 'Language has been changed to English.',
                 });
               }}
             >
@@ -1239,31 +1239,31 @@ export default function Settings() {
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2 pl-4">
               <Bell className="h-5 w-5 text-primary" />
-              {t('settings.reminders')}:
+              Recordatorios:
             </CardTitle>
             <Dialog open={isReminderDialogOpen} onOpenChange={setIsReminderDialogOpen}>
               <DialogTrigger asChild>
                 <Button size="sm" className="gap-2">
                   <Plus className="h-4 w-4" />
-                  {t('settings.add')}
+                  Añadir
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>{t('settings.addNewReminder')}</DialogTitle>
+                  <DialogTitle>Añadir Nuevo Recordatorio</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="reminder-title" className="pl-4">{t('settings.title')}:</Label>
+                    <Label htmlFor="reminder-title" className="pl-4">Título:</Label>
                     <Input
                       id="reminder-title"
-                      placeholder={t('settings.titlePlaceholder')}
+                      placeholder="Ej: Meditación matutina"
                       value={newReminder.title}
                       onChange={(e) => setNewReminder(prev => ({ ...prev, title: e.target.value }))}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="reminder-time" className="pl-4">{t('settings.time')}:</Label>
+                    <Label htmlFor="reminder-time" className="pl-4">Hora:</Label>
                     <Input
                       id="reminder-time"
                       type="time"
@@ -1272,7 +1272,7 @@ export default function Settings() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="pl-4">{t('settings.notificationType')}:</Label>
+                    <Label className="pl-4">Tipo de Notificación:</Label>
                     <RadioGroup
                       value={newReminder.notificationType} 
                       onValueChange={(value: "email" | "popup") => setNewReminder(prev => ({ ...prev, notificationType: value }))}
@@ -1281,20 +1281,20 @@ export default function Settings() {
                         <RadioGroupItem value="popup" id="popup" />
                         <Label htmlFor="popup" className="flex items-center gap-2 cursor-pointer font-normal">
                           <BellRing className="h-4 w-4" />
-                          {t('settings.popupInApp')}
+                          Pop-up en la aplicación
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="email" id="email" />
                         <Label htmlFor="email" className="flex items-center gap-2 cursor-pointer font-normal">
                           <Mail className="h-4 w-4" />
-                          {t('settings.sendByEmail')}
+                          Enviar por email
                         </Label>
                       </div>
                     </RadioGroup>
                   </div>
                   <Button onClick={addReminder} className="w-full">
-                    {t('settings.add')}
+                    Añadir
                   </Button>
                 </div>
               </DialogContent>
@@ -1306,7 +1306,7 @@ export default function Settings() {
             {reminders.length === 0 ? (
               <div className="text-center py-8">
                 <Bell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground text-sm">{t('settings.noRemindersConfigured')}</p>
+                <p className="text-muted-foreground text-sm">No tienes recordatorios configurados</p>
               </div>
             ) : (
               reminders.map((reminder) => (
@@ -1318,12 +1318,12 @@ export default function Settings() {
                       {reminder.notificationType === "email" ? (
                         <>
                           <Mail className="h-3 w-3 text-muted-foreground" />
-                          <span className="text-xs text-muted-foreground">{t('settings.email')}</span>
+                          <span className="text-xs text-muted-foreground">Email</span>
                         </>
                       ) : (
                         <>
                           <BellRing className="h-3 w-3 text-muted-foreground" />
-                          <span className="text-xs text-muted-foreground">{t('settings.popup')}</span>
+                          <span className="text-xs text-muted-foreground">Pop-up</span>
                         </>
                       )}
                     </div>
@@ -1351,38 +1351,38 @@ export default function Settings() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle className="pl-4">{t('settings.privacyAndSecurity')}:</CardTitle>
+          <CardTitle className="pl-4">Privacidad y seguridad:</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="pl-4">{t('settings.appLock')}:</Label>
-              <p className="text-sm text-muted-foreground pl-4">{t('settings.appLockDescription')}</p>
+              <Label className="pl-4">Bloqueo de Aplicación:</Label>
+              <p className="text-sm text-muted-foreground pl-4">Requiere PIN o biométrico para abrir la app</p>
             </div>
             <Switch />
           </div>
 
           <Button variant="outline" className="w-full">
-            {t('settings.exportMyData')}
+            Exportar Mis Datos
           </Button>
         </CardContent>
       </Card>
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle className="pl-4">{t('settings.about')}:</CardTitle>
+          <CardTitle className="pl-4">Acerca de:</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex justify-between">
-            <span className="text-muted-foreground">{t('settings.version')}</span>
+            <span className="text-muted-foreground">Versión</span>
             <span className="font-medium">1.0.0</span>
           </div>
           <div className="flex flex-col gap-2">
             <Button variant="link" className="p-0 h-auto justify-start">
-              {t('settings.privacyPolicy')}
+              Política de Privacidad
             </Button>
             <Button variant="link" className="p-0 h-auto justify-start">
-              {t('settings.termsOfService')}
+              Términos de Servicio
             </Button>
           </div>
         </CardContent>
@@ -1391,37 +1391,39 @@ export default function Settings() {
       <Card className="border-destructive/50 bg-destructive/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive pl-4">
-            {t('settings.dangerZone')}:
+            Zona de peligro:
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
             {/* Reset goals */}
             <div className="space-y-2">
-              <Label className="text-orange-600 dark:text-orange-500 font-semibold pl-4">{t('settings.resetGoals')}:</Label>
+              <Label className="text-orange-600 dark:text-orange-500 font-semibold pl-4">Reiniciar tus metas:</Label>
               <p className="text-sm text-muted-foreground mb-4 pl-4">
-                {t('settings.resetGoalsDescription')}
+                Restaura las metas a su configuración por defecto y reinicia el contador de abstinencia. 
+                Todos tus demás datos (check-ins, diarios, contactos, etc.) se mantendrán intactos.
               </p>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="outline" className="w-full border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white">
-                    {t('settings.resetGoalsButton')}
+                    Reiniciar metas
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>{t('settings.resetGoalsConfirm')}</AlertDialogTitle>
+                    <AlertDialogTitle>¿Reiniciar tus metas?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      {t('settings.resetGoalsConfirmDescription')}
+                      Esto restaurará tus metas a la configuración por defecto y reiniciará el contador "Soy libre desde hace". 
+                      Todos tus demás datos (check-ins, diarios, contactos, etc.) se mantendrán guardados. Esta acción no se puede deshacer.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>{t('settings.cancel')}</AlertDialogCancel>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={async () => {
                         try {
                           const { data: { user } } = await supabase.auth.getUser();
-                          if (!user) throw new Error(t('settings.userNotAuthenticated'));
+                          if (!user) throw new Error("Usuario no autenticado");
 
                           const { error } = await supabase.rpc('reset_goals_and_abstinence', {
                             p_user_id: user.id
@@ -1430,8 +1432,8 @@ export default function Settings() {
                           if (error) throw error;
 
                           toast({
-                            title: t('settings.goalsReset'),
-                            description: t('settings.goalsResetDescription'),
+                            title: "Metas reiniciadas",
+                            description: "Tus metas han sido restauradas a la configuración por defecto y tu contador ha sido reiniciado.",
                           });
 
                           // Dispatch event to update dashboard
@@ -1443,15 +1445,15 @@ export default function Settings() {
                           }, 1500);
                         } catch (error: any) {
                           toast({
-                            title: t('common.error'),
-                            description: error.message || t('settings.goalsResetDescription'),
+                            title: "Error",
+                            description: error.message || "No se pudieron reiniciar las metas.",
                             variant: "destructive",
                           });
                         }
                       }}
                       className="bg-orange-600 text-white hover:bg-orange-700"
                     >
-                      {t('settings.yesResetGoals')}
+                      Sí, reiniciar metas
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -1460,30 +1462,30 @@ export default function Settings() {
 
             {/* Delete account */}
             <div className="space-y-2">
-              <Label className="text-destructive font-semibold pl-4">{t('settings.deleteAccount')}:</Label>
+              <Label className="text-destructive font-semibold pl-4">Eliminar cuenta:</Label>
               <p className="text-sm text-muted-foreground mb-4 pl-4">
-                {t('settings.deleteAccountDescription')}
+                Esta acción es permanente y no se puede deshacer. Todos tus datos serán eliminados permanentemente.
               </p>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="destructive" className="w-full">
-                    {t('settings.deleteMyAccount')}
+                    Eliminar mi cuenta
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>{t('settings.absolutelySure')}</AlertDialogTitle>
+                    <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      {t('settings.deleteAccountConfirm')}
+                      Esta acción no se puede deshacer. Esto eliminará permanentemente tu cuenta y todos tus datos de nuestros servidores.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>{t('settings.cancel')}</AlertDialogCancel>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDeleteAccount}
                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                     >
-                      {t('settings.yesDeleteAccount')}
+                      Sí, eliminar mi cuenta
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
