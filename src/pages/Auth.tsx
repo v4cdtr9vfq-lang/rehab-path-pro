@@ -156,7 +156,7 @@ export default function Auth() {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {isLogin && !isForgotPassword && (
-          <div className="mb-5 pl-6">
+          <div className="mb-1">
             <Link to="/" className="inline-flex items-center gap-2 text-primary hover:opacity-80 transition-opacity">
               <Heart className="h-10 w-10" />
               <span className="text-4xl font-bold">rehabp.org</span>
@@ -165,7 +165,7 @@ export default function Auth() {
         )}
         
         {(!isLogin || isForgotPassword) && (
-          <div className="mb-5 pl-6">
+          <div className="mb-1">
             <Link to="/" className="inline-flex items-center gap-2 text-primary hover:opacity-80 transition-opacity">
               <Heart className="h-10 w-10" />
               <span className="text-4xl font-bold">rehabp.org</span>
