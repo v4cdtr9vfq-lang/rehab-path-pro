@@ -2,3 +2,6 @@ project_id = "ntxhuytetumqlyvbwvka"
 
 [functions.generate-progress-report]
 verify_jwt = true
+
+[functions.delete-old-messages]
+verify_jwt = false
