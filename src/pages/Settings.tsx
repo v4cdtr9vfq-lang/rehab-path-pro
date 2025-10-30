@@ -699,7 +699,7 @@ export default function Settings() {
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
               />
-              <Label htmlFor="confirm-email" className="pl-4">{t('settings.confirmEmail')}:</Label>
+              <Label htmlFor="confirm-email" className="pl-4 mt-1">{t('settings.confirmEmail')}:</Label>
               <Input
                 id="confirm-email"
                 type="email"
