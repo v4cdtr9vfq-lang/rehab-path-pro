@@ -33,7 +33,9 @@ interface ExpandedGoal {
 
 export default function ProgressPage() {
   const { t, i18n } = useTranslation();
-  const currentLanguage = i18n.language || 'es';
+  // Normalize language to 'en' or 'es'
+  const currentLanguage = i18n.language.startsWith('en') ? 'en' : 'es';
+  console.log('Progress - i18n.language:', i18n.language, 'normalized:', currentLanguage);
   
   const [hasCheckedInToday, setHasCheckedInToday] = useState(false);
   const [dailyGoals, setDailyGoals] = useState<ExpandedGoal[]>([]);

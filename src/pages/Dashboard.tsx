@@ -33,7 +33,9 @@ import { CSS } from '@dnd-kit/utilities';
 export default function Home() {
   const { t, i18n } = useTranslation();
   const quickTools = useTranslatedQuickTools();
-  const currentLanguage = i18n.language || 'es'; // Get current language
+  // Normalize language to 'en' or 'es'
+  const currentLanguage = i18n.language.startsWith('en') ? 'en' : 'es';
+  console.log('Dashboard - i18n.language:', i18n.language, 'normalized:', currentLanguage);
   
   const {
     toast

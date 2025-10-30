@@ -52,7 +52,9 @@ interface ExpandedGoal extends Goal {
 export default function Plan() {
   const isMobile = useIsMobile();
   const { t, i18n } = useTranslation();
-  const currentLanguage = i18n.language || 'es';
+  // Normalize language to 'en' or 'es'
+  const currentLanguage = i18n.language.startsWith('en') ? 'en' : 'es';
+  console.log('Plan - i18n.language:', i18n.language, 'normalized:', currentLanguage);
   const dateLocale = i18n.language === 'en' ? enUS : es;
   
   // Helper function to get completion status text
