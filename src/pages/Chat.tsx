@@ -42,25 +42,25 @@ interface ChatMessage {
 
 const CHAT_ROOMS = [
   { id: 'alcohol', translationKey: 'addictionTypes.alcohol' },
-  { id: 'amor', translationKey: 'addictionTypes.love' },
-  { id: 'azucar', translationKey: 'addictionTypes.sugar' },
+  { id: 'amor', translationKey: 'addictionTypes.amor' },
+  { id: 'azucar', translationKey: 'addictionTypes.azucar' },
   { id: 'cannabis', translationKey: 'addictionTypes.cannabis' },
-  { id: 'cocaina', translationKey: 'addictionTypes.cocaine' },
-  { id: 'codependencia', translationKey: 'addictionTypes.codependency' },
-  { id: 'comida', translationKey: 'addictionTypes.food' },
-  { id: 'compras', translationKey: 'addictionTypes.shopping' },
+  { id: 'cocaina', translationKey: 'addictionTypes.cocaina' },
+  { id: 'codependencia', translationKey: 'addictionTypes.codependencia' },
+  { id: 'comida', translationKey: 'addictionTypes.comida' },
+  { id: 'compras', translationKey: 'addictionTypes.compras' },
   { id: 'drama', translationKey: 'addictionTypes.drama' },
-  { id: 'medicamentos', translationKey: 'addictionTypes.medications' },
-  { id: 'narcoticos', translationKey: 'addictionTypes.narcotics' },
-  { id: 'pornografia', translationKey: 'addictionTypes.pornography' },
-  { id: 'redes_sociales', translationKey: 'addictionTypes.social_media' },
-  { id: 'sexo', translationKey: 'addictionTypes.sex' },
-  { id: 'tabaco', translationKey: 'addictionTypes.tobacco' },
-  { id: 'tecnologia', translationKey: 'addictionTypes.technology' },
-  { id: 'trabajo', translationKey: 'addictionTypes.work' },
-  { id: 'vaporizadores', translationKey: 'addictionTypes.vaporizers' },
-  { id: 'videojuegos', translationKey: 'addictionTypes.videogames' },
-  { id: 'otros', translationKey: 'addictionTypes.others' },
+  { id: 'medicamentos', translationKey: 'addictionTypes.medicamentos' },
+  { id: 'narcoticos', translationKey: 'addictionTypes.narcoticos' },
+  { id: 'pornografia', translationKey: 'addictionTypes.pornografia' },
+  { id: 'redes_sociales', translationKey: 'addictionTypes.redes_sociales' },
+  { id: 'sexo', translationKey: 'addictionTypes.sexo' },
+  { id: 'tabaco', translationKey: 'addictionTypes.tabaco' },
+  { id: 'tecnologia', translationKey: 'addictionTypes.tecnologia' },
+  { id: 'trabajo', translationKey: 'addictionTypes.trabajo' },
+  { id: 'vaporizadores', translationKey: 'addictionTypes.vaporizadores' },
+  { id: 'videojuegos', translationKey: 'addictionTypes.videojuegos' },
+  { id: 'otros', translationKey: 'addictionTypes.otros' },
 ] as const;
 
 export default function Chat() {
@@ -68,11 +68,6 @@ export default function Chat() {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
   const isMobile = useIsMobile();
-  
-  // Debug translations
-  console.log('Current language:', currentLanguage);
-  console.log('Translation test for addictionTypes.alcohol:', t('addictionTypes.alcohol'));
-  console.log('i18n ready:', i18n.isInitialized);
   
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -145,7 +140,6 @@ export default function Chat() {
 
     setUserId(user.id);
     const fullName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuario';
-    console.log('Nombre del usuario:', fullName, 'Iniciales:', getInitials(fullName));
     setUserName(fullName);
 
     // Load existing messages for current room and language
@@ -192,22 +186,18 @@ export default function Chat() {
     channel
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState();
-        console.log('Presence state:', state);
-        console.log('Current room:', currentRoom);
         
         // Count unique users in current room
         const uniqueUsers = new Set();
         Object.values(state).forEach((presences: any) => {
           if (Array.isArray(presences) && presences.length > 0) {
             const presence = presences[0];
-            console.log('Checking presence:', presence);
             if (presence?.room === currentRoom) {
               uniqueUsers.add(presence.user_id);
             }
           }
         });
         
-        console.log('Unique users:', uniqueUsers.size);
         setOnlineCountByRoom(prev => ({
           ...prev,
           [currentRoom]: uniqueUsers.size
@@ -219,10 +209,8 @@ export default function Chat() {
         }));
       })
       .on('presence', { event: 'join' }, ({ key, newPresences }) => {
-        console.log('User joined:', key);
       })
       .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
-        console.log('User left:', key);
       })
       .on('postgres_changes', {
         event: 'INSERT',
