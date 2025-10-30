@@ -666,12 +666,12 @@ export default function Settings() {
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="full-name" className="pl-4">Nombre completo:</Label>
+              <Label htmlFor="full-name" className="pl-4">Nombre pila:</Label>
               <div className="flex gap-2">
                 <Input
                   id="full-name"
                   type="text"
-                  placeholder="Tu nombre completo"
+                  placeholder="Solo tu nombre"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                 />
