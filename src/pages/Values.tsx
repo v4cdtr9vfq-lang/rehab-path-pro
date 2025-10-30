@@ -702,7 +702,7 @@ export default function Values() {
       {/* Valores Primarios Widget */}
       <div>
         <div className="flex justify-between items-center mb-0 pl-[35px]">
-          <h2 className="text-2xl font-semibold text-foreground">{t('values.primaryValues')}</h2>
+          <h2 className="text-sm md:text-2xl font-semibold text-foreground">{t('values.primaryValues')}</h2>
           <Dialog open={isPrimaryDialogOpen} onOpenChange={setIsPrimaryDialogOpen}>
             <DialogTrigger asChild>
               <Button className="gap-2 mt-[15px] mr-[15px]" disabled={values.filter(v => v.value_type === 'primary').length >= 3}>
@@ -787,7 +787,7 @@ export default function Values() {
       {/* Valores Secundarios Widget */}
       <div>
         <div className="flex justify-between items-center mb-0 pl-[35px]">
-          <h2 className="text-2xl font-semibold text-foreground">{t('values.secondaryValues')}</h2>
+          <h2 className="text-sm md:text-2xl font-semibold text-foreground">{t('values.secondaryValues')}</h2>
           <Dialog open={isSecondaryDialogOpen} onOpenChange={setIsSecondaryDialogOpen}>
             <DialogTrigger asChild>
               <Button className="gap-2 mt-[15px] mr-[15px]" disabled={values.filter(v => v.value_type === 'secondary').length >= 6}>
