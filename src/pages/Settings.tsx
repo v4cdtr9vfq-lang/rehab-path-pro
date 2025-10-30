@@ -1412,18 +1412,18 @@ export default function Settings() {
 
                           if (error) throw error;
 
+                          // Dispatch event to update dashboard
+                          window.dispatchEvent(new CustomEvent('abstinenceDateUpdated'));
+                          
                           toast({
                             title: t('settings.goalsReset'),
                             description: t('settings.goalsResetSuccessfully'),
                           });
-
-                          // Dispatch event to update dashboard
-                          window.dispatchEvent(new CustomEvent('abstinenceDateUpdated'));
                           
-                          // Refresh the page to show updated goals
+                          // Force hard refresh to clear all caches
                           setTimeout(() => {
-                            window.location.reload();
-                          }, 1500);
+                            window.location.href = window.location.href;
+                          }, 1000);
                         } catch (error: any) {
                           toast({
                             title: t('common.error'),
