@@ -16,6 +16,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recha
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getEmotionCategories } from "@/utils/emotionCategories";
+import { translateEmotion } from "@/utils/translateEmotion";
 
 interface TertiaryEmotion {
   name: string;
@@ -171,6 +172,8 @@ export default function EmotionJournal() {
       return;
     }
 
+    const targetLang = t('common.yes') === 'Yes' ? 'en' : 'es';
+
     // Count occurrences of each emotion
     const countMap = new Map<string, number>();
     
@@ -180,21 +183,24 @@ export default function EmotionJournal() {
         const primaries = entry.primary_emotion.split(", ");
         primaries.forEach((emotion: string) => {
           const trimmed = emotion.trim();
-          countMap.set(trimmed, (countMap.get(trimmed) || 0) + 1);
+          const translated = translateEmotion(trimmed, targetLang);
+          countMap.set(translated, (countMap.get(translated) || 0) + 1);
         });
       }
       
       // Count secondary emotions
       if (entry.secondary_emotions) {
         entry.secondary_emotions.forEach((emotion: string) => {
-          countMap.set(emotion, (countMap.get(emotion) || 0) + 1);
+          const translated = translateEmotion(emotion, targetLang);
+          countMap.set(translated, (countMap.get(translated) || 0) + 1);
         });
       }
       
       // Count tertiary emotions
       if (entry.tertiary_emotions) {
         entry.tertiary_emotions.forEach((emotion: string) => {
-          countMap.set(emotion, (countMap.get(emotion) || 0) + 1);
+          const translated = translateEmotion(emotion, targetLang);
+          countMap.set(translated, (countMap.get(translated) || 0) + 1);
         });
       }
     });
