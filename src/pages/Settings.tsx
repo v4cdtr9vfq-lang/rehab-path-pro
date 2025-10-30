@@ -1023,7 +1023,7 @@ export default function Settings() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 pl-4">
             {t('settings.subscription')}:
           </CardTitle>
         </CardHeader>
@@ -1059,7 +1059,7 @@ export default function Settings() {
 
               {/* Subscription Plans */}
               <div className="space-y-4">
-                <div className="mb-4">
+                <div className="mb-4 pl-4">
                   <h3 className="text-lg font-semibold">
                     {subscribed ? t('settings.changePlan') : t('settings.chooseYourPlan')}
                   </h3>
