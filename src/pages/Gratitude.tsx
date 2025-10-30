@@ -350,7 +350,7 @@ export default function Gratitude() {
                 <Button
                   variant="outline"
                   className={cn(
-                    "justify-start text-left font-normal",
+                    "justify-start text-left font-normal pl-[15px]",
                     !filterDate && "text-muted-foreground"
                   )}
                 >
