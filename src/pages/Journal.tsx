@@ -37,7 +37,6 @@ export default function Journal() {
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoadingDemo, setIsLoadingDemo] = useState(false);
   const [expandedEntries, setExpandedEntries] = useState<Set<string>>(new Set());
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -389,113 +388,6 @@ export default function Journal() {
     setCurrentPage(1);
   }, [searchTerm]);
 
-  const loadDemoEntries = async () => {
-    setIsLoadingDemo(true);
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        toast({
-          title: t('common.error'),
-          description: t('journal.loginRequired'),
-          variant: "destructive",
-        });
-        setIsLoadingDemo(false);
-        return;
-      }
-
-      const demoEntries = [
-        {
-          user_id: user.id,
-          title: 'Mi primer día',
-          content: 'Hoy comencé mi camino hacia la recuperación. Me siento esperanzado pero también nervioso. Sé que no será fácil, pero estoy comprometido con este cambio.',
-          tags: ['inicio', 'esperanza', 'compromiso'],
-          entry_date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-        },
-        {
-          user_id: user.id,
-          title: 'Reflexiones sobre mi pasado',
-          content: 'Hoy estuve pensando en las razones que me llevaron a este punto. No fue un solo evento, sino una serie de decisiones. Pero ahora puedo cambiar el rumbo.',
-          tags: ['reflexión', 'autoconocimiento'],
-          entry_date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-        },
-        {
-          user_id: user.id,
-          title: 'Un día difícil',
-          content: 'Hoy tuve tentaciones fuertes. Pero llamé a mi red de apoyo y pude superarlo. Aprendí que pedir ayuda no es debilidad, es fortaleza.',
-          tags: ['desafío', 'apoyo', 'fortaleza'],
-          entry_date: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-        },
-        {
-          user_id: user.id,
-          title: 'Pequeñas victorias',
-          content: 'Hoy celebré una semana limpio. Puede parecer poco para algunos, pero para mí es un logro enorme. Cada día cuenta.',
-          tags: ['victoria', 'celebración', 'gratitud'],
-          entry_date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-        },
-        {
-          user_id: user.id,
-          title: 'Descubriendo mis valores',
-          content: 'Hice el ejercicio de identificar mis valores más importantes. Me di cuenta de que había estado viviendo de una manera que contradecía lo que realmente importa para mí.',
-          tags: ['valores', 'autoconocimiento', 'propósito'],
-          entry_date: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-        },
-        {
-          user_id: user.id,
-          title: 'Agradecimiento',
-          content: 'Hoy practiqué la gratitud. Estoy agradecido por mi familia, por esta oportunidad de cambio, y por cada día que avanzo en mi recuperación.',
-          tags: ['gratitud', 'familia', 'positivo'],
-          entry_date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-        },
-        {
-          user_id: user.id,
-          title: 'Aprendiendo a sentir',
-          content: 'Por primera vez en mucho tiempo, permití sentir mis emociones sin escapar de ellas. Fue incómodo pero liberador.',
-          tags: ['emociones', 'crecimiento', 'honestidad'],
-          entry_date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-        },
-        {
-          user_id: user.id,
-          title: 'Mi rutina de bienestar',
-          content: 'Establecí una rutina matutina que incluye meditación y ejercicio. Me hace sentir más centrado y en control de mi día.',
-          tags: ['rutina', 'bienestar', 'meditación'],
-          entry_date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-        },
-        {
-          user_id: user.id,
-          title: 'Mirando hacia adelante',
-          content: 'Hoy reflexioné sobre mis metas a largo plazo. Quiero reconstruir las relaciones que dañé y encontrar un propósito que me llene.',
-          tags: ['futuro', 'metas', 'relaciones'],
-          entry_date: new Date().toISOString().split('T')[0]
-        }
-      ];
-
-      const { data, error } = await supabase
-        .from('journal_entries')
-        .insert(demoEntries)
-        .select();
-
-      if (error) throw error;
-
-      if (data) {
-        setEntries(prev => [...data.reverse(), ...prev]);
-        toast({
-          title: t('journal.entrySaved'),
-          description: t('journal.demoLoaded'),
-        });
-      }
-    } catch (error) {
-      console.error('Error loading demo entries:', error);
-      toast({
-        title: t('common.error'),
-        description: t('journal.errorDemo'),
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoadingDemo(false);
-    }
-  };
-
   return (
     <div className="space-y-[35px] animate-in fade-in duration-500">
       <div className="flex flex-col sm:flex-row gap-4">
@@ -621,21 +513,6 @@ export default function Journal() {
               <div className="flex flex-col gap-3 items-center">
                 <Button onClick={() => setShowNewEntry(true)} size="icon" className="h-12 w-12">
                   <Plus className="h-6 w-6" />
-                </Button>
-                <Button 
-                  onClick={loadDemoEntries} 
-                  variant="outline"
-                  disabled={isLoadingDemo}
-                  className="gap-2"
-                >
-                  {isLoadingDemo ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      {t('journal.loading')}
-                    </>
-                  ) : (
-                    t('journal.loadDemoEntries')
-                  )}
                 </Button>
               </div>
             </CardContent>
