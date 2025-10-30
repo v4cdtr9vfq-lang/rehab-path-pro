@@ -641,10 +641,10 @@ export default function CheckIn() {
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder={t('checkIn.relapseAddictionPlaceholder')} />
                   </SelectTrigger>
-                  <SelectContent className="bg-background">
+                   <SelectContent className="bg-background">
                     {userAddictions.map((addiction, index) => (
                       <SelectItem key={addiction.id} value={addiction.id}>
-                        {index + 1}. {addiction.name}
+                        {index + 1}. {t(`addictions.${addiction.name}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
