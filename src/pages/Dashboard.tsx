@@ -493,7 +493,7 @@ export default function Home() {
                   originalId: g.id,
                   title: g.text,
                   link: g.link,
-                  period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Pendiente' : 'Esta semana',
+                  period: g.goal_type === 'today' ? t('goals.today') : g.goal_type === 'always' ? t('goals.always') : t('goals.thisWeek'),
                   status: completedInstances.has(instanceId) ? 'completed' : 'pending',
                   instanceIndex: i
                 });

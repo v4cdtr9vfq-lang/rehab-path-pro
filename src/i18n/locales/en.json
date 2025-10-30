@@ -213,7 +213,11 @@
     "quickToolAddedError": "Could not add quick tool",
     "quickToolUpdatedError": "Could not update quick tool",
     "quickToolDeletedError": "Could not delete quick tool",
-    "confirmDeleteQuickTool": "Are you sure you want to delete this quick tool? This action cannot be undone."
+    "confirmDeleteQuickTool": "Are you sure you want to delete this quick tool? This action cannot be undone.",
+    "journal": "Journal",
+    "emotionJournal": "Emotion Journal",
+    "gratitude": "Gratitude",
+    "emergencyPlan": "Emergency Plan"
   },
   "plan": {
     "title": "Plan",
