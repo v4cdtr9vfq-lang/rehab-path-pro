@@ -107,9 +107,9 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
 
   return (
     <>
-      <div className="rounded-3xl p-8 md:p-12 bg-card border border-sidebar-border relative">
+      <div className="rounded-3xl p-5 md:p-12 bg-card border border-sidebar-border relative">
         {/* Title in top left corner */}
-        <p className="absolute top-[17px] md:top-[22px] left-8 text-foreground text-xl md:text-2xl font-bold text-left">
+        <p className="absolute top-[14px] md:top-[22px] left-5 md:left-8 text-foreground text-xl md:text-2xl font-bold text-left">
           {t('dashboard.cleanTime')}
         </p>
 
@@ -144,7 +144,7 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
           )}
         </div>
 
-        <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 mt-8">
+        <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 mt-6 md:mt-8">
           <div className="text-[2.75rem] sm:text-6xl md:text-8xl font-bold text-foreground tracking-tight">
             {count.years.toString().padStart(2, '0')}<span className="ml-1">A</span>
           </div>
