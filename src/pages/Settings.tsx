@@ -800,23 +800,6 @@ export default function Settings() {
                   1
                 </span>
                 <div className="flex-1 space-y-2">
-                  <Select
-                    value={rehabilitationType}
-                    onValueChange={setRehabilitationType}
-                  >
-                    <SelectTrigger className="w-full h-10">
-                      <SelectValue placeholder={t('settings.selectAddiction')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {REHABILITATION_TYPES.filter(type => 
-                        !addictions.some(a => a.addiction_type === type.id)
-                      ).map((type) => (
-                        <SelectItem key={type.id} value={type.id}>
-                          {type.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -851,19 +834,17 @@ export default function Settings() {
                       />
                     </PopoverContent>
                   </Popover>
-                  {(rehabilitationType !== initialRehabilitationType || abstinenceStartDate !== initialAbstinenceDate) && (
+                  {abstinenceStartDate !== initialAbstinenceDate && (
                     <Button 
                       size="sm"
                       onClick={() => {
-                        handleUpdateRehabilitationType();
                         handleUpdateAbstinenceDate();
-                        setInitialRehabilitationType(rehabilitationType);
                         setInitialAbstinenceDate(abstinenceStartDate);
                       }}
-                      disabled={isUpdatingDate || isUpdatingRehabType}
+                      disabled={isUpdatingDate}
                       className="w-full mt-2"
                     >
-                      {(isUpdatingDate || isUpdatingRehabType) ? "..." : t('settings.save')}
+                      {isUpdatingDate ? "..." : t('settings.save')}
                     </Button>
                   )}
                 </div>
