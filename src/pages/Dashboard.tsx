@@ -676,7 +676,7 @@ export default function Home() {
       { type: 'valor', days: 0, name: 'Valor', emoji: '🥉' },
       { type: 'constancia', days: 90, name: 'Constancia', emoji: '🥈' },
       { type: 'recuperacion', days: 180, name: 'Recuperación', emoji: '🥇' },
-      { type: 'servicio', days: 360, name: 'Libertad', emoji: '🏆' }
+      { type: 'servicio', days: 365, name: 'Libertad', emoji: '🏆' }
     ];
 
     for (const medal of medalsToCheck) {

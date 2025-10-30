@@ -270,9 +270,9 @@ export default function Community() {
     const medals = [];
     
     // Medallas basadas en días totales
-    if (totalDays >= 180) medals.push("🏆"); // Libertad (6 meses)
-    if (totalDays >= 90) medals.push("🥇"); // Recuperación (3 meses)
-    if (totalDays >= 40) medals.push("🥈"); // Constancia
+    if (totalDays >= 365) medals.push("🏆"); // Libertad (1 año)
+    if (totalDays >= 180) medals.push("🥇"); // Recuperación (6 meses)
+    if (totalDays >= 90) medals.push("🥈"); // Constancia (3 meses)
     medals.push("🥉"); // Valor (siempre)
     
     return medals;
