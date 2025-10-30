@@ -29,6 +29,9 @@ i18n
       order: ['localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
       caches: ['localStorage'],
     },
+    debug: false,
+    returnEmptyString: false,
+    returnNull: false,
   });
 
 export default i18n;
