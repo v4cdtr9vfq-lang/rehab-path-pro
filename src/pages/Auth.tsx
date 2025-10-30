@@ -295,7 +295,7 @@ export default function Auth() {
                   </div>
 
                   {!isLogin && (
-                    <div className="space-y-2 pb-[35px]">
+                    <div className="space-y-2 pb-[25px]">
                       <Label htmlFor="confirmPassword" className="pl-4">Confirmar contraseña:</Label>
                       <Input
                         id="confirmPassword"
@@ -310,7 +310,7 @@ export default function Auth() {
                     </div>
                   )}
 
-                  {isLogin && <div className="pb-[35px]" />}
+                  {isLogin && <div className="pb-[25px]" />}
 
                   <Button
                     type="submit"
