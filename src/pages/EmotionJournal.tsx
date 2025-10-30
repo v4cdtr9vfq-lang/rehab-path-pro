@@ -1068,7 +1068,7 @@ export default function EmotionJournal() {
                 <div className="space-y-3 px-2">
                   {entry.primary_emotion && (
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Me he sentido:</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('emotionJournal.iHaveFeltLog')}</h3>
                       <div className="flex flex-wrap gap-2">
                         {entry.primary_emotion.split(", ").sort().map((emotion, idx) => (
                           <span
@@ -1084,7 +1084,7 @@ export default function EmotionJournal() {
 
                   {entry.secondary_emotions && entry.secondary_emotions.length > 0 && (
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-2">También he sentido:</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('emotionJournal.alsoFeltLog')}</h3>
                       <div className="flex flex-wrap gap-2">
                         {[...entry.secondary_emotions].sort().map((emotion, idx) => (
                           <span
@@ -1100,7 +1100,7 @@ export default function EmotionJournal() {
 
                   {entry.tertiary_emotions && entry.tertiary_emotions.length > 0 && (
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-2">Y a nivel más profundo:</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('emotionJournal.andAtDeeperLevelLog')}</h3>
                       <div className="flex flex-wrap gap-2">
                         {[...entry.tertiary_emotions].sort().map((emotion, idx) => (
                           <span

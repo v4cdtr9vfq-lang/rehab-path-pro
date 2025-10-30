@@ -355,7 +355,10 @@
     "mustSelectPrimary": "Debes seleccionar al menos una categoría principal.",
     "mustSignIn": "Debes iniciar sesión para guardar tus emociones.",
     "error": "Error",
-    "quickAccess": "Accesos directos:"
+    "quickAccess": "Accesos directos:",
+    "iHaveFeltLog": "Me he sentido:",
+    "alsoFeltLog": "También he sentido:",
+    "andAtDeeperLevelLog": "Y a nivel más profundo:"
   },
   "gratitude": {
     "title": "Agradecimiento",

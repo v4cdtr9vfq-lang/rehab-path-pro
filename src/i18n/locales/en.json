@@ -355,7 +355,10 @@
     "mustSelectPrimary": "You must select at least one primary category.",
     "mustSignIn": "You must sign in to save your emotions.",
     "error": "Error",
-    "quickAccess": "Quick access:"
+    "quickAccess": "Quick access:",
+    "iHaveFeltLog": "I have felt:",
+    "alsoFeltLog": "I have also felt:",
+    "andAtDeeperLevelLog": "And at a deeper level:"
   },
   "gratitude": {
     "title": "Gratitude",
