@@ -358,7 +358,9 @@
     "quickAccess": "Quick access:",
     "iHaveFeltLog": "I have felt:",
     "alsoFeltLog": "I have also felt:",
-    "andAtDeeperLevelLog": "And at a deeper level:"
+    "andAtDeeperLevelLog": "And at a deeper level:",
+    "noDataForPeriod": "No data for this period",
+    "times": "times"
   },
   "gratitude": {
     "title": "Gratitude",

@@ -630,7 +630,7 @@ export default function EmotionJournal() {
     if (data.length === 0) {
       return (
         <div className="flex items-center justify-center h-[300px] text-muted-foreground">
-          No hay datos para este período
+          {t('emotionJournal.noDataForPeriod')}
         </div>
       );
     }
@@ -658,7 +658,7 @@ export default function EmotionJournal() {
             <Tooltip 
               formatter={(value: number, name: string) => {
                 const percentage = ((value / total) * 100).toFixed(1);
-                return [`${percentage}% (${value} veces)`, name];
+                return [`${percentage}% (${value} ${t('emotionJournal.times')})`, name];
               }}
             />
             <Legend 

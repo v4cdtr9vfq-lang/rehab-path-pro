@@ -358,7 +358,9 @@
     "quickAccess": "Accesos directos:",
     "iHaveFeltLog": "Me he sentido:",
     "alsoFeltLog": "También he sentido:",
-    "andAtDeeperLevelLog": "Y a nivel más profundo:"
+    "andAtDeeperLevelLog": "Y a nivel más profundo:",
+    "noDataForPeriod": "No hay datos para este período",
+    "times": "veces"
   },
   "gratitude": {
     "title": "Agradecimiento",
