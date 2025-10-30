@@ -714,7 +714,7 @@ export default function Settings() {
               >
                 {isUpdatingEmail ? t('settings.updating') : t('settings.update')}
               </Button>
-              <p className="text-sm text-muted-foreground pl-4">
+              <p className="text-xs text-muted-foreground pl-4">
                 {t('settings.confirmationEmailWillBeSent')}
               </p>
             </div>
