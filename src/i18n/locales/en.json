@@ -853,5 +853,57 @@
     "legal": "Legal",
     "cookies": "Cookies",
     "contact": "Contact"
+  },
+  "errors": {
+    "genericError": "Something went wrong",
+    "tryAgain": "Try again",
+    "notFound": "Not found",
+    "unauthorized": "Unauthorized",
+    "networkError": "Network error"
+  },
+  "landing": {
+    "welcome": "Welcome to your recovery journey",
+    "subtitle": "A complete tool to support your process",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More",
+    "features": "Features",
+    "testimonials": "Testimonials"
+  },
+  "quotes": {
+    "save": "Save quote",
+    "saved": "Quote saved",
+    "removed": "Quote removed",
+    "viewSaved": "View saved messages"
+  },
+  "reflections": {
+    "1": "Today I choose to move away from what harms me and closer to what heals me",
+    "2": "My past does not define my future",
+    "3": "Each day I stay clean is a victory",
+    "4": "I have the power to choose my path",
+    "5": "My recovery is my priority",
+    "6": "I am stronger than I think",
+    "7": "I deserve a full and healthy life",
+    "8": "Progress, not perfection, is my goal"
+  },
+  "defaultGoals": {
+    "physical1": "Exercise 30 min 🏃",
+    "physical2": "Sleep 7-9 hours 😴",
+    "physical3": "Eat healthy 🥗",
+    "emotional1": "Meditation + Visualization 🧘",
+    "emotional2": "Emotion journal 🌞",
+    "emotional3": "Gratitude letter 🙏",
+    "relationships1": "Connect with my support network 💬",
+    "relationships2": "Attend support meeting 🤝",
+    "relationships3": "🥳 Celebrate my victories 💃🕺",
+    "practical1": "🛌 Make the bed",
+    "practical2": "Fulfill daily responsibilities ✅",
+    "practical3": "Manage finances 💰",
+    "spiritual1": "Read inspiring material 📖",
+    "spiritual2": "Prayer or spiritual meditation 🙏",
+    "spiritual3": "Reflect on my values 💭",
+    "recovery1": "Read recovery literature 📚",
+    "recovery2": "Review my recovery plan 📋",
+    "recovery3": "Identify triggers 🔍",
+    "inventory": "Daily inventory 🤔"
   }
 }
