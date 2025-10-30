@@ -691,7 +691,7 @@ export default function Settings() {
             </div>
 
             <div className="border-t pt-4 space-y-2">
-              <Label htmlFor="new-email" className="pl-4">{t('settings.changeEmail')}:</Label>
+              <h3 className="text-lg font-semibold pl-4">{t('settings.changeEmail')}:</h3>
               <Input
                 id="new-email"
                 type="email"
@@ -720,9 +720,7 @@ export default function Settings() {
             </div>
 
             <div className="border-t pt-4 space-y-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Label className="pl-4">{t('settings.changePassword')}:</Label>
-              </div>
+              <h3 className="text-lg font-semibold pl-4 mb-2">{t('settings.changePassword')}:</h3>
               <div className="space-y-2">
                 <Label htmlFor="current-password" className="pl-4">{t('settings.currentPassword')}:</Label>
                 <Input
