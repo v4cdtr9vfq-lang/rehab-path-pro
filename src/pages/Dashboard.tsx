@@ -988,9 +988,9 @@ export default function Home() {
             </div>}
 
           {/* Sleep Schedule */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="p-4 rounded-xl bg-muted/50 border border-sidebar-border">
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex flex-col md:flex-row md:items-center justify-center gap-2">
                 <p className="text-sm text-muted-foreground whitespace-nowrap">{t('dashboard.fellAsleepAround')}</p>
                 <select 
                   value={bedtime}
@@ -1015,7 +1015,7 @@ export default function Home() {
             </div>
             
             <div className="p-4 rounded-xl bg-muted/50 border border-sidebar-border">
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex flex-col md:flex-row md:items-center justify-center gap-2">
                 <p className="text-sm text-muted-foreground whitespace-nowrap">{t('dashboard.wokeUpAround')}</p>
                 <select 
                   value={wakeUpTime}
