@@ -34,6 +34,9 @@ i18n
     returnEmptyString: false,
     returnNull: false,
     load: 'languageOnly',
+    react: {
+      useSuspense: true
+    }
   });
 
 export default i18n;

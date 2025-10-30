@@ -8,6 +8,7 @@ import { Layout } from "./components/Layout";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { SubscriptionProvider } from "./contexts/SubscriptionContext";
+import { Suspense } from "react";
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -37,6 +38,9 @@ const App = () => (
     <ThemeProvider>
       <TooltipProvider>
         <SubscriptionProvider>
+        <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center">
+          <div className="text-muted-foreground">Loading...</div>
+        </div>}>
         <BrowserRouter>
         <ScrollToTop />
         <Routes>
@@ -175,6 +179,7 @@ const App = () => (
         <Toaster />
         <Sonner />
       </BrowserRouter>
+        </Suspense>
         </SubscriptionProvider>
       </TooltipProvider>
     </ThemeProvider>
