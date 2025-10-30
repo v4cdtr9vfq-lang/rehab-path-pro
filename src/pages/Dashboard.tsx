@@ -403,16 +403,17 @@ export default function Home() {
         setSleepQuality(sleepData.quality_score);
       }
 
-      // Fetch sleep schedule from profile
+      // Fetch sleep schedule from profile - use real times, fallback to preferred times
       const { data: profileData } = await supabase
         .from('profiles')
-        .select('bedtime, wake_up_time')
+        .select('bedtime, wake_up_time, preferred_bedtime, preferred_wake_up_time')
         .eq('user_id', user.id)
         .single();
       
       if (profileData) {
-        if (profileData.bedtime) setBedtime(profileData.bedtime);
-        if (profileData.wake_up_time) setWakeUpTime(profileData.wake_up_time);
+        // Use real times if set, otherwise use preferred times as default
+        setBedtime(profileData.bedtime || profileData.preferred_bedtime || '21:00');
+        setWakeUpTime(profileData.wake_up_time || profileData.preferred_wake_up_time || '07:00');
       }
 
       setLoading(false);
