@@ -822,7 +822,7 @@
     "planTitle": "Plan and predefined goals",
     "planContent": "The application loads a series of daily goals for your \"Action Plan\" by default. You can delete or edit the periodicity of tasks if you wish, although we strongly recommend that you try sticking only to these tasks for at least 40 days.",
     "emergencyTitle": "Emergency plan and relapses",
-    "emergencyContent": "Our functionality contemplates the possibility of relapses. If in your daily check-in you answer \"No\" to the question \"Did I stay clean from use today?\", the option to write a \"Relapse Inventory\" will be activated for you to describe what situation or emotions led you to relapse. Remember that the goal is to learn from each process to gain greater capacity for action.",
+    "emergencyContent": "Our functionality contemplates the possibility of relapses. If in your daily check-in you answer \"No\" to the question \"Did I stay clean from use today?\", the option to write a \"Relapse Inventory\" will be activated for you to describe what situation or emotions led you to relapse. If you confirm the relapse, the counter for that dependency will reset to 0. Remember that the goal is to learn from each process to gain greater capacity for action.",
     "reportsTitle": "Evolution reports",
     "reportsContent": "In the \"Progress\" area you can generate AI-assisted psychotherapeutic reports that can help you understand your progress or the need to make changes to keep moving forward. These reports can also be useful for your therapist."
   },

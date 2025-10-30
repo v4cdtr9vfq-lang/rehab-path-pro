@@ -823,7 +823,7 @@
     "planTitle": "Plan y metas predefinidas",
     "planContent": "La aplicación por defecto carga una serie de metas diarias para tu \"Plan de acción\". Puedes borrar o editar la periodicidad de las tareas si lo deseas, aunque recomendamos encarecidamente que pruebes al menos 40 días ceñirte únicamente a estas tareas.",
     "emergencyTitle": "Plan de emergencia y recaídas",
-    "emergencyContent": "Nuestra funcionalidad contempla la posibilidad de las recaídas. Si en tu Check-in diario respondes \"No\" a la pregunta \"¿Me mantuve limpio de consumo hoy?\", se activará la opción de escribir un \"Inventario de la recaída\" para que describas qué situación o emociones te han llevado a recaer. Recuerda que el objetivo es aprender de cada proceso para ganar mayor capacidad de acción.",
+    "emergencyContent": "Nuestra funcionalidad contempla la posibilidad de las recaídas. Si en tu Check-in diario respondes \"No\" a la pregunta \"¿Me mantuve limpio de consumo hoy?\", se activará la opción de escribir un \"Inventario de la recaída\" para que describas qué situación o emociones te han llevado a recaer. Si confirmas la recaída el contador de esa dependencia volverá a 0. Recuerda que el objetivo es aprender de cada proceso para ganar mayor capacidad de acción.",
     "reportsTitle": "Informes de evolución",
     "reportsContent": "En el área \"Progreso\" podrás generar informes psicoterapéuticos asistidos por inteligencia artificial que pueden servirte para entender tu progreso o la necesidad de hacer cambios para seguir avanzando. Estos informes también pueden ser de utilidad para tu terapeuta."
   },
