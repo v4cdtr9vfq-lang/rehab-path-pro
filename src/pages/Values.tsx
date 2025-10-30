@@ -47,7 +47,8 @@ const COLORS = ['#22c55e', '#f97316', '#3b82f6', '#a855f7', '#ec4899', '#eab308'
 
 export default function Values() {
   const { toast } = useToast();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language.startsWith('en') ? 'en' : 'es';
   const isMobile = useIsMobile();
   const [values, setValues] = useState<Value[]>([]);
   const [isPrimaryDialogOpen, setIsPrimaryDialogOpen] = useState(false);
@@ -112,23 +113,41 @@ export default function Values() {
         .select('*')
         .eq('user_id', user.id);
 
-      // If no values exist, create default ones
-      if (!existingValues || existingValues.length === 0) {
-        const defaultValues = [
-          { name: t('values.defaultSelfCare'), type: "primary" },
-          { name: t('values.defaultGratitude'), type: "primary" },
-          { name: t('values.defaultHumor'), type: "primary" },
-          { name: t('values.defaultRespect'), type: "secondary" },
-          { name: t('values.defaultHealth'), type: "secondary" },
-          { name: t('values.defaultConsideration'), type: "secondary" },
-          { name: t('values.defaultCommitment'), type: "secondary" }
-        ];
+      // Check if user has values for current language
+      const { data: langValues } = await supabase
+        .from('values')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('language', currentLanguage);
+
+      // If no values exist for current language, create default ones
+      if (!langValues || langValues.length === 0) {
+        const defaultValues = currentLanguage === 'es' 
+          ? [
+              { name: 'Autocuidado', type: "primary" },
+              { name: 'Gratitud', type: "primary" },
+              { name: 'Humor', type: "primary" },
+              { name: 'Respeto', type: "secondary" },
+              { name: 'Salud', type: "secondary" },
+              { name: 'Consideración', type: "secondary" },
+              { name: 'Compromiso', type: "secondary" }
+            ]
+          : [
+              { name: 'Self-care', type: "primary" },
+              { name: 'Gratitude', type: "primary" },
+              { name: 'Humor', type: "primary" },
+              { name: 'Respect', type: "secondary" },
+              { name: 'Health', type: "secondary" },
+              { name: 'Consideration', type: "secondary" },
+              { name: 'Commitment', type: "secondary" }
+            ];
 
         const valuesToInsert = defaultValues.map((val, index) => ({
           user_id: user.id,
           name: val.name,
           value_type: val.type,
-          order_index: index
+          order_index: index,
+          language: currentLanguage
         }));
 
         await supabase
@@ -148,11 +167,12 @@ export default function Values() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Fetch user's values
+      // Fetch user's values filtered by language
       const { data: valuesData, error: valuesError } = await supabase
         .from('values')
         .select('*')
         .eq('user_id', user.id)
+        .eq('language', currentLanguage)
         .order('order_index', { ascending: true });
 
       if (valuesError) throw valuesError;
@@ -336,7 +356,8 @@ export default function Values() {
         .insert({
           user_id: user.id,
           name: newValueName.trim(),
-          value_type: type
+          value_type: type,
+          language: currentLanguage
         })
         .select()
         .single();
