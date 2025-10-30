@@ -69,7 +69,10 @@
     "myMedals": "Mis medallas:",
     "achieved": "¡Conseguida!",
     "quickAccess": "Accesos directos:",
-    "todayReminder": "Hoy elijo recordarme que:"
+    "todayReminder": "Hoy elijo recordarme que:",
+    "bedtime": "Hora de dormir",
+    "wakeUpTime": "Hora de levantarse",
+    "scheduleUpdated": "Horario actualizado"
   },
   "medals": {
     "courage": "Valor",

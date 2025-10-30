@@ -750,6 +750,62 @@ export default function Home() {
     }
   };
 
+  // Handle bedtime change
+  const handleBedtimeChange = async (time: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({ bedtime: time })
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      setBedtime(time);
+      toast({
+        title: t('dashboard.scheduleUpdated'),
+        description: `${t('dashboard.bedtime')}: ${time}`,
+      });
+    } catch (error: any) {
+      console.error('Error saving bedtime:', error);
+      toast({
+        title: t('goals.error'),
+        description: t('errors.genericError'),
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Handle wake up time change
+  const handleWakeUpTimeChange = async (time: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({ wake_up_time: time })
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      setWakeUpTime(time);
+      toast({
+        title: t('dashboard.scheduleUpdated'),
+        description: `${t('dashboard.wakeUpTime')}: ${time}`,
+      });
+    } catch (error: any) {
+      console.error('Error saving wake up time:', error);
+      toast({
+        title: t('goals.error'),
+        description: t('errors.genericError'),
+        variant: "destructive",
+      });
+    }
+  };
+
   // Sortable Goal Item Component
   function SortableGoalItem({ goal }: { goal: any }) {
     const {

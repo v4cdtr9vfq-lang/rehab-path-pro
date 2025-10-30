@@ -69,7 +69,10 @@
     "myMedals": "My medals:",
     "achieved": "Achieved!",
     "quickAccess": "Quick access:",
-    "todayReminder": "Today I choose to remember that:"
+    "todayReminder": "Today I choose to remember that:",
+    "bedtime": "Bedtime",
+    "wakeUpTime": "Wake up time",
+    "scheduleUpdated": "Schedule updated"
   },
   "medals": {
     "courage": "Courage",

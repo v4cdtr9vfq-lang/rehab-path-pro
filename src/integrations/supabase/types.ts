@@ -544,6 +544,7 @@ export type Database = {
         Row: {
           abstinence_start_date: string | null
           available_for_help: boolean
+          bedtime: string | null
           created_at: string
           full_name: string | null
           id: string
@@ -553,10 +554,12 @@ export type Database = {
           tour_completed: boolean
           updated_at: string
           user_id: string
+          wake_up_time: string | null
         }
         Insert: {
           abstinence_start_date?: string | null
           available_for_help?: boolean
+          bedtime?: string | null
           created_at?: string
           full_name?: string | null
           id?: string
@@ -566,10 +569,12 @@ export type Database = {
           tour_completed?: boolean
           updated_at?: string
           user_id: string
+          wake_up_time?: string | null
         }
         Update: {
           abstinence_start_date?: string | null
           available_for_help?: boolean
+          bedtime?: string | null
           created_at?: string
           full_name?: string | null
           id?: string
@@ -579,6 +584,7 @@ export type Database = {
           tour_completed?: boolean
           updated_at?: string
           user_id?: string
+          wake_up_time?: string | null
         }
         Relationships: []
       }
