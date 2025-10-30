@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 
 interface CommunityUser {
   id: string;
@@ -85,6 +86,7 @@ export default function Community() {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [isAvailableForHelp, setIsAvailableForHelp] = useState(false);
   const [currentUser, setCurrentUser] = useState<CommunityUser | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>("todos");
@@ -290,8 +292,8 @@ export default function Community() {
     
     if (!isUUID) {
       toast({
-        title: "Usuario no disponible",
-        description: "Este usuario aún no está registrado en el sistema. Solo puedes chatear con usuarios reales.",
+        title: t('community.userNotAvailable'),
+        description: t('community.userNotAvailableDesc'),
         variant: "destructive",
       });
       return;
@@ -308,7 +310,7 @@ export default function Community() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              Tiempo limpio:
+              {t('community.cleanTime')}
             </CardTitle>
             <Select value={selectedFilter} onValueChange={handleFilterChange}>
               <SelectTrigger className="w-[180px]">
@@ -328,14 +330,14 @@ export default function Community() {
           {/* Header Legend */}
           {!isMobile && (
             <div className="grid grid-cols-[minmax(180px,1fr)_180px_90px_110px] gap-3 px-4 pb-3 text-sm font-medium text-muted-foreground mb-3">
-              <div className="pl-[55px]">Nombre:</div>
+              <div className="pl-[55px]">{t('community.name')}</div>
               <div className="flex gap-1 -ml-[60px]">
-                <div className="w-[60px] text-center">Años:</div>
-                <div className="w-[60px] text-center">Meses:</div>
-                <div className="w-[60px] text-center">Días:</div>
+                <div className="w-[60px] text-center">{t('community.years')}</div>
+                <div className="w-[60px] text-center">{t('community.months')}</div>
+                <div className="w-[60px] text-center">{t('community.days')}</div>
               </div>
               <div className="text-right"></div>
-              <div className="text-right">Medallas:</div>
+              <div className="text-right">{t('community.medals')}</div>
             </div>
           )}
 
@@ -380,14 +382,14 @@ export default function Community() {
                           <div 
                             className={`w-3 h-3 rounded-full flex-shrink-0 ${onlineUsers.has(user.id) ? 'bg-green-500' : 'bg-red-500'}`}
                             style={{ aspectRatio: '1', minWidth: '12px', minHeight: '12px' }}
-                            title={onlineUsers.has(user.id) ? 'En línea' : 'Desconectado'}
+                            title={onlineUsers.has(user.id) ? t('community.online') : t('community.offline')}
                           />
                           <Badge 
                             variant="secondary" 
                             className={`flex-shrink-0 bg-success/20 text-success border-success/30 text-xs px-2 py-0 ${!isCurrentUser ? 'cursor-pointer hover:bg-success/30' : 'cursor-default'}`}
                             onClick={() => !isCurrentUser && openDirectChat(user.id, user.name)}
                           >
-                            Disponible
+                            {t('community.available')}
                           </Badge>
                         </div>
                       )}

@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { HelpCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface FAQ {
   id: string;
@@ -27,6 +28,7 @@ export default function Help() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAnonymous, setIsAnonymous] = useState(false);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadFAQs();
@@ -48,8 +50,8 @@ export default function Help() {
     } catch (error) {
       console.error("Error loading FAQs:", error);
       toast({
-        title: "Error",
-        description: "No se pudieron cargar las preguntas frecuentes.",
+        title: t('help.error'),
+        description: t('help.errorLoadingFAQs'),
         variant: "destructive",
       });
     }
@@ -70,8 +72,8 @@ export default function Help() {
   const handleSubmitQuestion = async () => {
     if (!userQuestion.trim()) {
       toast({
-        title: "Error",
-        description: "Por favor escribe tu pregunta.",
+        title: t('help.error'),
+        description: t('help.writeQuestion'),
         variant: "destructive",
       });
       return;
@@ -79,8 +81,8 @@ export default function Help() {
 
     if (userQuestion.length > 500) {
       toast({
-        title: "Error",
-        description: "La pregunta no puede exceder 500 caracteres.",
+        title: t('help.error'),
+        description: t('help.questionTooLong'),
         variant: "destructive",
       });
       return;
@@ -91,8 +93,8 @@ export default function Help() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
       toast({
-        title: "Error",
-        description: "Debes iniciar sesión para enviar preguntas.",
+        title: t('help.error'),
+        description: t('help.mustLogin'),
         variant: "destructive",
       });
         return;
@@ -109,8 +111,8 @@ export default function Help() {
       if (error) throw error;
 
       toast({
-        title: "Pregunta enviada",
-        description: "Tu pregunta ha sido enviada. Los administradores la responderán pronto.",
+        title: t('help.questionSent'),
+        description: t('help.questionSentDesc'),
       });
 
       setUserQuestion("");
@@ -118,8 +120,8 @@ export default function Help() {
     } catch (error: any) {
       console.error("Error submitting question:", error);
       toast({
-        title: "Error",
-        description: "No se pudo enviar tu pregunta.",
+        title: t('help.error'),
+        description: t('help.couldNotSend'),
         variant: "destructive",
       });
     } finally {
@@ -150,14 +152,14 @@ export default function Help() {
       {/* FAQs Section */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-2xl pl-4">Preguntas Frecuentes</CardTitle>
+          <CardTitle className="text-2xl pl-4">{t('help.faqTitle')}</CardTitle>
           <HelpCircle className="h-6 w-6 text-red-500" />
         </CardHeader>
         <CardContent className="space-y-4">
           <Tabs value={filter} onValueChange={(v) => setFilter(v as "recent" | "popular")}>
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="popular">Populares</TabsTrigger>
-              <TabsTrigger value="recent">Recientes</TabsTrigger>
+              <TabsTrigger value="popular">{t('help.popular')}</TabsTrigger>
+              <TabsTrigger value="recent">{t('help.recent')}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="popular" className="mt-6">
@@ -202,14 +204,14 @@ export default function Help() {
       {/* Ask a Question Section */}
       <Card>
         <CardHeader className="pb-0">
-          <CardTitle className="text-xl pl-4">¿No encuentras lo que buscas?</CardTitle>
+          <CardTitle className="text-xl pl-4">{t('help.notFindingTitle')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 pt-[15px]">
           <p className="text-sm text-muted-foreground pl-4">
-            Envía tu pregunta y nuestros administradores te responderán lo antes posible.
+            {t('help.notFindingDesc')}
           </p>
           <Textarea
-            placeholder="Escribe tu pregunta aquí..."
+            placeholder={t('help.questionPlaceholder')}
             value={userQuestion}
             onChange={(e) => setUserQuestion(e.target.value)}
             className="min-h-[120px] resize-none text-sm"
@@ -220,7 +222,7 @@ export default function Help() {
             disabled={isSubmitting || !userQuestion.trim()}
             className="rounded-xl w-full"
           >
-            {isSubmitting ? "Enviando..." : "Enviar pregunta"}
+            {isSubmitting ? t('help.sending') : t('help.sendQuestion')}
           </Button>
           <div className="flex items-center gap-2 pl-4">
             <Switch
@@ -229,11 +231,11 @@ export default function Help() {
               onCheckedChange={setIsAnonymous}
             />
             <Label htmlFor="anonymous-question" className="text-sm text-muted-foreground cursor-pointer">
-              Enviar de forma anónima
+              {t('help.sendAnonymously')}
             </Label>
           </div>
           <div className="text-xs text-muted-foreground pl-4">
-            {userQuestion.length}/500 caracteres
+            {userQuestion.length}/500 {t('help.charactersCount')}
           </div>
         </CardContent>
       </Card>
