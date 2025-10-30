@@ -8,7 +8,7 @@ import { useEffect } from "react";
 
 export default function Landing() {
   useSolarTheme();
-  const { t, i18n } = useTranslation();
+  const { t, i18n, ready } = useTranslation();
   const [searchParams] = useSearchParams();
 
   // Support ?lang=en or ?lang=es parameter to force language
@@ -21,6 +21,13 @@ export default function Landing() {
     const currentLang = i18n.language;
     localStorage.setItem('i18nextLng', currentLang);
   }, [searchParams, i18n]);
+
+  // Don't render until translations are ready
+  if (!ready) {
+    return <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="text-muted-foreground">Loading...</div>
+    </div>;
+  }
   
   const benefits = [{
     icon: Target,
