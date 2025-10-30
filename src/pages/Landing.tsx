@@ -3,38 +3,41 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, Target, TrendingUp, Users, Heart, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSolarTheme } from "@/hooks/useSolarTheme";
+import { useTranslation } from "react-i18next";
 
 export default function Landing() {
   useSolarTheme();
+  const { t } = useTranslation();
+  
   const benefits = [{
     icon: Target,
-    title: "Seguimiento de progreso",
-    description: "Monitorea tu abstinencia día a día y celebra cada logro alcanzado"
+    title: t("landing.benefit1Title"),
+    description: t("landing.benefit1Description")
   }, {
     icon: Calendar,
-    title: "Check-In Diario",
-    description: "Registra tu estado emocional y mantén el control de tu recuperación"
+    title: t("landing.benefit2Title"),
+    description: t("landing.benefit2Description")
   }, {
     icon: TrendingUp,
-    title: "Metas personalizadas",
-    description: "Establece y alcanza objetivos adaptados a tu proceso de recuperación"
+    title: t("landing.benefit3Title"),
+    description: t("landing.benefit3Description")
   }, {
     icon: Users,
-    title: "Red de apoyo",
-    description: "Conecta con tu red de soporte cuando más lo necesites"
+    title: t("landing.benefit4Title"),
+    description: t("landing.benefit4Description")
   }];
   const steps = [{
     number: "1",
-    title: "Regístrate",
-    description: "Crea tu cuenta en segundos."
+    title: t("landing.step1Title"),
+    description: t("landing.step1Description")
   }, {
     number: "2",
-    title: "Configura",
-    description: "Personaliza tu perfil y fecha de inicio en recuperación."
+    title: t("landing.step2Title"),
+    description: t("landing.step2Description")
   }, {
     number: "3",
-    title: "Progresa",
-    description: "Sigue tu recuperación día a día."
+    title: t("landing.step3Title"),
+    description: t("landing.step3Description")
   }];
   return <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -42,28 +45,28 @@ export default function Landing() {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center space-y-8">
             <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border border-primary/30">
-              <span className="text-base font-semibold text-primary">Un aliado en la rehabilitación</span>
+              <span className="text-base font-semibold text-primary">{t("landing.badge")}</span>
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight">
-              La recuperación,<br />
-              <span className="text-primary">está en  tus manos</span>
+              {t("landing.heroTitle")}<br />
+              <span className="text-primary">{t("landing.heroTitleHighlight")}</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               <span className="inline-flex items-center gap-1 relative -left-1 top-0.5">
                 <Heart className="h-5 w-5 md:h-6 md:w-6 text-primary flex-shrink-0" />
                 <span className="font-bold">rehabp.org</span>
-              </span> es una herramienta que te acompaña en cada paso de tu proceso de desintoxicación de dependencias. Está diseñada para mantenerte motivado, enfocado y estructurado.
+              </span> {t("landing.heroDescription")}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
               <Link to="/auth?mode=signup">
-                <Button size="lg" className="text-lg px-8 py-6 rounded-2xl hover:scale-105 transition-transform">Comienza tu proceso</Button>
+                <Button size="lg" className="text-lg px-8 py-6 rounded-2xl hover:scale-105 transition-transform">{t("landing.startButton")}</Button>
               </Link>
               <Link to="/auth?mode=login">
                 <Button variant="outline" size="lg" className="text-lg px-8 py-6 rounded-2xl">
-                  Iniciar sesión
+                  {t("landing.loginButton")}
                 </Button>
               </Link>
             </div>
@@ -76,13 +79,13 @@ export default function Landing() {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 inline-flex items-center justify-center flex-wrap">
-              <span className="mr-3">¿Por qué</span>
+              <span className="mr-3">{t("landing.whyTitle")}</span>
               <span className="inline-flex items-center gap-1">
                 <Heart className="h-10 w-10 text-primary" />
                 <span>rehabp.org?</span>
               </span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Herramientas diseñadas específicamente para tu proceso de recuperación de las dependecias.</p>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{t("landing.whySubtitle")}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -111,10 +114,10 @@ export default function Landing() {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Cómo funciona
+              {t("landing.howItWorksTitle")}
             </h2>
             <p className="text-xl text-muted-foreground">
-              Comienza tu viaje en 3 simples pasos
+              {t("landing.howItWorksSubtitle")}
             </p>
           </div>
 
@@ -139,9 +142,9 @@ export default function Landing() {
                 🏅🏅🏅🏅🏅
               </div>
               <blockquote className="text-2xl md:text-3xl font-medium text-foreground leading-relaxed">
-                "La confianza se construye con consistencia. rehabp.org me ha ayudado a mantener el enfoque día a día"
+                "{t("landing.testimonialQuote")}"
               </blockquote>
-              <p className="text-muted-foreground text-lg">- Usuario de rehabp.org</p>
+              <p className="text-muted-foreground text-lg">- {t("landing.testimonialAuthor")}</p>
             </CardContent>
           </Card>
         </div>
@@ -151,14 +154,14 @@ export default function Landing() {
       <section className="py-20">
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Comienza tu viaje hoy
+            {t("landing.ctaTitle")}
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            Únete a miles de personas que ya están transformando sus vidas
+            {t("landing.ctaSubtitle")}
           </p>
           <Link to="/auth?mode=signup">
             <Button size="lg" className="text-lg px-12 py-6 rounded-2xl hover:scale-105 transition-transform">
-              Registrarse gratis
+              {t("landing.ctaButton")}
             </Button>
           </Link>
         </div>
@@ -168,7 +171,7 @@ export default function Landing() {
       <footer className="py-8 border-t border-border/50">
         <div className="container mx-auto px-4 text-center">
           <p className="text-muted-foreground">
-            © 2024 rehabp.org. Tu privacidad y recuperación son nuestra prioridad.
+            {t("landing.footerText")}
           </p>
         </div>
       </footer>
