@@ -71,7 +71,7 @@ export default function Values() {
   );
 
   useEffect(() => {
-    // Initialize values and stats on mount
+    // Initialize values and stats on mount and when language changes
     const init = async () => {
       await initializeValues();
       await fetchStats();
@@ -100,28 +100,22 @@ export default function Values() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [currentLanguage]);
 
   const initializeValues = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Check if user has any values
-      const { data: existingValues } = await supabase
-        .from('values')
-        .select('*')
-        .eq('user_id', user.id);
-
       // Check if user has values for current language
-      const { data: langValues } = await supabase
+      const { data: existingValues } = await supabase
         .from('values')
         .select('*')
         .eq('user_id', user.id)
         .eq('language', currentLanguage);
 
       // If no values exist for current language, create default ones
-      if (!langValues || langValues.length === 0) {
+      if (!existingValues || existingValues.length === 0) {
         const defaultValues = currentLanguage === 'es' 
           ? [
               { name: 'Autocuidado', type: "primary" },
@@ -248,9 +242,10 @@ export default function Values() {
       .from('value_selections')
       .select(`
         value_id,
-        values!inner(name)
+        values!inner(name, language)
       `)
       .eq('user_id', userId)
+      .eq('values.language', currentLanguage)
       .gte('selected_date', startDate)
       .lte('selected_date', endDate);
 
@@ -262,9 +257,7 @@ export default function Values() {
     // Count occurrences of each value
     const countMap = new Map<string, number>();
     (data || []).forEach((item: any) => {
-      const rawValueName = item.values.name;
-      // Translate if it's a translation key
-      const valueName = rawValueName.startsWith('values.') ? t(rawValueName) : rawValueName;
+      const valueName = item.values.name;
       countMap.set(valueName, (countMap.get(valueName) || 0) + 1);
     });
 
