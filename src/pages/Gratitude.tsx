@@ -90,8 +90,8 @@ export default function Gratitude() {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
           toast({
-            title: "Error",
-            description: "Debes iniciar sesión para guardar entradas",
+            title: t('common.error'),
+            description: t('gratitude.loginRequired'),
             variant: "destructive"
           });
           return;
@@ -108,8 +108,8 @@ export default function Gratitude() {
         if (error) throw error;
 
         toast({
-          title: "Guardado",
-          description: "Tu entrada de gratitud ha sido guardada"
+          title: t('gratitude.saved'),
+          description: t('gratitude.entrySaved')
         });
 
         // Remove this field from the array
@@ -120,8 +120,8 @@ export default function Gratitude() {
       } catch (error) {
         console.error('Error adding entry:', error);
         toast({
-          title: "Error",
-          description: "No se pudo guardar tu entrada",
+          title: t('common.error'),
+          description: t('gratitude.errorSaving'),
           variant: "destructive"
         });
       }
@@ -154,8 +154,8 @@ export default function Gratitude() {
         if (error) throw error;
 
         toast({
-          title: "Actualizado",
-          description: "Tu entrada ha sido actualizada"
+          title: t('gratitude.updated'),
+          description: t('gratitude.entryUpdated')
         });
 
         setEditingId(null);
@@ -164,8 +164,8 @@ export default function Gratitude() {
       } catch (error) {
         console.error('Error updating entry:', error);
         toast({
-          title: "Error",
-          description: "No se pudo actualizar tu entrada",
+          title: t('common.error'),
+          description: t('gratitude.errorUpdating'),
           variant: "destructive"
         });
       }
@@ -187,8 +187,8 @@ export default function Gratitude() {
       if (error) throw error;
 
       toast({
-        title: "Eliminado",
-        description: "Tu entrada ha sido eliminada"
+        title: t('gratitude.deleted'),
+        description: t('gratitude.entryDeleted')
       });
 
       await loadEntries();
@@ -202,8 +202,8 @@ export default function Gratitude() {
     } catch (error) {
       console.error('Error deleting entry:', error);
       toast({
-        title: "Error",
-        description: "No se pudo eliminar tu entrada",
+        title: t('common.error'),
+        description: t('gratitude.errorDeleting'),
         variant: "destructive"
       });
     }
@@ -242,7 +242,7 @@ export default function Gratitude() {
             {newItems.map((item, index) => (
               <div key={index} className="flex gap-2">
                 <Input
-                  placeholder={`Agradecimiento ${todayCount + index + 1}`}
+                  placeholder={`${t('gratitude.gratitudeNumber')} ${todayCount + index + 1}`}
                   value={item}
                   onChange={(e) => updateNewItem(index, e.target.value)}
                   className="flex-1"
@@ -331,7 +331,7 @@ export default function Gratitude() {
 
           {(!todayEntry || todayEntry.items.length === 0) && (
             <div className="text-center py-3 text-muted-foreground">
-              <p>Aún no has añadido nada a tu lista de hoy.</p>
+              <p>{t('gratitude.noEntriesForToday')}</p>
             </div>
           )}
         </CardContent>
@@ -341,7 +341,7 @@ export default function Gratitude() {
       {pastEntries.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-3 pl-[35px]">
-            <h2 className="text-xl font-bold text-foreground">Historial:</h2>
+            <h2 className="text-xl font-bold text-foreground">{t('gratitude.history')}</h2>
             
             {/* Date Filter */}
             <Popover>
@@ -354,7 +354,7 @@ export default function Gratitude() {
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {filterDate ? format(filterDate, "d 'de' MMMM, yyyy", { locale: es }) : "Buscar por fecha"}
+                  {filterDate ? format(filterDate, "d 'de' MMMM, yyyy", { locale: es }) : t('gratitude.filterByDate')}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="end">
@@ -371,7 +371,7 @@ export default function Gratitude() {
                       className="w-full"
                       onClick={() => setFilterDate(undefined)}
                     >
-                      Limpiar filtro
+                      {t('gratitude.clearFilter')}
                     </Button>
                   </div>
                 )}
@@ -449,7 +449,7 @@ export default function Gratitude() {
               <Card className="border-border">
                 <CardContent className="pt-6">
                   <p className="text-center text-muted-foreground">
-                    No hay entradas para la fecha seleccionada.
+                    {t('gratitude.noEntriesForDate')}
                   </p>
                 </CardContent>
               </Card>
@@ -460,7 +460,7 @@ export default function Gratitude() {
 
       <div>
         <h2 className="text-2xl font-bold text-foreground mb-3 flex items-center justify-between">
-          <span className="pl-6 md:pl-[35px]">Por qué es tan importante</span>
+          <span className="pl-6 md:pl-[35px]">{t('gratitude.whyImportant')}</span>
           <span className="flex gap-2 pr-6">
             <span>🙏</span>
             <span>🙏</span>
@@ -470,9 +470,7 @@ export default function Gratitude() {
         <Card className="border-border bg-gradient-to-br from-sky-blue/5 to-transparent">
           <CardContent className="pt-6">
             <p className="text-foreground/80">
-              Practicar la gratitud cambia tu enfoque de lo que falta a lo que está presente. 
-              La práctica regular de gratitud ha demostrado mejorar la salud mental, fortalecer relaciones 
-              y apoyar la recuperación a largo plazo.
+              {t('gratitude.importanceDescription')}
             </p>
           </CardContent>
         </Card>
