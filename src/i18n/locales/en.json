@@ -661,6 +661,28 @@
     "goalReminders": "Goal Reminders",
     "receiveRemindersForUpcomingGoals": "Receive reminders for upcoming goals"
   },
+  "help": {
+    "title": "Help",
+    "resources": "Resources",
+    "faqTitle": "Frequently Asked Questions",
+    "popular": "Popular",
+    "recent": "Recent",
+    "notFound": "Can't find what you're looking for?",
+    "notFoundDesc": "Submit your question and our administrators will respond as soon as possible.",
+    "yourQuestion": "Write your question here...",
+    "sendQuestion": "Send Question",
+    "sending": "Sending...",
+    "sendAnonymously": "Send anonymously",
+    "characters": "characters",
+    "questionSent": "Question sent",
+    "questionSentDesc": "Your question has been submitted. Administrators will respond soon.",
+    "error": "Error",
+    "errorLoadingFAQs": "Could not load frequently asked questions.",
+    "writeQuestion": "Please write your question.",
+    "questionTooLong": "Question cannot exceed 500 characters.",
+    "mustLogin": "You must log in to send questions.",
+    "errorSending": "Could not send your question."
+  },
   "sleepQuality": {
     "title": "Sleep Quality",
     "description": "Here you can see your sleep quality",

@@ -625,6 +625,7 @@
   },
   "help": {
     "title": "Ayuda",
+    "resources": "Recursos",
     "faqTitle": "Preguntas Frecuentes",
     "popular": "Populares",
     "recent": "Recientes",
