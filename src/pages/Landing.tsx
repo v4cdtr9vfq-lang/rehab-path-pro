@@ -4,10 +4,17 @@ import { CheckCircle2, Target, TrendingUp, Users, Heart, Calendar } from "lucide
 import { Link } from "react-router-dom";
 import { useSolarTheme } from "@/hooks/useSolarTheme";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 export default function Landing() {
   useSolarTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  // Save detected language to localStorage to persist through auth flow
+  useEffect(() => {
+    const currentLang = i18n.language;
+    localStorage.setItem('i18nextLng', currentLang);
+  }, [i18n.language]);
   
   const benefits = [{
     icon: Target,
