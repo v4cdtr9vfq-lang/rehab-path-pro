@@ -867,14 +867,14 @@
     "10": "El primer paso no te lleva donde quieres ir, pero te saca de donde estás."
   },
   "reflections": {
-    "1": "Hoy elijo alejarme de lo que me daña y acercarme a lo que me sana",
-    "2": "Mi pasado no define mi futuro",
-    "3": "Cada día que permanezco limpio es una victoria",
-    "4": "Tengo el poder de elegir mi camino",
-    "5": "Mi recuperación es mi prioridad",
-    "6": "Soy más fuerte de lo que pienso",
-    "7": "Merezco una vida plena y saludable",
-    "8": "El progreso, no la perfección, es mi meta"
+    "1": "Hoy elijo alejarme de lo que me daña y acercarme a lo que me sana.",
+    "2": "Mi pasado no define mi futuro.",
+    "3": "Cada día que permanezco limpio es una victoria.",
+    "4": "Tengo el poder de elegir mi camino.",
+    "5": "Mi recuperación es mi prioridad.",
+    "6": "Soy más fuerte de lo que pienso.",
+    "7": "Merezco una vida plena y saludable.",
+    "8": "El progreso, no la perfección, es mi meta."
   },
   "defaultGoals": {
     "physical1": "Hacer ejercicio 30 min 🏃",
