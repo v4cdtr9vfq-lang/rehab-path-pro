@@ -730,7 +730,9 @@ export default function Plan() {
       setEditingGoal({
         ...originalGoalData,
         id: goal.originalId,
-        sectionKey
+        sectionKey,
+        // Translate the text if it's a translation key
+        text: translateGoalText(originalGoalData.text)
       });
       setIsEditDialogOpen(true);
     }
