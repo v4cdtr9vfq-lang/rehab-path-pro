@@ -81,22 +81,12 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
     onAddictionChange(currentAddiction.id, totalDays);
   }, [selectedIndex, allAddictions.length, rehabilitationType, startDate]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Reset selectedIndex if out of bounds
+  // Reset selectedIndex if out of bounds - always default to first addiction
   useEffect(() => {
     if (allAddictions.length > 0 && selectedIndex >= allAddictions.length) {
       setSelectedIndex(0);
     }
   }, [allAddictions.length, selectedIndex]);
-
-  // When addictions array grows, switch to the new addiction
-  const [previousLength, setPreviousLength] = useState(allAddictions.length);
-  useEffect(() => {
-    if (allAddictions.length > previousLength && previousLength > 0) {
-      // A new addiction was added, switch to it
-      setSelectedIndex(allAddictions.length - 1);
-    }
-    setPreviousLength(allAddictions.length);
-  }, [allAddictions.length, previousLength]);
 
   const handleAddAddiction = () => {
     if (!canAddMoreAddictions) {
