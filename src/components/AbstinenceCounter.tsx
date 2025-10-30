@@ -59,13 +59,22 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const start = new Date(dateToUse.getFullYear(), dateToUse.getMonth(), dateToUse.getDate());
     
+    console.log('=== ABSTINENCE COUNTER DEBUG ===');
+    console.log('Today:', today.toISOString());
+    console.log('Start:', start.toISOString());
+    
     const diff = today.getTime() - start.getTime();
     const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+    
+    console.log('Total days:', totalDays);
     
     const years = Math.floor(totalDays / 365);
     const daysAfterYears = totalDays % 365;
     const months = Math.floor(daysAfterYears / 30);
     const days = daysAfterYears % 30;
+    
+    console.log('Calculated:', years, 'A', months, 'M', days, 'D');
+    console.log('===========================');
     
     return { years, months, days, totalDays };
   };
