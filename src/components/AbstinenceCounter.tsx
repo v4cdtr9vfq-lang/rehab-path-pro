@@ -79,7 +79,7 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
     if (!currentAddiction || !onAddictionChange) return;
     const { totalDays } = calculateCount(currentAddiction);
     onAddictionChange(currentAddiction.id, totalDays);
-  }, [selectedIndex, allAddictions.length]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selectedIndex, allAddictions.length, rehabilitationType, startDate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Reset selectedIndex if out of bounds
   useEffect(() => {
