@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, Target, TrendingUp, Users, Heart, Calendar } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useSolarTheme } from "@/hooks/useSolarTheme";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
@@ -9,12 +9,18 @@ import { useEffect } from "react";
 export default function Landing() {
   useSolarTheme();
   const { t, i18n } = useTranslation();
+  const [searchParams] = useSearchParams();
 
-  // Save detected language to localStorage to persist through auth flow
+  // Support ?lang=en or ?lang=es parameter to force language
   useEffect(() => {
+    const langParam = searchParams.get('lang');
+    if (langParam && ['en', 'es'].includes(langParam)) {
+      i18n.changeLanguage(langParam);
+    }
+    // Save detected or forced language to localStorage
     const currentLang = i18n.language;
     localStorage.setItem('i18nextLng', currentLang);
-  }, [i18n.language]);
+  }, [searchParams, i18n]);
   
   const benefits = [{
     icon: Target,
