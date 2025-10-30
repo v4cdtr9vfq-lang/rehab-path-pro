@@ -184,9 +184,9 @@ export default function Auth() {
 
         <Card className="border-border/50">
           <CardHeader>
-            <CardTitle>{isForgotPassword ? "Recuperar contraseña" : isLogin ? "Iniciar sesión" : "Regístrate gratis:"}</CardTitle>
+            <CardTitle className="pl-4">{isForgotPassword ? "Recuperar contraseña" : isLogin ? "Iniciar sesión" : "Regístrate gratis:"}</CardTitle>
             {!isLogin && !isForgotPassword && (
-              <CardDescription>
+              <CardDescription className="pl-4">
                 Completa el formulario para crear tu cuenta:
               </CardDescription>
             )}
@@ -287,11 +287,6 @@ export default function Auth() {
                       disabled={loading}
                       className="rounded-xl"
                     />
-                    {!isLogin && (
-                      <p className="text-xs text-muted-foreground">
-                        Mínimo 8 caracteres con mayúsculas, minúsculas, números y símbolos
-                      </p>
-                    )}
                   </div>
 
                   {!isLogin && (
@@ -307,6 +302,9 @@ export default function Auth() {
                         disabled={loading}
                         className="rounded-xl"
                       />
+                      <p className="text-xs text-muted-foreground pl-4">
+                        Mínimo 8 caracteres con mayúsculas, minúsculas, números y símbolos
+                      </p>
                     </div>
                   )}
 
