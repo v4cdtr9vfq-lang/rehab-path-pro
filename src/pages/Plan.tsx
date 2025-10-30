@@ -1258,7 +1258,6 @@ export default function Plan() {
         </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-text" className="block px-3">{t('plan.goalText')}:</Label>
               <Input id="edit-goal-text" placeholder={t('plan.writeGoalPlaceholder')} value={editingGoal?.text || ""} onChange={e => setEditingGoal(prev => ({
               ...prev,
               text: e.target.value
