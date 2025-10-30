@@ -74,14 +74,14 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
             tertiaryEmotions: ["Desperate", "Expectant", "Intolerant", "Overwhelmed"].sort()
           },
           {
-            id: "incomodo",
-            name: "Uncomfortable",
-            tertiaryEmotions: ["Uneasy"].sort()
-          },
-          {
             id: "inquieto",
             name: "Restless",
             tertiaryEmotions: ["Agitated", "Alarmed", "Disconcerted", "Disturbed", "Startled", "Turbulent", "Upset"].sort()
+          },
+          {
+            id: "incomodo",
+            name: "Uncomfortable",
+            tertiaryEmotions: ["Uneasy"].sort()
           },
           {
             id: "vulnerable",
@@ -95,24 +95,24 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
         name: "Irritation",
         secondaryEmotions: [
           {
-            id: "deseo",
-            name: "Desirous",
-            tertiaryEmotions: ["Craving", "Greed", "Greedy", "Hungry", "Longing", "Obsession"].sort()
-          },
-          {
             id: "enojado",
             name: "Angry",
             tertiaryEmotions: ["Enraged", "Furious", "Indignant", "Outraged", "Resentful", "Wrathful"].sort()
           },
           {
-            id: "frustracion",
-            name: "Frustrated",
-            tertiaryEmotions: ["Powerless"].sort()
-          },
-          {
             id: "molesto",
             name: "Annoyed",
             tertiaryEmotions: ["Disgusted", "Exasperated"].sort()
+          },
+          {
+            id: "deseo",
+            name: "Desirous",
+            tertiaryEmotions: ["Craving", "Greed", "Greedy", "Hungry", "Longing", "Obsession"].sort()
+          },
+          {
+            id: "frustracion",
+            name: "Frustrated",
+            tertiaryEmotions: ["Powerless"].sort()
           }
         ].sort((a, b) => a.name.localeCompare(b.name))
       },
@@ -121,9 +121,9 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
         name: "Joy",
         secondaryEmotions: [
           {
-            id: "descansado",
-            name: "Rested",
-            tertiaryEmotions: ["Renewed", "Restored", "Revitalized", "Revived"].sort()
+            id: "euforico",
+            name: "Euphoric",
+            tertiaryEmotions: ["Bewitched", "Blissful", "Ecstatic", "Enchanted", "Enraptured", "Exalted", "Exuberant", "Radiant"].sort()
           },
           {
             id: "entusiasmado",
@@ -131,14 +131,14 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
             tertiaryEmotions: ["Amazed", "Animated", "Dazzled", "Energetic", "Enthusiastic", "Fiery", "Invigorated", "Passionate", "Surprised", "Vibrant"].sort()
           },
           {
+            id: "pleno",
+            name: "Fulfilled",
+            tertiaryEmotions: ["Gratitude", "Peace", "Satisfaction", "Transcendence"].sort()
+          },
+          {
             id: "esperanzado",
             name: "Hopeful",
             tertiaryEmotions: ["Encouraged", "Optimistic"].sort()
-          },
-          {
-            id: "euforico",
-            name: "Euphoric",
-            tertiaryEmotions: ["Bewitched", "Blissful", "Ecstatic", "Enchanted", "Enraptured", "Exalted", "Exuberant", "Radiant"].sort()
           },
           {
             id: "inspirado",
@@ -146,9 +146,9 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
             tertiaryEmotions: []
           },
           {
-            id: "pleno",
-            name: "Fulfilled",
-            tertiaryEmotions: ["Gratitude", "Peace", "Satisfaction", "Transcendence"].sort()
+            id: "descansado",
+            name: "Rested",
+            tertiaryEmotions: ["Renewed", "Restored", "Revitalized", "Revived"].sort()
           }
         ].sort((a, b) => a.name.localeCompare(b.name))
       },
@@ -157,14 +157,14 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
         name: "Sadness",
         secondaryEmotions: [
           {
-            id: "decepcionado",
-            name: "Disappointed",
-            tertiaryEmotions: ["Betrayed", "Disheartened", "Disillusioned", "Frustrated", "Let down"].sort()
-          },
-          {
             id: "deprimido",
             name: "Depressed",
             tertiaryEmotions: ["Dejected", "Despondent", "Discouraged", "Hopeless", "Worthless"].sort()
+          },
+          {
+            id: "decepcionado",
+            name: "Disappointed",
+            tertiaryEmotions: ["Betrayed", "Disheartened", "Disillusioned", "Frustrated", "Let down"].sort()
           },
           {
             id: "desanimado",
@@ -193,16 +193,6 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
             tertiaryEmotions: ["Certainty", "Conviction", "Firmness", "Resolution"].sort()
           },
           {
-            id: "agradecido",
-            name: "Grateful",
-            tertiaryEmotions: ["Amazement", "Recognition"].sort()
-          },
-          {
-            id: "comprometido",
-            name: "Engaged",
-            tertiaryEmotions: ["Absorbed", "Alert", "Curious", "Interested", "Intrigued", "Involved", "Stimulated"].sort()
-          },
-          {
             id: "seguro",
             name: "Connected",
             tertiaryEmotions: ["Acceptance", "Belonging", "Happy", "Intimacy", "Predictability", "Trust"].sort()
@@ -211,6 +201,16 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
             id: "empoderado",
             name: "Empowered",
             tertiaryEmotions: ["Autonomous", "Capable", "Confident", "Strong", "Valuable"].sort()
+          },
+          {
+            id: "comprometido",
+            name: "Engaged",
+            tertiaryEmotions: ["Absorbed", "Alert", "Curious", "Interested", "Intrigued", "Involved", "Stimulated"].sort()
+          },
+          {
+            id: "agradecido",
+            name: "Grateful",
+            tertiaryEmotions: ["Amazement", "Recognition"].sort()
           },
           {
             id: "esperanzado_conectado",
@@ -234,17 +234,6 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
   
   // Spanish (default)
   return [
-    {
-      id: "asco",
-      name: "Asco",
-      secondaryEmotions: [
-        {
-          id: "repugnancia",
-          name: "Repugnancia",
-          tertiaryEmotions: ["Náusea", "Negación", "Repulsión"].sort()
-        }
-      ].sort((a, b) => a.name.localeCompare(b.name, 'es'))
-    },
     {
       id: "alegre",
       name: "Alegría",
@@ -278,6 +267,17 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
           id: "pleno",
           name: "Pleno",
           tertiaryEmotions: ["Gratitud", "Paz", "Satisfacción", "Trascendencia"].sort()
+        }
+      ].sort((a, b) => a.name.localeCompare(b.name, 'es'))
+    },
+    {
+      id: "asco",
+      name: "Asco",
+      secondaryEmotions: [
+        {
+          id: "repugnancia",
+          name: "Repugnancia",
+          tertiaryEmotions: ["Náusea", "Negación", "Repulsión"].sort()
         }
       ].sort((a, b) => a.name.localeCompare(b.name, 'es'))
     },
