@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 export interface Addiction {
   id: string;
@@ -14,6 +15,7 @@ export interface Addiction {
 
 export function useAddictions() {
   const { toast } = useToast();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const { data: addictions = [], isLoading } = useQuery({
@@ -60,14 +62,14 @@ export function useAddictions() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["addictions"] });
       toast({
-        title: "Adicción añadida",
-        description: "La adicción ha sido registrada correctamente",
+        title: t('settings.addictionAdded'),
+        description: t('settings.addictionAddedCorrectly'),
       });
     },
     onError: (error) => {
       toast({
-        title: "Error",
-        description: "No se pudo añadir la adicción",
+        title: t('common.error'),
+        description: t('settings.couldNotAddAddiction'),
         variant: "destructive",
       });
       console.error("Error adding addiction:", error);
@@ -86,14 +88,14 @@ export function useAddictions() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["addictions"] });
       toast({
-        title: "Adicción eliminada",
-        description: "La adicción ha sido eliminada correctamente",
+        title: t('settings.addictionDeleted'),
+        description: t('settings.addictionDeletedCorrectly'),
       });
     },
     onError: (error) => {
       toast({
-        title: "Error",
-        description: "No se pudo eliminar la adicción",
+        title: t('common.error'),
+        description: t('settings.couldNotDeleteAddiction'),
         variant: "destructive",
       });
       console.error("Error deleting addiction:", error);

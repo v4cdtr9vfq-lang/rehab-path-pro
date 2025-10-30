@@ -692,26 +692,6 @@
     "filterVideogames": "Videojuegos",
     "filterOthers": "Otros"
   },
-  "settings": {
-    "title": "Configuración",
-    "profile": "Perfil",
-    "notifications": "Notificaciones",
-    "privacy": "Privacidad",
-    "language": "Idioma",
-    "selectLanguage": "Selecciona tu idioma",
-    "languageDescription": "Cambia el idioma de la aplicación",
-    "spanish": "Español",
-    "english": "Inglés",
-    "theme": "Tema",
-    "light": "Claro",
-    "dark": "Oscuro",
-    "system": "Sistema",
-    "account": "Cuenta",
-    "preferences": "Preferencias",
-    "about": "Acerca de",
-    "version": "Versión",
-    "logout": "Cerrar sesión"
-  },
   "checkIn": {
     "title": "Check-in Diario",
     "howAreYouFeeling": "¿Cómo te sientes hoy?",
@@ -1063,6 +1043,11 @@
     "dailyCheckInReminder": "Recordatorio de Check-In Diario",
     "receiveNotificationsForCheckIn": "Recibe notificaciones para completar tu check-in diario",
     "goalReminders": "Recordatorios de Metas",
-    "receiveRemindersForUpcomingGoals": "Recibe recordatorios de próximas metas"
+    "receiveRemindersForUpcomingGoals": "Recibe recordatorios de próximas metas",
+    "since": "Desde",
+    "manageAddictions": "Gestionar adicciones",
+    "noAddictionsRegistered": "No tienes adicciones registradas",
+    "errorLoadingAddictions": "Error al cargar las adicciones",
+    "errorDeletingAddiction": "Error al eliminar la adicción"
   }
 }

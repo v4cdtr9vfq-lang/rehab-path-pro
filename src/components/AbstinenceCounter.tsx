@@ -90,7 +90,7 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
 
   const handleAddAddiction = () => {
     if (!canAddMoreAddictions) {
-      toast.error("Máximo 3 adicciones permitidas");
+      toast.error(t('addictions.maxReached'));
       return;
     }
     setShowAddDialog(true);

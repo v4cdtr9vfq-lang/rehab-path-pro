@@ -27,7 +27,7 @@ export function ManageAddictionsDialog({
   onOpenChange,
   onAddictionsChanged
 }: ManageAddictionsDialogProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dateLocale = i18n.language === 'en' ? enUS : es;
   const [addictions, setAddictions] = useState<Addiction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -54,7 +54,7 @@ export function ManageAddictionsDialog({
       setAddictions(data || []);
     } catch (error) {
       console.error("Error fetching addictions:", error);
-      toast.error("Error al cargar las adicciones");
+      toast.error(t('settings.errorLoadingAddictions'));
     } finally {
       setLoading(false);
     }
@@ -69,12 +69,12 @@ export function ManageAddictionsDialog({
 
       if (error) throw error;
 
-      toast.success("Adicción eliminada");
+      toast.success(t('settings.addictionDeleted'));
       fetchAddictions();
       onAddictionsChanged();
     } catch (error) {
       console.error("Error deleting addiction:", error);
-      toast.error("Error al eliminar la adicción");
+      toast.error(t('settings.errorDeletingAddiction'));
     }
   };
 
@@ -82,16 +82,16 @@ export function ManageAddictionsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Gestionar adicciones</DialogTitle>
+          <DialogTitle>{t('settings.manageAddictions')}</DialogTitle>
         </DialogHeader>
         
         {loading ? (
           <div className="py-8 text-center text-muted-foreground">
-            Cargando...
+            {t('common.loading')}
           </div>
         ) : addictions.length === 0 ? (
           <div className="py-8 text-center text-muted-foreground">
-            No tienes adicciones registradas
+            {t('settings.noAddictionsRegistered')}
           </div>
         ) : (
           <div className="space-y-3">
@@ -100,11 +100,11 @@ export function ManageAddictionsDialog({
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg mb-1">
-                      {addiction.addiction_type}
+                      {t(`addictionTypes.${addiction.addiction_type}`)}
                     </h3>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Calendar className="h-4 w-4 mr-1" />
-                      Desde {format(new Date(addiction.start_date), "PPP", { locale: dateLocale })}
+                      {t('settings.since')} {format(new Date(addiction.start_date), "PPP", { locale: dateLocale })}
                     </div>
                   </div>
                   <Button
@@ -122,7 +122,7 @@ export function ManageAddictionsDialog({
         )}
 
         <Button onClick={() => onOpenChange(false)} className="w-full">
-          Cerrar
+          {t('common.close')}
         </Button>
       </DialogContent>
     </Dialog>
