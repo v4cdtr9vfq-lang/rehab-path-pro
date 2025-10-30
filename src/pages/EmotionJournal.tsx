@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface TertiaryEmotion {
   name: string;
@@ -358,6 +359,7 @@ const emotionCategories: PrimaryCategory[] = [
   }
 ];
 export default function EmotionJournal() {
+  const { t } = useTranslation();
   const [selectedPrimary, setSelectedPrimary] = useState<string[]>([]);
   const [selectedSecondary, setSelectedSecondary] = useState<string[]>([]);
   const [selectedTertiary, setSelectedTertiary] = useState<string[]>([]);
@@ -560,8 +562,8 @@ export default function EmotionJournal() {
   const handleSubmit = async () => {
     if (selectedPrimary.length === 0) {
       toast({
-        title: "Error",
-        description: "Debes seleccionar al menos una categoría principal.",
+        title: t('emotionJournal.error'),
+        description: t('emotionJournal.mustSelectPrimary'),
         variant: "destructive"
       });
       return;
@@ -572,8 +574,8 @@ export default function EmotionJournal() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
-          title: "Error",
-          description: "Debes iniciar sesión para guardar tus emociones.",
+          title: t('emotionJournal.error'),
+          description: t('emotionJournal.mustSignIn'),
           variant: "destructive"
         });
         return;
@@ -625,12 +627,12 @@ export default function EmotionJournal() {
 
       // Save person as journal entry if provided
       if (personTrigger && personDescription.trim()) {
-        const tags = generateHashtags('Personas que me activan', personDescription.trim(), primaryNames);
+        const tags = generateHashtags(t('emotionJournal.peopleWhoTriggerMe'), personDescription.trim(), primaryNames);
         await (supabase as any)
           .from('journal_entries')
           .insert({
             user_id: user.id,
-            title: 'Personas que me activan',
+            title: t('emotionJournal.peopleWhoTriggerMe'),
             content: personDescription.trim(),
             tags,
             entry_date: new Date().toISOString().split('T')[0]
@@ -639,12 +641,12 @@ export default function EmotionJournal() {
 
       // Save thought as journal entry if provided
       if (thoughtTrigger && thoughtDescription.trim()) {
-        const tags = generateHashtags('Pensamientos automáticos', thoughtDescription.trim(), primaryNames);
+        const tags = generateHashtags(t('emotionJournal.automaticThoughts'), thoughtDescription.trim(), primaryNames);
         await (supabase as any)
           .from('journal_entries')
           .insert({
             user_id: user.id,
-            title: 'Pensamientos automáticos',
+            title: t('emotionJournal.automaticThoughts'),
             content: thoughtDescription.trim(),
             tags,
             entry_date: new Date().toISOString().split('T')[0]
@@ -653,12 +655,12 @@ export default function EmotionJournal() {
 
       // Save belief as journal entry if provided
       if (beliefTrigger && beliefDescription.trim()) {
-        const tags = generateHashtags('Creencias falsas', beliefDescription.trim(), primaryNames);
+        const tags = generateHashtags(t('emotionJournal.falseBelief'), beliefDescription.trim(), primaryNames);
         await (supabase as any)
           .from('journal_entries')
           .insert({
             user_id: user.id,
-            title: 'Creencias falsas',
+            title: t('emotionJournal.falseBelief'),
             content: beliefDescription.trim(),
             tags,
             entry_date: new Date().toISOString().split('T')[0]
@@ -675,8 +677,8 @@ export default function EmotionJournal() {
         (beliefTrigger && beliefDescription.trim());
 
       toast({
-        title: "Guardado",
-        description: "Tus emociones han sido registradas exitosamente"
+        title: t('emotionJournal.saved'),
+        description: t('emotionJournal.emotionsSavedSuccess')
       });
 
       // Show additional toast if optional responses were saved
@@ -761,8 +763,8 @@ export default function EmotionJournal() {
 
     if (selectedPrimary.length === 0) {
       toast({
-        title: "Error",
-        description: "Debes seleccionar al menos una categoría principal.",
+        title: t('emotionJournal.error'),
+        description: t('emotionJournal.mustSelectPrimary'),
         variant: "destructive"
       });
       return;
@@ -1000,7 +1002,7 @@ export default function EmotionJournal() {
           {/* Secondary Emotions - Grouped by Primary Category */}
           {selectedPrimary.length > 0 && (
             <div>
-              <h2 className="text-xl font-semibold text-foreground mb-4">Me he sentido:</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">{t('emotionJournal.iHaveFelt')}</h2>
               <div className="flex flex-col gap-6">
                 {[...selectedPrimary].reverse().map((categoryId) => {
                   const category = emotionCategories.find(c => c.id === categoryId);
@@ -1044,7 +1046,7 @@ export default function EmotionJournal() {
           {/* Tertiary Emotions */}
           {selectedSecondary.length > 0 && (
             <div>
-              <h2 className="text-xl font-semibold text-foreground mb-4">Y a nivel más profundo:</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">{t('emotionJournal.atDeeperLevel')}</h2>
               <div className="flex flex-col gap-6">
                 {selectedSecondaryData.map((emotion) => (
                   <div key={emotion.id}>
@@ -1084,12 +1086,12 @@ export default function EmotionJournal() {
         {/* Additional Questions */}
         {selectedPrimary.length > 0 && (
           <div className="space-y-6 mt-8 pt-6 border-t">
-            <h2 className="text-lg lg:text-xl font-bold text-foreground mb-6">Preguntas opcionales:</h2>
+            <h2 className="text-lg lg:text-xl font-bold text-foreground mb-6">{t('emotionJournal.optionalQuestions')}</h2>
             
             {/* Situation Question */}
             <div className="space-y-3">
               <h3 className="text-lg font-semibold text-foreground">
-                ¿Hay alguna situación que te haya hecho conectar con estos sentimientos?
+                {t('emotionJournal.wasTriggeredBy')}
               </h3>
               <div className="flex gap-3">
                 <Button
@@ -1100,7 +1102,7 @@ export default function EmotionJournal() {
                   }}
                   className={`rounded-full px-6 ${situationTrigger === true ? "bg-success text-success-foreground hover:bg-success/90" : ""}`}
                 >
-                  Sí
+                  {t('common.yes')}
                 </Button>
                 <Button
                   variant={situationTrigger === false ? "default" : "outline"}
@@ -1110,7 +1112,7 @@ export default function EmotionJournal() {
                   }}
                   className="rounded-full px-6"
                 >
-                  No
+                  {t('common.no')}
                 </Button>
               </div>
               {situationTrigger === true && (
@@ -1118,7 +1120,7 @@ export default function EmotionJournal() {
                   <Textarea
                     value={situationDescription}
                     onChange={(e) => setSituationDescription(e.target.value)}
-                    placeholder="Describe la situación..."
+                    placeholder={t('emotionJournal.describeSituation')}
                     className="min-h-[100px] resize-none"
                   />
                 </div>
@@ -1128,7 +1130,7 @@ export default function EmotionJournal() {
             {/* Person Question */}
             <div className="space-y-3">
               <h3 className="text-lg font-semibold text-foreground">
-                ¿Hay alguna persona que te haga conectar con estas emociones?
+                {t('emotionJournal.wasPersonInvolved')}
               </h3>
               <div className="flex gap-3">
                 <Button
@@ -1139,7 +1141,7 @@ export default function EmotionJournal() {
                   }}
                   className={`rounded-full px-6 ${personTrigger === true ? "bg-success text-success-foreground hover:bg-success/90" : ""}`}
                 >
-                  Sí
+                  {t('common.yes')}
                 </Button>
                 <Button
                   variant={personTrigger === false ? "default" : "outline"}
@@ -1149,7 +1151,7 @@ export default function EmotionJournal() {
                   }}
                   className="rounded-full px-6"
                 >
-                  No
+                  {t('common.no')}
                 </Button>
               </div>
               {personTrigger === true && (
@@ -1157,7 +1159,7 @@ export default function EmotionJournal() {
                   <Textarea
                     value={personDescription}
                     onChange={(e) => setPersonDescription(e.target.value)}
-                    placeholder="Describe cómo te hace sentir esta persona..."
+                    placeholder={t('emotionJournal.describePersonPlaceholder')}
                     className="min-h-[100px] resize-none"
                   />
                 </div>
@@ -1167,7 +1169,7 @@ export default function EmotionJournal() {
             {/* Thought Question */}
             <div className="space-y-3">
               <h3 className="text-lg font-semibold text-foreground">
-                ¿Hay algún pensamiento automático asociado a estos sentimientos?
+                {t('emotionJournal.wasThought')}
               </h3>
               <div className="flex gap-3">
                 <Button
@@ -1178,7 +1180,7 @@ export default function EmotionJournal() {
                   }}
                   className={`rounded-full px-6 ${thoughtTrigger === true ? "bg-success text-success-foreground hover:bg-success/90" : ""}`}
                 >
-                  Sí
+                  {t('common.yes')}
                 </Button>
                 <Button
                   variant={thoughtTrigger === false ? "default" : "outline"}
@@ -1188,7 +1190,7 @@ export default function EmotionJournal() {
                   }}
                   className="rounded-full px-6"
                 >
-                  No
+                  {t('common.no')}
                 </Button>
               </div>
               {thoughtTrigger === true && (
@@ -1196,7 +1198,7 @@ export default function EmotionJournal() {
                   <Textarea
                     value={thoughtDescription}
                     onChange={(e) => setThoughtDescription(e.target.value)}
-                    placeholder="Describe el pensamiento automático..."
+                    placeholder={t('emotionJournal.describeThoughtPlaceholder')}
                     className="min-h-[100px] resize-none"
                   />
                 </div>
@@ -1206,7 +1208,7 @@ export default function EmotionJournal() {
             {/* Belief Question */}
             <div className="space-y-3">
               <h3 className="text-lg font-semibold text-foreground">
-                ¿Hay alguna creencia falsa asociada a estos sentimientos?
+                {t('emotionJournal.wasBelief')}
               </h3>
               <div className="flex gap-3">
                 <Button
@@ -1217,7 +1219,7 @@ export default function EmotionJournal() {
                   }}
                   className={`rounded-full px-6 ${beliefTrigger === true ? "bg-success text-success-foreground hover:bg-success/90" : ""}`}
                 >
-                  Sí
+                  {t('common.yes')}
                 </Button>
                 <Button
                   variant={beliefTrigger === false ? "default" : "outline"}
@@ -1227,7 +1229,7 @@ export default function EmotionJournal() {
                   }}
                   className="rounded-full px-6"
                 >
-                  No
+                  {t('common.no')}
                 </Button>
               </div>
               {beliefTrigger === true && (
@@ -1235,7 +1237,7 @@ export default function EmotionJournal() {
                   <Textarea
                     value={beliefDescription}
                     onChange={(e) => setBeliefDescription(e.target.value)}
-                    placeholder="Describe la creencia falsa..."
+                    placeholder={t('emotionJournal.describeBeliefPlaceholder')}
                     className="min-h-[100px] resize-none"
                   />
                 </div>
@@ -1275,8 +1277,8 @@ export default function EmotionJournal() {
         <div>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg lg:text-xl font-bold text-foreground pl-[10px] lg:pl-8">
-              <span className="lg:hidden">Registro:</span>
-              <span className="hidden lg:inline">Registro de emociones:</span>
+              <span className="lg:hidden">{t('emotionJournal.emotionLog')}</span>
+              <span className="hidden lg:inline">{t('emotionJournal.emotionLog')}</span>
             </h2>
             
             {/* Date Filter */}
@@ -1404,7 +1406,7 @@ export default function EmotionJournal() {
                         {entry.situations?.map((situation: any) => (
                           <div key={situation.id} className="bg-muted/30 p-3 rounded-lg">
                             <p className="text-xs font-medium text-muted-foreground mb-1">
-                              ¿Hay alguna situación que te haya hecho conectar con estos sentimientos?
+                              {t('emotionJournal.wasTriggeredBy')}
                             </p>
                             <p className="text-sm text-foreground">{situation.description}</p>
                           </div>
@@ -1413,7 +1415,7 @@ export default function EmotionJournal() {
                         {entry.persons?.map((person: any) => (
                           <div key={person.id} className="bg-muted/30 p-3 rounded-lg">
                             <p className="text-xs font-medium text-muted-foreground mb-1">
-                              ¿Hay alguna persona que te haga conectar con estas emociones?
+                              {t('emotionJournal.wasPersonInvolved')}
                             </p>
                             <p className="text-sm text-foreground">{person.description}</p>
                           </div>
@@ -1422,7 +1424,7 @@ export default function EmotionJournal() {
                         {entry.thoughts?.map((thought: any) => (
                           <div key={thought.id} className="bg-muted/30 p-3 rounded-lg">
                             <p className="text-xs font-medium text-muted-foreground mb-1">
-                              ¿Hay algún pensamiento automático asociado a estos sentimientos?
+                              {t('emotionJournal.wasThought')}
                             </p>
                             <p className="text-sm text-foreground">{thought.description}</p>
                           </div>
@@ -1431,7 +1433,7 @@ export default function EmotionJournal() {
                         {entry.beliefs?.map((belief: any) => (
                           <div key={belief.id} className="bg-muted/30 p-3 rounded-lg">
                             <p className="text-xs font-medium text-muted-foreground mb-1">
-                              ¿Hay alguna creencia falsa asociada a estos sentimientos?
+                              {t('emotionJournal.wasBelief')}
                             </p>
                             <p className="text-sm text-foreground">{belief.description}</p>
                           </div>
@@ -1445,7 +1447,7 @@ export default function EmotionJournal() {
             ) : (
               <Card className="p-6 bg-card border-border">
                 <p className="text-center text-muted-foreground">
-                  No hay entradas para la fecha seleccionada.
+                  {t('emotionJournal.noEntriesForDate')}
                 </p>
               </Card>
             )}
@@ -1533,7 +1535,7 @@ export default function EmotionJournal() {
                 <div className="mx-auto w-12 h-12 rounded-2xl flex items-center justify-center text-primary" style={{ backgroundColor: '#d5def7' }}>
                   <span className="text-2xl">😊</span>
                 </div>
-                <p className="font-semibold text-foreground text-sm leading-tight">Diario de emociones</p>
+                <p className="font-semibold text-foreground text-sm leading-tight">{t('emotionJournal.emotionDiary')}</p>
               </CardContent>
             </Card>
           </Link>
