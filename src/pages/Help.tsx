@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { HelpCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import i18n from "@/i18n/config";
 
 interface FAQ {
   id: string;
@@ -46,7 +47,16 @@ export default function Help() {
         .order("view_count", { ascending: false });
 
       if (error) throw error;
-      setFaqs(data || []);
+      
+      // Map FAQs to use the correct language
+      const currentLang = i18n.language;
+      const mappedFaqs = (data || []).map(faq => ({
+        ...faq,
+        question: currentLang === 'en' && faq.question_en ? faq.question_en : (faq.question_es || faq.question),
+        answer: currentLang === 'en' && faq.answer_en ? faq.answer_en : (faq.answer_es || faq.answer)
+      }));
+      
+      setFaqs(mappedFaqs);
     } catch (error) {
       console.error("Error loading FAQs:", error);
       toast({

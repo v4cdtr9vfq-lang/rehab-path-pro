@@ -281,28 +281,40 @@ export type Database = {
       faqs: {
         Row: {
           answer: string
+          answer_en: string | null
+          answer_es: string | null
           category: string
           created_at: string
           id: string
           question: string
+          question_en: string | null
+          question_es: string | null
           updated_at: string
           view_count: number
         }
         Insert: {
           answer: string
+          answer_en?: string | null
+          answer_es?: string | null
           category?: string
           created_at?: string
           id?: string
           question: string
+          question_en?: string | null
+          question_es?: string | null
           updated_at?: string
           view_count?: number
         }
         Update: {
           answer?: string
+          answer_en?: string | null
+          answer_es?: string | null
           category?: string
           created_at?: string
           id?: string
           question?: string
+          question_en?: string | null
+          question_es?: string | null
           updated_at?: string
           view_count?: number
         }
