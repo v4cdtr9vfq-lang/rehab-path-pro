@@ -19,29 +19,29 @@ import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
 
 const REHABILITATION_TYPES = [
-  { id: 'adiccion_1', label: 'Adicción 1' },
-  { id: 'adiccion_2', label: 'Adicción 2' },
-  { id: 'adiccion_3', label: 'Adicción 3' },
-  { id: 'alcohol', label: 'Alcohol' },
-  { id: 'amor', label: 'Amor' },
-  { id: 'azucar', label: 'Azúcar' },
-  { id: 'cannabis', label: 'Cannabis' },
-  { id: 'cocaina', label: 'Cocaína' },
-  { id: 'codependencia', label: 'Codependencia' },
-  { id: 'comida', label: 'Comida' },
-  { id: 'compras', label: 'Compras' },
-  { id: 'drama', label: 'Drama' },
-  { id: 'medicamentos', label: 'Medicamentos' },
-  { id: 'narcoticos', label: 'Narcóticos' },
-  { id: 'pornografia', label: 'Pornografía' },
-  { id: 'redes_sociales', label: 'Redes Sociales' },
-  { id: 'sexo', label: 'Sexo' },
-  { id: 'tabaco', label: 'Tabaco' },
-  { id: 'tecnologia', label: 'Tecnología' },
-  { id: 'trabajo', label: 'Trabajo' },
-  { id: 'vaporizadores', label: 'Vaporizadores' },
-  { id: 'videojuegos', label: 'Videojuegos' },
-  { id: 'otros', label: 'Otros' },
+  'adiccion_1',
+  'adiccion_2',
+  'adiccion_3',
+  'alcohol',
+  'amor',
+  'azucar',
+  'cannabis',
+  'cocaina',
+  'codependencia',
+  'comida',
+  'compras',
+  'drama',
+  'medicamentos',
+  'narcoticos',
+  'pornografia',
+  'redes_sociales',
+  'sexo',
+  'tabaco',
+  'tecnologia',
+  'trabajo',
+  'vaporizadores',
+  'videojuegos',
+  'otros',
 ] as const;
 
 interface RehabilitationTypeDialogProps {
@@ -132,8 +132,8 @@ export function RehabilitationTypeDialog({ onComplete }: RehabilitationTypeDialo
               </SelectTrigger>
               <SelectContent className="z-[99999] bg-popover max-h-[300px] overflow-y-auto">
                 {REHABILITATION_TYPES.map((type) => (
-                  <SelectItem key={type.id} value={type.id}>
-                    {type.label}
+                  <SelectItem key={type} value={type}>
+                    {t(`addictions.${type}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
