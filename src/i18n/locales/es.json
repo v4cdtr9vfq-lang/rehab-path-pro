@@ -354,7 +354,8 @@
     "emotionsSavedSuccess": "Tus emociones han sido registradas exitosamente",
     "mustSelectPrimary": "Debes seleccionar al menos una categoría principal.",
     "mustSignIn": "Debes iniciar sesión para guardar tus emociones.",
-    "error": "Error"
+    "error": "Error",
+    "quickAccess": "Accesos directos:"
   },
   "gratitude": {
     "title": "Agradecimiento",

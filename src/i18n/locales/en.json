@@ -354,7 +354,8 @@
     "emotionsSavedSuccess": "Your emotions have been saved successfully",
     "mustSelectPrimary": "You must select at least one primary category.",
     "mustSignIn": "You must sign in to save your emotions.",
-    "error": "Error"
+    "error": "Error",
+    "quickAccess": "Quick access:"
   },
   "gratitude": {
     "title": "Gratitude",

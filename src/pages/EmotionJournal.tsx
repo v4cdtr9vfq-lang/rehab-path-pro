@@ -687,7 +687,7 @@ export default function EmotionJournal() {
         <div className="space-y-8">
           {/* Primary Categories */}
           <div>
-            <h2 className="text-lg lg:text-xl font-bold text-foreground mb-[24px]">¿Qué sientes aquí y ahora?</h2>
+            <h2 className="text-lg lg:text-xl font-bold text-foreground mb-[24px]">{t('emotionJournal.howDoYouFeel')}</h2>
             <div className="flex flex-col lg:flex-row items-start lg:flex-wrap gap-3">
               {emotionCategories.map((category) => {
                 const isSelected = selectedPrimary.includes(category.id);
@@ -1008,7 +1008,7 @@ export default function EmotionJournal() {
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {filterDate ? format(filterDate, "d 'de' MMMM, yyyy", { locale: es }) : "Buscar por fecha"}
+                  {filterDate ? format(filterDate, "d 'de' MMMM, yyyy", { locale: es }) : t('emotionJournal.filterByDate')}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="end">
@@ -1207,15 +1207,15 @@ export default function EmotionJournal() {
         <Card className="border-sky-blue/20">
           <CardHeader>
             <CardTitle className="text-2xl">
-              Estadísticas
+              {t('emotionJournal.statistics')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="week" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="week">Esta semana</TabsTrigger>
-                <TabsTrigger value="month">Este mes</TabsTrigger>
-                <TabsTrigger value="quarter">Trimestre</TabsTrigger>
+                <TabsTrigger value="week">{t('emotionJournal.thisWeek')}</TabsTrigger>
+                <TabsTrigger value="month">{t('emotionJournal.thisMonth')}</TabsTrigger>
+                <TabsTrigger value="quarter">{t('emotionJournal.thisQuarter')}</TabsTrigger>
               </TabsList>
               <TabsContent value="week" className="mt-6">
                 {renderDonutChart(weekStats)}
@@ -1233,7 +1233,7 @@ export default function EmotionJournal() {
 
       {/* Quick Tools */}
       <div className="mt-12">
-        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">Accesos directos:</h2>
+        <h2 className="text-2xl font-bold mb-4 text-foreground pl-5">{t('emotionJournal.quickAccess')}</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-[15px]">
           <Link to="/journal">
             <Card className="hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer border-sidebar-border h-full">
@@ -1241,7 +1241,7 @@ export default function EmotionJournal() {
                 <div className="mx-auto w-12 h-12 rounded-2xl flex items-center justify-center text-primary" style={{ backgroundColor: '#d5def7' }}>
                   <span className="text-2xl">📔</span>
                 </div>
-                <p className="font-semibold text-foreground text-sm leading-tight">Diario</p>
+                <p className="font-semibold text-foreground text-sm leading-tight">{t('journal.title')}</p>
               </CardContent>
             </Card>
           </Link>
@@ -1261,7 +1261,7 @@ export default function EmotionJournal() {
                 <div className="mx-auto w-12 h-12 rounded-2xl flex items-center justify-center text-accent" style={{ backgroundColor: '#d5def7' }}>
                   <span className="text-2xl">🙏</span>
                 </div>
-                <p className="font-semibold text-foreground text-sm leading-tight">Agradecimiento</p>
+                <p className="font-semibold text-foreground text-sm leading-tight">{t('gratitude.title')}</p>
               </CardContent>
             </Card>
           </Link>
@@ -1271,7 +1271,7 @@ export default function EmotionJournal() {
                 <div className="mx-auto w-12 h-12 rounded-2xl flex items-center justify-center text-destructive" style={{ backgroundColor: '#d5def7' }}>
                   <span className="text-2xl">🚨</span>
                 </div>
-                <p className="font-semibold text-foreground text-sm leading-tight">Plan de emergencia</p>
+                <p className="font-semibold text-foreground text-sm leading-tight">{t('quickTools.emergencyPlan')}</p>
               </CardContent>
             </Card>
           </Link>
