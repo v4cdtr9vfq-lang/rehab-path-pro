@@ -16,27 +16,24 @@ i18n
         translation: es,
         emotions: emotionsEs.emotions
       },
-      'es-ES': {
-        translation: es,
-        emotions: emotionsEs.emotions
-      },
       en: { 
         translation: en,
         emotions: emotionsEn.emotions
       },
     },
+    supportedLngs: ['en', 'es'],
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false,
     },
     detection: {
-      order: ['localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
+      order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
     },
     debug: false,
     returnEmptyString: false,
     returnNull: false,
-    load: 'languageOnly', // This will use 'es' for 'es-ES'
+    load: 'languageOnly',
   });
 
 export default i18n;
