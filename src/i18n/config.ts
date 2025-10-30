@@ -25,6 +25,10 @@ i18n
         translation: es,
         emotions: emotionsEs.emotions
       },
+      'es-ES': {
+        translation: es,
+        emotions: emotionsEs.emotions
+      },
       en: { 
         translation: en,
         emotions: emotionsEn.emotions
@@ -41,6 +45,7 @@ i18n
     debug: false,
     returnEmptyString: false,
     returnNull: false,
+    load: 'languageOnly', // This will use 'es' for 'es-ES'
   });
 
 export default i18n;
