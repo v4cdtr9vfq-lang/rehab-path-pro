@@ -667,7 +667,7 @@ export default function Settings() {
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="full-name">{t('settings.firstName')}:</Label>
+              <Label htmlFor="full-name" className="pl-4">{t('settings.firstName')}:</Label>
               <div className="flex gap-2">
                 <Input
                   id="full-name"
@@ -684,14 +684,14 @@ export default function Settings() {
                 </Button>
               </div>
               {fullName.trim() && (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground pl-4">
                   {t('settings.pressToConfirm')}
                 </p>
               )}
             </div>
 
             <div className="border-t pt-4 space-y-2">
-              <h3 className="text-lg font-semibold">{t('settings.changeEmail')}:</h3>
+              <h3 className="text-lg font-semibold pl-4">{t('settings.changeEmail')}:</h3>
               <Input
                 id="new-email"
                 type="email"
@@ -700,7 +700,7 @@ export default function Settings() {
                 onChange={(e) => setNewEmail(e.target.value)}
               />
               <div className="pt-2.5">
-                <Label htmlFor="confirm-email">{t('settings.confirmEmail')}:</Label>
+                <Label htmlFor="confirm-email" className="pl-4">{t('settings.confirmEmail')}:</Label>
               </div>
               <Input
                 id="confirm-email"
@@ -717,16 +717,16 @@ export default function Settings() {
                 {isUpdatingEmail ? t('settings.updating') : t('settings.update')}
               </Button>
               <div className="pt-2.5">
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground pl-4">
                   {t('settings.confirmationEmailWillBeSent')}
                 </p>
               </div>
             </div>
 
             <div className="border-t pt-4 space-y-4">
-              <h3 className="text-lg font-semibold mb-2">{t('settings.changePassword')}:</h3>
+              <h3 className="text-lg font-semibold pl-4 mb-2">{t('settings.changePassword')}:</h3>
               <div className="space-y-2">
-                <Label htmlFor="current-password">{t('settings.currentPassword')}:</Label>
+                <Label htmlFor="current-password" className="pl-4">{t('settings.currentPassword')}:</Label>
                 <Input
                   id="current-password"
                   type="password"
@@ -736,7 +736,7 @@ export default function Settings() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="new-password">{t('settings.newPassword')}:</Label>
+                <Label htmlFor="new-password" className="pl-4">{t('settings.newPassword')}:</Label>
                 <Input
                   id="new-password"
                   type="password"
@@ -746,7 +746,7 @@ export default function Settings() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirm-password">{t('settings.confirmPassword')}:</Label>
+                <Label htmlFor="confirm-password" className="pl-4">{t('settings.confirmPassword')}:</Label>
                 <Input
                   id="confirm-password"
                   type="password"
@@ -777,7 +777,7 @@ export default function Settings() {
           {/* List of all addictions including main one */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <Label>{t('settings.myAddictions')}:</Label>
+              <Label className="pl-4">{t('settings.myAddictions')}:</Label>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">{addictions.length + 1}/3</span>
                 {addictions.length < 2 && (
