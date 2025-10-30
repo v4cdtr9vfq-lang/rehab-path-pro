@@ -1162,7 +1162,7 @@ export default function Home() {
       {/* Medals Widget */}
       <Card className="border-sidebar-border md:-mt-[3px]">
         <CardHeader className="pb-2">
-          <CardTitle className="text-xl md:text-2xl font-bold">{t('dashboard.myMedals')}</CardTitle>
+          <CardTitle className="text-xl md:text-2xl font-bold pl-[10px]">{t('dashboard.myMedals')}</CardTitle>
         </CardHeader>
         <CardContent className="pt-4 px-4 md:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 max-w-full">
