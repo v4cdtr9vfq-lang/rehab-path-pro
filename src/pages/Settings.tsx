@@ -800,6 +800,26 @@ export default function Settings() {
                   1
                 </span>
                 <div className="flex-1 space-y-2">
+                  <Select
+                    value={rehabilitationType}
+                    onValueChange={(value) => setRehabilitationType(value)}
+                  >
+                    <SelectTrigger className="w-full h-10">
+                      <SelectValue>
+                        {REHABILITATION_TYPES.find(t => t.id === rehabilitationType)?.label || t('settings.selectType')}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {REHABILITATION_TYPES.filter(type => 
+                        type.id === rehabilitationType || 
+                        !addictions.some(a => a.addiction_type === type.id)
+                      ).map((type) => (
+                        <SelectItem key={type.id} value={type.id}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -834,17 +854,23 @@ export default function Settings() {
                       />
                     </PopoverContent>
                   </Popover>
-                  {abstinenceStartDate !== initialAbstinenceDate && (
+                  {(abstinenceStartDate !== initialAbstinenceDate || rehabilitationType !== initialRehabilitationType) && (
                     <Button 
                       size="sm"
                       onClick={() => {
-                        handleUpdateAbstinenceDate();
-                        setInitialAbstinenceDate(abstinenceStartDate);
+                        if (abstinenceStartDate !== initialAbstinenceDate) {
+                          handleUpdateAbstinenceDate();
+                          setInitialAbstinenceDate(abstinenceStartDate);
+                        }
+                        if (rehabilitationType !== initialRehabilitationType) {
+                          handleUpdateRehabilitationType();
+                          setInitialRehabilitationType(rehabilitationType);
+                        }
                       }}
-                      disabled={isUpdatingDate}
+                      disabled={isUpdatingDate || isUpdatingRehabType}
                       className="w-full mt-2"
                     >
-                      {isUpdatingDate ? "..." : t('settings.save')}
+                      {(isUpdatingDate || isUpdatingRehabType) ? "..." : t('settings.save')}
                     </Button>
                   )}
                 </div>

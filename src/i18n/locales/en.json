@@ -982,6 +982,7 @@
     "myAddictions": "My addictions",
     "addAdditionalAddictions": "Add additional addictions (maximum 2)",
     "selectAddiction": "Select an addiction",
+    "selectType": "Select a type",
     "selectDate": "Select date",
     "subscription": "Subscription",
     "loading": "Loading...",

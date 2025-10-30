@@ -18,13 +18,6 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [rehabilitationType, setRehabilitationType] = useState<string | null>(null);
 
-  console.log('🔵 AbstinenceCounter render:', { 
-    selectedIndex, 
-    addictionsCount: addictions.length, 
-    rehabilitationType,
-    hasStartDate: !!startDate 
-  });
-
   // Load rehabilitation type from profile - ONCE
   useEffect(() => {
     let mounted = true;
@@ -57,7 +50,6 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
       }] : []),
       ...addictions.map(a => ({ ...a, isOriginal: false }))
     ];
-    console.log('🟢 allAddictions calculated:', combined.map(a => ({ id: a.id, type: a.addiction_type })));
     return combined;
   }, [startDate, rehabilitationType, addictions]);
 
@@ -94,10 +86,6 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
 
   // Always reset to first addiction when component mounts or addictions change
   useEffect(() => {
-    console.log('🟡 useEffect triggered - resetting to index 0', { 
-      allAddictionsLength: allAddictions.length,
-      currentIndex: selectedIndex 
-    });
     if (allAddictions.length > 0) {
       setSelectedIndex(0);
     }
@@ -117,7 +105,6 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
   };
 
   const handleCircleClick = (index: number) => {
-    console.log('🔴 Circle clicked:', index);
     setSelectedIndex(index);
   };
 
