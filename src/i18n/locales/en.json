@@ -21,7 +21,9 @@
     "share": "Share",
     "ok": "OK",
     "confirm": "Confirm",
-    "error": "Error"
+    "error": "Error",
+    "anonymous": "Anonymous",
+    "unknown": "Unknown"
   },
   "auth": {
     "signUp": "Sign Up",
@@ -873,7 +875,17 @@
     "save": "Save quote",
     "saved": "Quote saved",
     "removed": "Quote removed",
-    "viewSaved": "View saved messages"
+    "viewSaved": "View saved messages",
+    "1": "It is always the simple that produces the marvelous.",
+    "2": "Trust is built with consistency.",
+    "3": "A journey of a thousand miles begins with a single step.",
+    "4": "Courage is not the absence of fear, but triumph over it.",
+    "5": "Success is the sum of small efforts repeated day in and day out.",
+    "6": "Don't count the days, make the days count.",
+    "7": "Recovery is not a destination, it's a journey.",
+    "8": "Every day is a new opportunity to start over.",
+    "9": "Strength doesn't come from what you can do. It comes from overcoming the things you thought you couldn't.",
+    "10": "The first step doesn't take you where you want to go, but it gets you out of where you are."
   },
   "reflections": {
     "1": "Today I choose to move away from what harms me and closer to what heals me",

@@ -81,35 +81,35 @@ export default function Home() {
   const [bedtime, setBedtime] = useState<string>('21:00');
   const [wakeUpTime, setWakeUpTime] = useState<string>('07:00');
   const allQuotes = [{
-    text: "Siempre es lo simple lo que produce lo maravilloso.",
+    text: t('quotes.1'),
     author: "Amelia Barr"
   }, {
-    text: "La confianza se construye con consistencia.",
+    text: t('quotes.2'),
     author: "Lincoln Chafee"
   }, {
-    text: "Un viaje de mil millas comienza con un solo paso.",
+    text: t('quotes.3'),
     author: "Lao Tzu"
   }, {
-    text: "La valentía no es la ausencia del miedo, sino el triunfo sobre él.",
+    text: t('quotes.4'),
     author: "Nelson Mandela"
   }, {
-    text: "El éxito es la suma de pequeños esfuerzos repetidos día tras día.",
+    text: t('quotes.5'),
     author: "Robert Collier"
   }, {
-    text: "No cuentes los días, haz que los días cuenten.",
+    text: t('quotes.6'),
     author: "Muhammad Ali"
   }, {
-    text: "La recuperación no es un destino, es un viaje.",
-    author: "Anónimo"
+    text: t('quotes.7'),
+    author: t('common.anonymous')
   }, {
-    text: "Cada día es una nueva oportunidad para comenzar de nuevo.",
-    author: "Desconocido"
+    text: t('quotes.8'),
+    author: t('common.unknown')
   }, {
-    text: "La fuerza no viene de lo que puedes hacer. Viene de superar las cosas que creías que no podías hacer.",
+    text: t('quotes.9'),
     author: "Rikki Rogers"
   }, {
-    text: "El primer paso no te lleva donde quieres ir, pero te saca de donde estás.",
-    author: "Anónimo"
+    text: t('quotes.10'),
+    author: t('common.anonymous')
   }];
 
   // Get quote of the day based on date
@@ -369,7 +369,7 @@ export default function Home() {
               originalId: g.id,
               title: g.text,
               link: g.link,
-              period: g.goal_type === 'today' ? 'Hoy' : g.goal_type === 'always' ? 'Pendiente' : 'Esta semana',
+              period: g.goal_type === 'today' ? t('goals.today') : g.goal_type === 'always' ? t('goals.always') : t('goals.thisWeek'),
               status: completedInstances.has(instanceId) ? 'completed' : 'pending',
               instanceIndex: i
             });

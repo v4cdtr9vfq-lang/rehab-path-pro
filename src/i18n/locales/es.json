@@ -21,7 +21,9 @@
     "share": "Compartir",
     "ok": "Aceptar",
     "confirm": "Confirmar",
-    "error": "Error"
+    "error": "Error",
+    "anonymous": "Anónimo",
+    "unknown": "Desconocido"
   },
   "auth": {
     "signIn": "Iniciar sesión",
@@ -875,7 +877,17 @@
     "save": "Guardar frase",
     "saved": "Frase guardada",
     "removed": "Frase eliminada",
-    "viewSaved": "Ver mensajes guardados"
+    "viewSaved": "Ver mensajes guardados",
+    "1": "Siempre es lo simple lo que produce lo mavilloso.",
+    "2": "La confianza se construye con consistencia.",
+    "3": "Un viaje de mil millas comienza con un solo paso.",
+    "4": "La valentía no es la ausencia del miedo, sino el triunfo sobre él.",
+    "5": "El éxito es la suma de pequeños esfuerzos repetidos día tras día.",
+    "6": "No cuentes los días, haz que los días cuenten.",
+    "7": "La recuperación no es un destino, es un viaje.",
+    "8": "Cada día es una nueva oportunidad para comenzar de nuevo.",
+    "9": "La fuerza no viene de lo que puedes hacer. Viene de superar las cosas que creías que no podías hacer.",
+    "10": "El primer paso no te lleva donde quieres ir, pero te saca de donde estás."
   },
   "reflections": {
     "1": "Hoy elijo alejarme de lo que me daña y acercarme a lo que me sana",
