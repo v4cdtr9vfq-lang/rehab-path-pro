@@ -187,6 +187,9 @@
     "thisWeekLower": "esta semana",
     "thisMonthLower": "este mes",
     "sleepSchedule": "Horario de sueño",
+    "targetSleepSchedule": "Horario de sueño objetivo:",
+    "bedtimeLabel": "Hora para acostarme:",
+    "wakeTimeLabel": "Hora para levantarme:",
     "definedBedtime": "Hora definida para acostarme:",
     "definedWakeUpTime": "Hora definida para levantarme:",
     "scheduleUpdated": "Horario actualizado"

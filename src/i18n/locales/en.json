@@ -187,6 +187,9 @@
     "thisWeekLower": "this week",
     "thisMonthLower": "this month",
     "sleepSchedule": "Sleep Schedule",
+    "targetSleepSchedule": "Target sleep schedule:",
+    "bedtimeLabel": "Time to go to bed:",
+    "wakeTimeLabel": "Time to wake up:",
     "definedBedtime": "Defined bedtime:",
     "definedWakeUpTime": "Defined wake up time:",
     "scheduleUpdated": "Schedule updated"

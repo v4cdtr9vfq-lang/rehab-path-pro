@@ -1480,14 +1480,14 @@ export default function Plan() {
         <Card className="border-sidebar-border bg-card/50 backdrop-blur rounded-3xl">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg pl-[15px]">
-              Horario de sueño objetivo:
+              {t('plan.targetSleepSchedule')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-3">
               <div className="p-3 rounded-xl bg-background/50 border border-sidebar-border">
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-                  <p className="text-xs text-muted-foreground whitespace-nowrap">Hora para acostarme:</p>
+                  <p className="text-xs text-muted-foreground whitespace-nowrap">{t('plan.bedtimeLabel')}</p>
                   <select 
                     value={bedtime}
                     onChange={(e) => handleBedtimeChange(e.target.value)}
@@ -1510,7 +1510,7 @@ export default function Plan() {
               
               <div className="p-3 rounded-xl bg-background/50 border border-sidebar-border">
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-                  <p className="text-xs text-muted-foreground whitespace-nowrap">Hora para levantarme:</p>
+                  <p className="text-xs text-muted-foreground whitespace-nowrap">{t('plan.wakeTimeLabel')}</p>
                   <select
                     value={wakeUpTime}
                     onChange={(e) => handleWakeUpTimeChange(e.target.value)}
