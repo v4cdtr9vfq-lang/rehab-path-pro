@@ -228,6 +228,32 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
             tertiaryEmotions: ["Accomplished", "Content", "Fulfilled", "Relieved"].sort()
           }
         ].sort((a, b) => a.name.localeCompare(b.name))
+      },
+      {
+        id: "bad",
+        name: "Discomfort",
+        secondaryEmotions: [
+          {
+            id: "ocupado",
+            name: "Busy",
+            tertiaryEmotions: ["Pressured", "Rushed"].sort()
+          },
+          {
+            id: "cansado",
+            name: "Tired",
+            tertiaryEmotions: ["Exhausted", "Fatigued"].sort()
+          },
+          {
+            id: "estresado",
+            name: "Stressed",
+            tertiaryEmotions: ["Overwhelmed"].sort()
+          },
+          {
+            id: "aburrido",
+            name: "Bored",
+            tertiaryEmotions: ["Apathetic", "Indifferent"].sort()
+          }
+        ].sort((a, b) => a.name.localeCompare(b.name))
       }
     ].sort((a, b) => a.name.localeCompare(b.name));
   }
@@ -439,6 +465,32 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
           id: "solo",
           name: "Solo",
           tertiaryEmotions: ["Aislado", "Descuidado", "No deseado"].sort()
+        }
+      ].sort((a, b) => a.name.localeCompare(b.name, 'es'))
+    },
+    {
+      id: "bad",
+      name: "Malestar",
+      secondaryEmotions: [
+        {
+          id: "aburrido",
+          name: "Aburrido",
+          tertiaryEmotions: ["Apático", "Indiferente"].sort()
+        },
+        {
+          id: "cansado",
+          name: "Cansado",
+          tertiaryEmotions: ["Exhausto", "Fatigado"].sort()
+        },
+        {
+          id: "estresado",
+          name: "Estresado",
+          tertiaryEmotions: ["Abrumado"].sort()
+        },
+        {
+          id: "ocupado",
+          name: "Ocupado",
+          tertiaryEmotions: ["Apresurado", "Presionado"].sort()
         }
       ].sort((a, b) => a.name.localeCompare(b.name, 'es'))
     }
