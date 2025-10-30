@@ -848,7 +848,10 @@
   "footer": {
     "madeWith": "Hecho con",
     "for": "para",
-    "recovery": "la recuperación"
+    "recovery": "la recuperación",
+    "legal": "Legal",
+    "cookies": "Cookies",
+    "contact": "Contacto"
   },
   "sidebar": {
     "tagline": "Asistencia en procesos de rehabilitación."

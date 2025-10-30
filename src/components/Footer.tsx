@@ -76,27 +76,27 @@ export function Footer() {
 
           {/* Legal & Contact */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Legal</h4>
+            <h4 className="font-semibold text-foreground">{t('footer.legal')}</h4>
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  {t('settings.privacy')}
+                  {t('settings.privacyPolicy')}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Terms of Service
+                  {t('settings.termsOfService')}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Cookies
+                  {t('footer.cookies')}
                 </a>
               </li>
               <li>
                 <a href="mailto:info@rehabp.org" className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">
                   <Mail className="h-3 w-3" />
-                  Contact
+                  {t('footer.contact')}
                 </a>
               </li>
             </ul>

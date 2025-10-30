@@ -797,5 +797,13 @@
     "themeUpdatedError": "Could not update theme",
     "themeDeletedError": "Could not delete theme",
     "confirmDeleteTheme": "Are you sure you want to delete this theme? This action cannot be undone."
+  },
+  "footer": {
+    "madeWith": "Made with",
+    "for": "for",
+    "recovery": "recovery",
+    "legal": "Legal",
+    "cookies": "Cookies",
+    "contact": "Contact"
   }
 }
