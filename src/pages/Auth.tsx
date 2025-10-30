@@ -240,11 +240,11 @@ export default function Auth() {
                 <form onSubmit={handleAuth} className="space-y-4">
                   {!isLogin && (
                     <div className="space-y-2">
-                      <Label htmlFor="fullName" className="pl-4">Nombre completo</Label>
+                      <Label htmlFor="fullName" className="pl-4">Nombre de pila</Label>
                       <Input
                         id="fullName"
                         type="text"
-                        placeholder="Juan Pérez"
+                        placeholder="Solo tu nombre"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         required={!isLogin}
