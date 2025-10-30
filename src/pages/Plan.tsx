@@ -232,10 +232,10 @@ export default function Plan() {
     if (context === 'today') {
       dates.push(today);
     } else if (context === 'week') {
-      // Get current week (last 7 days including today)
-      for (let i = 6; i >= 0; i--) {
+      // Get next 7 days from today (including today)
+      for (let i = 0; i < 7; i++) {
         const date = new Date(today);
-        date.setDate(today.getDate() - i);
+        date.setDate(today.getDate() + i);
         dates.push(date);
       }
     } else if (context === 'month') {
