@@ -721,7 +721,7 @@ export default function Home() {
 
   // Medal configuration
   const medalConfig = [
-    { type: 'servicio', name: t('medals.freedom'), emoji: '🏆', requiredDays: 360 },
+    { type: 'servicio', name: t('medals.freedom'), emoji: '🏆', requiredDays: 365 },
     { type: 'recuperacion', name: t('medals.recovery'), emoji: '🥇', requiredDays: 180 },
     { type: 'constancia', name: t('medals.perseverance'), emoji: '🥈', requiredDays: 90 },
     { type: 'valor', name: t('medals.courage'), emoji: '🥉', requiredDays: 0 }
