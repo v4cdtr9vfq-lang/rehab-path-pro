@@ -1196,7 +1196,7 @@ export default function Settings() {
             <Label className="pl-4">{t('settings.selectLanguage')}:</Label>
             <p className="text-sm text-muted-foreground pl-4">{t('settings.languageDescription')}</p>
             <Select
-              value={i18n.language}
+              value={i18n.language.startsWith('es') ? 'es' : 'en'}
               onValueChange={(value) => {
                 i18n.changeLanguage(value);
                 toast({
