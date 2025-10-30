@@ -232,10 +232,13 @@ export default function Plan() {
     if (context === 'today') {
       dates.push(today);
     } else if (context === 'week') {
-      // Get next 7 days from today (including today)
+      // Get current week (Monday to Sunday)
+      const dayOfWeek = today.getDay();
+      const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // If Sunday, go back 6 days, otherwise calculate from Monday
+      
       for (let i = 0; i < 7; i++) {
         const date = new Date(today);
-        date.setDate(today.getDate() + i);
+        date.setDate(today.getDate() + mondayOffset + i);
         dates.push(date);
       }
     } else if (context === 'month') {
