@@ -1265,7 +1265,7 @@ export default function Plan() {
             </div>
             
             {editingGoal?.goal_type === 'periodic' && <div className="space-y-2">
-                <Label htmlFor="edit-periodic-type" className="block px-3">{t('plan.periodicity')}:</Label>
+                <Label htmlFor="edit-periodic-type" className="block px-3 text-sm font-normal">{t('plan.periodicity')}:</Label>
                 <Select value={editingGoal?.periodic_type || ""} onValueChange={value => setEditingGoal(prev => ({
               ...prev,
               periodic_type: value
@@ -1282,7 +1282,7 @@ export default function Plan() {
               </div>}
 
             {editingGoal?.goal_type === 'onetime' && <div className="space-y-2">
-                <Label className="block px-3">{t('plan.targetDate')}:</Label>
+                <Label className="block px-3 text-sm font-normal">{t('plan.targetDate')}:</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !editingGoal?.target_date && "text-muted-foreground")}>
@@ -1310,7 +1310,7 @@ export default function Plan() {
             </div>}
             
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-instructions" className="block px-3">{t('plan.instructions')}:</Label>
+              <Label htmlFor="edit-goal-instructions" className="block px-3 text-sm font-normal">{t('plan.instructions')}:</Label>
               <Textarea 
                 id="edit-goal-instructions" 
                 placeholder={t('plan.instructionsPlaceholder')} 
@@ -1325,7 +1325,7 @@ export default function Plan() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-notes" className="block px-3">{t('plan.notes')}:</Label>
+              <Label htmlFor="edit-goal-notes" className="block px-3 text-sm font-normal">{t('plan.notes')}:</Label>
               <Textarea 
                 id="edit-goal-notes" 
                 placeholder={t('plan.notesPlaceholder')} 
