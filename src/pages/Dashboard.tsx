@@ -951,7 +951,7 @@ export default function Home() {
           <div className="space-y-2">
             <div className="flex justify-between items-center mb-2">
               <p className="text-sm font-medium text-muted-foreground pl-[10px]">{t('dashboard.goalsCompleted')}</p>
-              <p className="text-sm font-bold text-green-500">{goalsCompleted} de {totalGoals}</p>
+              <p className="text-sm font-bold text-green-500 pr-[10px]">{goalsCompleted} de {totalGoals}</p>
             </div>
             <Progress key="dashboard-progress" value={goalsProgress} className="h-3 [&>div]:bg-green-500" />
           </div>
