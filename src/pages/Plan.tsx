@@ -564,40 +564,12 @@ export default function Plan() {
       }
       const wasCompleted = goal.completed;
 
-      // Optimistically update UI
-      const updatedSections = {
-        ...sections
-      };
-      Object.keys(updatedSections).forEach(key => {
-        const sk = key as keyof typeof sections;
-        updatedSections[sk] = {
-          ...updatedSections[sk],
-          goals: updatedSections[sk].goals.map(g => g.id === goalId ? {
-            ...g,
-            completed: !wasCompleted
-          } : g)
-        };
-      });
-      setSections(updatedSections);
-
-      // Save to database (realtime will sync to other devices)
+      // Save to database FIRST (so that refetch picks up the change)
       await saveCompletion(goal.originalId, instanceIndex, dateStr, !wasCompleted);
-
-      // Check if ALL instances of this goal are completed
-      const {
-        data: {
-          user
-        }
-      } = await supabase.auth.getUser();
-      if (!user) return;
-      const allGoals = [...updatedSections.today.goals, ...updatedSections.week.goals, ...updatedSections.month.goals, ...updatedSections.onetime.goals];
-      const instancesOfThisGoal = allGoals.filter(g => g.originalId === goal.originalId);
-      const allCompleted = instancesOfThisGoal.every(g => g.completed);
-
-      // Update database: mark as completed only if ALL instances are done
-      await supabase.from('goals').update({
-        completed: allCompleted
-      }).eq('id', goal.originalId);
+      
+      // Then refetch to ensure all sections show updated counts
+      await fetchGoals();
+      
       toast({
         title: "Meta actualizada",
         description: "El estado de la meta ha sido actualizado."
