@@ -1108,27 +1108,27 @@ export default function Settings() {
                 <div className={`border rounded-lg p-4 space-y-3 ${plan === "monthly" ? "border-primary bg-primary/5" : "border-border"}`}>
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-semibold text-lg">Plan mensual</h4>
-                      <p className="text-2xl font-bold text-primary mt-1">6€<span className="text-sm text-muted-foreground">/mes</span></p>
+                      <h4 className="font-semibold text-lg">{t('settings.monthlyPlan')}</h4>
+                      <p className="text-2xl font-bold text-primary mt-1">6€<span className="text-sm text-muted-foreground">{t('settings.perMonth')}</span></p>
                     </div>
                     {plan === "monthly" && (
                       <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
-                        Tu plan
+                        {t('settings.yourPlan')}
                       </span>
                     )}
                   </div>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      Acceso completo a todas las funciones.
+                      {t('settings.fullAccessToAllFeatures')}
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      Chat comunitario.
+                      {t('settings.communityChat')}
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      Seguimiento personalizado.
+                      {t('settings.personalizedTracking')}
                     </li>
                   </ul>
                   {plan === "monthly" ? (
@@ -1137,14 +1137,14 @@ export default function Settings() {
                       variant="destructive"
                       className="w-full mt-16"
                     >
-                      Plan Actual
+                      {t('settings.currentPlan')}
                     </Button>
                   ) : (
                     <Button 
                       onClick={() => createCheckoutSession(SUBSCRIPTION_PLANS.monthly.priceId)}
                       className="w-full mt-16"
                     >
-                      Actualiza tu plan
+                      {t('settings.upgradePlan')}
                     </Button>
                   )}
                 </div>
@@ -1152,32 +1152,32 @@ export default function Settings() {
                 {/* Annual Plan */}
                 <div className={`border rounded-lg p-4 space-y-3 relative ${plan === "annual" ? "border-primary bg-primary/5" : "border-border"}`}>
                   <div className="absolute -top-3 right-4 bg-primary text-primary-foreground text-xs px-3 py-1 rounded-full font-semibold">
-                    Ahorra 50%
+                    {t('settings.save50')}
                   </div>
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-semibold text-lg">Plan anual</h4>
-                      <p className="text-2xl font-bold text-primary mt-1">30€<span className="text-sm text-muted-foreground">/año</span></p>
-                      <p className="text-xs text-muted-foreground">Solo 2.5€/mes</p>
+                      <h4 className="font-semibold text-lg">{t('settings.annualPlan')}</h4>
+                      <p className="text-2xl font-bold text-primary mt-1">30€<span className="text-sm text-muted-foreground">{t('settings.perYear')}</span></p>
+                      <p className="text-xs text-muted-foreground">{t('settings.onlyPerMonth')}</p>
                     </div>
                     {plan === "annual" && (
                       <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
-                        Tu plan
+                        {t('settings.yourPlan')}
                       </span>
                     )}
                   </div>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      Todo lo del plan mensual.
+                      {t('settings.everythingInMonthlyPlan')}
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      Ahorra 42€ al año.
+                      {t('settings.savePerYear')}
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-destructive" />
-                      Mejor valor por tu dinero.
+                      {t('settings.bestValue')}
                     </li>
                   </ul>
                   {plan === "annual" ? (
@@ -1186,14 +1186,14 @@ export default function Settings() {
                       variant="destructive"
                       className="w-full mt-16"
                     >
-                      Plan Actual
+                      {t('settings.currentPlan')}
                     </Button>
                   ) : (
                     <Button 
                       onClick={() => createCheckoutSession(SUBSCRIPTION_PLANS.annual.priceId)}
                       className="w-full mt-16"
                     >
-                      Actualiza tu plan
+                      {t('settings.upgradePlan')}
                     </Button>
                   )}
                 </div>
@@ -1217,8 +1217,8 @@ export default function Settings() {
               onValueChange={(value) => {
                 i18n.changeLanguage(value);
                 toast({
-                  title: value === 'es' ? 'Idioma actualizado' : 'Language updated',
-                  description: value === 'es' ? 'El idioma se ha cambiado a español.' : 'Language has been changed to English.',
+                  title: t('settings.languageUpdated'),
+                  description: value === 'es' ? t('settings.languageChangedToSpanish') : t('settings.languageChangedToEnglish'),
                 });
               }}
             >
@@ -1239,31 +1239,31 @@ export default function Settings() {
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2 pl-4">
               <Bell className="h-5 w-5 text-primary" />
-              Recordatorios:
+              {t('settings.reminders')}:
             </CardTitle>
             <Dialog open={isReminderDialogOpen} onOpenChange={setIsReminderDialogOpen}>
               <DialogTrigger asChild>
                 <Button size="sm" className="gap-2">
                   <Plus className="h-4 w-4" />
-                  Añadir
+                  {t('settings.add')}
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Añadir Nuevo Recordatorio</DialogTitle>
+                  <DialogTitle>{t('settings.addNewReminder')}</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="reminder-title" className="pl-4">Título:</Label>
+                    <Label htmlFor="reminder-title" className="pl-4">{t('settings.title')}:</Label>
                     <Input
                       id="reminder-title"
-                      placeholder="Ej: Meditación matutina"
+                      placeholder={t('settings.exampleMorningMeditation')}
                       value={newReminder.title}
                       onChange={(e) => setNewReminder(prev => ({ ...prev, title: e.target.value }))}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="reminder-time" className="pl-4">Hora:</Label>
+                    <Label htmlFor="reminder-time" className="pl-4">{t('settings.time')}:</Label>
                     <Input
                       id="reminder-time"
                       type="time"
@@ -1272,7 +1272,7 @@ export default function Settings() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="pl-4">Tipo de Notificación:</Label>
+                    <Label className="pl-4">{t('settings.notificationType')}:</Label>
                     <RadioGroup
                       value={newReminder.notificationType} 
                       onValueChange={(value: "email" | "popup") => setNewReminder(prev => ({ ...prev, notificationType: value }))}
@@ -1281,20 +1281,20 @@ export default function Settings() {
                         <RadioGroupItem value="popup" id="popup" />
                         <Label htmlFor="popup" className="flex items-center gap-2 cursor-pointer font-normal">
                           <BellRing className="h-4 w-4" />
-                          Pop-up en la aplicación
+                          {t('settings.popupInApp')}
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="email" id="email" />
                         <Label htmlFor="email" className="flex items-center gap-2 cursor-pointer font-normal">
                           <Mail className="h-4 w-4" />
-                          Enviar por email
+                          {t('settings.sendByEmail')}
                         </Label>
                       </div>
                     </RadioGroup>
                   </div>
                   <Button onClick={addReminder} className="w-full">
-                    Añadir
+                    {t('settings.add')}
                   </Button>
                 </div>
               </DialogContent>
@@ -1306,7 +1306,7 @@ export default function Settings() {
             {reminders.length === 0 ? (
               <div className="text-center py-8">
                 <Bell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground text-sm">No tienes recordatorios configurados</p>
+                <p className="text-muted-foreground text-sm">{t('settings.noRemindersConfigured')}</p>
               </div>
             ) : (
               reminders.map((reminder) => (
@@ -1318,12 +1318,12 @@ export default function Settings() {
                       {reminder.notificationType === "email" ? (
                         <>
                           <Mail className="h-3 w-3 text-muted-foreground" />
-                          <span className="text-xs text-muted-foreground">Email</span>
+                          <span className="text-xs text-muted-foreground">{t('settings.email')}</span>
                         </>
                       ) : (
                         <>
                           <BellRing className="h-3 w-3 text-muted-foreground" />
-                          <span className="text-xs text-muted-foreground">Pop-up</span>
+                          <span className="text-xs text-muted-foreground">{t('settings.popup')}</span>
                         </>
                       )}
                     </div>
@@ -1351,38 +1351,38 @@ export default function Settings() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle className="pl-4">Privacidad y seguridad:</CardTitle>
+          <CardTitle className="pl-4">{t('settings.privacyAndSecurity')}:</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="pl-4">Bloqueo de Aplicación:</Label>
-              <p className="text-sm text-muted-foreground pl-4">Requiere PIN o biométrico para abrir la app</p>
+              <Label className="pl-4">{t('settings.appLock')}:</Label>
+              <p className="text-sm text-muted-foreground pl-4">{t('settings.requiresPinOrBiometric')}</p>
             </div>
             <Switch />
           </div>
 
           <Button variant="outline" className="w-full">
-            Exportar Mis Datos
+            {t('settings.exportMyData')}
           </Button>
         </CardContent>
       </Card>
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle className="pl-4">Acerca de:</CardTitle>
+          <CardTitle className="pl-4">{t('settings.about')}:</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Versión</span>
+            <span className="text-muted-foreground">{t('settings.version')}</span>
             <span className="font-medium">1.0.0</span>
           </div>
           <div className="flex flex-col gap-2">
             <Button variant="link" className="p-0 h-auto justify-start">
-              Política de Privacidad
+              {t('settings.privacyPolicy')}
             </Button>
             <Button variant="link" className="p-0 h-auto justify-start">
-              Términos de Servicio
+              {t('settings.termsOfService')}
             </Button>
           </div>
         </CardContent>
@@ -1391,34 +1391,32 @@ export default function Settings() {
       <Card className="border-destructive/50 bg-destructive/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive pl-4">
-            Zona de peligro:
+            {t('settings.dangerZone')}:
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
             {/* Reset goals */}
             <div className="space-y-2">
-              <Label className="text-orange-600 dark:text-orange-500 font-semibold pl-4">Reiniciar tus metas:</Label>
+              <Label className="text-orange-600 dark:text-orange-500 font-semibold pl-4">{t('settings.resetYourGoals')}:</Label>
               <p className="text-sm text-muted-foreground mb-4 pl-4">
-                Restaura las metas a su configuración por defecto y reinicia el contador de abstinencia. 
-                Todos tus demás datos (check-ins, diarios, contactos, etc.) se mantendrán intactos.
+                {t('settings.restoreGoalsToDefault')}
               </p>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="outline" className="w-full border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white">
-                    Reiniciar metas
+                    {t('settings.resetGoals')}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>¿Reiniciar tus metas?</AlertDialogTitle>
+                    <AlertDialogTitle>{t('settings.resetYourGoalsQuestion')}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Esto restaurará tus metas a la configuración por defecto y reiniciará el contador "Soy libre desde hace". 
-                      Todos tus demás datos (check-ins, diarios, contactos, etc.) se mantendrán guardados. Esta acción no se puede deshacer.
+                      {t('settings.thisWillRestoreGoals')}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogCancel>{t('settings.cancel')}</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={async () => {
                         try {
@@ -1432,8 +1430,8 @@ export default function Settings() {
                           if (error) throw error;
 
                           toast({
-                            title: "Metas reiniciadas",
-                            description: "Tus metas han sido restauradas a la configuración por defecto y tu contador ha sido reiniciado.",
+                            title: t('settings.goalsReset'),
+                            description: t('settings.goalsResetSuccessfully'),
                           });
 
                           // Dispatch event to update dashboard
@@ -1445,15 +1443,15 @@ export default function Settings() {
                           }, 1500);
                         } catch (error: any) {
                           toast({
-                            title: "Error",
-                            description: error.message || "No se pudieron reiniciar las metas.",
+                            title: t('common.error'),
+                            description: error.message || t('settings.couldNotResetGoals'),
                             variant: "destructive",
                           });
                         }
                       }}
                       className="bg-orange-600 text-white hover:bg-orange-700"
                     >
-                      Sí, reiniciar metas
+                      {t('settings.yesResetGoals')}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -1462,30 +1460,30 @@ export default function Settings() {
 
             {/* Delete account */}
             <div className="space-y-2">
-              <Label className="text-destructive font-semibold pl-4">Eliminar cuenta:</Label>
+              <Label className="text-destructive font-semibold pl-4">{t('settings.deleteAccount')}:</Label>
               <p className="text-sm text-muted-foreground mb-4 pl-4">
-                Esta acción es permanente y no se puede deshacer. Todos tus datos serán eliminados permanentemente.
+                {t('settings.thisActionIsPermanent')}
               </p>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="destructive" className="w-full">
-                    Eliminar mi cuenta
+                    {t('settings.deleteMyAccount')}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                    <AlertDialogTitle>{t('settings.areYouAbsolutelySure')}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Esta acción no se puede deshacer. Esto eliminará permanentemente tu cuenta y todos tus datos de nuestros servidores.
+                      {t('settings.thisActionCannotBeUndone')}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogCancel>{t('settings.cancel')}</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDeleteAccount}
                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                     >
-                      Sí, eliminar mi cuenta
+                      {t('settings.yesDeleteMyAccount')}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
