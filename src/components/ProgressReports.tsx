@@ -251,8 +251,8 @@ export default function ProgressReports() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">{t('progress.timePeriod')}</label>
+          <div className="flex items-center gap-3">
+            <label className="text-sm font-medium whitespace-nowrap">{t('progress.timePeriod')}</label>
             <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
               <SelectTrigger>
                 <SelectValue placeholder={t('progress.selectPeriod')} />
