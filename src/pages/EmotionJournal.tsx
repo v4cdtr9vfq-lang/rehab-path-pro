@@ -722,7 +722,7 @@ export default function EmotionJournal() {
           </div>
 
           {/* Secondary Emotions - Grouped by Primary Category */}
-          {selectedPrimary.length > 0 && (
+          {selectedPrimary.length > 0 && selectedCategories.some(cat => cat.secondaryEmotions.length > 0) && (
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-4">{t('emotionJournal.iHaveFelt')}</h2>
               <div className="flex flex-col gap-6">
@@ -766,7 +766,7 @@ export default function EmotionJournal() {
           )}
 
           {/* Tertiary Emotions */}
-          {selectedSecondary.length > 0 && (
+          {selectedSecondary.length > 0 && selectedSecondaryData.some(emotion => emotion.tertiaryEmotions.length > 0) && (
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-4">{t('emotionJournal.atDeeperLevel')}</h2>
               <div className="flex flex-col gap-6">
