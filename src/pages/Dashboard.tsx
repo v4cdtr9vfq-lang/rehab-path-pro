@@ -65,6 +65,8 @@ export default function Home() {
   const [hasUnsavedOrder, setHasUnsavedOrder] = useState(false);
   const [originalGoalsOrder, setOriginalGoalsOrder] = useState<any[]>([]);
   const [sleepQuality, setSleepQuality] = useState<number | null>(null);
+  const [bedtime, setBedtime] = useState<string>('21:00');
+  const [wakeUpTime, setWakeUpTime] = useState<string>('07:00');
   const allQuotes = [{
     text: "Siempre es lo simple lo que produce lo maravilloso.",
     author: "Amelia Barr"
@@ -361,6 +363,18 @@ export default function Home() {
       
       if (sleepData) {
         setSleepQuality(sleepData.quality_score);
+      }
+
+      // Fetch sleep schedule from profile
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('bedtime, wake_up_time')
+        .eq('user_id', user.id)
+        .single();
+      
+      if (profileData) {
+        if (profileData.bedtime) setBedtime(profileData.bedtime);
+        if (profileData.wake_up_time) setWakeUpTime(profileData.wake_up_time);
       }
 
       setLoading(false);
@@ -878,6 +892,49 @@ export default function Home() {
                 <p className="text-sm md:text-lg font-semibold text-green-500">{todayReminder}</p>
               </div>
             </div>}
+
+          {/* Sleep Schedule */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="p-4 rounded-xl bg-muted/50 border border-sidebar-border">
+              <div className="flex flex-col gap-2">
+                <p className="text-sm text-muted-foreground">{t('dashboard.bedtime')}</p>
+                <select 
+                  value={bedtime}
+                  onChange={(e) => handleBedtimeChange(e.target.value)}
+                  className="bg-background border border-sidebar-border rounded-lg px-3 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  {Array.from({ length: 24 }, (_, i) => {
+                    const hour = i.toString().padStart(2, '0');
+                    return (
+                      <option key={hour} value={`${hour}:00`}>
+                        {`${hour}:00`}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+            
+            <div className="p-4 rounded-xl bg-muted/50 border border-sidebar-border">
+              <div className="flex flex-col gap-2">
+                <p className="text-sm text-muted-foreground">{t('dashboard.wakeUpTime')}</p>
+                <select 
+                  value={wakeUpTime}
+                  onChange={(e) => handleWakeUpTimeChange(e.target.value)}
+                  className="bg-background border border-sidebar-border rounded-lg px-3 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  {Array.from({ length: 24 }, (_, i) => {
+                    const hour = i.toString().padStart(2, '0');
+                    return (
+                      <option key={hour} value={`${hour}:00`}>
+                        {`${hour}:00`}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
