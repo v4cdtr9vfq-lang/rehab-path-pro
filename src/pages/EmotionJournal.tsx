@@ -15,6 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { getEmotionCategories } from "@/utils/emotionCategories";
 
 interface TertiaryEmotion {
   name: string;
@@ -72,294 +73,9 @@ const COLORS = [
   '#20b2aa'   // Verde mar claro
 ];
 
-const emotionCategories: PrimaryCategory[] = [
-  {
-    id: "alegre",
-    name: "Alegría",
-    secondaryEmotions: [
-      {
-        id: "descansado",
-        name: "Descansado",
-        tertiaryEmotions: ["Renovado", "Restaurado", "Revitalizado", "Revivido"]
-      },
-      {
-        id: "entusiasmado",
-        name: "Entusiasmado",
-        tertiaryEmotions: ["Animado", "Apasionado", "Ardiente", "Asombrado", "Deslumbrado", "Enérgico", "Entusiasta", "Sorprendido", "Vibrante", "Vigorizado"]
-      },
-      {
-        id: "esperanzado",
-        name: "Esperanzado",
-        tertiaryEmotions: ["Alentado", "Optimista"]
-      },
-      {
-        id: "euforico",
-        name: "Eufórico",
-        tertiaryEmotions: ["Arrebatado", "Dichoso", "Embelesado", "Exaltado", "Extático", "Exuberante", "Hechizado", "Radiante"]
-      },
-      {
-        id: "inspirado",
-        name: "Inspirado",
-        tertiaryEmotions: []
-      },
-      {
-        id: "pleno",
-        name: "Pleno",
-        tertiaryEmotions: ["Gratitud", "Paz", "Satisfacción", "Trascendencia"]
-      }
-    ]
-  },
-  {
-    id: "asco",
-    name: "Asco",
-    secondaryEmotions: [
-      {
-        id: "disgusto",
-        name: "Disgusto",
-        tertiaryEmotions: ["Descontento", "Insatisfacción", "Molestia"]
-      },
-      {
-        id: "rechazo_asco",
-        name: "Rechazo",
-        tertiaryEmotions: ["Exclusión", "Negación", "Repudio"]
-      },
-      {
-        id: "repugnancia",
-        name: "Repugnancia",
-        tertiaryEmotions: ["Náusea", "Repelente", "Repulsión"]
-      }
-    ]
-  },
-  {
-    id: "confundido",
-    name: "Confusión",
-    secondaryEmotions: [
-      {
-        id: "desorientado",
-        name: "Desorientado",
-        tertiaryEmotions: ["Aturdido", "Perdido"]
-      }
-    ]
-  },
-  {
-    id: "vulnerable",
-    name: "Inseguridad",
-    secondaryEmotions: [
-      {
-        id: "avergonzado",
-        name: "Avergonzado",
-        tertiaryEmotions: ["Cohibido", "Culpable", "Mortificado", "Turbado"]
-      },
-      {
-        id: "impaciente",
-        name: "Impaciente",
-        tertiaryEmotions: ["Agobiado", "Desesperado", "Expectante", "Intolerante"]
-      },
-      {
-        id: "incomodo",
-        name: "Incómodo",
-        tertiaryEmotions: ["Intranquilo"]
-      },
-      {
-        id: "inquieto",
-        name: "Inquieto",
-        tertiaryEmotions: ["Agitación", "Agitado", "Alarmado", "Alterado", "Desconcertado", "Perturbado", "Sobresaltado", "Turbulento"]
-      },
-      {
-        id: "vulnerable",
-        name: "Vulnerable",
-        tertiaryEmotions: ["Frágil", "Indefenso", "Reservado", "Sensible", "Tembloroso"]
-      }
-    ]
-  },
-  {
-    id: "irritado",
-    name: "Irritación",
-    secondaryEmotions: [
-      {
-        id: "deseo",
-        name: "Deseo",
-        tertiaryEmotions: ["Anhelo", "Ansia", "Codicia", "Codicioso", "Hambriento", "Obsesión"]
-      },
-      {
-        id: "enojado",
-        name: "Enojado",
-        tertiaryEmotions: ["Enfurecido", "Furioso", "Indignado", "Iracundo", "Resentido", "Ultrajado"]
-      },
-      {
-        id: "frustracion",
-        name: "Frustrado",
-        tertiaryEmotions: ["Impotente"]
-      },
-      {
-        id: "molesto",
-        name: "Molesto",
-        tertiaryEmotions: ["Disgustado", "Exasperado"]
-      }
-    ]
-  },
-  {
-    id: "miedo",
-    name: "Miedo",
-    secondaryEmotions: [
-      {
-        id: "asustado",
-        name: "Asustado",
-        tertiaryEmotions: ["Aprensivo", "Atemorizado", "Aterrorizado", "Cauteloso", "Desconfiado", "En pánico", "Petrificado", "Preocupado", "Presentimiento", "Sospechoso", "Temor"]
-      },
-      {
-        id: "tenso",
-        name: "Tenso",
-        tertiaryEmotions: ["Abrumado", "Consternado", "Estresado", "Irritable", "Nervioso"]
-      }
-    ]
-  },
-  {
-    id: "conectado",
-    name: "Seguridad",
-    secondaryEmotions: [
-      {
-        id: "abierto",
-        name: "Abierto",
-        tertiaryEmotions: ["Accesible", "Disponible", "Receptivo", "Sincero", "Transparente"]
-      },
-      {
-        id: "afectuoso",
-        name: "Afectuoso",
-        tertiaryEmotions: ["Amigable", "Amoroso", "Cálido", "Compasivo", "Generoso", "Simpático", "Tierno"]
-      },
-      {
-        id: "afirmacion",
-        name: "Afirmación",
-        tertiaryEmotions: ["Certeza", "Convicción", "Firmeza", "Resolución"]
-      },
-      {
-        id: "agradecido",
-        name: "Agradecido",
-        tertiaryEmotions: ["Asombro", "Reconocimiento"]
-      },
-      {
-        id: "comprometido",
-        name: "Comprometido",
-        tertiaryEmotions: ["Absorto", "Alerta", "Curioso", "Estimulado", "Interesado", "Intrigado", "Involucrado"]
-      },
-      {
-        id: "seguro",
-        name: "Conectado",
-        tertiaryEmotions: ["Aceptación", "Confianza", "Feliz", "Intimidad", "Pertenencia", "Previsibilidad"]
-      },
-      {
-        id: "confiado",
-        name: "Confiado",
-        tertiaryEmotions: ["Empoderado", "Orgulloso", "Protegido"]
-      },
-      {
-        id: "despreocupado",
-        name: "Despreocupado",
-        tertiaryEmotions: ["Tranquilidad"]
-      },
-      {
-        id: "estabilidad",
-        name: "Estabilidad",
-        tertiaryEmotions: ["Arraigo", "Coherencia", "Equilibrio", "Resiliencia"]
-      },
-      {
-        id: "pacifico",
-        name: "Paz",
-        tertiaryEmotions: ["Aliviado", "Calmado", "Centrado", "Cómodo", "Contento", "Despejado", "Ecuánime", "Quieto", "Realizado", "Relajado", "Sereno"]
-      },
-      {
-        id: "valiente",
-        name: "Valiente",
-        tertiaryEmotions: ["Audaz", "Decidido", "Determinado", "Intrépido", "Osado"]
-      }
-    ]
-  },
-  {
-    id: "sorpresa",
-    name: "Sorpresa",
-    secondaryEmotions: [
-      {
-        id: "asombrado",
-        name: "Asombrado",
-        tertiaryEmotions: ["Boquiabierto", "Estupefacto", "Pasmado"]
-      },
-      {
-        id: "impactado",
-        name: "Impactado",
-        tertiaryEmotions: ["Conmocionado", "Impresionado", "Sacudido"]
-      },
-      {
-        id: "maravillado",
-        name: "Maravillado",
-        tertiaryEmotions: ["Encantado", "Fascinado"]
-      }
-    ]
-  },
-  {
-    id: "cansado",
-    name: "Tristeza",
-    secondaryEmotions: [
-      {
-        id: "abandono",
-        name: "Abandono",
-        tertiaryEmotions: ["Abandonado", "Dejado", "Desamparado", "Descuidado", "Desplazado", "Ignorado", "Olvidado", "Rechazado"]
-      },
-      {
-        id: "agotado",
-        name: "Agotado",
-        tertiaryEmotions: []
-      },
-      {
-        id: "cansado_sub",
-        name: "Cansado",
-        tertiaryEmotions: []
-      },
-      {
-        id: "desanimado",
-        name: "Desanimado",
-        tertiaryEmotions: ["Abatimiento", "Pereza"]
-      },
-      {
-        id: "desconectado",
-        name: "Desconectado",
-        tertiaryEmotions: ["Adormecido", "Alejado", "Alienado", "Desapegado", "Desinteresado", "Distante", "Distraído", "Frío", "Indiferente", "Retraído", "Vacío"]
-      },
-      {
-        id: "dolor",
-        name: "Dolor",
-        tertiaryEmotions: ["Afligido", "Agonía", "Angustiado", "Arrepentido", "Desconsolado", "Devastado", "Duelo", "Miserable", "Remordido"]
-      },
-      {
-        id: "fatigado",
-        name: "Fatigado",
-        tertiaryEmotions: ["Apático", "Exhausto", "Letárgico", "Quemado", "Somnoliento"]
-      },
-      {
-        id: "triste",
-        name: "Infeliz",
-        tertiaryEmotions: ["Deprimido", "Desalentado", "Descorazonado", "Desdichado", "Desolado", "Melancólico", "Sin esperanza", "Sombrío"]
-      },
-      {
-        id: "melancolia",
-        name: "Melancolía",
-        tertiaryEmotions: ["Nostalgia", "Resignación"]
-      },
-      {
-        id: "soledad",
-        name: "Soledad",
-        tertiaryEmotions: []
-      },
-      {
-        id: "vacio",
-        name: "Vacío",
-        tertiaryEmotions: ["Reprimido"]
-      }
-    ]
-  }
-];
 export default function EmotionJournal() {
   const { t } = useTranslation();
+  const emotionCategories = getEmotionCategories(t);
   const [selectedPrimary, setSelectedPrimary] = useState<string[]>([]);
   const [selectedSecondary, setSelectedSecondary] = useState<string[]>([]);
   const [selectedTertiary, setSelectedTertiary] = useState<string[]>([]);
@@ -1256,7 +972,7 @@ export default function EmotionJournal() {
                 onClick={handleCancelEdit}
                 className="rounded-full px-6 h-12 text-xl lg:text-sm font-medium"
               >
-                Cancelar
+                {t('common.cancel')}
               </Button>
             )}
             <Button
@@ -1266,7 +982,7 @@ export default function EmotionJournal() {
               disabled={isSaving}
               className="rounded-full px-6 h-12 text-xl lg:text-sm font-medium"
             >
-              {isSaving ? (editingEntry ? "Actualizando..." : "Guardando...") : (editingEntry ? "Actualizar" : "Guardar")}
+              {isSaving ? (editingEntry ? `${t('common.edit')}...` : `${t('common.save')}...`) : (editingEntry ? t('common.edit') : t('common.save'))}
             </Button>
           </div>
         )}

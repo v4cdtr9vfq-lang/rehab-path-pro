@@ -4,14 +4,22 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 import es from './locales/es.json';
 import en from './locales/en.json';
+import emotionsEs from './locales/emotions-es.json';
+import emotionsEn from './locales/emotions-en.json';
 
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
-      es: { translation: es },
-      en: { translation: en },
+      es: { 
+        translation: es,
+        emotions: emotionsEs.emotions
+      },
+      en: { 
+        translation: en,
+        emotions: emotionsEn.emotions
+      },
     },
     fallbackLng: 'es',
     interpolation: {
