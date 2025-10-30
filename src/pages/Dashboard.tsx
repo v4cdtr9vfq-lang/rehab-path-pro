@@ -271,6 +271,9 @@ export default function Home() {
       } = await supabase.auth.getUser();
       if (!user) return;
 
+      // Recalculate current language to ensure we use the latest value
+      const lang = i18n.language.startsWith('en') ? 'en' : 'es';
+
       // Fetch profile
       const {
         data: profile
@@ -330,7 +333,7 @@ export default function Home() {
       const {
         data: goals,
         error: goalsError
-      } = await supabase.from('goals').select('*').eq('user_id', user.id).eq('language', currentLanguage).order('order_index', {
+      } = await supabase.from('goals').select('*').eq('user_id', user.id).eq('language', lang).order('order_index', {
         ascending: true
       });
       if (goals && goals.length > 0) {
@@ -455,9 +458,12 @@ export default function Home() {
           } = await supabase.auth.getUser();
           if (!user) return;
 
+          // Recalculate current language to ensure we use the latest value
+          const lang = i18n.language.startsWith('en') ? 'en' : 'es';
+
           const {
             data: goals
-          } = await supabase.from('goals').select('*').eq('user_id', user.id).eq('language', currentLanguage).order('order_index', {
+          } = await supabase.from('goals').select('*').eq('user_id', user.id).eq('language', lang).order('order_index', {
             ascending: true
           });
           

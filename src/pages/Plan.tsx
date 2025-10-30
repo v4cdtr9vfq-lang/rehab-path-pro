@@ -429,11 +429,14 @@ export default function Plan() {
       } = await supabase.auth.getUser();
       if (!user) return;
       
+      // Recalculate current language to ensure we use the latest value
+      const lang = i18n.language.startsWith('en') ? 'en' : 'es';
+      
       // First fetch to check for missing order_index, filtered by language
       const {
         data: goals,
         error
-      } = await supabase.from('goals').select('*').eq('user_id', user.id).eq('language', currentLanguage);
+      } = await supabase.from('goals').select('*').eq('user_id', user.id).eq('language', lang);
       
       if (error) throw error;
       if (goals) {
@@ -461,7 +464,7 @@ export default function Plan() {
       }
 
       // Always refetch with proper ordering, filtered by language
-        const { data: orderedGoals } = await supabase.from('goals').select('*').eq('user_id', user.id).eq('language', currentLanguage).order('order_index', { ascending: true, nullsFirst: false });
+        const { data: orderedGoals } = await supabase.from('goals').select('*').eq('user_id', user.id).eq('language', lang).order('order_index', { ascending: true, nullsFirst: false });
         
         if (orderedGoals) {
           goals.length = 0;
