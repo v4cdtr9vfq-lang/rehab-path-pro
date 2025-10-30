@@ -74,12 +74,12 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
   const currentAddiction = allAddictions[selectedIndex] || allAddictions[0];
   const count = currentAddiction ? calculateCount(currentAddiction) : { years: 0, months: 0, days: 0, totalDays: 0 };
 
-  // Notify parent ONLY on mount and when selection changes
+  // Notify parent when selection changes or addictions load
   useEffect(() => {
     if (!currentAddiction || !onAddictionChange) return;
     const { totalDays } = calculateCount(currentAddiction);
     onAddictionChange(currentAddiction.id, totalDays);
-  }, [selectedIndex, currentAddiction?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selectedIndex, allAddictions.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Reset selectedIndex if out of bounds
   useEffect(() => {
