@@ -951,7 +951,7 @@ export default function Settings() {
                               <Button 
                                 size="sm" 
                                 variant="ghost"
-                                className="w-full text-destructive hover:text-destructive hover:bg-destructive/10"
+                                className="w-full hover:text-destructive hover:bg-destructive/10"
                               >
                                 Borrar
                               </Button>
