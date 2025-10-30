@@ -8,16 +8,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { toast } from "sonner";
 import { Heart } from "lucide-react";
 import { z } from "zod";
-
-const emailSchema = z.string().email("Email inválido");
-const passwordSchema = z.string()
-  .min(8, "La contraseña debe tener al menos 8 caracteres")
-  .regex(/[A-Z]/, "Debe contener al menos una mayúscula")
-  .regex(/[a-z]/, "Debe contener al menos una minúscula")
-  .regex(/[0-9]/, "Debe contener al menos un número")
-  .regex(/[^A-Za-z0-9]/, "Debe contener al menos un carácter especial (!@#$%^&*)");
+import { useTranslation } from "react-i18next";
 
 export default function Auth() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isLogin, setIsLogin] = useState(searchParams.get("mode") !== "signup");
@@ -27,6 +21,15 @@ export default function Auth() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Create dynamic schemas using translations
+  const getEmailSchema = () => z.string().email(t("auth.invalidEmail"));
+  const getPasswordSchema = () => z.string()
+    .min(8, t("auth.passwordMinLength"))
+    .regex(/[A-Z]/, t("auth.passwordUppercase"))
+    .regex(/[a-z]/, t("auth.passwordLowercase"))
+    .regex(/[0-9]/, t("auth.passwordNumber"))
+    .regex(/[^A-Za-z0-9]/, t("auth.passwordSpecial"));
 
   useEffect(() => {
     // Check if user is already logged in
@@ -39,18 +42,15 @@ export default function Auth() {
 
   const validateInputs = () => {
     try {
-      emailSchema.parse(email);
-      // Solo validar requisitos estrictos en registro, no en login
+      getEmailSchema().parse(email);
       if (!isLogin) {
-        passwordSchema.parse(password);
-        // Validar que las contraseñas coincidan
+        getPasswordSchema().parse(password);
         if (password !== confirmPassword) {
-          toast.error("Las contraseñas no coinciden");
+          toast.error(t("auth.passwordsNoMatch"));
           return false;
         }
       } else {
-        // En login, solo verificar que no esté vacía
-        z.string().min(1, "La contraseña es requerida").parse(password);
+        z.string().min(1, t("auth.passwordRequired")).parse(password);
       }
       return true;
     } catch (error) {
@@ -65,7 +65,7 @@ export default function Auth() {
     e.preventDefault();
     
     try {
-      emailSchema.parse(email);
+      getEmailSchema().parse(email);
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
@@ -85,11 +85,11 @@ export default function Auth() {
         return;
       }
 
-      toast.success("¡Revisa tu correo! Te hemos enviado un enlace para restablecer tu contraseña");
+      toast.success(t("auth.checkEmail"));
       setIsForgotPassword(false);
       setIsLogin(true);
     } catch (error) {
-      toast.error("Ocurrió un error inesperado");
+      toast.error(t("auth.unexpectedError"));
     } finally {
       setLoading(false);
     }
@@ -111,14 +111,14 @@ export default function Auth() {
 
         if (error) {
           if (error.message.includes("Invalid login credentials")) {
-            toast.error("Credenciales incorrectas");
+            toast.error(t("auth.invalidCredentials"));
           } else {
             toast.error(error.message);
           }
           return;
         }
 
-        toast.success("¡Bienvenido de vuelta!");
+        toast.success(t("auth.welcomeBackToast"));
         navigate("/dashboard");
       } else {
         const { error } = await supabase.auth.signUp({
@@ -134,19 +134,19 @@ export default function Auth() {
 
         if (error) {
           if (error.message.includes("already registered")) {
-            toast.error("Este email ya está registrado");
+            toast.error(t("auth.emailAlreadyRegistered"));
           } else {
             toast.error(error.message);
           }
           return;
         }
 
-        toast.success("¡Cuenta creada! Redirigiendo...");
+        toast.success(t("auth.accountCreated"));
         // Auto-login after signup since email is auto-confirmed
         navigate("/dashboard");
       }
     } catch (error) {
-      toast.error("Ocurrió un error inesperado");
+      toast.error(t("auth.unexpectedError"));
     } finally {
       setLoading(false);
     }
@@ -175,19 +175,19 @@ export default function Auth() {
         
         {isForgotPassword && (
           <div className="text-center space-y-4 mb-8">
-            <h1 className="text-4xl font-bold text-foreground">Recuperar contraseña</h1>
+            <h1 className="text-4xl font-bold text-foreground">{t("auth.recoverPasswordTitle")}</h1>
             <p className="text-muted-foreground text-lg">
-              Te enviaremos un enlace para restablecer tu contraseña
+              {t("auth.recoverPasswordDescription")}
             </p>
           </div>
         )}
 
         <Card className="border-border/50">
           <CardHeader>
-            <CardTitle className="pl-4">{isForgotPassword ? "Recuperar contraseña" : isLogin ? "Iniciar sesión" : "Regístrate gratis:"}</CardTitle>
+            <CardTitle className="pl-4">{isForgotPassword ? t("auth.recoverPasswordTitle") : isLogin ? t("auth.signInTitle") : t("auth.signUpTitle")}</CardTitle>
             {!isLogin && !isForgotPassword && (
               <CardDescription className="pl-4">
-                Completa el formulario para crear tu cuenta:
+                {t("auth.signUpDescription")}
               </CardDescription>
             )}
           </CardHeader>
@@ -195,7 +195,7 @@ export default function Auth() {
             {isForgotPassword ? (
               <form onSubmit={handlePasswordReset} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="pl-4">Email</Label>
+                  <Label htmlFor="email" className="pl-4">{t("auth.email")}</Label>
                   <Input
                     id="email"
                     type="email"
@@ -214,7 +214,7 @@ export default function Auth() {
                   disabled={loading}
                   size="lg"
                 >
-                  {loading ? "Enviando..." : "Enviar enlace de recuperación"}
+                  {loading ? t("auth.sending") : t("auth.sendRecoveryLink")}
                 </Button>
 
                 <Button
@@ -227,7 +227,7 @@ export default function Auth() {
                   }}
                   disabled={loading}
                 >
-                  Volver a iniciar sesión
+                  {t("auth.backToLogin")}
                 </Button>
               </form>
             ) : (
@@ -235,11 +235,11 @@ export default function Auth() {
                 <form onSubmit={handleAuth} className="space-y-4">
                   {!isLogin && (
                     <div className="space-y-2">
-                      <Label htmlFor="fullName" className="pl-4">Nombre de pila:</Label>
+                      <Label htmlFor="fullName" className="pl-4">{t("auth.fullName")}</Label>
                       <Input
                         id="fullName"
                         type="text"
-                        placeholder="Solo tu nombre"
+                        placeholder={t("auth.fullNamePlaceholder")}
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         required={!isLogin}
@@ -250,7 +250,7 @@ export default function Auth() {
                   )}
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="pl-4">Email:</Label>
+                    <Label htmlFor="email" className="pl-4">{t("auth.emailLabel")}</Label>
                     <Input
                       id="email"
                       type="email"
@@ -265,7 +265,7 @@ export default function Auth() {
 
                   <div className="space-y-2">
                     <div className="flex items-center justify-between pl-4">
-                      <Label htmlFor="password">Contraseña:</Label>
+                      <Label htmlFor="password">{t("auth.passwordLabel")}</Label>
                       {isLogin && (
                         <button
                           type="button"
@@ -273,7 +273,7 @@ export default function Auth() {
                           className="text-xs text-primary hover:underline pr-4"
                           disabled={loading}
                         >
-                          ¿Olvidaste tu contraseña?
+                          {t("auth.forgotPassword")}
                         </button>
                       )}
                     </div>
@@ -291,11 +291,11 @@ export default function Auth() {
 
                   {!isLogin && (
                     <div className="space-y-2 pb-[25px]">
-                      <Label htmlFor="confirmPassword" className="pl-4">Confirmar contraseña:</Label>
+                      <Label htmlFor="confirmPassword" className="pl-4">{t("auth.confirmPassword")}</Label>
                       <Input
                         id="confirmPassword"
                         type="password"
-                        placeholder="••••••••"
+                        placeholder={t("auth.confirmPasswordPlaceholder")}
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required={!isLogin}
@@ -303,7 +303,7 @@ export default function Auth() {
                         className="rounded-xl"
                       />
                       <p className="text-xs text-muted-foreground pl-4">
-                        Mínimo 8 caracteres con mayúsculas, minúsculas, números y símbolos
+                        {t("auth.passwordRequirements")}
                       </p>
                     </div>
                   )}
@@ -316,7 +316,7 @@ export default function Auth() {
                     disabled={loading}
                     size="lg"
                   >
-                    {loading ? "Procesando..." : isLogin ? "Iniciar sesión" : "Crear cuenta"}
+                    {loading ? t("auth.processing") : isLogin ? t("auth.signInTitle") : t("auth.createAccount")}
                   </Button>
                 </form>
 
@@ -327,7 +327,7 @@ export default function Auth() {
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
                       <span className="bg-card px-2 text-muted-foreground">
-                        {isLogin ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}
+                        {isLogin ? t("auth.dontHaveAccount") : t("auth.alreadyHaveAccount")}
                       </span>
                     </div>
                   </div>
@@ -339,7 +339,7 @@ export default function Auth() {
                     onClick={() => setIsLogin(!isLogin)}
                     disabled={loading}
                   >
-                    {isLogin ? "Crear cuenta nueva" : "Iniciar sesión"}
+                    {isLogin ? t("auth.createNewAccount") : t("auth.signInTitle")}
                   </Button>
                 </div>
               </>
@@ -348,7 +348,7 @@ export default function Auth() {
         </Card>
 
         <p className="text-center text-sm text-muted-foreground mt-6">
-          Al continuar, aceptas nuestros términos de servicio y política de privacidad
+          {t("auth.termsText")}
         </p>
       </div>
     </div>
