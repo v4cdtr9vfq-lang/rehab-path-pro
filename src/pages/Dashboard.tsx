@@ -403,17 +403,16 @@ export default function Home() {
         setSleepQuality(sleepData.quality_score);
       }
 
-      // Fetch sleep schedule from profile - use real times, fallback to preferred times
+      // Fetch sleep schedule from profile - always use preferred times
       const { data: profileData } = await supabase
         .from('profiles')
-        .select('bedtime, wake_up_time, preferred_bedtime, preferred_wake_up_time')
+        .select('preferred_bedtime, preferred_wake_up_time')
         .eq('user_id', user.id)
         .single();
       
       if (profileData) {
-        // Use real times if set, otherwise use preferred times as default
-        setBedtime(profileData.bedtime || profileData.preferred_bedtime || '21:00');
-        setWakeUpTime(profileData.wake_up_time || profileData.preferred_wake_up_time || '07:00');
+        setBedtime(profileData.preferred_bedtime || '21:00');
+        setWakeUpTime(profileData.preferred_wake_up_time || '07:00');
       }
 
       setLoading(false);
@@ -789,7 +788,7 @@ export default function Home() {
     }
   };
 
-  // Handle bedtime change
+  // Handle bedtime change - updates preferred time
   const handleBedtimeChange = async (time: string) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -797,7 +796,7 @@ export default function Home() {
 
       const { error } = await supabase
         .from('profiles')
-        .update({ bedtime: time })
+        .update({ preferred_bedtime: time })
         .eq('user_id', user.id);
 
       if (error) throw error;
@@ -817,7 +816,7 @@ export default function Home() {
     }
   };
 
-  // Handle wake up time change
+  // Handle wake up time change - updates preferred time
   const handleWakeUpTimeChange = async (time: string) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -825,7 +824,7 @@ export default function Home() {
 
       const { error } = await supabase
         .from('profiles')
-        .update({ wake_up_time: time })
+        .update({ preferred_wake_up_time: time })
         .eq('user_id', user.id);
 
       if (error) throw error;
