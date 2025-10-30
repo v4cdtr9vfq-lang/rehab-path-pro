@@ -173,16 +173,11 @@ export default function Auth() {
           </div>
         )}
         
-        {(!isLogin || isForgotPassword) && (
+        {isForgotPassword && (
           <div className="text-center space-y-4 mb-8">
-            {!isLogin && !isForgotPassword && (
-              <h1 className="text-4xl font-bold text-foreground">Comienza tu recuperación</h1>
-            )}
-            {isForgotPassword && (
-              <h1 className="text-4xl font-bold text-foreground">Recuperar contraseña</h1>
-            )}
+            <h1 className="text-4xl font-bold text-foreground">Recuperar contraseña</h1>
             <p className="text-muted-foreground text-lg">
-              {isForgotPassword ? "Te enviaremos un enlace para restablecer tu contraseña" : "Crea tu cuenta gratuita"}
+              Te enviaremos un enlace para restablecer tu contraseña
             </p>
           </div>
         )}
