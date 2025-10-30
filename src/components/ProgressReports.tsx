@@ -252,29 +252,31 @@ export default function ProgressReports() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center gap-3">
-            <label className="text-sm font-medium whitespace-nowrap pl-[10px]">{t('progress.timePeriod')}</label>
-            <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-              <SelectTrigger>
-                <SelectValue placeholder={t('progress.selectPeriod')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="last_week">{t('progress.lastWeek')}</SelectItem>
-                <SelectItem value="last_month">{t('progress.lastMonth')}</SelectItem>
-                <SelectItem value="last_3_months">{t('progress.last3Months')}</SelectItem>
-                <SelectItem value="last_6_months">{t('progress.last6Months')}</SelectItem>
-                <SelectItem value="last_year">{t('progress.lastYear')}</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+            <div className="flex items-center gap-3 flex-1">
+              <label className="text-sm font-medium whitespace-nowrap pl-[10px]">{t('progress.timePeriod')}</label>
+              <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+                <SelectTrigger className="flex-1">
+                  <SelectValue placeholder={t('progress.selectPeriod')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="last_week">{t('progress.lastWeek')}</SelectItem>
+                  <SelectItem value="last_month">{t('progress.lastMonth')}</SelectItem>
+                  <SelectItem value="last_3_months">{t('progress.last3Months')}</SelectItem>
+                  <SelectItem value="last_6_months">{t('progress.last6Months')}</SelectItem>
+                  <SelectItem value="last_year">{t('progress.lastYear')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-          <Button
-            onClick={generateReport}
-            disabled={isGenerating}
-            className="w-full"
-          >
-            {isGenerating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isGenerating ? t('progress.generatingReport') : t('progress.generateReport')}
-          </Button>
+            <Button
+              onClick={generateReport}
+              disabled={isGenerating}
+              className="whitespace-nowrap"
+            >
+              {isGenerating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isGenerating ? t('progress.generatingReport') : t('progress.generateReport')}
+            </Button>
+          </div>
 
           <div className="space-y-2">
             <h4 className="text-sm font-medium pl-[10px]">{t('progress.reportHistory')}</h4>
