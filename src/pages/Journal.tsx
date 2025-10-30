@@ -556,7 +556,7 @@ export default function Journal() {
           <CardHeader>
             <CardTitle>{editingEntryId ? t('journal.editEntry') : t('journal.newJournalEntry')}</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 pl-[15px]">
             <Input 
               placeholder={t('journal.entryTitlePlaceholder')} 
               value={entryTitle}
