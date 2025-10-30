@@ -944,13 +944,13 @@ export default function Home() {
       {/* Daily Progress Panel */}
       <Card className="border-sidebar-border md:-mt-[3px]" data-tour="daily-progress">
         <CardHeader>
-          <CardTitle className="text-xl md:text-2xl font-bold">{t('dashboard.dailyProgress')}</CardTitle>
+          <CardTitle className="text-xl md:text-2xl font-bold pl-[10px]">{t('dashboard.dailyProgress')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Goals Progress Bar */}
           <div className="space-y-2">
             <div className="flex justify-between items-center mb-2">
-              <p className="text-sm font-medium text-muted-foreground">{t('dashboard.goalsCompleted')}</p>
+              <p className="text-sm font-medium text-muted-foreground pl-[10px]">{t('dashboard.goalsCompleted')}</p>
               <p className="text-sm font-bold text-green-500">{goalsCompleted} de {totalGoals}</p>
             </div>
             <Progress key="dashboard-progress" value={goalsProgress} className="h-3 [&>div]:bg-green-500" />
