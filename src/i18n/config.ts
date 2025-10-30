@@ -7,15 +7,6 @@ import en from './locales/en.json';
 import emotionsEs from './locales/emotions-es.json';
 import emotionsEn from './locales/emotions-en.json';
 
-// Clear i18next cache to force reload
-if (typeof window !== 'undefined') {
-  Object.keys(localStorage).forEach(key => {
-    if (key.startsWith('i18next')) {
-      localStorage.removeItem(key);
-    }
-  });
-}
-
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
