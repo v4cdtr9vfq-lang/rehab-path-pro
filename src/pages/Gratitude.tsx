@@ -385,7 +385,7 @@ export default function Gratitude() {
               filteredPastEntries.map((entry) => (
                 <Card key={entry.id} className="border-border">
                   <CardContent className="pt-6">
-                    <div className="flex items-center gap-2 mb-4">
+                    <div className="flex items-center gap-2 mb-4 pl-[15px]">
                       <CalendarIcon className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm font-medium text-muted-foreground">
                         {format(entry.date, "EEEE, PPP", { locale: dateLocale })}
