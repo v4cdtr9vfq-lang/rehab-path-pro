@@ -68,6 +68,12 @@ export default function Chat() {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
   const isMobile = useIsMobile();
+  
+  // Debug translations
+  console.log('Current language:', currentLanguage);
+  console.log('Translation test for addictionTypes.alcohol:', t('addictionTypes.alcohol'));
+  console.log('i18n ready:', i18n.isInitialized);
+  
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [userName, setUserName] = useState("");
