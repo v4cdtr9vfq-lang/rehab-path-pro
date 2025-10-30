@@ -1045,7 +1045,7 @@ export default function Home() {
       {/* Active Goals Summary */}
       <Card className="border-sidebar-border md:-mt-[3px]" data-tour="goals-section">
         <CardHeader className="flex flex-row items-center justify-between gap-2 pb-[25px]">
-          <CardTitle className="text-xl md:text-2xl font-bold">{t('dashboard.todayGoals')}</CardTitle>
+          <CardTitle className="text-xl md:text-2xl font-bold pl-[10px]">{t('dashboard.todayGoals')}</CardTitle>
           <div className="flex gap-2">
             {hasUnsavedOrder && (
               <>
