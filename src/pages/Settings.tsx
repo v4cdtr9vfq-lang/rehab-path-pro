@@ -124,8 +124,8 @@ export default function Settings() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "true") {
       toast({
-        title: "Suscripción activada",
-        description: "Tu suscripción ha sido activada exitosamente. Disfruta de 40 días gratis.",
+        title: t('settings.subscriptionActivated'),
+        description: t('settings.subscriptionActivatedDescription'),
       });
       checkSubscription();
       window.history.replaceState({}, "", "/settings");
@@ -180,8 +180,8 @@ export default function Settings() {
   const handleUpdateAddictionDate = async (addictionId: string, newDate: string) => {
     if (!newDate) {
       toast({
-        title: "Error",
-        description: "Por favor selecciona una fecha válida.",
+        title: t('common.error'),
+        description: t('settings.selectValidDate'),
         variant: "destructive",
       });
       return;
@@ -198,8 +198,8 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: "Fecha actualizada",
-        description: "La fecha de la adicción ha sido actualizada.",
+        title: t('settings.dateUpdated'),
+        description: t('settings.dateUpdatedDescription'),
       });
 
       loadAddictions();
@@ -210,8 +210,8 @@ export default function Settings() {
       });
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "No se pudo actualizar la fecha.",
+        title: t('common.error'),
+        description: error.message || t('settings.couldNotUpdateDate'),
         variant: "destructive",
       });
     }
@@ -220,8 +220,8 @@ export default function Settings() {
   const handleUpdateAddiction = async (addictionId: string, newDate: string, newType?: string) => {
     if (!newDate) {
       toast({
-        title: "Error",
-        description: "Por favor selecciona una fecha válida.",
+        title: t('common.error'),
+        description: t('settings.selectValidDate'),
         variant: "destructive",
       });
       return;
@@ -243,8 +243,8 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: "Adicción actualizada",
-        description: "Los datos de la adicción han sido actualizados.",
+        title: t('settings.addictionUpdated'),
+        description: t('settings.addictionUpdatedDescription'),
       });
 
       loadAddictions();
@@ -260,8 +260,8 @@ export default function Settings() {
       });
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "No se pudo actualizar la adicción.",
+        title: t('common.error'),
+        description: error.message || t('settings.addictionUpdatedDescription'),
         variant: "destructive",
       });
     }
@@ -284,16 +284,16 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: "Adicción añadida",
-        description: "La adicción ha sido registrada correctamente.",
+        title: t('settings.addictionAdded'),
+        description: t('settings.addictionAddedDescription'),
       });
 
       loadAddictions();
       setShowAddDialog(false);
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "No se pudo añadir la adicción.",
+        title: t('common.error'),
+        description: error.message || t('settings.addictionAddedDescription'),
         variant: "destructive",
       });
     }
@@ -309,15 +309,15 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: "Adicción eliminada",
-        description: "La adicción ha sido eliminada correctamente.",
+        title: t('settings.addictionDeleted'),
+        description: t('settings.addictionDeletedDescription'),
       });
 
       loadAddictions();
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "No se pudo eliminar la adicción.",
+        title: t('common.error'),
+        description: error.message || t('settings.addictionDeletedDescription'),
         variant: "destructive",
       });
     }
@@ -350,8 +350,8 @@ export default function Settings() {
   const handleUpdateRehabilitationType = async () => {
     if (!rehabilitationType) {
       toast({
-        title: "Error",
-        description: "Por favor selecciona una opción.",
+        title: t('common.error'),
+        description: t('settings.selectAnOption'),
         variant: "destructive",
       });
       return;
@@ -372,13 +372,13 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: "Tipo de rehabilitación actualizado",
-        description: "Tu preferencia ha sido actualizada exitosamente.",
+        title: t('settings.rehabilitationTypeUpdated'),
+        description: t('settings.rehabilitationTypeUpdatedDescription'),
       });
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "No se pudo actualizar el tipo de rehabilitación.",
+        title: t('common.error'),
+        description: error.message || t('settings.couldNotUpdateRehabType'),
         variant: "destructive",
       });
     } finally {
@@ -389,8 +389,8 @@ export default function Settings() {
   const handleUpdateName = async () => {
     if (!fullName.trim()) {
       toast({
-        title: "Error",
-        description: "Por favor ingresa un nombre válido.",
+        title: t('common.error'),
+        description: t('settings.enterValidName'),
         variant: "destructive",
       });
       return;
@@ -399,7 +399,7 @@ export default function Settings() {
     setIsUpdatingName(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Usuario no autenticado");
+      if (!user) throw new Error(t('settings.userNotAuthenticated'));
 
       const { error } = await supabase
         .from('profiles')
@@ -409,13 +409,13 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: "Nombre actualizado",
-        description: "Tu nombre ha sido actualizado exitosamente.",
+        title: t('settings.nameUpdated'),
+        description: t('settings.nameUpdatedDescription'),
       });
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "No se pudo actualizar el nombre.",
+        title: t('common.error'),
+        description: error.message || t('settings.couldNotUpdateName'),
         variant: "destructive",
       });
     } finally {
@@ -441,8 +441,8 @@ export default function Settings() {
   const handleUpdateAbstinenceDate = async () => {
     if (!abstinenceStartDate) {
       toast({
-        title: "Error",
-        description: "Por favor selecciona una fecha válida.",
+        title: t('common.error'),
+        description: t('settings.selectValidDate'),
         variant: "destructive",
       });
       return;
@@ -451,7 +451,7 @@ export default function Settings() {
     setIsUpdatingDate(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Usuario no autenticado");
+      if (!user) throw new Error(t('settings.userNotAuthenticated'));
 
       // Convert local date to ISO timestamp
       const dateObj = new Date(abstinenceStartDate + 'T00:00:00');
@@ -464,19 +464,19 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: "Fecha actualizada",
-        description: "Tu fecha de inicio de abstinencia ha sido actualizada exitosamente.",
+        title: t('settings.abstinenceDateUpdated'),
+        description: t('settings.abstinenceDateUpdatedDescription'),
       });
 
       // Notify Dashboard to update
       window.dispatchEvent(new CustomEvent('abstinenceDateUpdated'));
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "No se pudo actualizar la fecha.",
+        title: t('common.error'),
+        description: error.message || t('settings.couldNotUpdateDate'),
         variant: "destructive",
       });
-    } finally {
+    } finally{
       setIsUpdatingDate(false);
     }
   };
@@ -484,8 +484,8 @@ export default function Settings() {
   const handleUpdateEmail = async () => {
     if (!newEmail.trim()) {
       toast({
-        title: "Error",
-        description: "Por favor ingresa un email válido.",
+        title: t('common.error'),
+        description: t('settings.enterValidEmail'),
         variant: "destructive",
       });
       return;
@@ -493,8 +493,8 @@ export default function Settings() {
 
     if (newEmail !== confirmEmail) {
       toast({
-        title: "Error",
-        description: "Los emails no coinciden.",
+        title: t('common.error'),
+        description: t('settings.emailsDoNotMatch'),
         variant: "destructive",
       });
       return;
@@ -507,14 +507,14 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: "Email actualizado",
-        description: "Se ha enviado un correo de confirmación a tu nueva dirección.",
+        title: t('settings.emailUpdated'),
+        description: t('settings.emailUpdatedDescription'),
       });
       setNewEmail("");
       setConfirmEmail("");
     } catch (error: any) {
       toast({
-        title: "Error",
+        title: t('common.error'),
         description: error.message + ".",
         variant: "destructive",
       });
@@ -526,8 +526,8 @@ export default function Settings() {
   const handleUpdatePassword = async () => {
     if (!currentPassword) {
       toast({
-        title: "Error",
-        description: "Por favor ingresa tu contraseña actual.",
+        title: t('common.error'),
+        description: t('settings.enterCurrentPassword'),
         variant: "destructive",
       });
       return;
@@ -535,8 +535,8 @@ export default function Settings() {
 
     if (!newPassword || newPassword.length < 6) {
       toast({
-        title: "Error",
-        description: "La nueva contraseña debe tener al menos 6 caracteres.",
+        title: t('common.error'),
+        description: t('settings.passwordMinLength'),
         variant: "destructive",
       });
       return;
@@ -544,8 +544,8 @@ export default function Settings() {
 
     if (newPassword !== confirmPassword) {
       toast({
-        title: "Error",
-        description: "Las contraseñas no coinciden.",
+        title: t('common.error'),
+        description: t('settings.passwordsDoNotMatch'),
         variant: "destructive",
       });
       return;
@@ -555,7 +555,7 @@ export default function Settings() {
     try {
       // First, verify current password by attempting to sign in
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user?.email) throw new Error("No se pudo obtener el email del usuario");
+      if (!user?.email) throw new Error(t('settings.couldNotGetEmail'));
 
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: user.email,
@@ -564,8 +564,8 @@ export default function Settings() {
 
       if (signInError) {
         toast({
-          title: "Error",
-          description: "La contraseña actual es incorrecta.",
+          title: t('common.error'),
+          description: t('settings.currentPasswordIncorrect'),
           variant: "destructive",
         });
         return;
@@ -577,15 +577,15 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: "Contraseña actualizada",
-        description: "Tu contraseña ha sido actualizada exitosamente.",
+        title: t('settings.passwordUpdated'),
+        description: t('settings.passwordUpdatedDescription'),
       });
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error: any) {
       toast({
-        title: "Error",
+        title: t('common.error'),
         description: error.message + ".",
         variant: "destructive",
       });
@@ -603,8 +603,8 @@ export default function Settings() {
       if (error) throw error;
 
       toast({
-        title: "Cuenta eliminada",
-        description: "Tu cuenta ha sido eliminada permanentemente",
+        title: t('settings.accountDeleted'),
+        description: t('settings.accountDeletedPermanently'),
       });
       
       // Sign out and redirect to landing page
@@ -612,8 +612,8 @@ export default function Settings() {
       navigate("/");
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "No se pudo eliminar la cuenta",
+        title: t('common.error'),
+        description: error.message || t('settings.couldNotDeleteAccount'),
         variant: "destructive",
       });
     }
@@ -636,8 +636,8 @@ export default function Settings() {
     setIsReminderDialogOpen(false);
     
     toast({
-      title: "Recordatorio añadido",
-      description: "Tu recordatorio ha sido configurado exitosamente.",
+      title: t('settings.reminderAdded'),
+      description: t('settings.reminderConfigured'),
     });
   };
 
@@ -650,8 +650,8 @@ export default function Settings() {
   const deleteReminder = (id: string) => {
     setReminders(prev => prev.filter(reminder => reminder.id !== id));
     toast({
-      title: "Recordatorio eliminado",
-      description: "El recordatorio ha sido eliminado",
+      title: t('settings.reminderDeleted'),
+      description: t('settings.reminderDeletedDescription'),
     });
   };
 
@@ -661,18 +661,18 @@ export default function Settings() {
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 pl-4">
-            Cuenta:
+            {t('settings.account')}:
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="full-name" className="pl-4">Nombre pila:</Label>
+              <Label htmlFor="full-name" className="pl-4">{t('settings.firstName')}:</Label>
               <div className="flex gap-2">
                 <Input
                   id="full-name"
                   type="text"
-                  placeholder="Solo tu nombre"
+                  placeholder={t('settings.firstNamePlaceholder')}
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                 />
@@ -680,30 +680,30 @@ export default function Settings() {
                   onClick={handleUpdateName} 
                   disabled={isUpdatingName || !fullName.trim()}
                 >
-                  {isUpdatingName ? "..." : "Guardar"}
+                  {isUpdatingName ? "..." : t('common.save')}
                 </Button>
               </div>
               {fullName.trim() && (
                 <p className="text-xs text-muted-foreground pl-4">
-                  Presiona "Guardar" para confirmar el cambio
+                  {t('settings.pressToConfirm')}
                 </p>
               )}
             </div>
 
             <div className="border-t pt-4 space-y-2">
-              <Label htmlFor="new-email" className="pl-4">Cambiar Email:</Label>
+              <Label htmlFor="new-email" className="pl-4">{t('settings.changeEmail')}:</Label>
               <Input
                 id="new-email"
                 type="email"
-                placeholder="nuevo@email.com"
+                placeholder={t('settings.newEmailPlaceholder')}
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
               />
-              <Label htmlFor="confirm-email" className="pl-4">Confirmar Email:</Label>
+              <Label htmlFor="confirm-email" className="pl-4">{t('settings.confirmEmail')}:</Label>
               <Input
                 id="confirm-email"
                 type="email"
-                placeholder="Repite tu nuevo email"
+                placeholder={t('settings.confirmEmailPlaceholder')}
                 value={confirmEmail}
                 onChange={(e) => setConfirmEmail(e.target.value)}
               />
@@ -712,10 +712,10 @@ export default function Settings() {
                 disabled={isUpdatingEmail}
                 className="w-full"
               >
-                {isUpdatingEmail ? "Actualizando..." : "Actualizar"}
+                {isUpdatingEmail ? t('settings.updating') : t('settings.update')}
               </Button>
               <p className="text-sm text-muted-foreground pl-4">
-                Se enviará un correo de confirmación a tu nueva dirección
+                {t('settings.confirmationEmailSent')}
               </p>
             </div>
 
