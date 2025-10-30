@@ -335,12 +335,12 @@ export default function EmotionJournal() {
 
       // Save situation as journal entry if provided
       if (situationTrigger && situationDescription.trim()) {
-        const tags = generateHashtags('Situaciones límite', situationDescription.trim(), primaryNames);
+        const tags = generateHashtags(t('emotionJournal.limitSituations'), situationDescription.trim(), primaryNames);
         await (supabase as any)
           .from('journal_entries')
           .insert({
             user_id: user.id,
-            title: 'Situaciones límite',
+            title: t('emotionJournal.limitSituations'),
             content: situationDescription.trim(),
             tags,
             entry_date: new Date().toISOString().split('T')[0]
@@ -407,8 +407,8 @@ export default function EmotionJournal() {
       if (hasOptionalResponses) {
         setTimeout(() => {
           toast({
-            title: "✓ Respuesta guardada",
-            description: "Tu respuesta se ha grabado como una entrada en tu diario"
+            title: t('emotionJournal.responseSaved'),
+            description: t('emotionJournal.responseSavedDescription')
           });
         }, 500);
       }

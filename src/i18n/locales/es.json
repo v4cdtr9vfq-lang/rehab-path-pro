@@ -368,7 +368,10 @@
     "of": "de",
     "confirmDelete": "Confirmar eliminación",
     "confirmDeleteDescription": "¿Estás seguro de que quieres eliminar esta entrada? Esta acción no se puede deshacer.",
-    "yes": "Sí"
+    "yes": "Sí",
+    "limitSituations": "Situaciones límite",
+    "responseSaved": "✓ Respuesta guardada",
+    "responseSavedDescription": "Tu respuesta se ha grabado como una entrada en tu diario"
   },
   "gratitude": {
     "title": "Agradecimiento",

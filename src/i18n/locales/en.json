@@ -368,7 +368,10 @@
     "of": "of",
     "confirmDelete": "Confirm deletion",
     "confirmDeleteDescription": "Are you sure you want to delete this entry? This action cannot be undone.",
-    "yes": "Yes"
+    "yes": "Yes",
+    "limitSituations": "Limit situations",
+    "responseSaved": "✓ Response saved",
+    "responseSavedDescription": "Your response has been saved as a journal entry"
   },
   "gratitude": {
     "title": "Gratitude",
