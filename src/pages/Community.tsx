@@ -465,14 +465,14 @@ export default function Community() {
                         <div 
                           className={`w-3 h-3 rounded-full flex-shrink-0 ${onlineUsers.has(user.id) ? 'bg-green-500' : 'bg-red-500'}`}
                           style={{ aspectRatio: '1', minWidth: '12px', minHeight: '12px' }}
-                          title={onlineUsers.has(user.id) ? 'En línea' : 'Desconectado'}
+                          title={onlineUsers.has(user.id) ? t('community.online') : t('community.offline')}
                         />
                         <Badge 
                           variant="secondary" 
                           className={`bg-success/20 text-success border-success/30 text-xs px-2 whitespace-nowrap ${!isCurrentUser ? 'cursor-pointer hover:bg-success/30' : 'cursor-default'}`}
                           onClick={() => !isCurrentUser && openDirectChat(user.id, user.name)}
                         >
-                          Disponible
+                          {t('community.available')}
                         </Badge>
                       </>
                     )}
