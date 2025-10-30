@@ -1032,7 +1032,7 @@ export default function EmotionJournal() {
                       className="w-full"
                       onClick={() => setFilterDate(undefined)}
                     >
-                      Limpiar filtro
+                      {t('emotionJournal.clearFilter')}
                     </Button>
                   </div>
                 )}
@@ -1123,7 +1123,7 @@ export default function EmotionJournal() {
                   {/* Optional Responses Section */}
                   {(entry.situations?.length > 0 || entry.persons?.length > 0 || entry.thoughts?.length > 0 || entry.beliefs?.length > 0) && (
                     <div className="mt-6 pt-4 border-t border-border">
-                      <h3 className="text-sm font-semibold text-muted-foreground mb-3">Respuestas opcionales:</h3>
+                      <h3 className="text-sm font-semibold text-muted-foreground mb-3">{t('emotionJournal.optionalResponses')}</h3>
                       <div className="space-y-3">
                         {entry.situations?.map((situation: any) => (
                           <div key={situation.id} className="bg-muted/30 p-3 rounded-lg">
@@ -1190,7 +1190,7 @@ export default function EmotionJournal() {
               )}
               
               <span className="text-sm text-muted-foreground px-4">
-                Página {currentPage} de {totalPages}
+                {t('emotionJournal.pageOf')} {currentPage} {t('emotionJournal.of')} {totalPages}
               </span>
               
               {currentPage < totalPages && (
@@ -1288,17 +1288,17 @@ export default function EmotionJournal() {
       <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogTitle>{t('emotionJournal.confirmDelete')}</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar esta entrada? Esta acción no se puede deshacer.
+              {t('emotionJournal.confirmDeleteDescription')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex justify-end gap-3">
             <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>
-              Cancelar
+              {t('common.cancel')}
             </Button>
             <Button variant="destructive" onClick={() => deleteConfirmId && handleDelete(deleteConfirmId)}>
-              Sí
+              {t('emotionJournal.yes')}
             </Button>
           </div>
         </AlertDialogContent>

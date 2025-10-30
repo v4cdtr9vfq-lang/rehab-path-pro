@@ -361,7 +361,14 @@
     "andAtDeeperLevelLog": "Y a nivel más profundo:",
     "noDataForPeriod": "No hay datos para este período",
     "times": "veces",
-    "dateFormat": "d 'de' MMMM, yyyy 'a las' HH:mm"
+    "dateFormat": "d 'de' MMMM, yyyy 'a las' HH:mm",
+    "clearFilter": "Limpiar filtro",
+    "optionalResponses": "Respuestas opcionales:",
+    "pageOf": "Página",
+    "of": "de",
+    "confirmDelete": "Confirmar eliminación",
+    "confirmDeleteDescription": "¿Estás seguro de que quieres eliminar esta entrada? Esta acción no se puede deshacer.",
+    "yes": "Sí"
   },
   "gratitude": {
     "title": "Agradecimiento",
