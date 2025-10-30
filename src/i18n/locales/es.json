@@ -53,6 +53,10 @@
     "checkIn": "Check-in",
     "sleepQuality": "Calidad de Sueño"
   },
+  "sidebar": {
+    "tagline": "Tu compañero de recuperación",
+    "exit": "Salir"
+  },
   "dashboard": {
     "cleanTime": "Tiempo limpio:",
     "dailyProgress": "Progreso diario:",
