@@ -549,6 +549,8 @@ export type Database = {
           full_name: string | null
           id: string
           onboarding_completed: boolean
+          preferred_bedtime: string | null
+          preferred_wake_up_time: string | null
           rehabilitation_type: string | null
           text_onboarding_completed: boolean | null
           tour_completed: boolean
@@ -564,6 +566,8 @@ export type Database = {
           full_name?: string | null
           id?: string
           onboarding_completed?: boolean
+          preferred_bedtime?: string | null
+          preferred_wake_up_time?: string | null
           rehabilitation_type?: string | null
           text_onboarding_completed?: boolean | null
           tour_completed?: boolean
@@ -579,6 +583,8 @@ export type Database = {
           full_name?: string | null
           id?: string
           onboarding_completed?: boolean
+          preferred_bedtime?: string | null
+          preferred_wake_up_time?: string | null
           rehabilitation_type?: string | null
           text_onboarding_completed?: boolean | null
           tour_completed?: boolean

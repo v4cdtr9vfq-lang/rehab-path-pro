@@ -468,13 +468,13 @@ export default function Plan() {
       // Fetch sleep schedule from profile
       const { data: profileData } = await supabase
         .from('profiles')
-        .select('bedtime, wake_up_time')
+        .select('preferred_bedtime, preferred_wake_up_time')
         .eq('user_id', user.id)
         .single();
       
       if (profileData) {
-        if (profileData.bedtime) setBedtime(profileData.bedtime);
-        if (profileData.wake_up_time) setWakeUpTime(profileData.wake_up_time);
+        if (profileData.preferred_bedtime) setBedtime(profileData.preferred_bedtime);
+        if (profileData.preferred_wake_up_time) setWakeUpTime(profileData.preferred_wake_up_time);
       }
 
       // Always refetch with proper ordering
@@ -1027,7 +1027,7 @@ export default function Plan() {
 
       const { error } = await supabase
         .from('profiles')
-        .update({ bedtime: time })
+        .update({ preferred_bedtime: time })
         .eq('user_id', user.id);
 
       if (error) throw error;
@@ -1053,7 +1053,7 @@ export default function Plan() {
 
       const { error } = await supabase
         .from('profiles')
-        .update({ wake_up_time: time })
+        .update({ preferred_wake_up_time: time })
         .eq('user_id', user.id);
 
       if (error) throw error;
