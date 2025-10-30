@@ -120,6 +120,20 @@ export default function Help() {
 
       if (error) throw error;
 
+      // Send email notification
+      try {
+        await supabase.functions.invoke("send-help-question", {
+          body: {
+            question: userQuestion.trim(),
+            userEmail: user.email || "",
+            userName: user.user_metadata?.full_name,
+          },
+        });
+      } catch (emailError) {
+        console.error("Error sending email notification:", emailError);
+        // Don't fail the whole operation if email fails
+      }
+
       toast({
         title: t('help.questionSent'),
         description: t('help.questionSentDesc'),
