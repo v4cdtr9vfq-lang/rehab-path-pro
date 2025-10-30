@@ -705,7 +705,7 @@ export default function Values() {
           <h2 className="text-2xl font-semibold text-foreground">{t('values.primaryValues')}</h2>
           <Dialog open={isPrimaryDialogOpen} onOpenChange={setIsPrimaryDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="gap-2 mt-[15px]" disabled={values.filter(v => v.value_type === 'primary').length >= 3}>
+              <Button className="gap-2 mt-[15px] mr-[15px]" disabled={values.filter(v => v.value_type === 'primary').length >= 3}>
                 <Plus className="h-4 w-4" />
                 {t('values.addPrimary')}
               </Button>
@@ -790,7 +790,7 @@ export default function Values() {
           <h2 className="text-2xl font-semibold text-foreground">{t('values.secondaryValues')}</h2>
           <Dialog open={isSecondaryDialogOpen} onOpenChange={setIsSecondaryDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="gap-2 mt-[15px]" disabled={values.filter(v => v.value_type === 'secondary').length >= 6}>
+              <Button className="gap-2 mt-[15px] mr-[15px]" disabled={values.filter(v => v.value_type === 'secondary').length >= 6}>
                 <Plus className="h-4 w-4" />
                 {t('values.addSecondary')}
               </Button>
