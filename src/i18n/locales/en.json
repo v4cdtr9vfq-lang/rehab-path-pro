@@ -87,6 +87,7 @@
     "thisWeek": "This week",
     "always": "Pending",
     "pending": "Pending",
+    "completed": "Completed!",
     "goalUpdated": "Goal updated",
     "markedAsPending": "Goal marked as pending.",
     "goalCompleted": "Goal completed!",
