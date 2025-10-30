@@ -95,8 +95,8 @@ export default function Journal() {
     } catch (error) {
       console.error('Error loading entries:', error);
       toast({
-        title: "Error",
-        description: "No se pudieron cargar las entradas.",
+        title: t('common.error'),
+        description: t('journal.errorLoading'),
         variant: "destructive",
       });
     } finally {
@@ -133,14 +133,14 @@ export default function Journal() {
       setIsRecordingQuick(true);
       
       toast({
-        title: "Grabando",
-        description: "Habla ahora para crear una entrada automática.",
+        title: t('journal.recording'),
+        description: t('journal.speakNow'),
       });
     } catch (error) {
       console.error('Error starting recording:', error);
       toast({
-        title: "Error",
-        description: "No se pudo acceder al micrófono.",
+        title: t('common.error'),
+        description: t('journal.microphoneError'),
         variant: "destructive",
       });
     }
@@ -173,8 +173,8 @@ export default function Journal() {
           
           if (!user) {
             toast({
-              title: "Error",
-              description: "Debes iniciar sesión para guardar entradas.",
+              title: t('common.error'),
+              description: t('journal.loginRequired'),
               variant: "destructive",
             });
             setIsProcessingQuick(false);
@@ -186,7 +186,7 @@ export default function Journal() {
             .from('journal_entries')
             .insert({
               user_id: user.id,
-              title: "Entrada de voz - " + new Date().toLocaleDateString('es-ES'),
+              title: t('journal.voiceEntryTitle') + " " + new Date().toLocaleDateString(t('common.yes') === 'Yes' ? 'en-US' : 'es-ES'),
               content: data.text,
               tags: ["voz"]
             })
@@ -199,8 +199,8 @@ export default function Journal() {
             setEntries(prev => [newEntry, ...prev]);
             
             toast({
-              title: "Entrada creada",
-              description: "Tu audio ha sido transcrito y guardado como nueva entrada.",
+              title: t('journal.entryCreated'),
+              description: t('journal.voiceCreated'),
             });
           }
         }
@@ -210,8 +210,8 @@ export default function Journal() {
     } catch (error) {
       console.error('Error transcribing audio:', error);
       toast({
-        title: "Error",
-        description: "No se pudo transcribir el audio.",
+        title: t('common.error'),
+        description: t('journal.errorTranscribing'),
         variant: "destructive",
       });
       setIsProcessingQuick(false);
@@ -221,8 +221,8 @@ export default function Journal() {
   const saveEntry = async () => {
     if (!entryTitle.trim() || !entryContent.trim()) {
       toast({
-        title: "Error",
-        description: "Por favor completa el título y contenido.",
+        title: t('common.error'),
+        description: t('journal.completeFields'),
         variant: "destructive",
       });
       return;
@@ -233,8 +233,8 @@ export default function Journal() {
       
       if (!user) {
         toast({
-          title: "Error",
-          description: "Debes iniciar sesión para guardar entradas.",
+          title: t('common.error'),
+          description: t('journal.loginRequired'),
           variant: "destructive",
         });
         return;
@@ -262,8 +262,8 @@ export default function Journal() {
         ));
 
         toast({
-          title: "Entrada actualizada",
-          description: "Tu entrada ha sido actualizada exitosamente.",
+          title: t('journal.entryUpdated'),
+          description: t('journal.entrySuccessfullyUpdated'),
         });
       } else {
         // Create new entry
@@ -284,8 +284,8 @@ export default function Journal() {
           setEntries(prev => [newEntry, ...prev]);
           
           toast({
-            title: "Entrada guardada",
-            description: "Tu entrada ha sido guardada exitosamente.",
+            title: t('journal.entrySaved'),
+            description: t('journal.entrySuccessfullySaved'),
           });
         }
       }
@@ -303,8 +303,8 @@ export default function Journal() {
     } catch (error) {
       console.error('Error saving entry:', error);
       toast({
-        title: "Error",
-        description: "No se pudo guardar la entrada.",
+        title: t('common.error'),
+        description: t('journal.errorSaving'),
         variant: "destructive",
       });
     }
@@ -323,14 +323,14 @@ export default function Journal() {
       setEntries(prev => prev.filter(entry => entry.id !== entryId));
       
       toast({
-        title: "Entrada eliminada",
-        description: "La entrada ha sido eliminada exitosamente.",
+        title: t('journal.entryDeleted'),
+        description: t('journal.entrySuccessfullyDeleted'),
       });
     } catch (error) {
       console.error('Error deleting entry:', error);
       toast({
-        title: "Error",
-        description: "No se pudo eliminar la entrada.",
+        title: t('common.error'),
+        description: t('journal.errorDeleting'),
         variant: "destructive",
       });
     }
@@ -396,8 +396,8 @@ export default function Journal() {
       
       if (!user) {
         toast({
-          title: "Error",
-          description: "Debes iniciar sesión para cargar las entradas.",
+          title: t('common.error'),
+          description: t('journal.loginRequired'),
           variant: "destructive",
         });
         setIsLoadingDemo(false);
@@ -480,15 +480,15 @@ export default function Journal() {
       if (data) {
         setEntries(prev => [...data.reverse(), ...prev]);
         toast({
-          title: "Entradas cargadas",
-          description: "Se han añadido 9 entradas de demostración a tu diario.",
+          title: t('journal.entrySaved'),
+          description: t('journal.demoLoaded'),
         });
       }
     } catch (error) {
       console.error('Error loading demo entries:', error);
       toast({
-        title: "Error",
-        description: "No se pudieron cargar las entradas de demostración.",
+        title: t('common.error'),
+        description: t('journal.errorDemo'),
         variant: "destructive",
       });
     } finally {
@@ -503,7 +503,7 @@ export default function Journal() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Buscar en tu diario..."
+              placeholder={t('journal.searchInJournal')}
               className="pl-10 h-10"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -513,7 +513,7 @@ export default function Journal() {
         <div className="flex gap-2">
           <Button onClick={() => setShowNewEntry(true)} className="gap-2 h-10">
             <Plus className="h-4 w-4" />
-            Nueva Entrada
+            {t('journal.newEntryButton')}
           </Button>
           
           {!isRecordingQuick && !isProcessingQuick && (
@@ -523,7 +523,7 @@ export default function Journal() {
               className="gap-2 h-10"
             >
               <Mic className="h-4 w-4" />
-              Grabar audio
+              {t('journal.recordAudio')}
             </Button>
           )}
           
@@ -534,7 +534,7 @@ export default function Journal() {
               className="gap-2 animate-pulse h-10"
             >
               <Square className="h-4 w-4" />
-              Detener
+              {t('journal.stop')}
             </Button>
           )}
           
@@ -545,7 +545,7 @@ export default function Journal() {
               className="gap-2 h-10"
             >
               <Loader2 className="h-4 w-4 animate-spin" />
-              Transcribiendo...
+              {t('journal.transcribing')}
             </Button>
           )}
         </div>
@@ -554,17 +554,17 @@ export default function Journal() {
       {showNewEntry && (
         <Card className="border-border">
           <CardHeader>
-            <CardTitle>{editingEntryId ? 'Editar entrada' : 'Nueva entrada de diario'}</CardTitle>
+            <CardTitle>{editingEntryId ? t('journal.editEntry') : t('journal.newJournalEntry')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <Input 
-              placeholder="Título de la entrada..." 
+              placeholder={t('journal.entryTitlePlaceholder')} 
               value={entryTitle}
               onChange={(e) => setEntryTitle(e.target.value)}
             />
             <div className="space-y-2">
               <Textarea
-                placeholder="Escribe tus pensamientos..."
+                placeholder={t('journal.writeYourThoughts')}
                 className="min-h-[200px]"
                 value={entryContent}
                 onChange={(e) => setEntryContent(e.target.value)}
@@ -572,7 +572,7 @@ export default function Journal() {
               <AudioRecorder onTranscriptionComplete={handleTranscriptionComplete} />
             </div>
             <Input 
-              placeholder="Etiquetas (separadas por comas)" 
+              placeholder={t('journal.tagsPlaceholder')} 
               value={entryTags}
               onChange={(e) => setEntryTags(e.target.value)}
             />
@@ -581,7 +581,7 @@ export default function Journal() {
                 className="flex-1" 
                 onClick={saveEntry}
               >
-                {editingEntryId ? 'Actualizar Entrada' : 'Guardar Entrada'}
+                {editingEntryId ? t('journal.updateEntry') : t('journal.saveEntry')}
               </Button>
               <Button variant="outline" onClick={() => {
                 setShowNewEntry(false);
@@ -595,7 +595,7 @@ export default function Journal() {
                 localStorage.removeItem('journal-draft-content');
                 localStorage.removeItem('journal-draft-tags');
               }}>
-                Cancelar
+                {t('common.cancel')}
               </Button>
             </div>
           </CardContent>
@@ -604,20 +604,20 @@ export default function Journal() {
 
       <div className="space-y-[20px]">
         {!isLoading && entries.length > 0 && (
-          <h2 className="text-2xl font-semibold text-foreground pl-6">Entradas recientes:</h2>
+          <h2 className="text-2xl font-semibold text-foreground pl-6">{t('journal.recentEntries')}</h2>
         )}
         {isLoading ? (
           <Card className="border-border">
             <CardContent className="p-12 text-center">
               <Loader2 className="h-12 w-12 text-muted-foreground mx-auto mb-4 animate-spin" />
-              <p className="text-muted-foreground">Cargando entradas...</p>
+              <p className="text-muted-foreground">{t('journal.loadingEntries')}</p>
             </CardContent>
           </Card>
         ) : entries.length === 0 ? (
           <Card className="border-border">
             <CardContent className="p-12 text-center space-y-4">
               <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground mb-4">Aún no has creado ninguna entrada.</p>
+              <p className="text-muted-foreground mb-4">{t('journal.noEntriesYet')}</p>
               <div className="flex flex-col gap-3 items-center">
                 <Button onClick={() => setShowNewEntry(true)} size="icon" className="h-12 w-12">
                   <Plus className="h-6 w-6" />
@@ -631,10 +631,10 @@ export default function Journal() {
                   {isLoadingDemo ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      Cargando...
+                      {t('journal.loading')}
                     </>
                   ) : (
-                    'Cargar entradas de demostración'
+                    t('journal.loadDemoEntries')
                   )}
                 </Button>
               </div>
@@ -644,7 +644,7 @@ export default function Journal() {
           <Card className="border-border">
             <CardContent className="p-12 text-center">
               <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">No se encontraron entradas que coincidan con "{searchTerm}"</p>
+              <p className="text-muted-foreground">{t('journal.noEntriesFound')} "{searchTerm}"</p>
             </CardContent>
           </Card>
         ) : (
@@ -656,7 +656,7 @@ export default function Journal() {
                     <div className="space-y-1 flex-1">
                       <CardTitle className="text-xl">{entry.title}</CardTitle>
                       <p className="text-sm text-muted-foreground">
-                        {new Date(entry.created_at).toLocaleDateString('es-ES', { 
+                        {new Date(entry.created_at).toLocaleDateString(t('common.yes') === 'Yes' ? 'en-US' : 'es-ES', { 
                           weekday: 'long', 
                           year: 'numeric', 
                           month: 'short', 
@@ -693,7 +693,7 @@ export default function Journal() {
                       onClick={() => toggleExpandEntry(entry.id)}
                       className="mb-4 bg-white text-black border-black hover:bg-green-500 hover:text-white hover:border-green-500"
                     >
-                      {expandedEntries.has(entry.id) ? "Leer menos" : "Leer más"}
+                      {expandedEntries.has(entry.id) ? t('journal.readLess') : t('journal.readMore')}
                     </Button>
                   )}
                   <div className="flex flex-wrap gap-2">
@@ -726,7 +726,7 @@ export default function Journal() {
                 )}
                 
                 <span className="text-sm text-muted-foreground px-4">
-                  Página {currentPage} de {totalPages}
+                  {t('journal.pageOf')} {currentPage} {t('journal.of')} {totalPages}
                 </span>
                 
                 {currentPage < totalPages && (
@@ -749,17 +749,17 @@ export default function Journal() {
       <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogTitle>{t('journal.confirmDelete')}</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar esta entrada? Esta acción no se puede deshacer.
+              {t('journal.confirmDeleteDescription')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex justify-end gap-3">
             <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>
-              Cancelar
+              {t('common.cancel')}
             </Button>
             <Button variant="destructive" onClick={() => deleteConfirmId && deleteEntry(deleteConfirmId)}>
-              Sí
+              {t('journal.yes')}
             </Button>
           </div>
         </AlertDialogContent>
