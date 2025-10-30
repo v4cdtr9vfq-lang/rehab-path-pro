@@ -38,9 +38,6 @@ const App = () => (
     <ThemeProvider>
       <TooltipProvider>
         <SubscriptionProvider>
-        <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center">
-          <div className="text-muted-foreground">Loading...</div>
-        </div>}>
         <BrowserRouter>
         <ScrollToTop />
         <Routes>
@@ -179,7 +176,6 @@ const App = () => (
         <Toaster />
         <Sonner />
       </BrowserRouter>
-        </Suspense>
         </SubscriptionProvider>
       </TooltipProvider>
     </ThemeProvider>

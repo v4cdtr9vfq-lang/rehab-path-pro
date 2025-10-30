@@ -30,12 +30,12 @@ i18n
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
     },
-    debug: false,
+    debug: true,
     returnEmptyString: false,
     returnNull: false,
     load: 'languageOnly',
     react: {
-      useSuspense: true
+      useSuspense: false
     }
   });
 
