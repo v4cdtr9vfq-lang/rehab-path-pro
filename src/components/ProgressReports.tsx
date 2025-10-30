@@ -253,7 +253,7 @@ export default function ProgressReports() {
         <CardContent className="space-y-4">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-3 flex-1">
-              <label className="text-sm font-medium whitespace-nowrap pl-[10px]">{t('progress.timePeriod')}</label>
+              <label className="text-sm font-medium whitespace-nowrap pl-[15px]">{t('progress.timePeriod')}</label>
               <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
                 <SelectTrigger className="flex-1 h-10">
                   <SelectValue placeholder={t('progress.selectPeriod')} />
@@ -279,7 +279,7 @@ export default function ProgressReports() {
           </div>
 
           <div className="space-y-2">
-            <h4 className="text-sm font-medium pl-[10px]">{t('progress.reportHistory')}</h4>
+            <h4 className="text-sm font-medium pl-[15px]">{t('progress.reportHistory')}</h4>
             <div className="space-y-2 max-h-[300px] overflow-y-auto">
               {reports.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center py-4">
