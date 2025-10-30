@@ -701,7 +701,7 @@ export default function Values() {
 
       {/* Valores Primarios Widget */}
       <div>
-        <div className="flex justify-between items-center mb-0 pl-[35px]">
+        <div className="flex justify-between items-center mb-0 pl-[25px] md:pl-[35px]">
           <h2 className="text-sm md:text-2xl font-semibold text-foreground">
             <span className="md:hidden">{t('values.primaryValuesShort')}</span>
             <span className="hidden md:inline">{t('values.primaryValues')}</span>
@@ -740,7 +740,7 @@ export default function Values() {
           </Dialog>
         </div>
 
-        <p className="text-foreground/80 mb-[15px] mt-[5px] pl-[35px]">
+        <p className="text-foreground/80 mb-[15px] mt-[5px] pl-[25px] md:pl-[35px]">
           {t('values.selectConnected')}
         </p>
 
@@ -789,7 +789,7 @@ export default function Values() {
 
       {/* Valores Secundarios Widget */}
       <div>
-        <div className="flex justify-between items-center mb-0 pl-[35px]">
+        <div className="flex justify-between items-center mb-0 pl-[25px] md:pl-[35px]">
           <h2 className="text-sm md:text-2xl font-semibold text-foreground">
             <span className="md:hidden">{t('values.secondaryValuesShort')}</span>
             <span className="hidden md:inline">{t('values.secondaryValues')}</span>
@@ -828,7 +828,7 @@ export default function Values() {
           </Dialog>
         </div>
 
-        <p className="text-foreground/80 mb-[15px] mt-[5px] pl-[35px]">
+        <p className="text-foreground/80 mb-[15px] mt-[5px] pl-[25px] md:pl-[35px]">
           {t('values.selectConnected')}
         </p>
 
