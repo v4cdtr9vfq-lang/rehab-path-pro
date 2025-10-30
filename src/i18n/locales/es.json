@@ -284,7 +284,7 @@
     "voiceEntry": "Entrada de voz",
     "recording": "Grabando",
     "processing": "Procesando",
-    "speakNow": "Habla ahora para crear una entrada automática",
+    "speakNow": "Habla claramente hacia el micrófono...",
     "microphoneError": "No se pudo acceder al micrófono",
     "entrySaved": "Entrada guardada",
     "entryUpdated": "Entrada actualizada",
@@ -326,7 +326,14 @@
     "entrySuccessfullyDeleted": "La entrada ha sido eliminada exitosamente",
     "voiceEntryTitle": "Entrada de voz -",
     "pageOf": "Página",
-    "of": "de"
+    "of": "de",
+    "recordingSpeakClearly": "Grabando... Habla claramente",
+    "stopRecording": "Detener Grabación",
+    "transcriptionComplete": "Transcripción completada",
+    "audioTranscribed": "Tu audio ha sido transcrito exitosamente",
+    "noVoiceDetected": "No se detectó voz",
+    "speakClearly": "Por favor habla más claramente hacia el micrófono",
+    "errorReadingAudio": "No se pudo leer el archivo de audio"
   },
   "emotionJournal": {
     "title": "Diario de Emociones",

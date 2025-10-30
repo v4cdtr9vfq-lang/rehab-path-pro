@@ -284,7 +284,7 @@
     "voiceEntry": "Voice entry",
     "recording": "Recording",
     "processing": "Processing",
-    "speakNow": "Speak now to create an automatic entry",
+    "speakNow": "Speak clearly into the microphone...",
     "microphoneError": "Could not access microphone",
     "entrySaved": "Entry saved",
     "entryUpdated": "Entry updated",
@@ -326,7 +326,14 @@
     "entrySuccessfullyDeleted": "The entry has been deleted successfully",
     "voiceEntryTitle": "Voice entry -",
     "pageOf": "Page",
-    "of": "of"
+    "of": "of",
+    "recordingSpeakClearly": "Recording... Speak clearly",
+    "stopRecording": "Stop Recording",
+    "transcriptionComplete": "Transcription complete",
+    "audioTranscribed": "Your audio has been successfully transcribed",
+    "noVoiceDetected": "No voice detected",
+    "speakClearly": "Please speak more clearly into the microphone",
+    "errorReadingAudio": "Could not read the audio file"
   },
   "emotionJournal": {
     "title": "Emotion Journal",

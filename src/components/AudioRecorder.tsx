@@ -3,12 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Mic, Square, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 
 interface AudioRecorderProps {
   onTranscriptionComplete: (text: string) => void;
 }
 
 export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) => {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -81,14 +83,14 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
       console.log('✅ isRecording has been set to TRUE');
       
       toast({
-        title: "Grabando",
-        description: "Habla claramente hacia el micrófono...",
+        title: t('journal.recording'),
+        description: t('journal.speakNow'),
       });
     } catch (error) {
       console.error('Error starting recording:', error);
       toast({
-        title: "Error",
-        description: "No se pudo acceder al micrófono. Verifica los permisos.",
+        title: t('common.error'),
+        description: t('journal.microphoneError'),
         variant: "destructive",
       });
     }
@@ -118,13 +120,13 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
         if (data?.text && data.text.trim().length > 3) {
           onTranscriptionComplete(data.text);
           toast({
-            title: "Transcripción completada",
-            description: "Tu audio ha sido transcrito exitosamente",
+            title: t('journal.transcriptionComplete'),
+            description: t('journal.audioTranscribed'),
           });
         } else {
           toast({
-            title: "No se detectó voz",
-            description: "Por favor habla más claramente hacia el micrófono",
+            title: t('journal.noVoiceDetected'),
+            description: t('journal.speakClearly'),
             variant: "destructive",
           });
         }
@@ -134,8 +136,8 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
 
       reader.onerror = () => {
         toast({
-          title: "Error",
-          description: "No se pudo leer el archivo de audio",
+          title: t('common.error'),
+          description: t('journal.errorReadingAudio'),
           variant: "destructive",
         });
         setIsProcessing(false);
@@ -143,8 +145,8 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
     } catch (error) {
       console.error('Error transcribing audio:', error);
       toast({
-        title: "Error",
-        description: "No se pudo transcribir el audio",
+        title: t('common.error'),
+        description: t('journal.errorTranscribing'),
         variant: "destructive",
       });
       setIsProcessing(false);
@@ -162,7 +164,7 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
             </span>
           </div>
           <p className="text-base text-foreground mt-3 font-medium">
-            Grabando... Habla claramente
+            {t('journal.recordingSpeakClearly')}
           </p>
         </div>
       )}
@@ -177,7 +179,7 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
             className="gap-2"
           >
             <Mic className="h-5 w-5" />
-            Grabar Audio
+            {t('journal.recordAudio')}
           </Button>
         )}
         
@@ -190,7 +192,7 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
             className="gap-2"
           >
             <Square className="h-5 w-5" />
-            Detener Grabación
+            {t('journal.stopRecording')}
           </Button>
         )}
         
@@ -203,7 +205,7 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
             className="gap-2"
           >
             <Loader2 className="h-5 w-5 animate-spin" />
-            Transcribiendo...
+            {t('journal.transcribing')}
           </Button>
         )}
       </div>
