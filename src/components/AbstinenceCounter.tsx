@@ -86,7 +86,17 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
     if (allAddictions.length > 0 && selectedIndex >= allAddictions.length) {
       setSelectedIndex(0);
     }
-  }, [allAddictions.length]);
+  }, [allAddictions.length, selectedIndex]);
+
+  // When addictions array grows, switch to the new addiction
+  const [previousLength, setPreviousLength] = useState(allAddictions.length);
+  useEffect(() => {
+    if (allAddictions.length > previousLength && previousLength > 0) {
+      // A new addiction was added, switch to it
+      setSelectedIndex(allAddictions.length - 1);
+    }
+    setPreviousLength(allAddictions.length);
+  }, [allAddictions.length, previousLength]);
 
   const handleAddAddiction = () => {
     if (!canAddMoreAddictions) {
@@ -99,8 +109,6 @@ export function AbstinenceCounter({ startDate, onAddictionChange }: CounterProps
   const handleAddSubmit = (addictionType: string, startDate: Date) => {
     addAddiction({ addictionType, startDate });
     setShowAddDialog(false);
-    // Switch to the new addiction (it will be the last one in the array)
-    setSelectedIndex(allAddictions.length);
   };
 
   const handleCircleClick = (index: number) => {
