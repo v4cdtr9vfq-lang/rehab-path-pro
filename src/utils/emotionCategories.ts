@@ -86,7 +86,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
           {
             id: "inquieto",
             name: "Restless",
-            tertiaryEmotions: ["Agitated", "Agitation", "Alarmed", "Disconcerted", "Disturbed", "Startled", "Turbulent", "Upset"].sort()
+            tertiaryEmotions: ["Agitated", "Alarmed", "Disconcerted", "Disturbed", "Startled", "Turbulent", "Upset"].sort()
           },
           {
             id: "vulnerable",
@@ -329,7 +329,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
         {
           id: "inquieto",
           name: "Inquieto",
-          tertiaryEmotions: ["Agitación", "Agitado", "Alarmado", "Alterado", "Desconcertado", "Perturbado", "Sobresaltado", "Turbulento"].sort()
+          tertiaryEmotions: ["Agitado", "Alarmado", "Alterado", "Desconcertado", "Perturbado", "Sobresaltado", "Turbulento"].sort()
         },
         {
           id: "vulnerable",
