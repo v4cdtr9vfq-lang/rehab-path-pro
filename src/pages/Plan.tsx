@@ -1126,65 +1126,6 @@ export default function Plan() {
     }
   };
   return <div className="space-y-[30px] animate-in fade-in duration-500 mt-[14px] md:-mt-[4px]">
-      {/* Sleep Schedule Widget */}
-      <Card className="bg-gradient-to-br from-primary/5 to-transparent border-primary/20 ml-[35px] mr-[35px]">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Clock className="w-5 h-5" />
-            {t('plan.sleepSchedule')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 rounded-xl bg-background/50 border border-sidebar-border">
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-                <p className="text-xs text-muted-foreground whitespace-nowrap">{t('plan.definedBedtime')}</p>
-                <select 
-                  value={bedtime}
-                  onChange={(e) => handleBedtimeChange(e.target.value)}
-                  className="bg-background border border-sidebar-border rounded-lg px-2 py-1 pr-6 pl-[15px] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-primary appearance-none bg-no-repeat"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                    backgroundPosition: 'right 0.25rem center',
-                    backgroundSize: '1.25em 1.25em'
-                  }}
-                >
-                  {Array.from({ length: 24 }, (_, i) => {
-                    const hour = i.toString().padStart(2, '0');
-                    return (
-                      <option key={hour} value={`${hour}:00`}>{hour}:00</option>
-                    );
-                  })}
-                </select>
-              </div>
-            </div>
-            
-            <div className="p-3 rounded-xl bg-background/50 border border-sidebar-border">
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-                <p className="text-xs text-muted-foreground whitespace-nowrap">{t('plan.definedWakeUpTime')}</p>
-                <select 
-                  value={wakeUpTime}
-                  onChange={(e) => handleWakeUpTimeChange(e.target.value)}
-                  className="bg-background border border-sidebar-border rounded-lg px-2 py-1 pr-6 pl-[15px] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-primary appearance-none bg-no-repeat"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                    backgroundPosition: 'right 0.25rem center',
-                    backgroundSize: '1.25em 1.25em'
-                  }}
-                >
-                  {Array.from({ length: 24 }, (_, i) => {
-                    const hour = i.toString().padStart(2, '0');
-                    return (
-                      <option key={hour} value={`${hour}:00`}>{hour}:00</option>
-                    );
-                  })}
-                </select>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       <div className="flex justify-between items-center gap-4 pl-[35px]">
         <h2 className="text-3xl font-bold text-foreground">{t('goals.title') || 'Metas'}</h2>
         <div className="flex gap-2">
@@ -1533,6 +1474,63 @@ export default function Plan() {
               </DndContext>
             </CardContent>
           )}
+        </Card>
+
+        {/* Sleep Schedule Widget */}
+        <Card className="bg-gradient-to-br from-primary/5 to-transparent border-primary/20 ml-[35px] mr-[35px]">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">
+              Hora preferida para acostrarme:
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="p-3 rounded-xl bg-background/50 border border-sidebar-border">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                  <select 
+                    value={bedtime}
+                    onChange={(e) => handleBedtimeChange(e.target.value)}
+                    className="bg-background border border-sidebar-border rounded-lg px-2 py-1 pr-6 pl-[15px] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-primary appearance-none bg-no-repeat"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                      backgroundPosition: 'right 0.25rem center',
+                      backgroundSize: '1.25em 1.25em'
+                    }}
+                  >
+                    {Array.from({ length: 24 }, (_, i) => {
+                      const hour = i.toString().padStart(2, '0');
+                      return (
+                        <option key={hour} value={`${hour}:00`}>{hour}:00</option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </div>
+              
+              <div className="p-3 rounded-xl bg-background/50 border border-sidebar-border">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                  <p className="text-xs text-muted-foreground whitespace-nowrap">Y para levantarme:</p>
+                  <select 
+                    value={wakeUpTime}
+                    onChange={(e) => handleWakeUpTimeChange(e.target.value)}
+                    className="bg-background border border-sidebar-border rounded-lg px-2 py-1 pr-6 pl-[15px] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-primary appearance-none bg-no-repeat"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                      backgroundPosition: 'right 0.25rem center',
+                      backgroundSize: '1.25em 1.25em'
+                    }}
+                  >
+                    {Array.from({ length: 24 }, (_, i) => {
+                      const hour = i.toString().padStart(2, '0');
+                      return (
+                        <option key={hour} value={`${hour}:00`}>{hour}:00</option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </CardContent>
         </Card>
 
         {/* Reset to Default Goals */}
