@@ -16,10 +16,15 @@ export default function Landing() {
     const langParam = searchParams.get('lang');
     if (langParam && ['en', 'es'].includes(langParam)) {
       i18n.changeLanguage(langParam);
+      localStorage.setItem('i18nextLng', langParam);
+    } else {
+      // If no URL param, use Spanish as default
+      const savedLang = localStorage.getItem('i18nextLng');
+      if (!savedLang || !['en', 'es'].includes(savedLang)) {
+        i18n.changeLanguage('es');
+        localStorage.setItem('i18nextLng', 'es');
+      }
     }
-    // Save detected or forced language to localStorage
-    const currentLang = i18n.language;
-    localStorage.setItem('i18nextLng', currentLang);
   }, [searchParams, i18n]);
 
   // Don't render until translations are ready
