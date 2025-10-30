@@ -1261,7 +1261,7 @@ export default function Plan() {
               <Input id="edit-goal-text" placeholder={t('plan.writeGoalPlaceholder')} value={editingGoal?.text || ""} onChange={e => setEditingGoal(prev => ({
               ...prev,
               text: e.target.value
-            }))} />
+            }))} className="text-sm" />
             </div>
             
             {editingGoal?.goal_type === 'periodic' && <div className="space-y-2">
@@ -1306,7 +1306,7 @@ export default function Plan() {
               <Input id="edit-goal-remaining" type="number" min="1" value={editingGoal?.remaining || 1} onChange={e => setEditingGoal(prev => ({
               ...prev,
               remaining: parseInt(e.target.value) || 1
-            }))} />
+            }))} className="text-sm" />
             </div>}
             
             <div className="space-y-2">
@@ -1320,7 +1320,7 @@ export default function Plan() {
                   instructions: e.target.value
                 }))}
                 rows={3}
-                className="resize-none"
+                className="resize-none text-sm"
               />
             </div>
             
@@ -1335,7 +1335,7 @@ export default function Plan() {
                   notes: e.target.value
                 }))}
                 rows={3}
-                className="resize-none"
+                className="resize-none text-sm"
               />
             </div>
             
@@ -1350,6 +1350,7 @@ export default function Plan() {
                   ...prev,
                   link: e.target.value
                 }))}
+                className="text-sm"
               />
               <p className="text-xs text-muted-foreground px-3">{t('plan.linkHint')}</p>
             </div>
