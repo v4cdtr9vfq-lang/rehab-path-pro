@@ -21,7 +21,7 @@ i18n
         emotions: emotionsEn.emotions
       },
     },
-    fallbackLng: 'es',
+    fallbackLng: 'en',
     interpolation: {
       escapeValue: false,
     },
