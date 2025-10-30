@@ -317,7 +317,7 @@ export default function Community() {
               <SelectTrigger className="w-[180px]">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent align="end">
+              <SelectContent align="end" className="pl-[10px]">
                 {REHABILITATION_TYPES.map((type) => (
                   <SelectItem key={type.id} value={type.id}>
                     {type.label}
