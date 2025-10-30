@@ -55,8 +55,21 @@ export default function Plan() {
   
   // Helper function to translate goal text if it's a translation key
   const translateGoalText = (text: string): string => {
+    if (!text) return text;
+    
     if (text.startsWith('defaultGoals.')) {
-      return t(text);
+      try {
+        const translated = t(text);
+        // If translation returns the key itself, it means translation failed
+        if (translated === text) {
+          console.warn(`Translation not found for: ${text}`);
+          return text.replace('defaultGoals.', ''); // Return key without prefix as fallback
+        }
+        return translated;
+      } catch (error) {
+        console.error(`Error translating ${text}:`, error);
+        return text.replace('defaultGoals.', ''); // Return key without prefix as fallback
+      }
     }
     return text;
   };

@@ -36,8 +36,21 @@ export default function Home() {
   
   // Helper function to translate goal text if it's a translation key
   const translateGoalText = (text: string): string => {
-    if (text && text.startsWith('defaultGoals.')) {
-      return t(text);
+    if (!text) return text;
+    
+    if (text.startsWith('defaultGoals.')) {
+      try {
+        const translated = t(text);
+        // If translation returns the key itself, it means translation failed
+        if (translated === text) {
+          console.warn(`Translation not found for: ${text}`);
+          return text.replace('defaultGoals.', ''); // Return key without prefix as fallback
+        }
+        return translated;
+      } catch (error) {
+        console.error(`Error translating ${text}:`, error);
+        return text.replace('defaultGoals.', ''); // Return key without prefix as fallback
+      }
     }
     return text;
   };
@@ -190,7 +203,11 @@ export default function Home() {
   const toggleGoal = async (goalId: string) => {
     try {
       const goal = activeGoals.find(g => g.id === goalId);
-      if (!goal) return;
+      if (!goal) {
+        console.warn('Goal not found:', goalId);
+        return;
+      }
+      
       const todayStr = getLocalDateString();
       const wasCompleted = goal.status === 'completed';
 
@@ -214,13 +231,30 @@ export default function Home() {
           user
         }
       } = await supabase.auth.getUser();
-      if (!user) return;
+      
+      if (!user) {
+        console.error('User not authenticated');
+        toast({
+          title: t('goals.error'),
+          description: 'Sesión expirada. Por favor, inicia sesión de nuevo.',
+          variant: "destructive"
+        });
+        return;
+      }
+      
       const instancesOfThisGoal = updatedGoals.filter(g => g.originalId === goal.originalId);
       const completedInstancesOfGoal = instancesOfThisGoal.filter(g => g.status === 'completed').length;
       const allInstancesCompleted = completedInstancesOfGoal === instancesOfThisGoal.length;
-      await supabase.from('goals').update({
+      
+      const { error } = await supabase.from('goals').update({
         completed: allInstancesCompleted
       }).eq('id', goal.originalId).eq('user_id', user.id);
+      
+      if (error) {
+        console.error('Error updating goal:', error);
+        throw error;
+      }
+      
       toast({
         title: t('goals.goalUpdated'),
         description: wasCompleted ? t('goals.markedAsPending') : t('goals.goalCompleted')
@@ -229,17 +263,21 @@ export default function Home() {
       console.error('Error in toggleGoal:', error);
       toast({
         title: t('goals.error'),
-        description: t('goals.couldNotUpdate'),
+        description: error.message || t('goals.couldNotUpdate'),
         variant: "destructive"
       });
       // Revert optimistic update on error
-      const todayStr = getLocalDateString();
-      const completedInstances = await loadCompletedInstances(todayStr);
-      const revertedGoals = activeGoals.map(g => ({
-        ...g,
-        status: completedInstances.has(g.id) ? 'completed' : 'pending'
-      }));
-      setActiveGoals(revertedGoals);
+      try {
+        const todayStr = getLocalDateString();
+        const completedInstances = await loadCompletedInstances(todayStr);
+        const revertedGoals = activeGoals.map(g => ({
+          ...g,
+          status: completedInstances.has(g.id) ? 'completed' : 'pending'
+        }));
+        setActiveGoals(revertedGoals);
+      } catch (revertError) {
+        console.error('Error reverting goal state:', revertError);
+      }
     }
   };
   useEffect(() => {
