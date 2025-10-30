@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 const REHABILITATION_TYPES = [
   { id: 'adiccion_1', label: 'Adicción 1' },
@@ -48,6 +49,7 @@ interface RehabilitationTypeDialogProps {
 }
 
 export function RehabilitationTypeDialog({ onComplete }: RehabilitationTypeDialogProps) {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [selectedType, setSelectedType] = useState<string>("");
   const [isSaving, setIsSaving] = useState(false);
@@ -55,8 +57,8 @@ export function RehabilitationTypeDialog({ onComplete }: RehabilitationTypeDialo
   const handleSave = async () => {
     if (!selectedType) {
       toast({
-        title: "Error",
-        description: "Por favor selecciona una opción",
+        title: t("onboarding.error"),
+        description: t("onboarding.selectError"),
         variant: "destructive",
       });
       return;
@@ -75,15 +77,15 @@ export function RehabilitationTypeDialog({ onComplete }: RehabilitationTypeDialo
       if (error) throw error;
 
       toast({
-        title: "Guardado",
-        description: "Tu preferencia ha sido guardada exitosamente",
+        title: t("onboarding.saved"),
+        description: t("onboarding.savedSuccess"),
       });
       
       onComplete();
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "No se pudo guardar tu preferencia",
+        title: t("onboarding.error"),
+        description: error.message || t("onboarding.saveError"),
         variant: "destructive",
       });
     } finally {
@@ -113,20 +115,20 @@ export function RehabilitationTypeDialog({ onComplete }: RehabilitationTypeDialo
       <DialogContent className="sm:max-w-[425px]" style={{ zIndex: 9999 }}>
         <DialogHeader>
           <DialogTitle className="text-left text-xl pl-[17px]">
-            ¿Qué quieres rehabilitar?
+            {t("onboarding.rehabTitle")}
           </DialogTitle>
           <DialogDescription className="text-left text-sm pl-[17px]">
-            Selecciona el tipo de adicción de la que te quieres liberar
+            {t("onboarding.rehabDescription")}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground pl-[17px]">
-              Liberación de:
+              {t("onboarding.liberationFrom")}
             </p>
             <Select value={selectedType} onValueChange={setSelectedType}>
               <SelectTrigger className="w-full pl-[17px]">
-                <SelectValue placeholder="Selecciona una opción" />
+                <SelectValue placeholder={t("onboarding.selectOption")} />
               </SelectTrigger>
               <SelectContent className="z-[99999] bg-popover max-h-[300px] overflow-y-auto">
                 {REHABILITATION_TYPES.map((type) => (
@@ -142,17 +144,17 @@ export function RehabilitationTypeDialog({ onComplete }: RehabilitationTypeDialo
             disabled={isSaving || !selectedType}
             className="w-full"
           >
-            {isSaving ? "Guardando..." : "Guardar"}
+            {isSaving ? t("onboarding.saving") : t("onboarding.save")}
           </Button>
           <Button 
             onClick={handleSkip} 
             variant="outline"
             className="w-full"
           >
-            Prefiero no decir ahora.
+            {t("onboarding.preferNotToSay")}
           </Button>
           <p className="text-xs text-muted-foreground text-center">
-            Podrás cambiar esto más tarde en configuración.
+            {t("onboarding.canChangeLater")}
           </p>
         </div>
       </DialogContent>
