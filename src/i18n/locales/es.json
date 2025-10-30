@@ -37,7 +37,7 @@
     "createAccount": "Crear cuenta"
   },
   "navigation": {
-    "dashboard": "Tu Centro",
+    "dashboard": "Mi Centro",
     "plan": "Mi Plan",
     "progress": "Progreso",
     "emotionJournal": "Diario de Emociones",
@@ -185,7 +185,11 @@
     "remainingPlural": "restantes",
     "todayLower": "hoy",
     "thisWeekLower": "esta semana",
-    "thisMonthLower": "este mes"
+    "thisMonthLower": "este mes",
+    "sleepSchedule": "Horario de sueño",
+    "definedBedtime": "Hora definida para acostarme:",
+    "definedWakeUpTime": "Hora definida para levantarme:",
+    "scheduleUpdated": "Horario actualizado"
   },
   "progress": {
     "title": "Progreso",

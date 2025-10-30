@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Plus, ChevronDown, ChevronUp, Pencil, Trash2, CheckCircle2, Circle, CalendarIcon, GripVertical } from "lucide-react";
+import { Plus, ChevronDown, ChevronUp, Pencil, Trash2, CheckCircle2, Circle, CalendarIcon, GripVertical, Clock } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -134,6 +134,8 @@ export default function Plan() {
     link: ""
   });
   const [editingGoal, setEditingGoal] = useState<any>(null);
+  const [bedtime, setBedtime] = useState<string>('21:00');
+  const [wakeUpTime, setWakeUpTime] = useState<string>('07:00');
 
   // Get local date string without UTC conversion
   const getLocalDateString = (date: Date = new Date()): string => {
@@ -450,7 +452,19 @@ export default function Plan() {
           }
         }
         
-        // Always refetch with proper ordering
+      // Fetch sleep schedule from profile
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('bedtime, wake_up_time')
+        .eq('user_id', user.id)
+        .single();
+      
+      if (profileData) {
+        if (profileData.bedtime) setBedtime(profileData.bedtime);
+        if (profileData.wake_up_time) setWakeUpTime(profileData.wake_up_time);
+      }
+
+      // Always refetch with proper ordering
         const { data: orderedGoals } = await supabase.from('goals').select('*').eq('user_id', user.id).order('order_index', { ascending: true, nullsFirst: false });
         
         if (orderedGoals) {
@@ -990,6 +1004,58 @@ export default function Plan() {
     }
   };
 
+  // Handle bedtime change
+  const handleBedtimeChange = async (time: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({ bedtime: time })
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      setBedtime(time);
+      toast({
+        title: t('plan.scheduleUpdated'),
+      });
+    } catch (error) {
+      console.error('Error updating bedtime:', error);
+      toast({
+        title: t('goals.error'),
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Handle wake up time change
+  const handleWakeUpTimeChange = async (time: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({ wake_up_time: time })
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      setWakeUpTime(time);
+      toast({
+        title: t('plan.scheduleUpdated'),
+      });
+    } catch (error) {
+      console.error('Error updating wake up time:', error);
+      toast({
+        title: t('goals.error'),
+        variant: "destructive",
+      });
+    }
+  };
+
   const saveGoalOrder = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -1045,6 +1111,65 @@ export default function Plan() {
     }
   };
   return <div className="space-y-[30px] animate-in fade-in duration-500 mt-[14px] md:-mt-[4px]">
+      {/* Sleep Schedule Widget */}
+      <Card className="bg-gradient-to-br from-primary/5 to-transparent border-primary/20 ml-[35px] mr-[35px]">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Clock className="w-5 h-5" />
+            {t('plan.sleepSchedule')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="p-3 rounded-xl bg-background/50 border border-sidebar-border">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                <p className="text-xs text-muted-foreground whitespace-nowrap">{t('plan.definedBedtime')}</p>
+                <select 
+                  value={bedtime}
+                  onChange={(e) => handleBedtimeChange(e.target.value)}
+                  className="bg-background border border-sidebar-border rounded-lg px-2 py-1 pr-6 pl-[15px] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-primary appearance-none bg-no-repeat"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                    backgroundPosition: 'right 0.25rem center',
+                    backgroundSize: '1.25em 1.25em'
+                  }}
+                >
+                  {Array.from({ length: 24 }, (_, i) => {
+                    const hour = i.toString().padStart(2, '0');
+                    return (
+                      <option key={hour} value={`${hour}:00`}>{hour}:00</option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+            
+            <div className="p-3 rounded-xl bg-background/50 border border-sidebar-border">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                <p className="text-xs text-muted-foreground whitespace-nowrap">{t('plan.definedWakeUpTime')}</p>
+                <select 
+                  value={wakeUpTime}
+                  onChange={(e) => handleWakeUpTimeChange(e.target.value)}
+                  className="bg-background border border-sidebar-border rounded-lg px-2 py-1 pr-6 pl-[15px] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-primary appearance-none bg-no-repeat"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                    backgroundPosition: 'right 0.25rem center',
+                    backgroundSize: '1.25em 1.25em'
+                  }}
+                >
+                  {Array.from({ length: 24 }, (_, i) => {
+                    const hour = i.toString().padStart(2, '0');
+                    return (
+                      <option key={hour} value={`${hour}:00`}>{hour}:00</option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="flex justify-between items-center gap-4 pl-[35px]">
         <h2 className="text-3xl font-bold text-foreground">{t('goals.title') || 'Metas'}</h2>
         <div className="flex gap-2">
