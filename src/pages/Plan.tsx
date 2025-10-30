@@ -1253,12 +1253,12 @@ export default function Plan() {
       {/* Edit Goal Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t('plan.editGoal')}</DialogTitle>
-          </DialogHeader>
+        <DialogHeader>
+          <DialogTitle>{t('plan.editGoal')}:</DialogTitle>
+        </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-text">{t('plan.goalText')}</Label>
+              <Label htmlFor="edit-goal-text" className="block">{t('plan.goalText')}:</Label>
               <Input id="edit-goal-text" placeholder={t('plan.writeGoalPlaceholder')} value={editingGoal?.text || ""} onChange={e => setEditingGoal(prev => ({
               ...prev,
               text: e.target.value
@@ -1266,7 +1266,7 @@ export default function Plan() {
             </div>
             
             {editingGoal?.goal_type === 'periodic' && <div className="space-y-2">
-                <Label htmlFor="edit-periodic-type">{t('plan.periodicity')}</Label>
+                <Label htmlFor="edit-periodic-type" className="block">{t('plan.periodicity')}:</Label>
                 <Select value={editingGoal?.periodic_type || ""} onValueChange={value => setEditingGoal(prev => ({
               ...prev,
               periodic_type: value
@@ -1283,7 +1283,7 @@ export default function Plan() {
               </div>}
 
             {editingGoal?.goal_type === 'onetime' && <div className="space-y-2">
-                <Label>{t('plan.targetDate')}</Label>
+                <Label className="block">{t('plan.targetDate')}:</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !editingGoal?.target_date && "text-muted-foreground")}>
@@ -1303,7 +1303,7 @@ export default function Plan() {
               </div>}
 
             {editingGoal?.goal_type !== 'onetime' && <div className="space-y-2">
-              <Label htmlFor="edit-goal-remaining">{t('plan.numberOfTimes')}</Label>
+              <Label htmlFor="edit-goal-remaining" className="block">{t('plan.numberOfTimes')}:</Label>
               <Input id="edit-goal-remaining" type="number" min="1" value={editingGoal?.remaining || 1} onChange={e => setEditingGoal(prev => ({
               ...prev,
               remaining: parseInt(e.target.value) || 1
@@ -1311,7 +1311,7 @@ export default function Plan() {
             </div>}
             
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-instructions">{t('plan.instructions')}</Label>
+              <Label htmlFor="edit-goal-instructions" className="block">{t('plan.instructions')}:</Label>
               <Textarea 
                 id="edit-goal-instructions" 
                 placeholder={t('plan.instructionsPlaceholder')} 
@@ -1326,7 +1326,7 @@ export default function Plan() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-notes">{t('plan.notes')}</Label>
+              <Label htmlFor="edit-goal-notes" className="block">{t('plan.notes')}:</Label>
               <Textarea 
                 id="edit-goal-notes" 
                 placeholder={t('plan.notesPlaceholder')} 
@@ -1341,7 +1341,7 @@ export default function Plan() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="edit-goal-link">{t('plan.linkOptional')}</Label>
+              <Label htmlFor="edit-goal-link" className="block">{t('plan.linkOptional')}:</Label>
               <Input 
                 id="edit-goal-link" 
                 type="url"
@@ -1352,7 +1352,7 @@ export default function Plan() {
                   link: e.target.value
                 }))}
               />
-              <p className="text-xs text-muted-foreground">{t('plan.linkHint')}</p>
+              <p className="text-xs text-muted-foreground">{t('plan.linkHint')}:</p>
             </div>
             <Button onClick={updateGoal} className="w-full">
               {t('plan.saveChanges')}
