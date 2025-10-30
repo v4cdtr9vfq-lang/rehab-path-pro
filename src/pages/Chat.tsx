@@ -28,6 +28,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MentorshipsView from "@/components/MentorshipsView";
+import { useTranslation } from "react-i18next";
 
 interface ChatMessage {
   id: string;
@@ -36,33 +37,36 @@ interface ChatMessage {
   message: string;
   created_at: string;
   room: string;
+  language?: string;
 }
 
 const CHAT_ROOMS = [
-  { id: 'alcohol', label: 'Alcohol' },
-  { id: 'amor', label: 'Amor' },
-  { id: 'azucar', label: 'Azúcar' },
-  { id: 'cannabis', label: 'Cannabis' },
-  { id: 'cocaina', label: 'Cocaína' },
-  { id: 'codependencia', label: 'Codependencia' },
-  { id: 'comida', label: 'Comida' },
-  { id: 'compras', label: 'Compras' },
-  { id: 'drama', label: 'Drama' },
-  { id: 'medicamentos', label: 'Medicamentos' },
-  { id: 'narcoticos', label: 'Narcóticos' },
-  { id: 'pornografia', label: 'Pornografía' },
-  { id: 'redes_sociales', label: 'Redes Sociales' },
-  { id: 'sexo', label: 'Sexo' },
-  { id: 'tabaco', label: 'Tabaco' },
-  { id: 'tecnologia', label: 'Tecnología' },
-  { id: 'trabajo', label: 'Trabajo' },
-  { id: 'vaporizadores', label: 'Vaporizadores' },
-  { id: 'videojuegos', label: 'Videojuegos' },
-  { id: 'otros', label: 'Otros' },
+  { id: 'alcohol', translationKey: 'addictionTypes.alcohol' },
+  { id: 'amor', translationKey: 'addictionTypes.love' },
+  { id: 'azucar', translationKey: 'addictionTypes.sugar' },
+  { id: 'cannabis', translationKey: 'addictionTypes.cannabis' },
+  { id: 'cocaina', translationKey: 'addictionTypes.cocaine' },
+  { id: 'codependencia', translationKey: 'addictionTypes.codependency' },
+  { id: 'comida', translationKey: 'addictionTypes.food' },
+  { id: 'compras', translationKey: 'addictionTypes.shopping' },
+  { id: 'drama', translationKey: 'addictionTypes.drama' },
+  { id: 'medicamentos', translationKey: 'addictionTypes.medications' },
+  { id: 'narcoticos', translationKey: 'addictionTypes.narcotics' },
+  { id: 'pornografia', translationKey: 'addictionTypes.pornography' },
+  { id: 'redes_sociales', translationKey: 'addictionTypes.social_media' },
+  { id: 'sexo', translationKey: 'addictionTypes.sex' },
+  { id: 'tabaco', translationKey: 'addictionTypes.tobacco' },
+  { id: 'tecnologia', translationKey: 'addictionTypes.technology' },
+  { id: 'trabajo', translationKey: 'addictionTypes.work' },
+  { id: 'vaporizadores', translationKey: 'addictionTypes.vaporizers' },
+  { id: 'videojuegos', translationKey: 'addictionTypes.videogames' },
+  { id: 'otros', translationKey: 'addictionTypes.others' },
 ] as const;
 
 export default function Chat() {
   const { toast } = useToast();
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language;
   const isMobile = useIsMobile();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -126,8 +130,8 @@ export default function Chat() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       toast({
-        title: "Error",
-        description: "Debes iniciar sesión para usar el chat",
+        title: t('chat.error'),
+        description: t('chat.mustLogin'),
         variant: "destructive",
       });
       return;
@@ -138,11 +142,12 @@ export default function Chat() {
     console.log('Nombre del usuario:', fullName, 'Iniciales:', getInitials(fullName));
     setUserName(fullName);
 
-    // Load existing messages for current room
+    // Load existing messages for current room and language
     const { data: existingMessages } = await supabase
       .from('chat_messages')
       .select('*')
       .eq('room', currentRoom)
+      .eq('language', currentLanguage)
       .order('created_at', { ascending: true })
       .limit(50);
 
@@ -220,7 +225,7 @@ export default function Chat() {
         filter: `room=eq.${currentRoom}`
       }, (payload) => {
         const newMsg = payload.new as ChatMessage;
-        if (newMsg.room === currentRoom) {
+        if (newMsg.room === currentRoom && newMsg.language === currentLanguage) {
           setMessages(prev => [...prev, newMsg]);
           scrollToBottom();
         }
@@ -295,6 +300,7 @@ export default function Chat() {
           user_name: displayName,
           message: newMessage.trim(),
           room: currentRoom,
+          language: currentLanguage,
         });
 
       if (error) throw error;
@@ -303,8 +309,8 @@ export default function Chat() {
     } catch (error: any) {
       console.error('Error sending message:', error);
       toast({
-        title: "Error",
-        description: "No se pudo enviar el mensaje",
+        title: t('chat.error'),
+        description: t('chat.errorSending'),
         variant: "destructive",
       });
     } finally {
@@ -358,13 +364,13 @@ export default function Chat() {
       setEditedMessage("");
       
       toast({
-        title: "Mensaje editado",
-        description: "Tu mensaje ha sido actualizado correctamente",
+        title: t('chat.messageEdited'),
+        description: t('chat.messageEditedDesc'),
       });
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: "No se pudo editar el mensaje",
+        title: t('chat.error'),
+        description: t('chat.errorEditing'),
         variant: "destructive",
       });
     }
@@ -406,13 +412,13 @@ export default function Chat() {
         }
 
         toast({
-          title: "Denuncia retirada",
-          description: "Has retirado tu denuncia de este mensaje",
+          title: t('chat.reportRemoved'),
+          description: t('chat.reportRemovedDesc'),
         });
       } catch (error: any) {
         toast({
-          title: "Error",
-          description: "No se pudo retirar la denuncia",
+          title: t('chat.error'),
+          description: t('chat.errorUnreport'),
           variant: "destructive",
         });
       }
@@ -433,13 +439,13 @@ export default function Chat() {
         setMyReports(prev => new Set([...prev, messageId]));
 
         toast({
-          title: "Mensaje denunciado",
-          description: "Has marcado este mensaje como inapropiado",
+          title: t('chat.messageReported'),
+          description: t('chat.messageReportedDesc'),
         });
       } catch (error: any) {
         toast({
-          title: "Error",
-          description: "No se pudo denunciar el mensaje",
+          title: t('chat.error'),
+          description: t('chat.errorReport'),
           variant: "destructive",
         });
       }
@@ -459,13 +465,13 @@ export default function Chat() {
       setMessages(prev => prev.filter(msg => msg.id !== messageId));
       
       toast({
-        title: "Mensaje eliminado",
-        description: "Tu mensaje ha sido eliminado correctamente",
+        title: t('chat.messageDeleted'),
+        description: t('chat.messageDeletedDesc'),
       });
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: "No se pudo eliminar el mensaje",
+        title: t('chat.error'),
+        description: t('chat.errorDeleting'),
         variant: "destructive",
       });
     }
@@ -478,10 +484,10 @@ export default function Chat() {
       <Tabs defaultValue="rooms" className="flex-1 flex flex-col">
         <TabsList className="w-full justify-start rounded-none bg-transparent p-0">
           <TabsTrigger value="rooms" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
-            Salas
+            {t('chat.rooms')}
           </TabsTrigger>
           <TabsTrigger value="mentorships" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
-            Mentorías
+            {t('chat.mentorships')}
           </TabsTrigger>
         </TabsList>
 
@@ -495,7 +501,7 @@ export default function Chat() {
             }}>
               <SelectTrigger className="w-full bg-muted text-foreground border-border flex items-center pr-3 pl-3 relative [&>svg]:absolute [&>svg]:right-3">
                 <span className="flex-1 text-left font-medium pr-8">
-                  {CHAT_ROOMS.find(room => room.id === currentRoom)?.label}
+                  {t(CHAT_ROOMS.find(room => room.id === currentRoom)?.translationKey || 'addictionTypes.narcotics')}
                 </span>
                 <Badge 
                   variant="secondary" 
@@ -513,7 +519,7 @@ export default function Chat() {
                     className="cursor-pointer hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground"
                   >
                     <span className="flex items-center justify-between w-full">
-                      <span className="flex-1">{room.label}</span>
+                      <span className="flex-1">{t(room.translationKey)}</span>
                       <Badge 
                         variant="secondary" 
                         className="ml-2 inline-flex gap-1 text-xs px-1.5 py-0.5 h-5 bg-primary/20 text-primary pointer-events-none"
@@ -538,17 +544,17 @@ export default function Chat() {
                     <div className="flex flex-col items-center gap-2 flex-shrink-0">
                       <Avatar className="h-11 w-11">
                         <AvatarFallback className="bg-muted text-foreground text-sm font-semibold">
-                          E
+                          {t('chat.hope').charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                     </div>
                     <div className="flex flex-col gap-1 flex-1">
                       <span className="text-xs text-muted-foreground pl-6">
-                        Esperanza
+                        {t('chat.hope')}
                       </span>
                       <div className="rounded-[18px] px-6 py-3 max-w-full bg-muted/70 text-foreground">
                         <p className="text-xs">
-                          Siempre hay un primer valiente...
+                          {t('chat.firstMessage')}
                         </p>
                       </div>
                     </div>
@@ -575,10 +581,10 @@ export default function Chat() {
                         />
                         <div className="flex gap-2">
                           <Button size="sm" onClick={() => saveEdit(msg.id)}>
-                            Guardar
+                            {t('chat.save')}
                           </Button>
                           <Button size="sm" variant="outline" onClick={cancelEditing}>
-                            Cancelar
+                            {t('chat.cancel')}
                           </Button>
                         </div>
                       </div>
@@ -617,14 +623,14 @@ export default function Chat() {
                                   </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="bg-popover text-popover-foreground border-border z-[100] shadow-lg min-w-[160px]">
-                                  <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
-                                    <Edit2 className="h-4 w-4 mr-2" />
-                                    Editar
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem onClick={() => setDeleteConfirmId(msg.id)} className="text-destructive">
-                                    <Trash2 className="h-4 w-4 mr-2" />
-                                    Eliminar
-                                  </DropdownMenuItem>
+                                   <DropdownMenuItem onClick={() => startEditing(msg.id, msg.message)}>
+                                     <Edit2 className="h-4 w-4 mr-2" />
+                                     {t('chat.edit')}
+                                   </DropdownMenuItem>
+                                   <DropdownMenuItem onClick={() => setDeleteConfirmId(msg.id)} className="text-destructive">
+                                     <Trash2 className="h-4 w-4 mr-2" />
+                                     {t('chat.delete')}
+                                   </DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </div>
@@ -726,7 +732,7 @@ export default function Chat() {
                   onCheckedChange={setIsAnonymous}
                 />
                 <Label htmlFor="anonymous-mode" className="text-sm text-muted-foreground cursor-pointer">
-                  Escribir en modo anónimo.
+                  {t('chat.anonymousMode')}
                 </Label>
               </div>
             </div>
@@ -763,8 +769,8 @@ export default function Chat() {
 
         <TabsContent value="mentorships" className="flex-1 mt-0 min-h-0 overflow-hidden">
           <Card className="h-full flex flex-col border-border overflow-hidden">
-            <div className="bg-muted/30 border-b px-4 py-3 shrink-0">
-              <h2 className="font-semibold">Mis Mentorías</h2>
+          <div className="bg-muted/30 border-b px-4 py-3 shrink-0">
+              <h2 className="font-semibold">{t('chat.myMentorships')}</h2>
             </div>
             <div className="flex-1 overflow-auto">
               <MentorshipsView />
@@ -777,17 +783,17 @@ export default function Chat() {
       <AlertDialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogTitle>{t('chat.confirmDelete')}</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar este mensaje? Esta acción no se puede deshacer.
+              {t('chat.deleteMessage')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex justify-end gap-3">
             <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>
-              Cancelar
+              {t('chat.cancel')}
             </Button>
             <Button variant="destructive" onClick={() => deleteConfirmId && deleteMessage(deleteConfirmId)}>
-              Sí
+              {t('chat.yes')}
             </Button>
           </div>
         </AlertDialogContent>

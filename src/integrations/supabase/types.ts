@@ -108,6 +108,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          language: string
           message: string
           room: string
           updated_at: string | null
@@ -117,6 +118,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          language?: string
           message: string
           room?: string
           updated_at?: string | null
@@ -126,6 +128,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          language?: string
           message?: string
           room?: string
           updated_at?: string | null
@@ -165,6 +168,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          language: string
           message: string
           read_at: string | null
           receiver_id: string
@@ -174,6 +178,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          language?: string
           message: string
           read_at?: string | null
           receiver_id: string
@@ -183,6 +188,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          language?: string
           message?: string
           read_at?: string | null
           receiver_id?: string
