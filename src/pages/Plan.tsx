@@ -1479,7 +1479,7 @@ export default function Plan() {
         {/* Sleep Schedule Widget */}
         <Card className="border-sidebar-border bg-card/50 backdrop-blur rounded-3xl">
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg">
+            <CardTitle className="text-lg pl-[15px]">
               Horario de sueño objetivo:
             </CardTitle>
           </CardHeader>
