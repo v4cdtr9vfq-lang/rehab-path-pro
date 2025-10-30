@@ -699,7 +699,9 @@ export default function Settings() {
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
               />
-              <Label htmlFor="confirm-email" className="pl-4 !mt-2.5">{t('settings.confirmEmail')}:</Label>
+              <div className="pt-2.5">
+                <Label htmlFor="confirm-email" className="pl-4">{t('settings.confirmEmail')}:</Label>
+              </div>
               <Input
                 id="confirm-email"
                 type="email"
@@ -714,9 +716,11 @@ export default function Settings() {
               >
                 {isUpdatingEmail ? t('settings.updating') : t('settings.update')}
               </Button>
-              <p className="text-xs text-muted-foreground pl-4 !mt-2.5">
-                {t('settings.confirmationEmailWillBeSent')}
-              </p>
+              <div className="pt-2.5">
+                <p className="text-xs text-muted-foreground pl-4">
+                  {t('settings.confirmationEmailWillBeSent')}
+                </p>
+              </div>
             </div>
 
             <div className="border-t pt-4 space-y-4">
