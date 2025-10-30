@@ -58,29 +58,29 @@ const mockUsers: CommunityUser[] = [
   { id: "25", name: "Alberto Méndez", avatar: "", years: 0, months: 0, days: 14, medals: [], availableForHelp: true, rehabilitationType: "pornografia" },
 ];
 
-const REHABILITATION_TYPES = [
-  { id: 'todos', label: 'Todos' },
-  { id: 'alcohol', label: 'Alcohol' },
-  { id: 'amor', label: 'Amor' },
-  { id: 'azucar', label: 'Azúcar' },
-  { id: 'cannabis', label: 'Cannabis' },
-  { id: 'cocaina', label: 'Cocaína' },
-  { id: 'codependencia', label: 'Codependencia' },
-  { id: 'comida', label: 'Comida' },
-  { id: 'compras', label: 'Compras' },
-  { id: 'drama', label: 'Drama' },
-  { id: 'medicamentos', label: 'Medicamentos' },
-  { id: 'narcoticos', label: 'Narcóticos' },
-  { id: 'pornografia', label: 'Pornografía' },
-  { id: 'redes_sociales', label: 'Redes Sociales' },
-  { id: 'sexo', label: 'Sexo' },
-  { id: 'tabaco', label: 'Tabaco' },
-  { id: 'tecnologia', label: 'Tecnología' },
-  { id: 'trabajo', label: 'Trabajo' },
-  { id: 'vaporizadores', label: 'Vaporizadores' },
-  { id: 'videojuegos', label: 'Videojuegos' },
-  { id: 'otros', label: 'Otros' },
-] as const;
+const getRehabilitationTypes = (t: any) => [
+  { id: 'todos', label: t('community.filterAll') },
+  { id: 'alcohol', label: t('community.filterAlcohol') },
+  { id: 'amor', label: t('community.filterLove') },
+  { id: 'azucar', label: t('community.filterSugar') },
+  { id: 'cannabis', label: t('community.filterCannabis') },
+  { id: 'cocaina', label: t('community.filterCocaine') },
+  { id: 'codependencia', label: t('community.filterCodepency') },
+  { id: 'comida', label: t('community.filterFood') },
+  { id: 'compras', label: t('community.filterShopping') },
+  { id: 'drama', label: t('community.filterDrama') },
+  { id: 'medicamentos', label: t('community.filterMedications') },
+  { id: 'narcoticos', label: t('community.filterNarcotics') },
+  { id: 'pornografia', label: t('community.filterPornography') },
+  { id: 'redes_sociales', label: t('community.filterSocialMedia') },
+  { id: 'sexo', label: t('community.filterSex') },
+  { id: 'tabaco', label: t('community.filterTobacco') },
+  { id: 'tecnologia', label: t('community.filterTechnology') },
+  { id: 'trabajo', label: t('community.filterWork') },
+  { id: 'vaporizadores', label: t('community.filterVaporizers') },
+  { id: 'videojuegos', label: t('community.filterVideogames') },
+  { id: 'otros', label: t('community.filterOthers') },
+];
 
 export default function Community() {
   const isMobile = useIsMobile();
@@ -93,6 +93,7 @@ export default function Community() {
   const [loading, setLoading] = useState(true);
   const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());
   const channelRef = useRef<any>(null);
+  const REHABILITATION_TYPES = getRehabilitationTypes(t);
 
   // Set up presence tracking for all users
   useEffect(() => {
@@ -499,10 +500,10 @@ export default function Community() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor="available-help" className="text-base font-semibold">
-                  Disponible para asistencia
+                  {t('community.availableForHelp')}
                 </Label>
                 <p className="text-sm text-muted-foreground">
-                  Has desbloqueado todas las medallas. Indica si estás disponible para ayudar a otros miembros de la comunidad.
+                  {t('community.availableForHelpDesc')}
                 </p>
               </div>
               <Switch
@@ -522,16 +523,16 @@ export default function Community() {
                     if (error) {
                       console.error('Error saving availability preference:', error);
                       toast({
-                        title: "Error",
-                        description: "No se pudo guardar tu preferencia de disponibilidad",
+                        title: t('common.error'),
+                        description: t('community.errorSaving'),
                         variant: "destructive",
                       });
                     } else {
                       toast({
-                        title: checked ? "Disponible" : "No disponible",
+                        title: checked ? t('community.nowAvailable') : t('community.notAvailable'),
                         description: checked 
-                          ? "Ahora estás disponible para ayudar a otros miembros"
-                          : "Ya no estás disponible para asistencia",
+                          ? t('community.nowAvailableDesc')
+                          : t('community.notAvailableDesc'),
                       });
                     }
                   }
