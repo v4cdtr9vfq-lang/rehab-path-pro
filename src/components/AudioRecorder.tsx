@@ -54,9 +54,24 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
         } 
       });
 
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus'
-      });
+      // Detect supported MIME type (Safari/iOS doesn't support webm)
+      let mimeType = 'audio/webm;codecs=opus';
+      if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+        mimeType = 'audio/webm;codecs=opus';
+      } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+        mimeType = 'audio/mp4';
+      } else if (MediaRecorder.isTypeSupported('audio/wav')) {
+        mimeType = 'audio/wav';
+      } else {
+        // Let the browser use its default format
+        mimeType = '';
+      }
+
+      console.log('Using MIME type:', mimeType || 'browser default');
+
+      const mediaRecorder = mimeType 
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream);
       
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
@@ -71,7 +86,8 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
         console.log('Recording stopped, processing...');
         setIsProcessing(true);
         
-        const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm;codecs=opus' });
+        const actualMimeType = mediaRecorder.mimeType || 'audio/webm';
+        const audioBlob = new Blob(chunksRef.current, { type: actualMimeType });
         await transcribeAudio(audioBlob);
         
         stream.getTracks().forEach(track => track.stop());
@@ -86,11 +102,23 @@ export const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) =
         title: t('journal.recording'),
         description: t('journal.speakNow'),
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error starting recording:', error);
+      
+      let errorMessage = t('journal.microphoneError');
+      
+      // Provide specific error messages
+      if (error.name === 'NotAllowedError') {
+        errorMessage = t('journal.microphonePermissionDenied');
+      } else if (error.name === 'NotFoundError') {
+        errorMessage = t('journal.microphoneNotFound');
+      } else if (error.name === 'NotReadableError') {
+        errorMessage = t('journal.microphoneInUse');
+      }
+      
       toast({
         title: t('common.error'),
-        description: t('journal.microphoneError'),
+        description: errorMessage,
         variant: "destructive",
       });
     }
