@@ -179,8 +179,8 @@
     "todayReminder": "Hoy elijo recordarme que:",
     "bedtime": "Hora de dormir",
     "wakeUpTime": "Hora de levantarse",
-    "fellAsleepAround": "Me dormí sobre las:",
-    "wokeUpAround": "Me levanté a las:",
+    "fellAsleepAround": "Ayer me acosté sobre las:",
+    "wokeUpAround": "Hoy me levanté a las:",
     "scheduleUpdated": "Horario actualizado"
   },
   "medals": {

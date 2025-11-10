@@ -179,8 +179,8 @@
     "todayReminder": "Today I choose to remind myself that:",
     "bedtime": "Bedtime",
     "wakeUpTime": "Wake up time",
-    "fellAsleepAround": "I fell asleep around:",
-    "wokeUpAround": "I woke up at:",
+    "fellAsleepAround": "Yesterday I went to bed around:",
+    "wokeUpAround": "Today I woke up at:",
     "scheduleUpdated": "Schedule updated"
   },
   "medals": {
