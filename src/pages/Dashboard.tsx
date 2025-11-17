@@ -13,6 +13,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTranslation } from "react-i18next";
 import { useTranslatedQuickTools } from "@/hooks/useTranslatedQuickTools";
+import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
+import { GuidedOnboardingDialog } from "@/components/onboarding/GuidedOnboardingDialog";
 import {
   DndContext,
   closestCenter,
@@ -42,6 +44,7 @@ export default function Home() {
   } = useToast();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { currentStep, shouldShowDialog } = useGuidedOnboarding();
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [loading, setLoading] = useState(true);
   const [checkInCompleted, setCheckInCompleted] = useState(false);
@@ -1250,5 +1253,31 @@ export default function Home() {
           </div>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Guided Onboarding Dialogs */}
+      {shouldShowDialog('emotion_journal') && (
+        <GuidedOnboardingDialog 
+          step="emotion_journal" 
+          onClose={() => {}} 
+        />
+      )}
+      {shouldShowDialog('check_in') && (
+        <GuidedOnboardingDialog 
+          step="check_in" 
+          onClose={() => {}} 
+        />
+      )}
+      {shouldShowDialog('daily_inventory') && (
+        <GuidedOnboardingDialog 
+          step="daily_inventory" 
+          onClose={() => {}} 
+        />
+      )}
+      {shouldShowDialog('values') && (
+        <GuidedOnboardingDialog 
+          step="values" 
+          onClose={() => {}} 
+        />
+      )}
     </div>;
 }

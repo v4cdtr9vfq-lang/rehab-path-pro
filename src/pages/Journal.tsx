@@ -8,8 +8,11 @@ import { AudioRecorder } from "@/components/AudioRecorder";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { format } from "date-fns";
+import { es, enUS } from "date-fns/locale";
+import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
 
 interface JournalEntry {
   id: string;
@@ -23,8 +26,12 @@ interface JournalEntry {
 }
 
 export default function Journal() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === 'es' ? es : enUS;
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { currentStep, updateStep } = useGuidedOnboarding();
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [showNewEntry, setShowNewEntry] = useState(false);
   const [entryContent, setEntryContent] = useState("");
@@ -286,6 +293,13 @@ export default function Journal() {
             title: t('journal.entrySaved'),
             description: t('journal.entrySuccessfullySaved'),
           });
+
+          // Check if this is the daily inventory step
+          if (currentStep === 'daily_inventory' && entryTitle === 'Inventario del día') {
+            await updateStep('values');
+            navigate('/dashboard');
+            return;
+          }
         }
       }
 

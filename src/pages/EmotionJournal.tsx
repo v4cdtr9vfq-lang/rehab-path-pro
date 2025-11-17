@@ -13,10 +13,11 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getEmotionCategories } from "@/utils/emotionCategories";
 import { translateEmotion } from "@/utils/translateEmotion";
+import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
 
 interface TertiaryEmotion {
   name: string;
@@ -75,9 +76,12 @@ const COLORS = [
 ];
 
 export default function EmotionJournal() {
+  const { toast } = useToast();
   const { t, i18n } = useTranslation();
   const dateLocale = i18n.language === 'en' ? enUS : es;
   const emotionCategories = getEmotionCategories(t);
+  const navigate = useNavigate();
+  const { currentStep, updateStep } = useGuidedOnboarding();
   const [selectedPrimary, setSelectedPrimary] = useState<string[]>([]);
   const [selectedSecondary, setSelectedSecondary] = useState<string[]>([]);
   const [selectedTertiary, setSelectedTertiary] = useState<string[]>([]);
@@ -98,7 +102,6 @@ export default function EmotionJournal() {
   const [thoughtDescription, setThoughtDescription] = useState("");
   const [beliefTrigger, setBeliefTrigger] = useState<boolean | null>(null);
   const [beliefDescription, setBeliefDescription] = useState("");
-  const { toast } = useToast();
   
   const ENTRIES_PER_PAGE = 3;
 
@@ -427,6 +430,12 @@ export default function EmotionJournal() {
       setBeliefDescription("");
       await loadSavedEntries();
       await fetchStats();
+
+      // Update guided onboarding step if in the flow
+      if (currentStep === 'emotion_journal') {
+        await updateStep('check_in');
+        navigate('/dashboard');
+      }
     } catch (error) {
       console.error('Error saving emotions:', error);
       toast({
