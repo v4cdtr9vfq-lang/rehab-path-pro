@@ -64,6 +64,7 @@ export default function Values() {
   const [originalValuesOrder, setOriginalValuesOrder] = useState<Value[]>([]);
   const [editingValueId, setEditingValueId] = useState<string | null>(null);
   const [editValueName, setEditValueName] = useState("");
+  const [isComposing, setIsComposing] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -649,8 +650,10 @@ export default function Values() {
           <Input
             value={editName}
             onChange={(e) => onEditNameChange(e.target.value)}
+            onCompositionStart={() => setIsComposing(true)}
+            onCompositionEnd={() => setIsComposing(false)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+              if (e.key === 'Enter' && !isComposing) {
                 onSaveEdit();
               }
             }}
@@ -751,8 +754,10 @@ export default function Values() {
                     placeholder={t('values.primaryPlaceholder')}
                     value={newValueName}
                     onChange={(e) => setNewValueName(e.target.value)}
+                    onCompositionStart={() => setIsComposing(true)}
+                    onCompositionEnd={() => setIsComposing(false)}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                      if (e.key === 'Enter' && !isComposing) {
                         addValue('primary');
                       }
                     }}
@@ -839,8 +844,10 @@ export default function Values() {
                     placeholder={t('values.secondaryPlaceholder')}
                     value={newValueName}
                     onChange={(e) => setNewValueName(e.target.value)}
+                    onCompositionStart={() => setIsComposing(true)}
+                    onCompositionEnd={() => setIsComposing(false)}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                      if (e.key === 'Enter' && !isComposing) {
                         addValue('secondary');
                       }
                     }}
