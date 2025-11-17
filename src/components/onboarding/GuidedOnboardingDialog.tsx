@@ -67,7 +67,7 @@ export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialog
             {config.message}
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="flex-row gap-2 justify-end">
+        <AlertDialogFooter className="flex-row gap-2 justify-between">
           <Button 
             variant="ghost" 
             onClick={handleDisableAssistance}
@@ -75,18 +75,20 @@ export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialog
           >
             Desactivar asistencia
           </Button>
-          <Button 
-            variant="outline" 
-            onClick={onClose}
-          >
-            Cancelar
-          </Button>
-          <Button 
-            onClick={handleContinue}
-            variant="default"
-          >
-            Continuar
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={onClose}
+            >
+              Cancelar
+            </Button>
+            <Button 
+              onClick={handleContinue}
+              variant="default"
+            >
+              Continuar
+            </Button>
+          </div>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
