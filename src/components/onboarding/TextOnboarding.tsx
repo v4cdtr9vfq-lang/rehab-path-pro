@@ -59,8 +59,8 @@ export function TextOnboarding({ onComplete }: TextOnboardingProps) {
   const progress = ((currentStep + 1) / steps.length) * 100;
 
   return (
-    <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-background/95 backdrop-blur-sm">
-      <Card className="w-full max-w-2xl mx-4 p-8 shadow-xl">
+    <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-background/95 backdrop-blur-sm pointer-events-auto">
+      <Card className="w-full max-w-2xl mx-4 p-8 shadow-xl relative z-[10002] pointer-events-auto">
         <div className="space-y-6">
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm text-muted-foreground">
