@@ -7,6 +7,7 @@ export function useGuidedOnboarding() {
   const [currentStep, setCurrentStep] = useState<GuidedStep | null>(null);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [shouldShow, setShouldShow] = useState(true); // Control temporal del popup
 
   useEffect(() => {
     checkGuidedOnboardingStatus();
@@ -16,6 +17,7 @@ export function useGuidedOnboarding() {
       if (event === 'SIGNED_IN' && session) {
         // Reset to emotion_journal when user logs in (if not disabled)
         resetOnLogin(session.user.id);
+        setShouldShow(true); // Mostrar popups en nuevo login
       }
     });
 
@@ -106,7 +108,11 @@ export function useGuidedOnboarding() {
   };
 
   const shouldShowDialog = (step: GuidedStep) => {
-    return !isDisabled && currentStep === step;
+    return !isDisabled && currentStep === step && shouldShow;
+  };
+
+  const hideTemporarily = () => {
+    setShouldShow(false);
   };
 
   return {
@@ -116,6 +122,7 @@ export function useGuidedOnboarding() {
     updateStep,
     toggleAssistance,
     shouldShowDialog,
+    hideTemporarily,
     refresh: checkGuidedOnboardingStatus
   };
 }
