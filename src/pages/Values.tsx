@@ -649,9 +649,19 @@ export default function Values() {
         {isEditing ? (
           <Input
             value={editName}
-            onChange={(e) => onEditNameChange(e.target.value)}
-            onCompositionStart={() => setIsComposing(true)}
-            onCompositionEnd={() => setIsComposing(false)}
+            onChange={(e) => {
+              if (!isComposing) {
+                onEditNameChange(e.target.value);
+              }
+            }}
+            onCompositionStart={(e) => {
+              setIsComposing(true);
+            }}
+            onCompositionEnd={(e) => {
+              setIsComposing(false);
+              // Handle Chrome's specific behavior
+              onEditNameChange(e.currentTarget.value);
+            }}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !isComposing) {
                 onSaveEdit();
