@@ -81,12 +81,26 @@ export function TextOnboarding({ onComplete }: TextOnboardingProps) {
           <div className="flex justify-between pt-4">
             <Button
               variant="outline"
-              onClick={prevStep}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Prev clicked');
+                prevStep();
+              }}
               disabled={currentStep === 0}
+              type="button"
             >
               {t('tour.previous')}
             </Button>
-            <Button onClick={nextStep}>
+            <Button 
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Next clicked', currentStep);
+                nextStep();
+              }}
+              type="button"
+            >
               {currentStep === steps.length - 1 ? t('tour.finish') : t('tour.next')}
             </Button>
           </div>
