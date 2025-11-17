@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, X, CheckCircle2, Circle, TrendingUp, GripVertical } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -610,6 +610,9 @@ export default function Values() {
       transition,
       isDragging,
     } = useSortable({ id: value.id });
+    
+    const inputRef = useRef<HTMLInputElement>(null);
+    const isComposingRef = useRef(false);
 
     const style = {
       transform: CSS.Transform.toString(transform),
@@ -648,8 +651,20 @@ export default function Values() {
         )}
         {isEditing ? (
           <Input
-            value={editName}
-            onChange={(e) => onEditNameChange(e.target.value)}
+            ref={inputRef}
+            defaultValue={editName}
+            onInput={(e) => {
+              if (!isComposingRef.current) {
+                onEditNameChange(e.currentTarget.value);
+              }
+            }}
+            onCompositionStart={() => {
+              isComposingRef.current = true;
+            }}
+            onCompositionEnd={(e) => {
+              isComposingRef.current = false;
+              onEditNameChange(e.currentTarget.value);
+            }}
             className="flex-1"
             autoFocus
           />
