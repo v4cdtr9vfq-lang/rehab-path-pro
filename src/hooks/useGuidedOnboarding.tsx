@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-type GuidedStep = 'not_started' | 'emotion_journal' | 'check_in' | 'daily_inventory' | 'values' | 'completed';
+type GuidedStep = 'not_started' | 'emotion_journal' | 'gratitude' | 'check_in' | 'daily_inventory' | 'values' | 'completed';
 
 export function useGuidedOnboarding() {
   const [currentStep, setCurrentStep] = useState<GuidedStep | null>(null);

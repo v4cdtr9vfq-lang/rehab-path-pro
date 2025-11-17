@@ -433,7 +433,7 @@ export default function EmotionJournal() {
 
       // Update guided onboarding step if in the flow
       if (currentStep === 'emotion_journal') {
-        await updateStep('check_in');
+        await updateStep('gratitude');
         navigate('/dashboard');
       }
     } catch (error) {

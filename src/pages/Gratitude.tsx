@@ -11,8 +11,9 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
 
 interface GratitudeItem {
   id: string;
@@ -35,6 +36,8 @@ export default function Gratitude() {
   const { toast } = useToast();
   const { t, i18n } = useTranslation();
   const dateLocale = i18n.language === 'en' ? enUS : es;
+  const navigate = useNavigate();
+  const { currentStep } = useGuidedOnboarding();
 
   useEffect(() => {
     loadEntries();
@@ -164,15 +167,32 @@ export default function Gratitude() {
 
       if (error) throw error;
 
-      toast({
-        title: t('gratitude.saved'),
-        description: t('gratitude.allEntriesSaved', { count: itemsToSave.length })
-      });
+        toast({
+          title: t('gratitude.saved'),
+          description: t('gratitude.allEntriesSaved', { count: itemsToSave.length })
+        });
 
-      // Reset to initial state with 3 empty fields
-      setNewItems(["", "", ""]);
-      
-      await loadEntries();
+        // Reset to initial state with 3 empty fields
+        setNewItems(["", "", ""]);
+        
+        await loadEntries();
+
+        // Advance guided onboarding to next step (check_in)
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('guided_onboarding_step')
+          .eq('user_id', user.id)
+          .single();
+
+        if (profile?.guided_onboarding_step === 'gratitude') {
+          await supabase
+            .from('profiles')
+            .update({ guided_onboarding_step: 'check_in' })
+            .eq('user_id', user.id);
+          
+          // Navigate back to dashboard to show next popup
+          navigate('/dashboard');
+        }
     } catch (error) {
       console.error('Error saving all entries:', error);
       toast({
