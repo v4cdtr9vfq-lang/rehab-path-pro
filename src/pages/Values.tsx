@@ -650,17 +650,6 @@ export default function Values() {
           <Input
             value={editName}
             onChange={(e) => onEditNameChange(e.target.value)}
-            onCompositionStart={(e) => {
-              setIsComposing(true);
-            }}
-            onCompositionEnd={(e) => {
-              setIsComposing(false);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !isComposing) {
-                onSaveEdit();
-              }
-            }}
             className="flex-1"
             autoFocus
           />
