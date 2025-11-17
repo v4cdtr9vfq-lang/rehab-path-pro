@@ -62,7 +62,7 @@ export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialog
     <AlertDialog open={true}>
       <AlertDialogContent className="max-w-lg">
         <AlertDialogHeader>
-          <AlertDialogDescription className="text-base pt-4">
+          <AlertDialogDescription className="text-base pt-4 text-center">
             {config.message}
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -70,6 +70,7 @@ export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialog
           <Button 
             variant="destructive" 
             onClick={handleDisableAssistance}
+            className="opacity-30 hover:opacity-40"
           >
             Desactivar asistencia
           </Button>
