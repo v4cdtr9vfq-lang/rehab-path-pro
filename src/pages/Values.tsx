@@ -650,24 +650,7 @@ export default function Values() {
         {isEditing ? (
           <Input
             value={editName}
-            onChange={(e) => {
-              if (!isComposing) {
-                onEditNameChange(e.target.value);
-              }
-            }}
-            onCompositionStart={(e) => {
-              setIsComposing(true);
-            }}
-            onCompositionUpdate={(e) => {
-              // Durante la composición, guardamos el valor temporalmente
-              setComposingValue(e.currentTarget.value);
-            }}
-            onCompositionEnd={(e) => {
-              setIsComposing(false);
-              // Al finalizar, actualizamos con el valor completo
-              onEditNameChange(e.currentTarget.value);
-              setComposingValue("");
-            }}
+            onChange={(e) => onEditNameChange(e.target.value)}
             className="flex-1"
             autoFocus
           />
