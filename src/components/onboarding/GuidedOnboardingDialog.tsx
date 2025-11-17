@@ -62,7 +62,7 @@ export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialog
     <AlertDialog open={true}>
       <AlertDialogContent className="max-w-lg">
         <AlertDialogHeader>
-          <AlertDialogDescription className="text-base pt-4 text-center">
+          <AlertDialogDescription className="text-base pt-4 mx-auto max-w-md text-left">
             {config.message}
           </AlertDialogDescription>
         </AlertDialogHeader>
