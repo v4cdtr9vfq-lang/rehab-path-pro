@@ -720,7 +720,7 @@ export default function Values() {
             {t('values.cancel')}
           </Button>
           <Button onClick={saveValueOrder}>
-            {t('values.orderSaved')}
+            {t('values.saveOrder')}
           </Button>
         </div>
       )}
