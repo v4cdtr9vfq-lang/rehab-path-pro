@@ -317,17 +317,16 @@ export default function Gratitude() {
                 </Button>
               </div>
             ))}
-            <Button 
-              onClick={saveAllGratitudes} 
-              className="w-full gap-2"
-              disabled={!newItems.some(item => item.trim())}
-            >
-              <Check className="h-4 w-4" />
-              {t('gratitude.saveAll')}
-            </Button>
             <Button onClick={addNewField} variant="outline" className="w-full gap-2">
               <Plus className="h-4 w-4" />
               {t('gratitude.addAnother')}
+            </Button>
+            <Button 
+              onClick={saveAllGratitudes} 
+              className="w-full"
+              disabled={!newItems.some(item => item.trim())}
+            >
+              {t('gratitude.saveAll')}
             </Button>
           </div>
 
