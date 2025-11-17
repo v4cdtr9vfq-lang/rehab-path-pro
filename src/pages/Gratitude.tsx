@@ -343,7 +343,7 @@ export default function Gratitude() {
             </Button>
             <Button 
               onClick={saveAllGratitudes} 
-              className="w-full"
+              className="w-full hover:bg-primary/90"
               disabled={!newItems.some(item => item.trim())}
             >
               {t('gratitude.saveAll')}
