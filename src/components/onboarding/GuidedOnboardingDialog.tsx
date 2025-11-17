@@ -22,7 +22,7 @@ const STEP_CONFIG = {
     route: "/checkin"
   },
   daily_inventory: {
-    message: "¡Enhorabuena por tu compromiso con tu recuperación! Ahora es momento de rellenar tu inventario del día",
+    message: "¡Enhorabuena por tu compromiso con tu recuperación! Ahora es momento de rellenar tu inventario del día.",
     route: "/journal?title=Inventario del día"
   },
   values: {
