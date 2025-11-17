@@ -10,7 +10,39 @@ export function useGuidedOnboarding() {
 
   useEffect(() => {
     checkGuidedOnboardingStatus();
+    
+    // Listen for auth changes to reset the flow on login
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        // Reset to emotion_journal when user logs in (if not disabled)
+        resetOnLogin(session.user.id);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
+
+  const resetOnLogin = async (userId: string) => {
+    try {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('guided_onboarding_disabled')
+        .eq('user_id', userId)
+        .single();
+
+      // Only reset if assistance is not disabled
+      if (profile && !profile.guided_onboarding_disabled) {
+        await supabase
+          .from('profiles')
+          .update({ guided_onboarding_step: 'emotion_journal' })
+          .eq('user_id', userId);
+        
+        setCurrentStep('emotion_journal');
+      }
+    } catch (error) {
+      console.error('Error resetting guided onboarding on login:', error);
+    }
+  };
 
   const checkGuidedOnboardingStatus = async () => {
     try {
@@ -53,6 +85,26 @@ export function useGuidedOnboarding() {
     }
   };
 
+  const toggleAssistance = async (enabled: boolean) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      await supabase
+        .from('profiles')
+        .update({ 
+          guided_onboarding_disabled: !enabled,
+          guided_onboarding_step: enabled ? 'emotion_journal' : 'completed'
+        })
+        .eq('user_id', user.id);
+
+      setIsDisabled(!enabled);
+      setCurrentStep(enabled ? 'emotion_journal' : 'completed');
+    } catch (error) {
+      console.error('Error toggling guided assistance:', error);
+    }
+  };
+
   const shouldShowDialog = (step: GuidedStep) => {
     return !isDisabled && currentStep === step;
   };
@@ -62,6 +114,7 @@ export function useGuidedOnboarding() {
     isDisabled,
     isLoading,
     updateStep,
+    toggleAssistance,
     shouldShowDialog,
     refresh: checkGuidedOnboardingStatus
   };

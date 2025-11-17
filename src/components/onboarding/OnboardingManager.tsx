@@ -98,7 +98,8 @@ export function OnboardingManager() {
       await supabase
         .from('profiles')
         .update({ 
-          guided_onboarding_step: 'emotion_journal'
+          guided_onboarding_step: 'emotion_journal',
+          guided_onboarding_disabled: false  // Ensure it's enabled for new users
         })
         .eq('user_id', userId);
     } catch (error) {

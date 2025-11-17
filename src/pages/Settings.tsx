@@ -26,6 +26,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useSubscription, SUBSCRIPTION_PLANS } from "@/contexts/SubscriptionContext";
 import { useTranslation } from "react-i18next";
+import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -59,6 +60,7 @@ export default function Settings() {
   const { t, i18n } = useTranslation();
   const dateLocale = i18n.language === 'en' ? enUS : es;
   const { subscribed, plan, subscriptionEnd, loading, checkSubscription, createCheckoutSession, openCustomerPortal } = useSubscription();
+  const { isDisabled: guidedAssistanceDisabled, toggleAssistance } = useGuidedOnboarding();
   const [newEmail, setNewEmail] = useState("");
   const [confirmEmail, setConfirmEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -1395,6 +1397,40 @@ export default function Settings() {
               {t('settings.termsOfService')}
             </Button>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Guided Assistance Settings */}
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle className="pl-4">{t('settings.guidedAssistance')}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label className="pl-4">{t('settings.enableDailyAssistance')}</Label>
+              <p className="text-sm text-muted-foreground pl-4">
+                {t('settings.receiveGuidedPopups')}
+              </p>
+            </div>
+            <Switch
+              checked={!guidedAssistanceDisabled}
+              onCheckedChange={async (checked) => {
+                await toggleAssistance(checked);
+                toast({
+                  title: checked ? t('settings.assistanceEnabled') : t('settings.assistanceDisabled'),
+                  description: checked 
+                    ? t('settings.assistanceEnabledDescription')
+                    : t('settings.assistanceDisabledDescription'),
+                });
+              }}
+            />
+          </div>
+          <p className="text-xs text-muted-foreground pl-4 pt-2">
+            {!guidedAssistanceDisabled 
+              ? t('settings.assistanceWillHelp')
+              : t('settings.canReactivateAnytime')}
+          </p>
         </CardContent>
       </Card>
 
