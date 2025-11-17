@@ -747,7 +747,7 @@ export default function Values() {
                     value={newValueName}
                     onChange={(e) => setNewValueName(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
+                      if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
                         addValue('primary');
                       }
                     }}
@@ -835,7 +835,7 @@ export default function Values() {
                     value={newValueName}
                     onChange={(e) => setNewValueName(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
+                      if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
                         addValue('secondary');
                       }
                     }}
