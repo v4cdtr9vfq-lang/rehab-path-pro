@@ -649,6 +649,11 @@ export default function Values() {
           <Input
             value={editName}
             onChange={(e) => onEditNameChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                onSaveEdit();
+              }
+            }}
             className="flex-1"
             autoFocus
           />
