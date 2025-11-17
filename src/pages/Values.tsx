@@ -65,6 +65,7 @@ export default function Values() {
   const [editingValueId, setEditingValueId] = useState<string | null>(null);
   const [editValueName, setEditValueName] = useState("");
   const [isComposing, setIsComposing] = useState(false);
+  const [composingValue, setComposingValue] = useState("");
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -649,7 +650,24 @@ export default function Values() {
         {isEditing ? (
           <Input
             value={editName}
-            onChange={(e) => onEditNameChange(e.target.value)}
+            onChange={(e) => {
+              if (!isComposing) {
+                onEditNameChange(e.target.value);
+              }
+            }}
+            onCompositionStart={(e) => {
+              setIsComposing(true);
+            }}
+            onCompositionUpdate={(e) => {
+              // Durante la composición, guardamos el valor temporalmente
+              setComposingValue(e.currentTarget.value);
+            }}
+            onCompositionEnd={(e) => {
+              setIsComposing(false);
+              // Al finalizar, actualizamos con el valor completo
+              onEditNameChange(e.currentTarget.value);
+              setComposingValue("");
+            }}
             className="flex-1"
             autoFocus
           />
