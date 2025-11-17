@@ -129,6 +129,60 @@ export default function Gratitude() {
     }
   };
 
+  const saveAllGratitudes = async () => {
+    const itemsToSave = newItems.filter(item => item.trim());
+    
+    if (itemsToSave.length === 0) {
+      toast({
+        title: t('common.info'),
+        description: t('gratitude.noItemsToSave'),
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: t('common.error'),
+          description: t('gratitude.loginRequired'),
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const entriesToInsert = itemsToSave.map(text => ({
+        user_id: user.id,
+        text: text,
+        entry_date: new Date().toISOString().split('T')[0]
+      }));
+
+      const { error } = await (supabase as any)
+        .from('gratitude_entries')
+        .insert(entriesToInsert);
+
+      if (error) throw error;
+
+      toast({
+        title: t('gratitude.saved'),
+        description: t('gratitude.allEntriesSaved', { count: itemsToSave.length })
+      });
+
+      // Reset to initial state with 3 empty fields
+      setNewItems(["", "", ""]);
+      
+      await loadEntries();
+    } catch (error) {
+      console.error('Error saving all entries:', error);
+      toast({
+        title: t('common.error'),
+        description: t('gratitude.errorSaving'),
+        variant: "destructive"
+      });
+    }
+  };
+
   const addNewField = () => {
     setNewItems([...newItems, ""]);
   };
@@ -263,6 +317,14 @@ export default function Gratitude() {
                 </Button>
               </div>
             ))}
+            <Button 
+              onClick={saveAllGratitudes} 
+              className="w-full gap-2"
+              disabled={!newItems.some(item => item.trim())}
+            >
+              <Check className="h-4 w-4" />
+              {t('gratitude.saveAll')}
+            </Button>
             <Button onClick={addNewField} variant="outline" className="w-full gap-2">
               <Plus className="h-4 w-4" />
               {t('gratitude.addAnother')}
