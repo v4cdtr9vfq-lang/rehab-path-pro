@@ -19,7 +19,7 @@ const STEP_CONFIG = {
   },
   check_in: {
     message: "Ahora que has conectado con la gratitud, es momento de hacer tu Check In diario que evalúa tu proceso de recuperación.",
-    route: "/check-in"
+    route: "/checkin"
   },
   daily_inventory: {
     message: "¡Enhorabuena por tu compromiso con tu recuperación! Ahora es momento de rellenar tu inventario del día",
