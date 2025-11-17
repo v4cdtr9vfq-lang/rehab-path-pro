@@ -70,7 +70,7 @@ export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialog
           <Button 
             variant="destructive" 
             onClick={handleDisableAssistance}
-            className="opacity-30 hover:opacity-40"
+            className="bg-destructive/30 hover:bg-destructive text-destructive-foreground"
           >
             Desactivar asistencia
           </Button>
