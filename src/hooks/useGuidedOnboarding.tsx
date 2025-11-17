@@ -61,8 +61,19 @@ export function useGuidedOnboarding() {
         .single();
 
       if (profile) {
-        setCurrentStep(profile.guided_onboarding_step as GuidedStep);
-        setIsDisabled(profile.guided_onboarding_disabled || false);
+        // Si el step es 'not_started' y la asistencia está habilitada, iniciar automáticamente
+        if (profile.guided_onboarding_step === 'not_started' && !profile.guided_onboarding_disabled) {
+          await supabase
+            .from('profiles')
+            .update({ guided_onboarding_step: 'emotion_journal' })
+            .eq('user_id', user.id);
+          
+          setCurrentStep('emotion_journal');
+          setIsDisabled(false);
+        } else {
+          setCurrentStep(profile.guided_onboarding_step as GuidedStep);
+          setIsDisabled(profile.guided_onboarding_disabled || false);
+        }
       }
     } catch (error) {
       console.error('Error checking guided onboarding:', error);
