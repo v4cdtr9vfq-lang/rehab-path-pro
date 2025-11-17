@@ -65,7 +65,6 @@ export default function Values() {
   const [editingValueId, setEditingValueId] = useState<string | null>(null);
   const [editValueName, setEditValueName] = useState("");
   const [isComposing, setIsComposing] = useState(false);
-  const [composingValue, setComposingValue] = useState("");
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -611,6 +610,8 @@ export default function Values() {
       transition,
       isDragging,
     } = useSortable({ id: value.id });
+    
+    const [localIsComposing, setLocalIsComposing] = useState(false);
 
     const style = {
       transform: CSS.Transform.toString(transform),
@@ -650,7 +651,16 @@ export default function Values() {
         {isEditing ? (
           <Input
             value={editName}
-            onChange={(e) => onEditNameChange(e.target.value)}
+            onChange={(e) => {
+              if (!localIsComposing) {
+                onEditNameChange(e.target.value);
+              }
+            }}
+            onCompositionStart={() => setLocalIsComposing(true)}
+            onCompositionEnd={(e) => {
+              setLocalIsComposing(false);
+              onEditNameChange(e.currentTarget.value);
+            }}
             className="flex-1"
             autoFocus
           />
