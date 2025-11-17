@@ -66,11 +66,11 @@ export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialog
             {config.message}
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="flex-row gap-2 justify-between">
+        <AlertDialogFooter className="flex-col sm:flex-row gap-2">
           <Button 
             variant="destructive" 
             onClick={handleDisableAssistance}
-            className="bg-destructive/30 hover:bg-destructive text-destructive-foreground"
+            className="bg-destructive/30 hover:bg-destructive text-destructive-foreground sm:mr-auto"
           >
             Desactivar asistencia
           </Button>
