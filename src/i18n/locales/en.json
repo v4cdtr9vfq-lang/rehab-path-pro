@@ -586,6 +586,7 @@
     "nameEmpty": "Name cannot be empty",
     "changesCancelled": "Changes cancelled",
     "orderRestored": "Original order has been restored",
+    "saveOrder": "Save order",
     "orderSaved": "Order saved",
     "orderUpdated": "Your values order has been updated",
     "errorSavingOrder": "Could not save order",

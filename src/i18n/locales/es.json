@@ -587,6 +587,7 @@
     "nameEmpty": "El nombre no puede estar vacío",
     "changesCancelled": "Cambios cancelados",
     "orderRestored": "Se ha restaurado el orden original",
+    "saveOrder": "Guardar orden",
     "orderSaved": "Orden guardado",
     "orderUpdated": "El orden de tus valores ha sido actualizado",
     "errorSavingOrder": "No se pudo guardar el orden",
