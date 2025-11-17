@@ -69,7 +69,7 @@ export default function Plan() {
                      sectionKey === "week" ? t('plan.thisWeekLower') : 
                      sectionKey === "month" ? t('plan.thisMonthLower') : "";
     
-    return `${remaining} ${remainingText} ${timeText}`;
+    return `${remaining} ${remainingText} ${timeText}.`;
   };
   
   const {
