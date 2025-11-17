@@ -1261,6 +1261,12 @@ export default function Home() {
           onClose={() => {}} 
         />
       )}
+      {shouldShowDialog('gratitude') && (
+        <GuidedOnboardingDialog 
+          step="gratitude" 
+          onClose={() => {}} 
+        />
+      )}
       {shouldShowDialog('check_in') && (
         <GuidedOnboardingDialog 
           step="check_in" 

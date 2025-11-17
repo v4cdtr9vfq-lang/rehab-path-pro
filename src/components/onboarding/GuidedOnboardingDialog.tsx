@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 
 interface GuidedOnboardingDialogProps {
-  step: 'emotion_journal' | 'check_in' | 'daily_inventory' | 'values';
+  step: 'emotion_journal' | 'gratitude' | 'check_in' | 'daily_inventory' | 'values';
   onClose: () => void;
 }
 
@@ -13,8 +13,12 @@ const STEP_CONFIG = {
     message: "Vamos a empezar tu rutina diaria conectando con tus emociones. Selecciona cómo te sientes aquí y ahora",
     route: "/emotion-journal"
   },
+  gratitude: {
+    message: "¡Genial! Ya has conectado con lo que está vivo dentro de ti en este momento. Te invito a que ahora agradezcas los regalos del día.",
+    route: "/gratitude"
+  },
   check_in: {
-    message: "Ahora que has conectado con tus emociones, es momento de hacer tu Check In",
+    message: "Ahora que has conectado con la gratitud, es momento de hacer tu Check In",
     route: "/check-in"
   },
   daily_inventory: {
