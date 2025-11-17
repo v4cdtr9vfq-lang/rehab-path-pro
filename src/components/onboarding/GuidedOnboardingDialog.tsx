@@ -70,7 +70,7 @@ export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialog
           <Button 
             variant="ghost" 
             onClick={handleDisableAssistance}
-            className="text-foreground hover:text-muted-foreground"
+            className="text-foreground/90 hover:text-foreground/60"
           >
             Desactivar asistencia
           </Button>
