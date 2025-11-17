@@ -60,7 +60,7 @@ export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialog
 
   return (
     <AlertDialog open={true}>
-      <AlertDialogContent className="max-w-md">
+      <AlertDialogContent className="max-w-lg">
         <AlertDialogHeader>
           <AlertDialogDescription className="text-base pt-4">
             {config.message}
