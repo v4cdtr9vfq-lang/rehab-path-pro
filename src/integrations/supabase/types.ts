@@ -568,6 +568,8 @@ export type Database = {
           bedtime: string | null
           created_at: string
           full_name: string | null
+          guided_onboarding_disabled: boolean | null
+          guided_onboarding_step: string | null
           id: string
           onboarding_completed: boolean
           preferred_bedtime: string | null
@@ -585,6 +587,8 @@ export type Database = {
           bedtime?: string | null
           created_at?: string
           full_name?: string | null
+          guided_onboarding_disabled?: boolean | null
+          guided_onboarding_step?: string | null
           id?: string
           onboarding_completed?: boolean
           preferred_bedtime?: string | null
@@ -602,6 +606,8 @@ export type Database = {
           bedtime?: string | null
           created_at?: string
           full_name?: string | null
+          guided_onboarding_disabled?: boolean | null
+          guided_onboarding_step?: string | null
           id?: string
           onboarding_completed?: boolean
           preferred_bedtime?: string | null

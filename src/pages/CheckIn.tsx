@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
+import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
 import {
   Select,
   SelectContent,
@@ -64,6 +65,7 @@ export default function CheckIn() {
   const { t, i18n } = useTranslation();
   const dateLocale = i18n.language === 'es' ? es : enUS;
   const questions = getQuestions(t);
+  const { currentStep, updateStep } = useGuidedOnboarding();
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [triggerDescription, setTriggerDescription] = useState("");
   const [resentmentDescription, setResentmentDescription] = useState("");
@@ -406,6 +408,11 @@ export default function CheckIn() {
         title: t('checkIn.checkInSaved'),
         description: t('checkIn.checkInSavedSuccess'),
       });
+
+      // Update guided onboarding step if in the flow
+      if (currentStep === 'check_in') {
+        await updateStep('daily_inventory');
+      }
 
       navigate('/dashboard');
     } catch (error: any) {

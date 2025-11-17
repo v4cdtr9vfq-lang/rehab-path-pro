@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
 import {
   DndContext,
   closestCenter,
@@ -50,6 +51,7 @@ export default function Values() {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language.startsWith('en') ? 'en' : 'es';
   const isMobile = useIsMobile();
+  const { currentStep, updateStep } = useGuidedOnboarding();
   const [values, setValues] = useState<Value[]>([]);
   const [isPrimaryDialogOpen, setIsPrimaryDialogOpen] = useState(false);
   const [isSecondaryDialogOpen, setIsSecondaryDialogOpen] = useState(false);
@@ -308,6 +310,11 @@ export default function Values() {
 
       // Refresh stats
       await fetchStats();
+
+      // Update guided onboarding if this is the values step
+      if (currentStep === 'values') {
+        await updateStep('completed');
+      }
     } catch (error: any) {
       toast({
         title: t('common.error'),

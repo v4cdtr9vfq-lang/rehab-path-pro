@@ -90,7 +90,21 @@ export function OnboardingManager() {
     }
   };
 
-  const handleRehabComplete = () => {
+  const handleRehabComplete = async () => {
+    // Start guided onboarding after rehabilitation type selection
+    if (!userId) return;
+    
+    try {
+      await supabase
+        .from('profiles')
+        .update({ 
+          guided_onboarding_step: 'emotion_journal'
+        })
+        .eq('user_id', userId);
+    } catch (error) {
+      console.error('[OnboardingManager] Error starting guided onboarding:', error);
+    }
+    
     setCurrentStep('tour');
   };
 
