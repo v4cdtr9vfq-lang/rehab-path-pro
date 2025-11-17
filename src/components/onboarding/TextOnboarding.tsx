@@ -40,9 +40,12 @@ export function TextOnboarding({ onComplete }: TextOnboardingProps) {
   ];
 
   const nextStep = () => {
+    console.log('nextStep clicked', { currentStep, stepsLength: steps.length });
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
+      console.log('Moving to next step:', currentStep + 1);
     } else {
+      console.log('Calling onComplete');
       onComplete();
     }
   };
