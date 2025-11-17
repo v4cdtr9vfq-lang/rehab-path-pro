@@ -44,7 +44,7 @@ export default function Home() {
   } = useToast();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const { currentStep, shouldShowDialog } = useGuidedOnboarding();
+  const { currentStep, shouldShowDialog, hideTemporarily } = useGuidedOnboarding();
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [loading, setLoading] = useState(true);
   const [checkInCompleted, setCheckInCompleted] = useState(false);
@@ -1258,31 +1258,31 @@ export default function Home() {
       {shouldShowDialog('emotion_journal') && (
         <GuidedOnboardingDialog 
           step="emotion_journal" 
-          onClose={() => {}} 
+          onClose={hideTemporarily} 
         />
       )}
       {shouldShowDialog('gratitude') && (
         <GuidedOnboardingDialog 
           step="gratitude" 
-          onClose={() => {}} 
+          onClose={hideTemporarily} 
         />
       )}
       {shouldShowDialog('check_in') && (
         <GuidedOnboardingDialog 
           step="check_in" 
-          onClose={() => {}} 
+          onClose={hideTemporarily} 
         />
       )}
       {shouldShowDialog('daily_inventory') && (
         <GuidedOnboardingDialog 
           step="daily_inventory" 
-          onClose={() => {}} 
+          onClose={hideTemporarily} 
         />
       )}
       {shouldShowDialog('values') && (
         <GuidedOnboardingDialog 
           step="values" 
-          onClose={() => {}} 
+          onClose={hideTemporarily} 
         />
       )}
     </div>;
