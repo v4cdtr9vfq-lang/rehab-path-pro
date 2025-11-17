@@ -2,6 +2,7 @@ import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFoo
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface GuidedOnboardingDialogProps {
   step: 'emotion_journal' | 'gratitude' | 'check_in' | 'daily_inventory' | 'values';
@@ -10,28 +11,29 @@ interface GuidedOnboardingDialogProps {
 
 const STEP_CONFIG = {
   emotion_journal: {
-    message: "Vamos a empezar tu rutina diaria conectando con tus emociones. Selecciona cómo te sientes aquí y ahora",
+    messageKey: "guidedStepEmotionJournal",
     route: "/emotion-journal"
   },
   gratitude: {
-    message: "¡Genial! Ya has conectado con lo que está vivo dentro de ti en este momento. Te invito a que ahora agradezcas los regalos del día.",
+    messageKey: "guidedStepGratitude",
     route: "/gratitude"
   },
   check_in: {
-    message: "Ahora que has conectado con la gratitud, es momento de hacer tu Check In diario que evalúa tu proceso de recuperación.",
+    messageKey: "guidedStepCheckIn",
     route: "/checkin"
   },
   daily_inventory: {
-    message: "¡Enhorabuena por tu compromiso con tu recuperación! Ahora es momento de rellenar tu inventario del día.",
+    messageKey: "guidedStepDailyInventory",
     route: "/journal?title=Inventario del día"
   },
   values: {
-    message: "No hay nada como el trabajo bien hecho. Por último, si lo deseas, te invitamos a revisar tus valores para saber si has conectado hoy con alguno de ellos en especial.",
+    messageKey: "guidedStepValues",
     route: "/values"
   }
 };
 
 export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialogProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const config = STEP_CONFIG[step];
 
@@ -63,7 +65,7 @@ export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialog
       <AlertDialogContent className="max-w-lg">
         <AlertDialogHeader>
           <AlertDialogDescription className="text-base pt-4 mx-auto max-w-md text-left">
-            {config.message}
+            {t(`settings.${config.messageKey}`)}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-col sm:flex-row gap-2">
@@ -72,20 +74,20 @@ export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialog
             onClick={handleDisableAssistance}
             className="bg-destructive/30 hover:bg-destructive text-destructive-foreground sm:mr-auto"
           >
-            Desactivar asistencia
+            {t('settings.disableAssistance')}
           </Button>
           <div className="flex gap-2">
             <Button 
               variant="outline" 
               onClick={onClose}
             >
-              Cancelar
+              {t('settings.cancel')}
             </Button>
             <Button 
               onClick={handleContinue}
               variant="default"
             >
-              Continuar
+              {t('settings.continueButton')}
             </Button>
           </div>
         </AlertDialogFooter>
