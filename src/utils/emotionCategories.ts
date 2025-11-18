@@ -287,7 +287,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
           {
             id: "fulfilled",
             name: "Fulfilled",
-            tertiaryEmotions: ["Complete", "Whole", "Accomplished"].sort()
+            tertiaryEmotions: ["Complete"].sort()
           },
           {
             id: "mellow",
@@ -592,7 +592,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
         {
           id: "fulfilled",
           name: "Realizado",
-          tertiaryEmotions: ["Completo", "Entero", "Logrado"].sort()
+          tertiaryEmotions: ["Completo"].sort()
         },
         {
           id: "mellow",
