@@ -12,7 +12,18 @@ export function formatDate(date: Date, language: string = 'es'): string {
   // Spanish: "Martes, 18 de Noviembre"
   // English: "Tuesday, November 18"
   const dateFormat = language === 'en' ? "EEEE, MMMM d" : "EEEE, d 'de' MMMM";
-  return format(date, dateFormat, { locale });
+  const formatted = format(date, dateFormat, { locale });
+  
+  // Capitalize day and month for Spanish
+  if (language === 'es') {
+    const parts = formatted.split(', ');
+    const dayCapitalized = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+    const rest = parts[1].split(' de ');
+    const monthCapitalized = rest[1].charAt(0).toUpperCase() + rest[1].slice(1);
+    return `${dayCapitalized}, ${rest[0]} de ${monthCapitalized}`;
+  }
+  
+  return formatted;
 }
 
 export function formatDateTime(date: Date, language: string = 'es'): string {
