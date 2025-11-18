@@ -195,7 +195,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
           {
             id: "seguro",
             name: "Connected",
-            tertiaryEmotions: ["Acceptance", "Belonging", "Happy", "Intimacy", "Predictability", "Trust"].sort()
+            tertiaryEmotions: ["Acceptance", "Belonging", "Happy", "Intimacy", "Predictability", "Trust", "Vulnerable"].sort()
           },
           {
             id: "empoderado",
@@ -494,7 +494,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
         {
           id: "seguro",
           name: "Conectado",
-          tertiaryEmotions: ["Aceptación", "Confianza", "Feliz", "Intimidad", "Pertenencia", "Previsibilidad"].sort()
+          tertiaryEmotions: ["Aceptación", "Confianza", "Feliz", "Intimidad", "Pertenencia", "Previsibilidad", "Vulnerable"].sort()
         },
         {
           id: "empoderado",
