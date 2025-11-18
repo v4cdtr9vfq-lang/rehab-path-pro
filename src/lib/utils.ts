@@ -17,8 +17,8 @@ export function formatDate(date: Date, language: string = 'es'): string {
 
 export function formatDateTime(date: Date, language: string = 'es'): string {
   const locale = language === 'en' ? enUS : es;
-  // Spanish: "18 de Noviembre, 2024 a las 14:30"
-  // English: "November 18, 2024 at 14:30"
-  const dateFormat = language === 'en' ? "MMMM d, yyyy 'at' HH:mm" : "d 'de' MMMM, yyyy 'a las' HH:mm";
+  // Spanish: "M 10/11/2025 a las 20:43"
+  // English: "T 11/10/2025 at 20:43"
+  const dateFormat = language === 'en' ? "EEEEE MM/dd/yyyy 'at' HH:mm" : "EEEEE dd/MM/yyyy 'a las' HH:mm";
   return format(date, dateFormat, { locale });
 }
