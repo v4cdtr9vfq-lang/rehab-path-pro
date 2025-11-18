@@ -109,7 +109,18 @@ export function OnboardingManager() {
     setCurrentStep('tour');
   };
 
-  const handleTourComplete = () => {
+  const handleTourComplete = async () => {
+    // Backup: asegurar que tour_completed esté marcado
+    if (userId) {
+      try {
+        await supabase
+          .from('profiles')
+          .update({ tour_completed: true })
+          .eq('user_id', userId);
+      } catch (error) {
+        console.error('[OnboardingManager] Error in handleTourComplete:', error);
+      }
+    }
     setCurrentStep('complete');
   };
 

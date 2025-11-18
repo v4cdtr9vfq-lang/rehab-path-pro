@@ -182,9 +182,9 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   }, [navigate, isMobile]);
 
   const handleJoyrideCallback = async (data: CallBackProps) => {
-    const { status, action, index, type } = data;
+    const { status, action, type } = data;
     
-    console.log('Tour callback:', { status, action, index, type });
+    console.log('Tour callback:', { status, action, type });
     
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
@@ -195,16 +195,23 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
-          await supabase
+          const { error } = await supabase
             .from('profiles')
             .update({ tour_completed: true })
             .eq('user_id', user.id);
+          
+          if (error) {
+            console.error('Error updating tour_completed:', error);
+          } else {
+            console.log('Tour marked as completed successfully');
+          }
         }
       } catch (error) {
         console.error('Error marking tour as completed:', error);
       }
       
-      onComplete();
+      // Llamar a onComplete después de asegurar que se guardó
+      setTimeout(() => onComplete(), 100);
     }
   };
 
