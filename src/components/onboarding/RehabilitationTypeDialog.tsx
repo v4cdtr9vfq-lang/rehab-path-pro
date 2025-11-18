@@ -83,17 +83,27 @@ export function RehabilitationTypeDialog({ onComplete }: RehabilitationTypeDialo
 
       if (profileError) throw profileError;
 
-      // Create addiction entry with start date
-      const { error: addictionError } = await supabase
+      // Check if addiction already exists
+      const { data: existingAddictions } = await supabase
         .from('addictions')
-        .insert({
-          user_id: user.id,
-          addiction_type: selectedType,
-          start_date: now,
-          is_active: true
-        });
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('addiction_type', selectedType)
+        .eq('is_active', true);
 
-      if (addictionError) throw addictionError;
+      // Only create addiction entry if it doesn't exist
+      if (!existingAddictions || existingAddictions.length === 0) {
+        const { error: addictionError } = await supabase
+          .from('addictions')
+          .insert({
+            user_id: user.id,
+            addiction_type: selectedType,
+            start_date: now,
+            is_active: true
+          });
+
+        if (addictionError) throw addictionError;
+      }
 
       toast({
         title: t("onboarding.saved"),
