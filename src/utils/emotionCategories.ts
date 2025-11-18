@@ -312,7 +312,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
           {
             id: "serene",
             name: "Serene",
-            tertiaryEmotions: ["Placid", "Smooth", "Motionless", "Settled", "Restful", "Soothing", "Undisturbed", "Peaceful"].sort()
+            tertiaryEmotions: ["Calm", "Connected"].sort()
           },
           {
             id: "trusting",
@@ -617,7 +617,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
         {
           id: "serene",
           name: "Sereno",
-          tertiaryEmotions: ["Plácido", "Fluido", "Asentado", "Descansado", "Reconfortante", "Imperturbado", "Pacífico"].sort()
+          tertiaryEmotions: ["Calmado", "Conectado"].sort()
         },
         {
           id: "trusting",
