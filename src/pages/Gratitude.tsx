@@ -10,7 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
-import { cn } from "@/lib/utils";
+import { formatDate, cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
@@ -469,7 +469,7 @@ export default function Gratitude() {
                     <div className="flex items-center gap-2 mb-4 pl-[15px]">
                       <CalendarIcon className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm font-medium text-muted-foreground">
-                        {format(entry.date, "EEEE, PPP", { locale: dateLocale })}
+                        {formatDate(entry.date, i18n.language)}
                       </span>
                     </div>
                     <ul className="space-y-2">

@@ -1,6 +1,16 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { format } from "date-fns";
+import { es, enUS } from "date-fns/locale";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function formatDate(date: Date, language: string = 'es'): string {
+  const locale = language === 'en' ? enUS : es;
+  // Spanish: "Martes, 18 de Noviembre"
+  // English: "Tuesday, November 18"
+  const dateFormat = language === 'en' ? "EEEE, MMMM d" : "EEEE, d 'de' MMMM";
+  return format(date, dateFormat, { locale });
 }

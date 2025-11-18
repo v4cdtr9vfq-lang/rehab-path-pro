@@ -11,6 +11,7 @@ import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHea
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
+import { formatDate } from "@/lib/utils";
 
 interface Quote {
   text: string;
@@ -270,7 +271,7 @@ export default function Message() {
             </Button>
           </div>
           <p className="text-sm text-muted-foreground">
-            {format(new Date(), "EEEE, PPP", { locale: dateLocale })}
+            {formatDate(new Date(), i18n.language)}
           </p>
         </CardHeader>
         <CardContent>
