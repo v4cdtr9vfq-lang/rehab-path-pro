@@ -69,12 +69,30 @@ export function RehabilitationTypeDialog({ onComplete }: RehabilitationTypeDialo
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Usuario no autenticado");
 
-      const { error } = await supabase
+      const now = new Date().toISOString();
+
+      // Update profile with rehabilitation type
+      const { error: profileError } = await supabase
         .from('profiles')
-        .update({ rehabilitation_type: selectedType })
+        .update({ 
+          rehabilitation_type: selectedType,
+          abstinence_start_date: now
+        })
         .eq('user_id', user.id);
 
-      if (error) throw error;
+      if (profileError) throw profileError;
+
+      // Create addiction entry with start date
+      const { error: addictionError } = await supabase
+        .from('addictions')
+        .insert({
+          user_id: user.id,
+          addiction_type: selectedType,
+          start_date: now,
+          is_active: true
+        });
+
+      if (addictionError) throw addictionError;
 
       toast({
         title: t("onboarding.saved"),
