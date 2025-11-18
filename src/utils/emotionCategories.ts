@@ -307,7 +307,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
           {
             id: "relieved",
             name: "Relieved",
-            tertiaryEmotions: ["Unburdened", "Soothed", "Comforted", "Appeased"].sort()
+            tertiaryEmotions: ["Unburdened", "Comforted", "Appeased"].sort()
           },
           {
             id: "satisfied",
@@ -317,17 +317,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
           {
             id: "serene",
             name: "Serene",
-            tertiaryEmotions: ["Tranquil", "Untroubled", "Placid", "Smooth"].sort()
-          },
-          {
-            id: "still",
-            name: "Still",
-            tertiaryEmotions: ["Motionless", "Settled", "Restful"].sort()
-          },
-          {
-            id: "tranquil",
-            name: "Tranquil",
-            tertiaryEmotions: ["Soothing", "Undisturbed", "Peaceful"].sort()
+            tertiaryEmotions: ["Tranquil", "Untroubled", "Placid", "Smooth", "Motionless", "Settled", "Restful", "Soothing", "Undisturbed", "Peaceful"].sort()
           },
           {
             id: "trusting",
@@ -627,7 +617,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
         {
           id: "relieved",
           name: "Aliviado",
-          tertiaryEmotions: ["Liberado", "Calmado", "Reconfortado", "Apaciguado"].sort()
+          tertiaryEmotions: ["Liberado", "Reconfortado", "Apaciguado"].sort()
         },
         {
           id: "satisfied",
@@ -637,17 +627,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
         {
           id: "serene",
           name: "Sereno",
-          tertiaryEmotions: ["Tranquilo", "Sin preocupaciones", "Plácido", "Fluido"].sort()
-        },
-        {
-          id: "still",
-          name: "Quieto",
-          tertiaryEmotions: ["Inmóvil", "Asentado", "Descansado"].sort()
-        },
-        {
-          id: "tranquil",
-          name: "Tranquilo",
-          tertiaryEmotions: ["Reconfortante", "Imperturbado", "Pacífico"].sort()
+          tertiaryEmotions: ["Tranquilo", "Sin preocupaciones", "Plácido", "Fluido", "Inmóvil", "Asentado", "Descansado", "Reconfortante", "Imperturbado", "Pacífico"].sort()
         },
         {
           id: "trusting",
