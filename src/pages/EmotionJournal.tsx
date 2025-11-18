@@ -781,7 +781,7 @@ export default function EmotionJournal() {
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-4">{t('emotionJournal.atDeeperLevel')}</h2>
               <div className="flex flex-col gap-6">
-                {selectedSecondaryData.map((emotion) => (
+                {[...selectedSecondaryData].reverse().map((emotion) => (
                   <div key={emotion.id}>
                     <h3 className="text-lg font-medium text-green-600 mb-3">{emotion.primaryCategory} - {emotion.name}</h3>
                     <div className="flex flex-col lg:flex-row items-start lg:flex-wrap gap-3">
