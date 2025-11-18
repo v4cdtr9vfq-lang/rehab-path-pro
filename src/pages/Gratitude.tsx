@@ -308,7 +308,7 @@ export default function Gratitude() {
             <CardTitle className="flex flex-col md:flex-row md:items-center md:justify-between pl-[14px] gap-2">
               <span>{t('gratitude.todayGratitude')}</span>
               <span className="text-sm font-normal text-muted-foreground md:pr-6">
-                {new Date().toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
+                {formatDate(new Date(), i18n.language)}
               </span>
             </CardTitle>
           </CardHeader>
