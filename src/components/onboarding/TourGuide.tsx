@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Joyride, { Step, CallBackProps, STATUS } from "react-joyride";
+import Joyride, { Step, CallBackProps, STATUS, ACTIONS } from "react-joyride";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -187,8 +187,10 @@ export function TourGuide({ onComplete }: TourGuideProps) {
     console.log('Tour callback:', { status, action, type });
     
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
+    const shouldClose = finishedStatuses.includes(status) || action === ACTIONS.SKIP || action === ACTIONS.CLOSE;
 
-    if (finishedStatuses.includes(status)) {
+    if (shouldClose) {
+      console.log('Closing tour, marking as completed');
       setRun(false);
       
       // Marcar el tour como completado
