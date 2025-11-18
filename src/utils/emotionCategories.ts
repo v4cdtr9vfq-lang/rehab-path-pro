@@ -127,7 +127,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
           {
             id: "incomodo",
             name: "Uncomfortable",
-            tertiaryEmotions: ["Uneasy", "Hurt"].sort()
+            tertiaryEmotions: ["Uneasy", "Hurt", "Disgusted"].sort()
           }
         ].sort((a, b) => a.name.localeCompare(b.name))
       },
@@ -441,7 +441,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
         {
           id: "incomodo",
           name: "Incómodo",
-          tertiaryEmotions: ["Intranquilo", "Dolorido"].sort()
+          tertiaryEmotions: ["Intranquilo", "Dolorido", "Disgustado"].sort()
         }
       ].sort((a, b) => a.name.localeCompare(b.name, 'es'))
     },
