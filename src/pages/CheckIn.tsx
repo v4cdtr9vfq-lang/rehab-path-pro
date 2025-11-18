@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
 import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
+import { formatDate } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -315,9 +316,7 @@ export default function CheckIn() {
       const today = new Date().toISOString().split('T')[0];
       
       // Create comprehensive check-in journal entry
-      const journalTitle = format(new Date(), "EEEE d MMM. yyyy", { locale: dateLocale })
-        .replace(/^\w/, (c) => c.toUpperCase())
-        .replace(/\b([a-z]{3})\./i, (match) => match.charAt(0).toUpperCase() + match.slice(1));
+      const journalTitle = formatDate(new Date(), i18n.language);
       
       // Build journal content with all text answers in a single line
       let journalParts = [];
@@ -436,9 +435,7 @@ export default function CheckIn() {
             <span className="text-xl">👀</span>
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            {format(new Date(), "EEEE, d MMM. yyyy", { locale: dateLocale })
-              .replace(/^\w/, (c) => c.toUpperCase())
-              .replace(/\b([a-z]{3})\./i, (match) => match.charAt(0).toUpperCase() + match.slice(1))}
+            {formatDate(new Date(), i18n.language)}
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
