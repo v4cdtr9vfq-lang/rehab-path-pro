@@ -617,11 +617,11 @@ export default function EmotionJournal() {
     }))
   );
   
-  // Get selected secondary emotions data (ordered by selection - last selected first)
+  // Get selected secondary emotions data (maintaining original order)
   const selectedSecondaryData = selectedSecondary.map(id => {
     const emotion = allSecondaryEmotionsWithParent.find(e => e.id === id);
     return emotion;
-  }).filter(Boolean).reverse() as Array<SecondaryEmotion & { primaryCategory: string }>;
+  }).filter(Boolean) as Array<SecondaryEmotion & { primaryCategory: string }>;
 
   // Filter entries by date if a filter date is selected
   const filteredEntries = filterDate
@@ -745,24 +745,7 @@ export default function EmotionJournal() {
                     <div key={categoryId}>
                       <h3 className="text-lg font-medium text-green-600 mb-3">{category.name}</h3>
                       <div className="flex flex-col lg:flex-row items-start lg:flex-wrap gap-3">
-                        {/* Sort secondary emotions: selected ones first (in reverse selection order), then unselected alphabetically */}
-                        {[...category.secondaryEmotions]
-                          .sort((a, b) => {
-                            const aSelected = selectedSecondary.includes(a.id);
-                            const bSelected = selectedSecondary.includes(b.id);
-                            
-                            if (aSelected && !bSelected) return -1;
-                            if (!aSelected && bSelected) return 1;
-                            
-                            if (aSelected && bSelected) {
-                              // Both selected - order by reverse selection order (last selected first)
-                              return selectedSecondary.indexOf(b.id) - selectedSecondary.indexOf(a.id);
-                            }
-                            
-                            // Both unselected - alphabetical order
-                            return a.name.localeCompare(b.name);
-                          })
-                          .map((emotion) => {
+                        {category.secondaryEmotions.map((emotion) => {
                           const isSelected = selectedSecondary.includes(emotion.id);
                           return (
                             <Button
