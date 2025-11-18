@@ -249,6 +249,92 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
             tertiaryEmotions: ["Apathetic", "Indifferent"].sort()
           }
         ].sort((a, b) => a.name.localeCompare(b.name))
+      },
+      {
+        id: "peaceful",
+        name: "Peaceful",
+        secondaryEmotions: [
+          {
+            id: "calm",
+            name: "Calm",
+            tertiaryEmotions: ["Composed", "Balanced", "Steady", "Stable"].sort()
+          },
+          {
+            id: "clearHeaded",
+            name: "Clear Headed",
+            tertiaryEmotions: ["Grounded", "Poised", "Collected", "Lucid", "Focused"].sort()
+          },
+          {
+            id: "comfortable",
+            name: "Comfortable",
+            tertiaryEmotions: ["At Ease", "Cozy", "Safe", "Secure"].sort()
+          },
+          {
+            id: "centered",
+            name: "Centered",
+            tertiaryEmotions: ["Anchored", "Aligned", "Harmonious"].sort()
+          },
+          {
+            id: "content",
+            name: "Content",
+            tertiaryEmotions: ["Pleased", "Gratified", "Balanced", "Neutral"].sort()
+          },
+          {
+            id: "equanimous",
+            name: "Equanimous",
+            tertiaryEmotions: ["Even-tempered", "Unruffled"].sort()
+          },
+          {
+            id: "fulfilled",
+            name: "Fulfilled",
+            tertiaryEmotions: ["Complete", "Whole", "Accomplished"].sort()
+          },
+          {
+            id: "mellow",
+            name: "Mellow",
+            tertiaryEmotions: ["Soft", "Gentle", "Easygoing"].sort()
+          },
+          {
+            id: "quiet",
+            name: "Quiet",
+            tertiaryEmotions: ["Hushed", "Peaceful", "Undisturbed"].sort()
+          },
+          {
+            id: "relaxed",
+            name: "Relaxed",
+            tertiaryEmotions: ["Unwound", "Loosened", "Calm"].sort()
+          },
+          {
+            id: "relieved",
+            name: "Relieved",
+            tertiaryEmotions: ["Unburdened", "Soothed", "Comforted", "Appeased"].sort()
+          },
+          {
+            id: "satisfied",
+            name: "Satisfied",
+            tertiaryEmotions: ["Contented", "Pleased", "Gratified"].sort()
+          },
+          {
+            id: "serene",
+            name: "Serene",
+            tertiaryEmotions: ["Tranquil", "Untroubled", "Placid", "Smooth"].sort()
+          },
+          {
+            id: "still",
+            name: "Still",
+            tertiaryEmotions: ["Motionless", "Settled", "Restful"].sort()
+          },
+          {
+            id: "tranquil",
+            name: "Tranquil",
+            tertiaryEmotions: ["Soothing", "Undisturbed", "Peaceful"].sort()
+          },
+          {
+            id: "trusting",
+            name: "Trusting",
+            tertiaryEmotions: ["Confident", "Assured", "Faithful"].sort()
+          }
+        ].sort((a, b) => a.name.localeCompare(b.name))
       }
     ].sort((a, b) => a.name.localeCompare(b.name));
   }
@@ -481,6 +567,92 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
           id: "estresado",
           name: "Estresado",
           tertiaryEmotions: ["Abrumado"].sort()
+        }
+      ].sort((a, b) => a.name.localeCompare(b.name, 'es'))
+    },
+    {
+      id: "peaceful",
+      name: "Paz",
+      secondaryEmotions: [
+        {
+          id: "calm",
+          name: "Tranquilo",
+          tertiaryEmotions: ["Compuesto", "Equilibrado", "Estable"].sort()
+        },
+        {
+          id: "clearHeaded",
+          name: "Mente Clara",
+          tertiaryEmotions: ["Con los pies en la tierra", "Sereno", "Calmado", "Lúcido", "Enfocado"].sort()
+        },
+        {
+          id: "comfortable",
+          name: "Cómodo",
+          tertiaryEmotions: ["A gusto", "Acogedor", "Seguro"].sort()
+        },
+        {
+          id: "centered",
+          name: "Centrado",
+          tertiaryEmotions: ["Anclado", "Alineado", "Armonioso"].sort()
+        },
+        {
+          id: "content",
+          name: "Conforme",
+          tertiaryEmotions: ["Complacido", "Gratificado", "Equilibrado", "Neutral"].sort()
+        },
+        {
+          id: "equanimous",
+          name: "Ecuánime",
+          tertiaryEmotions: ["Templado", "Imperturbable"].sort()
+        },
+        {
+          id: "fulfilled",
+          name: "Realizado",
+          tertiaryEmotions: ["Completo", "Entero", "Logrado"].sort()
+        },
+        {
+          id: "mellow",
+          name: "Apacible",
+          tertiaryEmotions: ["Suave", "Gentil", "Tranquilo"].sort()
+        },
+        {
+          id: "quiet",
+          name: "Quieto",
+          tertiaryEmotions: ["Silencioso", "Pacífico", "Imperturbado"].sort()
+        },
+        {
+          id: "relaxed",
+          name: "Relajado",
+          tertiaryEmotions: ["Relajado", "Suelto", "Calmado"].sort()
+        },
+        {
+          id: "relieved",
+          name: "Aliviado",
+          tertiaryEmotions: ["Liberado", "Calmado", "Reconfortado", "Apaciguado"].sort()
+        },
+        {
+          id: "satisfied",
+          name: "Satisfecho",
+          tertiaryEmotions: ["Contento", "Complacido", "Gratificado"].sort()
+        },
+        {
+          id: "serene",
+          name: "Sereno",
+          tertiaryEmotions: ["Tranquilo", "Sin preocupaciones", "Plácido", "Fluido"].sort()
+        },
+        {
+          id: "still",
+          name: "Quieto",
+          tertiaryEmotions: ["Inmóvil", "Asentado", "Descansado"].sort()
+        },
+        {
+          id: "tranquil",
+          name: "Tranquilo",
+          tertiaryEmotions: ["Reconfortante", "Imperturbado", "Pacífico"].sort()
+        },
+        {
+          id: "trusting",
+          name: "Confiado",
+          tertiaryEmotions: ["Confiado", "Seguro", "Fiel"].sort()
         }
       ].sort((a, b) => a.name.localeCompare(b.name, 'es'))
     }
