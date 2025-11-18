@@ -38,6 +38,7 @@ export function AddAddictionDialog({ open, onOpenChange, onAdd, existingAddictio
     { id: 'amor', label: t('addictionTypes.amor') },
     { id: 'azucar', label: t('addictionTypes.azucar') },
     { id: 'cannabis', label: t('addictionTypes.cannabis') },
+    { id: 'catastrofismo', label: t('addictionTypes.catastrofismo') },
     { id: 'cocaina', label: t('addictionTypes.cocaina') },
     { id: 'codependencia', label: t('addictionTypes.codependencia') },
     { id: 'comida', label: t('addictionTypes.comida') },

@@ -64,6 +64,7 @@ const getRehabilitationTypes = (t: any) => [
   { id: 'amor', label: t('community.filterLove') },
   { id: 'azucar', label: t('community.filterSugar') },
   { id: 'cannabis', label: t('community.filterCannabis') },
+  { id: 'catastrofismo', label: t('community.filterCatastrophism') },
   { id: 'cocaina', label: t('community.filterCocaine') },
   { id: 'codependencia', label: t('community.filterCodepency') },
   { id: 'comida', label: t('community.filterFood') },
