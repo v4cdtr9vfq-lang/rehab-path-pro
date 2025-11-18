@@ -26,6 +26,7 @@ const REHABILITATION_TYPES = [
   'amor',
   'azucar',
   'cannabis',
+  'catastrofismo',
   'cocaina',
   'codependencia',
   'comida',
