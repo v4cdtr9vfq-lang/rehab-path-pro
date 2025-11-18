@@ -160,20 +160,6 @@
       "ridiculed": "Ridiculed",
       "ashamed": "Ashamed"
     },
-    "bad": {
-      "name": "Discomfort",
-      "busy": "Busy",
-      "stressed": "Stressed",
-      "tired": "Tired",
-      "bored": "Bored",
-      "pressured": "Pressured",
-      "rushed": "Rushed",
-      "overwhelmed": "Overwhelmed",
-      "exhausted": "Exhausted",
-      "fatigued": "Fatigued",
-      "indifferent": "Indifferent",
-      "apathetic": "Apathetic"
-    },
     "peaceful": {
       "name": "Peaceful",
       "calm": "Calm",

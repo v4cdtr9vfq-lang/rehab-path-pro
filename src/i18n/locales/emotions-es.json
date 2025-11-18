@@ -160,20 +160,6 @@
       "ridiculed": "Ridiculizado",
       "ashamed": "Avergonzado"
     },
-    "bad": {
-      "name": "Malestar",
-      "busy": "Ocupado",
-      "stressed": "Estresado",
-      "tired": "Cansado",
-      "bored": "Aburrido",
-      "pressured": "Presionado",
-      "rushed": "Apresurado",
-      "overwhelmed": "Abrumado",
-      "exhausted": "Exhausto",
-      "fatigued": "Fatigado",
-      "indifferent": "Indiferente",
-      "apathetic": "Apático"
-    },
     "peaceful": {
       "name": "Paz",
       "calm": "Tranquilo",
