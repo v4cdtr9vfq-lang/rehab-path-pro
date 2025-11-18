@@ -10,7 +10,7 @@ import { es, enUS } from "date-fns/locale";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { cn, formatDate } from "@/lib/utils";
+import { cn, formatDate, formatDateTime } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { Link, useNavigate } from "react-router-dom";
@@ -1059,7 +1059,7 @@ export default function EmotionJournal() {
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <CalendarIcon className="h-4 w-4" />
                     <span className="text-sm font-medium">
-                      {formatDate(new Date(entry.created_at), t('common.yes') === 'Yes' ? 'en' : 'es')}
+                      {formatDateTime(new Date(entry.created_at), t('common.yes') === 'Yes' ? 'en' : 'es')}
                     </span>
                   </div>
                   <div className="flex gap-2 mr-[10px] lg:mr-0">
