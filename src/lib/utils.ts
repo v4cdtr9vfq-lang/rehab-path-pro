@@ -20,5 +20,7 @@ export function formatDateTime(date: Date, language: string = 'es'): string {
   // Spanish: "M 10/11/2025 a las 20:43"
   // English: "T 11/10/2025 at 20:43"
   const dateFormat = language === 'en' ? "EEEEE MM/dd/yyyy 'at' HH:mm" : "EEEEE dd/MM/yyyy 'a las' HH:mm";
-  return format(date, dateFormat, { locale });
+  const formatted = format(date, dateFormat, { locale });
+  // Capitalize first letter
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 }
