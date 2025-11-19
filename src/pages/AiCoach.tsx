@@ -92,7 +92,7 @@ const AiCoach = () => {
       <Card className="h-[calc(100vh-8rem)] flex flex-col">
         <div className="p-4 border-b">
           <h1 className="text-2xl font-bold">🤖 AI Coach</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground pl-[5px]">
             Inteligencia basada en Gemini 3 entrenada en tratamiento de adicciones.
           </p>
         </div>
