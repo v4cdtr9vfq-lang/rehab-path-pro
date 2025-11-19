@@ -37,7 +37,7 @@ export default function Gratitude() {
   const { t, i18n } = useTranslation();
   const dateLocale = i18n.language === 'en' ? enUS : es;
   const navigate = useNavigate();
-  const { currentStep } = useGuidedOnboarding();
+  const { currentStep, updateStep } = useGuidedOnboarding();
 
   useEffect(() => {
     loadEntries();
@@ -178,18 +178,8 @@ export default function Gratitude() {
         await loadEntries();
 
         // Advance guided onboarding to next step (check_in)
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('guided_onboarding_step')
-          .eq('user_id', user.id)
-          .single();
-
-        if (profile?.guided_onboarding_step === 'gratitude') {
-          await supabase
-            .from('profiles')
-            .update({ guided_onboarding_step: 'check_in' })
-            .eq('user_id', user.id);
-          
+        if (currentStep === 'gratitude') {
+          await updateStep('check_in');
           // Navigate back to dashboard to show next popup
           navigate('/dashboard');
         }
