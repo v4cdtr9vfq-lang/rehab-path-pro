@@ -29,6 +29,7 @@ import TrialEnded from "./pages/TrialEnded";
 import SupportNetwork from "./pages/SupportNetwork";
 import Help from "./pages/Help";
 import SleepQuality from "./pages/SleepQuality";
+import AiCoach from "./pages/AiCoach";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -162,6 +163,13 @@ const App = () => (
             <ProtectedRoute>
               <Layout>
                 <SleepQuality />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/ai-coach" element={
+            <ProtectedRoute>
+              <Layout>
+                <AiCoach />
               </Layout>
             </ProtectedRoute>
           } />
