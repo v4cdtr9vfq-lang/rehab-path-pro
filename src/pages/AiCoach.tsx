@@ -16,21 +16,74 @@ interface Message {
 const AiCoach = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: "assistant",
-      content: "Hola! Estoy aquí para apoyarte en tu proceso de recuperación. ¿Cómo llevas el proceso?"
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    loadChatHistory();
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  const loadChatHistory = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('ai_coach_messages')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        const loadedMessages: Message[] = data.map(msg => ({
+          role: msg.role as "user" | "assistant",
+          content: msg.content
+        }));
+        setMessages(loadedMessages);
+      } else {
+        // Si no hay historial, mostrar mensaje de bienvenida
+        setMessages([{
+          role: "assistant",
+          content: "Hola! Estoy aquí para apoyarte en tu proceso de recuperación. ¿Cómo llevas el proceso?"
+        }]);
+      }
+    } catch (error) {
+      console.error("Error cargando historial:", error);
+      // En caso de error, mostrar mensaje de bienvenida
+      setMessages([{
+        role: "assistant",
+        content: "Hola! Estoy aquí para apoyarte en tu proceso de recuperación. ¿Cómo llevas el proceso?"
+      }]);
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  };
+
+  const saveMessage = async (message: Message) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      await supabase.from('ai_coach_messages').insert({
+        user_id: user.id,
+        role: message.role,
+        content: message.content
+      });
+    } catch (error) {
+      console.error("Error guardando mensaje:", error);
+    }
+  };
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -39,6 +92,9 @@ const AiCoach = () => {
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
+
+    // Guardar mensaje del usuario
+    await saveMessage(userMessage);
 
     try {
       const { data, error } = await supabase.functions.invoke("ai-coach", {
@@ -75,6 +131,9 @@ const AiCoach = () => {
       };
 
       setMessages(prev => [...prev, assistantMessage]);
+      
+      // Guardar mensaje del asistente
+      await saveMessage(assistantMessage);
     } catch (error) {
       console.error("Error al enviar mensaje:", error);
       toast({
@@ -98,8 +157,13 @@ const AiCoach = () => {
         </div>
 
         <ScrollArea className="flex-1 p-4" ref={scrollRef}>
-          <div className="space-y-4">
-            {messages.map((message, index) => (
+          {isLoadingHistory ? (
+            <div className="flex items-center justify-center h-full">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {messages.map((message, index) => (
               <div
                 key={index}
                 className={`flex ${
@@ -117,14 +181,15 @@ const AiCoach = () => {
                 </div>
               </div>
             ))}
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-muted rounded-lg p-3">
-                  <Loader2 className="h-5 w-5 animate-spin" />
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="bg-muted rounded-lg p-3">
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </ScrollArea>
 
         <div className="p-4 border-t">
