@@ -24,6 +24,13 @@ export function useGuidedOnboarding() {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Reset shouldShow when currentStep changes
+  useEffect(() => {
+    if (currentStep) {
+      setShouldShow(true);
+    }
+  }, [currentStep]);
+
   const resetOnLogin = async (userId: string) => {
     try {
       const { data: profile } = await supabase
