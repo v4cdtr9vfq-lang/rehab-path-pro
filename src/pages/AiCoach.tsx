@@ -4,9 +4,20 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface Message {
   role: "user" | "assistant";
@@ -85,6 +96,39 @@ const AiCoach = () => {
     }
   };
 
+  const clearChat = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Eliminar todos los mensajes del usuario
+      const { error } = await supabase
+        .from('ai_coach_messages')
+        .delete()
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      // Actualizar el estado local con mensaje de bienvenida
+      setMessages([{
+        role: "assistant",
+        content: "Hola! Estoy aquí para apoyarte en tu proceso de recuperación. ¿Cómo llevas el proceso?"
+      }]);
+
+      toast({
+        title: "Chat limpiado",
+        description: "Se ha eliminado el historial de conversación.",
+      });
+    } catch (error) {
+      console.error("Error limpiando chat:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo limpiar el chat. Por favor, intenta de nuevo.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
@@ -149,11 +193,32 @@ const AiCoach = () => {
   return (
     <div className="container mx-auto p-4 max-w-4xl">
       <Card className="h-[calc(100vh-8rem)] flex flex-col">
-        <div className="p-4 border-b">
-          <h1 className="text-2xl font-bold">🤖 AI Coach</h1>
-          <p className="text-sm text-muted-foreground pl-[5px]">
-            Inteligencia basada en Gemini 3 entrenada en tratamiento de adicciones.
-          </p>
+        <div className="p-4 border-b flex justify-between items-start">
+          <div>
+            <h1 className="text-2xl font-bold">🤖 AI Coach</h1>
+            <p className="text-sm text-muted-foreground pl-[5px]">
+              Inteligencia basada en Gemini 3 entrenada en tratamiento de adicciones.
+            </p>
+          </div>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="ghost" size="icon" disabled={isLoading}>
+                <Trash2 className="h-5 w-5" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>¿Limpiar el chat?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Esto eliminará todo el historial de conversación. Esta acción no se puede deshacer.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction onClick={clearChat}>Limpiar</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
 
         <ScrollArea className="flex-1 p-4" ref={scrollRef}>
