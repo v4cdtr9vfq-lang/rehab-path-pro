@@ -7,7 +7,8 @@ export function useGuidedOnboarding() {
   const [currentStep, setCurrentStep] = useState<GuidedStep | null>(null);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [shouldShow, setShouldShow] = useState(true); // Control temporal del popup
+  const [shouldShow, setShouldShow] = useState(false); // Control temporal del popup
+  const [lastShownDate, setLastShownDate] = useState<string | null>(null);
 
   useEffect(() => {
     checkGuidedOnboardingStatus();
@@ -18,16 +19,23 @@ export function useGuidedOnboarding() {
         // Reset to emotion_journal when user logs in (if not disabled)
         resetOnLogin(session.user.id);
         setShouldShow(true); // Mostrar popups en nuevo login
+        setLastShownDate(null); // Reset last shown date on login
       }
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  // Reset shouldShow when currentStep changes
+  // Only show popup once per day
   useEffect(() => {
-    if (currentStep) {
-      setShouldShow(true);
+    if (currentStep && currentStep !== 'not_started' && currentStep !== 'completed') {
+      const today = new Date().toDateString();
+      
+      // Only show if we haven't shown it today
+      if (lastShownDate !== today) {
+        setShouldShow(true);
+        setLastShownDate(today);
+      }
     }
   }, [currentStep]);
 
