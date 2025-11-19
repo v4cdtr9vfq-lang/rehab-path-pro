@@ -93,7 +93,7 @@ const AiCoach = () => {
         <div className="p-4 border-b">
           <h1 className="text-2xl font-bold">🤖 AI Coach</h1>
           <p className="text-sm text-muted-foreground">
-            Terapeuta cognitivo conductual especializado en adicciones
+            Inteligencia basada en Gemini 3 entrenada en tratamiento de adicciones.
           </p>
         </div>
 
