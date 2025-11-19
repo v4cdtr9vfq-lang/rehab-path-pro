@@ -19,7 +19,7 @@ const AiCoach = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hola, soy tu AI Coach. Soy un terapeuta cognitivo conductual especializado en adicciones con conocimientos en terapia somática bioenergética. Estoy aquí para apoyarte en tu proceso de recuperación. ¿En qué puedo ayudarte hoy?"
+      content: "Hola! Estoy aquí para apoyarte en tu proceso de recuperación. ¿Cómo llevas el proceso?"
     }
   ]);
   const [input, setInput] = useState("");
