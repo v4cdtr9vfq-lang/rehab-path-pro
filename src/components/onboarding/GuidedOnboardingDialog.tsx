@@ -1,12 +1,12 @@
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 interface GuidedOnboardingDialogProps {
   step: 'emotion_journal' | 'gratitude' | 'check_in' | 'daily_inventory' | 'values';
   onClose: () => void;
+  onDisable?: () => void;
 }
 
 const STEP_CONFIG = {
@@ -32,7 +32,7 @@ const STEP_CONFIG = {
   }
 };
 
-export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialogProps) {
+export function GuidedOnboardingDialog({ step, onClose, onDisable }: GuidedOnboardingDialogProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const config = STEP_CONFIG[step];
@@ -43,19 +43,8 @@ export function GuidedOnboardingDialog({ step, onClose }: GuidedOnboardingDialog
   };
 
   const handleDisableAssistance = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        await supabase
-          .from('profiles')
-          .update({ 
-            guided_onboarding_disabled: true,
-            guided_onboarding_step: 'completed'
-          })
-          .eq('user_id', user.id);
-      }
-    } catch (error) {
-      console.error('Error disabling guided onboarding:', error);
+    if (onDisable) {
+      onDisable();
     }
     onClose();
   };

@@ -120,6 +120,11 @@ export function useGuidedOnboarding() {
 
       setIsDisabled(!enabled);
       setCurrentStep(enabled ? 'emotion_journal' : 'completed');
+      
+      // Force shouldShow to update when re-enabling
+      if (enabled) {
+        setShouldShow(true);
+      }
     } catch (error) {
       console.error('Error toggling guided assistance:', error);
     }
