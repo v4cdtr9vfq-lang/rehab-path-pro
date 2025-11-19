@@ -4,9 +4,9 @@ export const useTranslatedQuickTools = () => {
   const { t } = useTranslation();
   
   return [{
-    emoji: "📔",
-    label: t('quickTools.journal'),
-    path: "/journal",
+    emoji: "🤖",
+    label: t('quickTools.aiCoach'),
+    path: "/ai-coach",
     color: "text-primary"
   }, {
     emoji: "😊",
