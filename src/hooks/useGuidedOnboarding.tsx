@@ -76,8 +76,14 @@ export function useGuidedOnboarding() {
         .single();
 
       if (profile) {
+        // Si el step es 'completed', no mostrar nada
+        if (profile.guided_onboarding_step === 'completed') {
+          setCurrentStep('completed');
+          setIsDisabled(false);
+          setShouldShow(false);
+        }
         // Si el step es 'not_started' y la asistencia está habilitada, iniciar automáticamente
-        if (profile.guided_onboarding_step === 'not_started' && !profile.guided_onboarding_disabled) {
+        else if (profile.guided_onboarding_step === 'not_started' && !profile.guided_onboarding_disabled) {
           await supabase
             .from('profiles')
             .update({ guided_onboarding_step: 'emotion_journal' })
@@ -139,7 +145,8 @@ export function useGuidedOnboarding() {
   };
 
   const shouldShowDialog = (step: GuidedStep) => {
-    return !isDisabled && currentStep === step && shouldShow;
+    // No mostrar si está deshabilitado, o si no es el paso correcto, o si no debe mostrarse, o si está completado
+    return !isDisabled && currentStep === step && shouldShow && currentStep !== 'completed';
   };
 
   const hideTemporarily = () => {
