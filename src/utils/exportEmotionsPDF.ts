@@ -60,7 +60,7 @@ const emotionsData: EmotionCategory[] = [
       { name: "Enojado", tertiaryEmotions: ["Enfurecido", "Furioso", "Indignado", "Iracundo", "Resentido", "Ultrajado"] },
       { name: "Estresado", tertiaryEmotions: ["Abrumado"] },
       { name: "Frustrado", tertiaryEmotions: ["Impotente"] },
-      { name: "Incómodo", tertiaryEmotions: ["Disgustado", "Dolorido", "Intranquilo", "Violento"] },
+      { name: "Incómodo", tertiaryEmotions: ["Dolorido", "Intranquilo", "Violento"] },
       { name: "Molesto", tertiaryEmotions: ["Disgustado", "Exasperado"] }
     ]
   },
