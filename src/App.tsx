@@ -30,6 +30,7 @@ import SupportNetwork from "./pages/SupportNetwork";
 import Help from "./pages/Help";
 import SleepQuality from "./pages/SleepQuality";
 import AiCoach from "./pages/AiCoach";
+import ExportEmotions from "./pages/ExportEmotions";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -176,6 +177,11 @@ const App = () => (
           <Route path="/trial-ended" element={
             <ProtectedRoute>
               <TrialEnded />
+            </ProtectedRoute>
+          } />
+          <Route path="/export-emotions" element={
+            <ProtectedRoute>
+              <ExportEmotions />
             </ProtectedRoute>
           } />
           
