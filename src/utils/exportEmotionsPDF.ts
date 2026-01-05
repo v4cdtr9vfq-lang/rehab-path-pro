@@ -1,5 +1,5 @@
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 
 // Extend jsPDF type for autoTable
 declare module 'jspdf' {
@@ -183,9 +183,10 @@ export const downloadEmotionsPDF = () => {
     });
     
     // Get the final Y position after the table
-    yPosition = (doc as any).lastAutoTable.finalY + 12;
+    const finalY = (doc as any).lastAutoTable?.finalY ?? yPosition;
+    yPosition = finalY + 12;
   });
-  
+
   // Summary at the end
   if (yPosition > 250) {
     doc.addPage();
