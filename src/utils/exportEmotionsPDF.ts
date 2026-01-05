@@ -45,7 +45,7 @@ const emotionsData: EmotionCategory[] = [
   {
     name: "Inseguridad",
     secondaryEmotions: [
-      { name: "Avergonzado", tertiaryEmotions: ["Cohibido", "Culpable", "Mortificado", "Turbado"] },
+      { name: "Avergonzado", tertiaryEmotions: ["Cohibido", "Culpable", "Mortificado", "Perturbado"] },
       { name: "Impaciente", tertiaryEmotions: ["Agobiado", "Desesperado", "Expectante", "Intolerante"] },
       { name: "Inquieto", tertiaryEmotions: ["Agitado", "Alarmado", "Alterado", "Desconcertado", "Perturbado", "Sobresaltado", "Turbulento"] },
       { name: "Vulnerable", tertiaryEmotions: ["Frágil", "Indefenso", "Reservado", "Sensible", "Tembloroso"] }
