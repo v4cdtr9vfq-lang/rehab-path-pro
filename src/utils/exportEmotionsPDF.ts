@@ -80,7 +80,7 @@ const emotionsData: EmotionCategory[] = [
       { name: "Claridad", tertiaryEmotions: ["Calmado", "Enfocado", "Lúcido", "Sereno"] },
       { name: "Cómodo", tertiaryEmotions: ["Conectado", "Relajado", "Seguro"] },
       { name: "Conforme", tertiaryEmotions: ["Complacido", "Equilibrado", "Gratificado", "Neutral"] },
-      { name: "Confiado", tertiaryEmotions: ["Esperanza", "Seguridad", "Tranquilidad"] },
+      { name: "Confianza", tertiaryEmotions: ["Esperanza", "Seguridad", "Tranquilidad"] },
       { name: "Ecuánime", tertiaryEmotions: ["Conectado"] },
       { name: "Realizado", tertiaryEmotions: ["Completo"] },
       { name: "Satisfecho", tertiaryEmotions: ["Complacido", "Contento", "Gratificado"] },
@@ -105,9 +105,8 @@ const emotionsData: EmotionCategory[] = [
   {
     name: "Tristeza",
     secondaryEmotions: [
-      { name: "Decepcionado", tertiaryEmotions: ["Defraudado", "Descorazonado", "Desilusionado", "Frustrado"] },
       { name: "Deprimido", tertiaryEmotions: ["Abatido", "Desalentado", "Desanimado", "Desesperanzado", "Sin valor"] },
-      { name: "Desanimado", tertiaryEmotions: ["Derrotado", "Desmoralizado"] },
+      { name: "Desanimado", tertiaryEmotions: ["Derrotado", "Descorazonado", "Desilusionado", "Desmoralizado"] },
       { name: "Solo", tertiaryEmotions: ["Aislado", "Descuidado", "No deseado"] }
     ]
   }
