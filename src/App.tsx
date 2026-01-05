@@ -179,11 +179,7 @@ const App = () => (
               <TrialEnded />
             </ProtectedRoute>
           } />
-          <Route path="/export-emotions" element={
-            <ProtectedRoute>
-              <ExportEmotions />
-            </ProtectedRoute>
-          } />
+          <Route path="/export-emotions" element={<ExportEmotions />} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>
