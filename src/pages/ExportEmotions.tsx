@@ -7,11 +7,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 const ExportEmotions = () => {
   const handleDownload = useCallback(() => {
     try {
+      console.log("[export-emotions] generating PDF");
       downloadEmotionsPDF();
       toast.success("PDF generado y descargado");
     } catch (error) {
-      console.error(error);
-      toast.error("No se pudo generar el PDF");
+      const message = error instanceof Error ? error.message : String(error);
+      console.error("[export-emotions] PDF generation failed", error);
+      toast.error(`No se pudo generar el PDF: ${message}`);
     }
   }, []);
 
@@ -27,9 +29,7 @@ const ExportEmotions = () => {
       document.head.appendChild(meta);
     }
     meta.content = content;
-
-    // Intento automático (por si el navegador permite la descarga sin click)
-    handleDownload();
+    // Nota: evitamos auto-descarga para no chocar con bloqueos del navegador.
   }, [handleDownload]);
 
   return (
