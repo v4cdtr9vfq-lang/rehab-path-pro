@@ -524,7 +524,7 @@ export const getEmotionCategories = (t: TFunction): PrimaryCategory[] => {
         {
           id: "solo",
           name: "Solo",
-          tertiaryEmotions: ["Aislado", "Descuidado", "No deseado"].sort()
+          tertiaryEmotions: ["Aislado", "Indeseado", "Separado"].sort()
         }
       ].sort((a, b) => a.name.localeCompare(b.name, 'es'))
     },
