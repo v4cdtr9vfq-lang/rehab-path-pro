@@ -107,7 +107,7 @@ const emotionsData: EmotionCategory[] = [
     secondaryEmotions: [
       { name: "Deprimido", tertiaryEmotions: ["Abatido", "Desalentado", "Desanimado", "Desesperanzado", "Sin valor"] },
       { name: "Desanimado", tertiaryEmotions: ["Derrotado", "Descorazonado", "Desilusionado", "Desmoralizado"] },
-      { name: "Solo", tertiaryEmotions: ["Aislado", "Descuidado", "No deseado"] }
+      { name: "Solo", tertiaryEmotions: ["Aislado", "Indeseado", "Separado"] }
     ]
   }
 ];
