@@ -27,6 +27,7 @@ interface Message {
 
 const AiCoach = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
