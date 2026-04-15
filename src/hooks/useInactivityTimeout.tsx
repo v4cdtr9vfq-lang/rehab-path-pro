@@ -4,8 +4,8 @@ import { useToast } from '@/hooks/use-toast';
 
 export const useInactivityTimeout = (timeoutMinutes: number = 3) => {
   const { toast } = useToast();
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const warningTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const warningTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const logout = async () => {
     try {
