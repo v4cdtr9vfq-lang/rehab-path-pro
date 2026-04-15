@@ -196,11 +196,16 @@ const AiCoach = () => {
     <div className="container mx-auto p-4 max-w-4xl">
       <Card className="h-[calc(100vh-8rem)] flex flex-col">
         <div className="p-4 border-b flex justify-between items-start">
-          <div>
-            <h1 className="text-2xl font-bold">🤖 AI Coach</h1>
-            <p className="text-sm text-muted-foreground pl-[5px]">
-              Inteligencia basada en Gemini 3 entrenada en tratamiento de adicciones.
-            </p>
+          <div className="flex items-start gap-2">
+            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="mt-0.5">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold">🤖 AI Coach</h1>
+              <p className="text-sm text-muted-foreground pl-[5px]">
+                Inteligencia basada en Gemini 3 entrenada en tratamiento de adicciones.
+              </p>
+            </div>
           </div>
           <AlertDialog>
             <AlertDialogTrigger asChild>
